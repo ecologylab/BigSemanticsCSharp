@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3A67F507-1E77-4ED6-BD46-981E66D15F92}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ecologylabSemantics</RootNamespace>
+    <AssemblyName>ecologylabSemantics</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ecologylab\io\BasicSite.cs" />
+    <Compile Include="ecologylab\net\UserAgent.cs" />
+    <Compile Include="ecologylab\semantics\actions\AndCondition.cs" />
+    <Compile Include="ecologylab\semantics\actions\BackOffFromSiteSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\actions\ChooseSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\actions\Condition.cs" />
+    <Compile Include="ecologylab\semantics\actions\CreateAndVisualizeImgSurrogateSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\actions\CreateAndVisualizeTextSurrogateSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\actions\CreateSemanticAnchorSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\actions\EvaluateRankWeight.cs" />
+    <Compile Include="ecologylab\semantics\actions\ForEachSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\actions\GetFieldSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\actions\IfSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\actions\NestedSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\actions\NotCondition.cs" />
+    <Compile Include="ecologylab\semantics\actions\NotNull.cs" />
+    <Compile Include="ecologylab\semantics\actions\Null.cs" />
+    <Compile Include="ecologylab\semantics\actions\OrCondition.cs" />
+    <Compile Include="ecologylab\semantics\actions\Otherwise.cs" />
+    <Compile Include="ecologylab\semantics\actions\ParseDocumentSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\actions\SearchSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\actions\SemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\actions\SetFieldSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\actions\SetMetadataSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\connectors\CookieProcessing.cs" />
+    <Compile Include="ecologylab\semantics\connectors\SemanticsSite.cs" />
+    <Compile Include="ecologylab\semantics\metadata\MetadataClassDescriptor.cs" />
+    <Compile Include="ecologylab\semantics\metadata\MetadataFieldDescriptor.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\Argument.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\DefVar.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\MetaMetadata.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\MetaMetadataCollectionField.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\MetaMetadataCompositeField.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\MetaMetadataField.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\MetaMetadataNestedField.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\MetaMetadataRepository.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\MetaMetadataScalarField.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\MetaMetadataSelector.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\RegexFilter.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\SearchEngine.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\SearchEngines.cs" />
+    <Compile Include="ecologylab\textformat\NamedStyle.cs" />
+    <Compile Include="MetaMetadataTranslationScope.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ecologylabFundamental.NET\ecologylabFundamental\ecologylabFundamental.NET.csproj">
+      <Project>{2250CC5F-E93C-4BCE-82B8-3760E3A528EE}</Project>
+      <Name>ecologylabFundamental.NET</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
