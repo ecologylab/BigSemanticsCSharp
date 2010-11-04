@@ -66,8 +66,12 @@
     <Compile Include="ecologylab\semantics\actions\SetMetadataSemanticAction.cs" />
     <Compile Include="ecologylab\semantics\connectors\CookieProcessing.cs" />
     <Compile Include="ecologylab\semantics\connectors\SemanticsSite.cs" />
+    <Compile Include="ecologylab\semantics\metadata\Metadata.cs" />
     <Compile Include="ecologylab\semantics\metadata\MetadataClassDescriptor.cs" />
     <Compile Include="ecologylab\semantics\metadata\MetadataFieldDescriptor.cs" />
+    <Compile Include="ecologylab\semantics\metadata\mm_name.cs" />
+    <Compile Include="ecologylab\semantics\metadata\scalar\MetadataScalars.cs" />
+    <Compile Include="ecologylab\semantics\metadata\semantics_mixin.cs" />
     <Compile Include="ecologylab\semantics\metametadata\Argument.cs" />
     <Compile Include="ecologylab\semantics\metametadata\DefVar.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MetaMetadata.cs" />

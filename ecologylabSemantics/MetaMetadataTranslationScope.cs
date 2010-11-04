@@ -9,7 +9,7 @@ using ecologylab.textformat;
 using ecologylab.semantics.actions;
 using ecologylab.semantics.connectors;
 using ecologylab.io;
-using ecologylabFundamental.ecologylab.serialization;
+using ecologylab.serialization;
 
 namespace ecologylabSemantics
 {
@@ -17,54 +17,54 @@ namespace ecologylabSemantics
     {
         static Type[] translations = {
             typeof(MetadataClassDescriptor),
-		    typeof(MetadataFieldDescriptor),
-		    typeof(MetaMetadataField),
-		    typeof(MetaMetadataScalarField),
-		    typeof(MetaMetadataCompositeField),
-		    typeof(MetaMetadataNestedField),
-		    typeof(MetaMetadataCollectionField),
-		    typeof(MetaMetadata),
-		    typeof(SearchEngines),
-		    typeof(SearchEngine),
-		    typeof(UserAgent), 
-		    typeof(NamedStyle), 
-		    typeof(SemanticAction),
-		    typeof(NestedSemanticAction),
-		    typeof(SemanticsSite),
-		    typeof(BasicSite),
-		    typeof(Argument),
-		    typeof(RegexFilter),
-		    typeof(CookieProcessing),
-		    typeof(MetaMetadataRepository), 
-    	    typeof(MetaMetadataSelector),
-		    typeof(DefVar),
+            typeof(MetadataFieldDescriptor),
+            typeof(MetaMetadataField),
+            typeof(MetaMetadataScalarField),
+            typeof(MetaMetadataCompositeField),
+            typeof(MetaMetadataNestedField),
+            typeof(MetaMetadataCollectionField),
+            typeof(MetaMetadata),
+            typeof(SearchEngines),
+            typeof(SearchEngine),
+            typeof(UserAgent), 
+            typeof(NamedStyle), 
+            typeof(SemanticAction),
+            typeof(NestedSemanticAction),
+            typeof(SemanticsSite),
+            typeof(BasicSite),
+            typeof(Argument),
+            typeof(RegexFilter),
+            typeof(CookieProcessing),
+            typeof(MetaMetadataRepository), 
+            typeof(MetaMetadataSelector),
+            typeof(DefVar),
  
             //Condition scope
-        	typeof(Condition),
-		    typeof(AndCondition),
-		    typeof(OrCondition),
-		    typeof(NotCondition),
-		
-		    typeof(NotNull),
-		    typeof(Null),
+            typeof(Condition),
+            typeof(AndCondition),
+            typeof(OrCondition),
+            typeof(NotCondition),
+        
+            typeof(NotNull),
+            typeof(Null),
         };
 
         static Type[] semanticActionClasses = {
             //SemanticAction scope
-        	typeof(BackOffFromSiteSemanticAction),
-	        typeof(ChooseSemanticAction),
-	        //typeof(ChooseSemanticAction.Otherwise), //FIXME: Unsupported
-	        typeof(CreateAndVisualizeImgSurrogateSemanticAction),
-	        typeof(CreateAndVisualizeTextSurrogateSemanticAction),
-	        typeof(CreateSemanticAnchorSemanticAction),
-	        typeof(EvaluateRankWeight),
-	        typeof(ForEachSemanticAction),
-	        typeof(GetFieldSemanticAction),
-	        typeof(IfSemanticAction),
-	        typeof(ParseDocumentSemanticAction),
-	        typeof(SearchSemanticAction),
-	        typeof(SetFieldSemanticAction),
-	        typeof(SetMetadataSemanticAction),
+            typeof(BackOffFromSiteSemanticAction),
+            typeof(ChooseSemanticAction),
+            //typeof(ChooseSemanticAction.Otherwise), //FIXME: Unsupported
+            typeof(CreateAndVisualizeImgSurrogateSemanticAction),
+            typeof(CreateAndVisualizeTextSurrogateSemanticAction),
+            typeof(CreateSemanticAnchorSemanticAction),
+            typeof(EvaluateRankWeight),
+            typeof(ForEachSemanticAction),
+            typeof(GetFieldSemanticAction),
+            typeof(IfSemanticAction),
+            typeof(ParseDocumentSemanticAction),
+            typeof(SearchSemanticAction),
+            typeof(SetFieldSemanticAction),
+            typeof(SetMetadataSemanticAction),
         };
 
         public static TranslationScope get()

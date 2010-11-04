@@ -8,9 +8,9 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylabFundamental.ecologylab.attributes;
-using ecologylabFundamental.ecologylab.serialization;
-using ecologylabFundamental.ecologylab.serialization.types;
+using ecologylab.attributes;
+using ecologylab.serialization;
+using ecologylab.serialization.types;
 using ecologylab.semantics.actions;
 using ecologylab.semantics.connectors;
 using ecologylab.semantics.metametadata;

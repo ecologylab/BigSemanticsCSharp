@@ -8,14 +8,15 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylabFundamental.ecologylab.attributes;
-using ecologylabFundamental.ecologylab.serialization;
-using ecologylabFundamental.ecologylab.serialization.types;
+using ecologylab.attributes;
+using ecologylab.serialization;
+using ecologylab.serialization.types;
 using ecologylab.semantics.actions;
 using ecologylab.semantics.connectors;
 using ecologylab.semantics.metametadata;
 using ecologylab.net;
 using ecologylab.textformat;
+using ecologylab.serialization.types.element;
 
 namespace ecologylab.semantics.metametadata 
 {
@@ -23,7 +24,7 @@ namespace ecologylab.semantics.metametadata
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	[simpl_inherit]
-	public class MetaMetadata : MetaMetadataCompositeField , IMappable
+	public class MetaMetadata : MetaMetadataCompositeField , Mappable
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
