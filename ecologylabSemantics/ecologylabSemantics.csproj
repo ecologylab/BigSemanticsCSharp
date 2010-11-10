@@ -71,6 +71,7 @@
     <Compile Include="ecologylab\semantics\metadata\MetadataFieldDescriptor.cs" />
     <Compile Include="ecologylab\semantics\metadata\mm_name.cs" />
     <Compile Include="ecologylab\semantics\metadata\scalar\MetadataScalars.cs" />
+    <Compile Include="ecologylab\semantics\metadata\scalar\types\MetadataScalarScalarType.cs" />
     <Compile Include="ecologylab\semantics\metadata\semantics_mixin.cs" />
     <Compile Include="ecologylab\semantics\metametadata\Argument.cs" />
     <Compile Include="ecologylab\semantics\metametadata\DefVar.cs" />
@@ -86,7 +87,7 @@
     <Compile Include="ecologylab\semantics\metametadata\SearchEngine.cs" />
     <Compile Include="ecologylab\semantics\metametadata\SearchEngines.cs" />
     <Compile Include="ecologylab\textformat\NamedStyle.cs" />
-    <Compile Include="MetaMetadataTranslationScope.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\MetaMetadataTranslationScope.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

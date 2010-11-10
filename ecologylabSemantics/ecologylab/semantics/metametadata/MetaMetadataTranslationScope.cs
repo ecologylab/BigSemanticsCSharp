@@ -11,7 +11,7 @@ using ecologylab.semantics.connectors;
 using ecologylab.io;
 using ecologylab.serialization;
 
-namespace ecologylabSemantics
+namespace ecologylab.semantics.metametadata
 {
     public class MetaMetadataTranslationScope
     {
@@ -37,16 +37,17 @@ namespace ecologylabSemantics
             typeof(CookieProcessing),
             typeof(MetaMetadataRepository), 
             typeof(MetaMetadataSelector),
-            typeof(DefVar),
- 
+            typeof(DefVar)
+        };
             //Condition scope
+        static Type[] conditionClasses = {
             typeof(Condition),
             typeof(AndCondition),
             typeof(OrCondition),
             typeof(NotCondition),
         
             typeof(NotNull),
-            typeof(Null),
+            typeof(Null)
         };
 
         static Type[] semanticActionClasses = {
@@ -65,13 +66,16 @@ namespace ecologylabSemantics
             typeof(SearchSemanticAction),
             typeof(SetFieldSemanticAction),
             typeof(SetMetadataSemanticAction),
+            typeof(SemanticAction)
         };
 
         public static TranslationScope get()
         {
-            TranslationScope semanticActionScope = TranslationScope.Get("semantic_action_translation_scope", semanticActionClasses);
-            TranslationScope mmdScope = TranslationScope.Get("meta_metadata", translations);
+            TranslationScope semanticActionScope    = TranslationScope.Get("semantic_action_translation_scope", semanticActionClasses);
+            TranslationScope conditionScope         = TranslationScope.Get("condition_scope", conditionClasses);
+            TranslationScope mmdScope               = TranslationScope.Get("meta_metadata", translations);
             mmdScope.AddTranslations(semanticActionScope);
+            mmdScope.AddTranslations(conditionScope);
             return mmdScope;
         }
     }
