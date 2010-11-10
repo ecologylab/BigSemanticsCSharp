@@ -10,6 +10,8 @@ namespace ecologylab.semantics.metadata.scalar
         Object value;
         public static String VALUE_FIELD_NAME	    = "value";
 
+
+
         public MetadataScalarBase(Object value)
         {
             this.value = value;
@@ -23,29 +25,58 @@ namespace ecologylab.semantics.metadata.scalar
 
         public override String ToString()
         {
-            Object value = Value;
             return value == null ? "null" : value.ToString();
         }
     }
 
-    public class MetadataString
+    public class MetadataString : MetadataScalarBase
     {
+
+        //The termvector stuff goes here !
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        public MetadataString(object value)
+            :base(value)
+        {
+
+        }
 
     }
-    public class MetadataInteger
+    public class MetadataInteger : MetadataScalarBase
     {
+        public MetadataInteger(object value)
+            :base(value)
+        {
+
+        }
 
     }
-    public class MetadataParsedURL
+    public class MetadataParsedURL : MetadataScalarBase
     {
+        public MetadataParsedURL(object value)
+            :base(value)
+        {
+
+        }
 
     }
-    public class MetadataDate
+    public class MetadataDate : MetadataScalarBase
     {
+        public MetadataDate(object value)
+            :base(value)
+        {
 
+        }
     }
-    public class MetadataStringBuilder
+    public class MetadataStringBuilder : MetadataScalarBase
     {
+        public MetadataStringBuilder(object value)
+            :base(value)
+        {
 
+        }
     }
 }
