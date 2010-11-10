@@ -50,7 +50,7 @@ namespace DomExtraction
             mmdJSON.Append("mmd = ");
             imdbTitleMMD.serializeToJSON(mmdJSON);
             mmdJSON.Append(";");
-            Console.WriteLine("JSON: \n" + mmdJSON);
+            //Console.WriteLine("JSON: \n" + mmdJSON);
             //mmdJSON.Replace("", "'");
             browser.Loaded += delegate
             {
@@ -81,7 +81,7 @@ namespace DomExtraction
                     metadataJSON = value.ToString();
                 Console.WriteLine("String MetadataJSON received. " + System.DateTime.Now);
 
-
+                
                 //if (value.IsArray())
                 //{
                 //    Collection<JSValue> arrVals = value.GetArray();
