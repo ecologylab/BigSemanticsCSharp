@@ -22,25 +22,40 @@ namespace ecologylab.semantics.metadata.scalar.types
 		public MetadataScalarScalarType(Type metadataScalarTypeClass, Type valueClass)
 			:base(metadataScalarTypeClass)
 		{
-			this.valueScalarType = TypeRegistry.GetType(valueClass);
-			GetValueField();
+			// Get type handles for Test<String> and its field.
+
+            this.valueScalarType = TypeRegistry.GetType(valueClass);
+            valueField = metadataScalarTypeClass.GetField("value");
+
+            /*
+            
+            Type baseType = metadataScalarTypeClass.BaseType;
+            
+            RuntimeTypeHandle rth = metadataScalarTypeClass.TypeHandle;
+            RuntimeFieldHandle rfh = metadataScalarTypeClass.GetField("value").FieldHandle;
+
+            
+            Type[] genericParams = baseType.GetGenericArguments();
+            Type gType = genericParams.Length == 1 ? genericParams[0] : null;
+            if(gType != null)
+            {
+                Object t = ((MetadataScalarBase<gType>)metadataScalarTypeClass).Value;
+            }
+            
+
+            valueField = FieldInfo.GetFieldFromHandle(rfh); 
+            */
+            if (ValueField == null)
+				Console.WriteLine(metadataScalarTypeClass.Name + " does not have a valueField");
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		FieldInfo GetValueField()
+		FieldInfo ValueField
 		{
-			FieldInfo result = valueField;
-			if (result == null)
-			{
-				Type typeClass = typeof(MetadataScalarBase);
-				result = typeClass.GetField(MetadataScalarBase.VALUE_FIELD_NAME);
-				//result.setAccessible(true);
-				valueField = result;
-			}
-			return result;
+			get{ return valueField; }
 		}
 
 		public override bool SetField(object context, FieldInfo field, string valueString, string[] format)
@@ -54,12 +69,14 @@ namespace ecologylab.semantics.metadata.scalar.types
 			if (valueObject != null)
 			{
 				Object metadataScalarContext = field.GetValue(context);
-				if (metadataScalarContext != null)
+				if (metadataScalarContext == null)
 				{
-					metadataScalarContext = Activator.CreateInstance(field.GetType());
+                    Type t = field.FieldType;
+					metadataScalarContext = Activator.CreateInstance(t,new object[]{valueObject});
 					field.SetValue(context, metadataScalarContext);
 				}
-				valueField.SetValue(context, valueObject);
+                else
+                    ValueField.SetValue(metadataScalarContext, valueObject);
 				result = true;
 			}
 			return result;

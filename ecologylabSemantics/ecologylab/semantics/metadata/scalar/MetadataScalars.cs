@@ -7,17 +7,20 @@ namespace ecologylab.semantics.metadata.scalar
 {
     abstract public class MetadataScalarBase
     {
-        Object value;
+        public Object value;
         public static String VALUE_FIELD_NAME	    = "value";
 
+        public MetadataScalarBase()
+        {
+        
+        }
 
-
-        public MetadataScalarBase(Object value)
+        public MetadataScalarBase(object value)
         {
             this.value = value;
         }
 
-        public Object Value
+        public object Value
         {
             get { return value; }
             set { this.value = value; }
@@ -31,15 +34,18 @@ namespace ecologylab.semantics.metadata.scalar
 
     public class MetadataString : MetadataScalarBase
     {
+        public MetadataString()
+        {
+
+        }
 
         //The termvector stuff goes here !
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
         public MetadataString(object value)
-            :base(value)
+            :base((String)value)
         {
 
         }
@@ -47,8 +53,12 @@ namespace ecologylab.semantics.metadata.scalar
     }
     public class MetadataInteger : MetadataScalarBase
     {
+        public MetadataInteger()
+        {
+
+        }
         public MetadataInteger(object value)
-            :base(value)
+            :base((int)value)
         {
 
         }
@@ -56,8 +66,12 @@ namespace ecologylab.semantics.metadata.scalar
     }
     public class MetadataParsedURL : MetadataScalarBase
     {
+        public MetadataParsedURL()
+        {
+
+        }
         public MetadataParsedURL(object value)
-            :base(value)
+            :base((Uri)value)
         {
 
         }
@@ -65,16 +79,24 @@ namespace ecologylab.semantics.metadata.scalar
     }
     public class MetadataDate : MetadataScalarBase
     {
+        public MetadataDate()
+        {
+
+        }
         public MetadataDate(object value)
-            :base(value)
+            :base((DateTime)value)
         {
 
         }
     }
     public class MetadataStringBuilder : MetadataScalarBase
     {
+        public MetadataStringBuilder()
+        {
+
+        }
         public MetadataStringBuilder(object value)
-            :base(value)
+            :base((StringBuilder)value)
         {
 
         }
