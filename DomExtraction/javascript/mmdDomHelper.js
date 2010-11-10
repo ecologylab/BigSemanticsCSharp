@@ -87,8 +87,10 @@ function extractCollection(mmdCollectionField, contextNode, metadata)
     //Must be an object with name = mmdField.child_type
     //Collections will always have 1 composite kid 
     //whose children need to be recursed over 
+		// WEIRD. JAVA->JSON produced a struction that required mmdCollectionField.kids[0].composite.kids
+		// C#->JSON produces a more 'correct' looking structure that requirs mmdCollectionField.kids ...
     // for each result 
-    var collectionFields = mmdCollectionField.kids[0].composite.kids;
+    var collectionFields = mmdCollectionField.kids;
     if (collectionFields == null || collectionFields == undefined)
         console.log("Oops, collection fields doesn't exist");
     for (var resultIndex = 0; resultIndex < nodeList.snapshotLength; resultIndex++) {
