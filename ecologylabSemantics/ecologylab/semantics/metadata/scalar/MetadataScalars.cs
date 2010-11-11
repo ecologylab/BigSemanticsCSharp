@@ -5,9 +5,10 @@ using System.Text;
 
 namespace ecologylab.semantics.metadata.scalar
 {
-    abstract public class MetadataScalarBase
+
+    abstract public class MetadataScalarBase<T>
     {
-        public Object value;
+        public T value;
         public static String VALUE_FIELD_NAME	    = "value";
 
         public MetadataScalarBase()
@@ -17,13 +18,13 @@ namespace ecologylab.semantics.metadata.scalar
 
         public MetadataScalarBase(object value)
         {
-            this.value = value;
+            this.value = (T) value;
         }
 
         public object Value
         {
             get { return value; }
-            set { this.value = value; }
+            set { this.value = (T)value; }
         }
 
         public override String ToString()
@@ -32,73 +33,43 @@ namespace ecologylab.semantics.metadata.scalar
         }
     }
 
-    public class MetadataString : MetadataScalarBase
+    public class MetadataString : MetadataScalarBase<String>
     {
-        public MetadataString()
-        {
-
-        }
+        public MetadataString(){}
 
         //The termvector stuff goes here !
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public MetadataString(object value)
-            :base((String)value)
-        {
-
-        }
+        public MetadataString(object value):base(value)
+        {}
 
     }
-    public class MetadataInteger : MetadataScalarBase
+    public class MetadataInteger : MetadataScalarBase<int>
     {
-        public MetadataInteger()
-        {
-
-        }
-        public MetadataInteger(object value)
-            :base((int)value)
-        {
-
-        }
+        public MetadataInteger(){}
+        public MetadataInteger(object value):base(value)
+        {}
 
     }
-    public class MetadataParsedURL : MetadataScalarBase
+    public class MetadataParsedURL : MetadataScalarBase<Uri>
     {
-        public MetadataParsedURL()
-        {
-
-        }
-        public MetadataParsedURL(object value)
-            :base((Uri)value)
-        {
-
-        }
+        public MetadataParsedURL(){}
+        public MetadataParsedURL(object value):base(value)
+        {}
 
     }
-    public class MetadataDate : MetadataScalarBase
+    public class MetadataDate : MetadataScalarBase<DateTime>
     {
-        public MetadataDate()
-        {
-
-        }
-        public MetadataDate(object value)
-            :base((DateTime)value)
-        {
-
-        }
+        public MetadataDate(){}
+        public MetadataDate(object value):base(value)
+        {}
     }
-    public class MetadataStringBuilder : MetadataScalarBase
+    public class MetadataStringBuilder : MetadataScalarBase<StringBuilder>
     {
-        public MetadataStringBuilder()
-        {
-
-        }
-        public MetadataStringBuilder(object value)
-            :base((StringBuilder)value)
-        {
-
-        }
+        public MetadataStringBuilder(){}
+        public MetadataStringBuilder(object value):base(value)
+        {}
     }
 }

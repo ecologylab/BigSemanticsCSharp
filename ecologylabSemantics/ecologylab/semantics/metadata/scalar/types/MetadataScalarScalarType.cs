@@ -5,6 +5,7 @@ using System.Text;
 using ecologylab.serialization.types.scalar;
 using ecologylab.serialization.types;
 using System.Reflection;
+using ecologylab.serialization;
 
 namespace ecologylab.semantics.metadata.scalar.types
 {
@@ -24,27 +25,24 @@ namespace ecologylab.semantics.metadata.scalar.types
 		{
 			// Get type handles for Test<String> and its field.
 
-            this.valueScalarType = TypeRegistry.GetType(valueClass);
-            valueField = metadataScalarTypeClass.GetField("value");
+			this.valueScalarType = TypeRegistry.GetType(valueClass);
+			valueField = metadataScalarTypeClass.GetField(MetadataScalarBase<object>.VALUE_FIELD_NAME);
 
+            Object t = typeof(Type);
             /*
-            
-            Type baseType = metadataScalarTypeClass.BaseType;
-            
-            RuntimeTypeHandle rth = metadataScalarTypeClass.TypeHandle;
-            RuntimeFieldHandle rfh = metadataScalarTypeClass.GetField("value").FieldHandle;
-
-            
-            Type[] genericParams = baseType.GetGenericArguments();
-            Type gType = genericParams.Length == 1 ? genericParams[0] : null;
-            if(gType != null)
+             * http://msdn.microsoft.com/en-us/library/ms145335.aspx
+             Apparantly this is the way to get FieldInfo of a generic type parameter field 
+             * But .GetField seems to be working fine.
+            if (valueField == null)
             {
-                Object t = ((MetadataScalarBase<gType>)metadataScalarTypeClass).Value;
-            }
-            
+                Type baseType = metadataScalarTypeClass.BaseType;
 
-            valueField = FieldInfo.GetFieldFromHandle(rfh); 
-            */
+                RuntimeTypeHandle rth = metadataScalarTypeClass.TypeHandle;
+                RuntimeFieldHandle rfh = metadataScalarTypeClass.GetField(MetadataScalarBase<object>.VALUE_FIELD_NAME).FieldHandle;
+
+                valueField = FieldInfo.GetFieldFromHandle(rfh, rth); 
+            }
+			*/
             if (ValueField == null)
 				Console.WriteLine(metadataScalarTypeClass.Name + " does not have a valueField");
 		}
@@ -58,33 +56,33 @@ namespace ecologylab.semantics.metadata.scalar.types
 			get{ return valueField; }
 		}
 
-		public override bool SetField(object context, FieldInfo field, string valueString, string[] format)
+		public override bool SetField(object context, FieldInfo field, string valueString, string[] format, IScalarUnmarshallingContext scalarUnmarshallingContext)
 		{
 			if (valueString == null)
 				return true;
 			bool result = false;
 			Object valueObject;
 
-			valueObject = valueScalarType.GetInstance(valueString);
+            valueObject = valueScalarType.GetInstance(valueString, format, scalarUnmarshallingContext);
 			if (valueObject != null)
 			{
 				Object metadataScalarContext = field.GetValue(context);
 				if (metadataScalarContext == null)
 				{
-                    Type t = field.FieldType;
+					Type t = field.FieldType;
 					metadataScalarContext = Activator.CreateInstance(t,new object[]{valueObject});
 					field.SetValue(context, metadataScalarContext);
 				}
-                else
-                    ValueField.SetValue(metadataScalarContext, valueObject);
+				else
+					ValueField.SetValue(metadataScalarContext, valueObject);
 				result = true;
 			}
 			return result;
 		}
 
-		public Object GetValueInstance(String value, String[] formatStrings)
+		public Object GetValueInstance(String value, String[] formatStrings, IScalarUnmarshallingContext scalarUnmarshallingContext)
 		{
-			return valueScalarType.GetInstance(value, formatStrings);
+			return valueScalarType.GetInstance(value, formatStrings, scalarUnmarshallingContext);
 		}
 
 		public static Type[]	METADATA_SCALAR_TYPES	=
@@ -112,9 +110,9 @@ namespace ecologylab.semantics.metadata.scalar.types
 		{
 
 		}
-		public override object GetInstance(string value, string[] formatStrings)
+        public override object GetInstance(string value, string[] formatStrings, IScalarUnmarshallingContext scalarUnmarshallingContext)
 		{
-			return new MetadataString(GetValueInstance(value, formatStrings));
+            return new MetadataString(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
 		}
 	}
 	public class MetadataStringBuilderScalarType : MetadataScalarScalarType
@@ -124,9 +122,9 @@ namespace ecologylab.semantics.metadata.scalar.types
 		{
 
 		}
-		public override object GetInstance(string value, string[] formatStrings)
+        public override object GetInstance(string value, string[] formatStrings, IScalarUnmarshallingContext scalarUnmarshallingContext)
 		{
-			return new MetadataStringBuilder(GetValueInstance(value, formatStrings));
+            return new MetadataStringBuilder(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
 		}
 	}
 	public class MetadataIntegerScalarType : MetadataScalarScalarType
@@ -136,9 +134,9 @@ namespace ecologylab.semantics.metadata.scalar.types
 		{
 
 		}
-		public override object GetInstance(string value, string[] formatStrings)
+        public override object GetInstance(string value, string[] formatStrings, IScalarUnmarshallingContext scalarUnmarshallingContext)
 		{
-			return new MetadataStringBuilder(GetValueInstance(value, formatStrings));
+            return new MetadataStringBuilder(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
 		}
 	}
 	public class MetadataParsedURLScalarType : MetadataScalarScalarType
@@ -148,9 +146,9 @@ namespace ecologylab.semantics.metadata.scalar.types
 		{
 
 		}
-		public override object GetInstance(string value, string[] formatStrings)
+        public override object GetInstance(string value, string[] formatStrings, IScalarUnmarshallingContext scalarUnmarshallingContext)
 		{
-			return new MetadataParsedURL(GetValueInstance(value, formatStrings));
+            return new MetadataParsedURL(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
 		}
 	}
 	public class MetadataDateScalarType : MetadataScalarScalarType
@@ -160,9 +158,9 @@ namespace ecologylab.semantics.metadata.scalar.types
 		{
 
 		}
-		public override object GetInstance(string value, string[] formatStrings)
+        public override object GetInstance(string value, string[] formatStrings, IScalarUnmarshallingContext scalarUnmarshallingContext)
 		{
-			return new MetadataDate(GetValueInstance(value, formatStrings));
+            return new MetadataDate(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
 		}
 	}
 }
