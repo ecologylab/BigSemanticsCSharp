@@ -21,7 +21,7 @@ namespace ecologylab.semantics.metadata.scalar
             this.value = (T) value;
         }
 
-        public object Value
+        public T Value
         {
             get { return value; }
             set { this.value = (T)value; }
