@@ -1,14 +1,11 @@
 ﻿//Given mmd, representing the mmd of this page.
 
 var currentMMDField;
-function myTest() 
-{
-    var s = {};
-    s.nameString = "name";
-    s.val = [];
-    s.val.push("string");
-    return JSON.stringify(s);    
-}
+//var xpathResult = document.evaluate( xpathExpression, contextNode, namespaceResolver, resultType, result );  
+//More info at: https://developer.mozilla.org/en/Introduction_to_using_XPath_in_JavaScript
+//Mozilla has better documentation, but we're using chromium.
+//Not to worry, we're working with standards here. Both browsers implement the XPath defined in
+// http://www.w3.org/TR/2004/NOTE-DOM-Level-3-XPath-20040226/DOM3-XPath.html
 
 function extractMetadata(mmd) 
 {
