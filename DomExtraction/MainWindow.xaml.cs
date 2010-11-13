@@ -16,7 +16,8 @@ using System.Collections.ObjectModel;
 using ecologylab.semantics.metametadata;
 using ecologylab.serialization;
 using ecologylab.semantics.metadata.scalar.types;
-using System.Threading.Tasks;
+using ecologylab.semantics.generated.library.imdb;
+
 
 namespace DomExtraction
 {
@@ -27,34 +28,26 @@ namespace DomExtraction
     {
 
         static String uri = "http://www.imdb.com/title/tt1285016/";
-        MMDExtractionBrowser extractor;
+        //MMDExtractionBrowser browser;
         public MainWindow()
         {
             InitializeComponent();
-            Console.WriteLine("\n\nSetting Source: " + System.DateTime.Now + "\n\n");
-            
-            MetadataScalarScalarType.init();
-            
-            //MetadataScalarScalarType.init();
-
-            extractor = new MMDExtractionBrowser();
+            //browser = new MMDExtractionBrowser();
+            //myCanvas.Children.Add(browser);
 
 
+            //myGrid. AddChild(browser);
         }
-        
-        
 
-        public async void GetMetadata()
+
+        private async void GetMetadata(object sender, RoutedEventArgs e)
         {
+
+            
             Console.WriteLine("Getting Metadata");
-            ElementState result = await extractor.ExtractMetadata(uri);
-            Console.WriteLine("Got Metadata !!");
-            
-        }
-
-        private void GetMetadata(object sender, RoutedEventArgs e)
-        {
-            TaskEx.Run(()=> GetMetadata());
+            ImdbTitle result = (ImdbTitle) await  browser.ExtractMetadata(UrlTextbox.Text);
+            Console.WriteLine("Got Metadata :: " + result.Plot);
+            Plot.Text = result.Plot.Value;
         }
 
     }
