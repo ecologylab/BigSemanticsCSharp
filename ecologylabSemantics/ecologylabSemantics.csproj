@@ -62,9 +62,11 @@
     <Compile Include="ecologylab\semantics\actions\ParseDocumentSemanticAction.cs" />
     <Compile Include="ecologylab\semantics\actions\SearchSemanticAction.cs" />
     <Compile Include="ecologylab\semantics\actions\SemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\actions\SemanticActionHandler.cs" />
     <Compile Include="ecologylab\semantics\actions\SetFieldSemanticAction.cs" />
     <Compile Include="ecologylab\semantics\actions\SetMetadataSemanticAction.cs" />
     <Compile Include="ecologylab\semantics\connectors\CookieProcessing.cs" />
+    <Compile Include="ecologylab\semantics\connectors\InfoCollector.cs" />
     <Compile Include="ecologylab\semantics\connectors\SemanticsSite.cs" />
     <Compile Include="ecologylab\semantics\metadata\Metadata.cs" />
     <Compile Include="ecologylab\semantics\metadata\MetadataClassDescriptor.cs" />
