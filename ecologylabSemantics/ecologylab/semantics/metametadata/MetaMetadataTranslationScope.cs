@@ -28,8 +28,8 @@ namespace ecologylab.semantics.metametadata
             typeof(SearchEngine),
             typeof(UserAgent), 
             typeof(NamedStyle), 
-            typeof(SemanticAction),
-            typeof(NestedSemanticAction),
+            typeof(SemanticAction<InfoCollector, SemanticActionHandler>),
+            typeof(NestedSemanticAction<InfoCollector, SemanticActionHandler>),
             typeof(SemanticsSite),
             typeof(BasicSite),
             typeof(Argument),
@@ -52,21 +52,21 @@ namespace ecologylab.semantics.metametadata
 
         static Type[] semanticActionClasses = {
             //SemanticAction scope
-            typeof(BackOffFromSiteSemanticAction),
-            typeof(ChooseSemanticAction),
+            typeof(BackOffFromSiteSemanticAction<InfoCollector, SemanticActionHandler>),
+            typeof(ChooseSemanticAction<InfoCollector, SemanticActionHandler>),
             //typeof(ChooseSemanticAction.Otherwise), //FIXME: Unsupported
-            typeof(CreateAndVisualizeImgSurrogateSemanticAction),
-            typeof(CreateAndVisualizeTextSurrogateSemanticAction),
-            typeof(CreateSemanticAnchorSemanticAction),
-            typeof(EvaluateRankWeight),
-            typeof(ForEachSemanticAction),
-            typeof(GetFieldSemanticAction),
-            typeof(IfSemanticAction),
-            typeof(ParseDocumentSemanticAction),
-            typeof(SearchSemanticAction),
-            typeof(SetFieldSemanticAction),
-            typeof(SetMetadataSemanticAction),
-            typeof(SemanticAction)
+            typeof(CreateAndVisualizeImgSurrogateSemanticAction<InfoCollector, SemanticActionHandler>),
+            typeof(CreateAndVisualizeTextSurrogateSemanticAction<InfoCollector, SemanticActionHandler>),
+            typeof(CreateSemanticAnchorSemanticAction<InfoCollector, SemanticActionHandler>),
+            typeof(EvaluateRankWeight<InfoCollector, SemanticActionHandler>),
+            typeof(ForEachSemanticAction<InfoCollector, SemanticActionHandler>),
+            typeof(GetFieldSemanticAction<InfoCollector, SemanticActionHandler>),
+            typeof(IfSemanticAction<InfoCollector, SemanticActionHandler>),
+            typeof(ParseDocumentSemanticAction<InfoCollector, SemanticActionHandler>),
+            typeof(SearchSemanticAction<InfoCollector, SemanticActionHandler>),
+            typeof(SetFieldSemanticAction<InfoCollector, SemanticActionHandler>),
+            typeof(SetMetadataSemanticAction<InfoCollector, SemanticActionHandler>),
+            typeof(SemanticAction<InfoCollector, SemanticActionHandler>)
         };
 
         public static TranslationScope get()
