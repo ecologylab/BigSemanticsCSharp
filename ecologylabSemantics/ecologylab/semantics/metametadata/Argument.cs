@@ -56,7 +56,7 @@ namespace ecologylab.semantics.metametadata
 		public String Value
 		{
 			get{return value;}
-			set{value = value;}
+			set{this.value = value;}
 		}
 
 		public String Name
@@ -85,7 +85,7 @@ namespace ecologylab.semantics.metametadata
 
 		public Object key()
 		{
-			throw new NotImplementedException();
+            return name;
 		}
 	}
 }

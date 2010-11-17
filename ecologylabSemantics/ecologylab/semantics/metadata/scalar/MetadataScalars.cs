@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ecologylab.net;
 
 namespace ecologylab.semantics.metadata.scalar
 {
@@ -53,7 +54,7 @@ namespace ecologylab.semantics.metadata.scalar
         {}
 
     }
-    public class MetadataParsedURL : MetadataScalarBase<Uri>
+    public class MetadataParsedURL : MetadataScalarBase<ParsedUri>
     {
         public MetadataParsedURL(){}
         public MetadataParsedURL(object value):base(value)

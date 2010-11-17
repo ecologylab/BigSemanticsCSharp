@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using ecologylab.attributes;
 using ecologylab.serialization.types.element;
+using ecologylab.serialization;
 
 namespace ecologylab.semantics.metametadata 
 {
@@ -54,39 +55,41 @@ namespace ecologylab.semantics.metametadata
 		public MetaMetadata()
 		{ }
 
-		public MetaMetadataSelector Selector
-		{
-			get{return selector;}
-			set{selector = value;}
-		}
+        protected override string GetMetaMetadataTagToInheritFrom()
+        {
+            return extendsAttribute ?? base.GetMetaMetadataTagToInheritFrom();
+        }
 
-		public String PackageAttribute
-		{
-			get{return packageAttribute;}
-			set{packageAttribute = value;}
-		}
+        #region Properties
+        public MetaMetadataSelector Selector
+        {
+            get { return selector ?? MetaMetadataSelector.NULL_SELECTOR; }
+            set { selector = value; }
+        }
 
-		public Boolean DontGenerateClass
-		{
-			get{return dontGenerateClass;}
-			set{dontGenerateClass = value;}
-		}
+        public String PackageAttribute
+        {
+            get { return packageAttribute; }
+            set { packageAttribute = value; }
+        }
 
-		public List<String> Mixins
-		{
-			get{return mixins;}
-			set{mixins = value;}
-		}
+        public Boolean DontGenerateClass
+        {
+            get { return dontGenerateClass; }
+            set { dontGenerateClass = value; }
+        }
 
-		public String CollectionOf
-		{
-			get{return collectionOf;}
-			set{collectionOf = value;}
-		}
+        public List<String> Mixins
+        {
+            get { return mixins; }
+            set { mixins = value; }
+        }
 
-		public Object key()
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public String CollectionOf
+        {
+            get { return collectionOf; }
+            set { collectionOf = value; }
+        }
+        #endregion
+    }
 }

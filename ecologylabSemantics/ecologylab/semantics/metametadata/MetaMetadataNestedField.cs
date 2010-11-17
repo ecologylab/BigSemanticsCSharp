@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using ecologylab.attributes;
+using ecologylab.generic;
 
 namespace ecologylab.semantics.metametadata 
 {
@@ -16,9 +17,60 @@ namespace ecologylab.semantics.metametadata
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	[simpl_inherit]
-	public class MetaMetadataNestedField : MetaMetadataField
+	public abstract class MetaMetadataNestedField : MetaMetadataField
 	{
 		public MetaMetadataNestedField()
 		{ }
+
+        abstract protected String GetMetaMetadataTagToInheritFrom();
+
+        internal void InheritMetaMetadata(MetaMetadataRepository repository)
+        {
+            if (!inheritMetaMetadataFinished)
+		    {
+			    /**************************************************************************************
+			     * Inheritance works here in a top-down manner: first we know the type or extends of a
+			     * meta-metadata, from which we can infer scalar_type/type/child_type of its first-level
+			     * children (those not defined inline). In this way we can resolve type information
+			     * recursively.
+			     **************************************************************************************/
+
+			    /*
+			     * tagName will be type / extends attribute for <composite>, or child_type attribute for
+			     * <collection>
+			     */
+			    String tagName = GetMetaMetadataTagToInheritFrom();
+			    MetaMetadata inheritedMetaMetadata = repository.GetByTagName(tagName);
+			    if (inheritedMetaMetadata != null)
+			    {
+				    inheritedMetaMetadata.InheritMetaMetadata(repository);
+				    // <collection> should not inherit attributes from its child_type
+				    if (!(this.GetType().IsInstanceOfType(typeof(MetaMetadataCollectionField))))
+					    InheritNonDefaultAttributes(inheritedMetaMetadata);
+				    foreach (MetaMetadataField inheritedField in inheritedMetaMetadata.Kids.Values)
+					    InheritForField(inheritedField);
+				    InheritNonFieldComponentsFromMM(inheritedMetaMetadata);
+			    }
+
+			    if (Kids != null)
+			    {
+				    foreach (MetaMetadataField childField in Kids.Values)
+				    {
+					    if (childField.GetType().IsInstanceOfType(typeof(MetaMetadataNestedField)))
+						    ((MetaMetadataNestedField) childField).InheritMetaMetadata(repository);
+				    }
+
+				    SortForDisplay();
+			    }
+
+			    inheritMetaMetadataFinished = true;
+		    }
+        }
+
+        private void InheritNonFieldComponentsFromMM(MetaMetadata inheritedMetaMetadata)
+        {
+            Console.WriteLine("InheritNonFieldComponentsFromMM, doing nothing");
+        }
+
 	}
 }

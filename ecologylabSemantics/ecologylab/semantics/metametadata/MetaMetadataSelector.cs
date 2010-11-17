@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using ecologylab.attributes;
 using ecologylab.serialization;
 using ecologylab.serialization.types.element;
+using ecologylab.net;
 
 namespace ecologylab.semantics.metametadata 
 {
@@ -42,13 +43,13 @@ namespace ecologylab.semantics.metametadata
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
 		[simpl_scalar]
-		private Uri urlStripped;
+		private ParsedUri urlStripped;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
 		[simpl_scalar]
-		private Uri urlPathTree;
+		private ParsedUri urlPathTree;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -76,10 +77,14 @@ namespace ecologylab.semantics.metametadata
 		[simpl_nowrap]
 		private List<String> suffixes;
 
+        public static MetaMetadataSelector NULL_SELECTOR = new MetaMetadataSelector();
+
 		public MetaMetadataSelector()
 		{ }
 
-		public String Name
+        #region Properties
+        
+        public String Name
 		{
 			get{return name;}
 			set{name = value;}
@@ -97,13 +102,13 @@ namespace ecologylab.semantics.metametadata
 			set{defaultPref = value;}
 		}
 
-		public Uri UrlStripped
+		public ParsedUri UrlStripped
 		{
 			get{return urlStripped;}
 			set{urlStripped = value;}
 		}
 
-		public Uri UrlPathTree
+		public ParsedUri UrlPathTree
 		{
 			get{return urlPathTree;}
 			set{urlPathTree = value;}
@@ -132,10 +137,11 @@ namespace ecologylab.semantics.metametadata
 			get{return suffixes;}
 			set{suffixes = value;}
 		}
-
-		public Object key()
+        #endregion
+        
+        public Object key()
 		{
-			throw new NotImplementedException();
+            return name;
 		}
 	}
 }

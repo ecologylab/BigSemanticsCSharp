@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using ecologylab.attributes;
 using ecologylab.semantics.actions;
 using ecologylab.semantics.connectors;
+using ecologylab.semantics.metadata;
 
 namespace ecologylab.semantics.metametadata 
 {
@@ -74,6 +75,16 @@ namespace ecologylab.semantics.metametadata
 		public MetaMetadataCompositeField()
 		{ }
 
+        protected override string GetMetaMetadataTagToInheritFrom()
+        {
+            if (Entity)
+                return DocumentParserTagNames.ENTITY;
+            else if (type != null)
+                return type;
+            else
+                return null;
+        }
+
 		public String Type
 		{
 			get{return type;}
@@ -121,5 +132,10 @@ namespace ecologylab.semantics.metametadata
 			get{return reloadPageFirstTime;}
 			set{reloadPageFirstTime = value;}
 		}
+
+        public String GetTypeOrName()
+        {
+            return Type ?? Name;
+        }
 	}
 }

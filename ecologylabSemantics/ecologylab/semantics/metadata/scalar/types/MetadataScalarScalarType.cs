@@ -6,6 +6,7 @@ using ecologylab.serialization.types.scalar;
 using ecologylab.serialization.types;
 using System.Reflection;
 using ecologylab.serialization;
+using ecologylab.net;
 
 namespace ecologylab.semantics.metadata.scalar.types
 {
@@ -142,7 +143,7 @@ namespace ecologylab.semantics.metadata.scalar.types
 	public class MetadataParsedURLScalarType : MetadataScalarScalarType
 	{
 		public MetadataParsedURLScalarType()
-			: base(typeof(MetadataParsedURL), typeof(Uri))
+			: base(typeof(MetadataParsedURL), typeof(ParsedUri))
 		{
 
 		}

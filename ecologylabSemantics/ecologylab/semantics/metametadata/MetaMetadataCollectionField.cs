@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using ecologylab.attributes;
+using ecologylab.semantics.metadata;
 
 namespace ecologylab.semantics.metametadata 
 {
@@ -45,6 +46,17 @@ namespace ecologylab.semantics.metametadata
 
 		public MetaMetadataCollectionField()
 		{ }
+
+        protected override string GetMetaMetadataTagToInheritFrom()
+        {
+            if (childEntity)
+                return DocumentParserTagNames.ENTITY;
+            else if (childType != null)
+                return childType;
+            else
+                return null;
+        }
+
 
 		public String ChildTag
 		{

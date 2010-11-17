@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using ecologylab.attributes;
 using ecologylab.serialization;
+using System.Text.RegularExpressions;
 
 namespace ecologylab.semantics.metametadata 
 {
@@ -23,7 +24,7 @@ namespace ecologylab.semantics.metametadata
 		/// </summary>
 		[simpl_scalar]
 		[simpl_hints(new Hint[] { Hint.XML_ATTRIBUTE })]
-		private String regex;
+		private Regex regex;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -35,7 +36,7 @@ namespace ecologylab.semantics.metametadata
 		public RegexFilter()
 		{ }
 
-		public String Regex
+		public Regex RegexPattern
 		{
 			get{return regex;}
 			set{regex = value;}
