@@ -68,6 +68,14 @@
     <Compile Include="ecologylab\semantics\connectors\CookieProcessing.cs" />
     <Compile Include="ecologylab\semantics\connectors\InfoCollector.cs" />
     <Compile Include="ecologylab\semantics\connectors\SemanticsSite.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\ClippableDocument.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\DebugMetadata.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\Document.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\Entity.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\Image.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\Surrogate.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\Text.cs" />
+    <Compile Include="ecologylab\semantics\metadata\DocumentParserTagNames.cs" />
     <Compile Include="ecologylab\semantics\metadata\Metadata.cs" />
     <Compile Include="ecologylab\semantics\metadata\MetadataClassDescriptor.cs" />
     <Compile Include="ecologylab\semantics\metadata\MetadataFieldDescriptor.cs" />
@@ -86,6 +94,7 @@
     <Compile Include="ecologylab\semantics\metametadata\MetaMetadataScalarField.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MetaMetadataSelector.cs" />
     <Compile Include="ecologylab\semantics\metametadata\RegexFilter.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\RepositoryPatternEntry.cs" />
     <Compile Include="ecologylab\semantics\metametadata\SearchEngine.cs" />
     <Compile Include="ecologylab\semantics\metametadata\SearchEngines.cs" />
     <Compile Include="ecologylab\textformat\NamedStyle.cs" />
