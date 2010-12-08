@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using ecologylab.attributes;
 using ecologylab.serialization;
 using ecologylab.semantics.metadata.scalar;
+using System.Collections;
+using System.Windows.Controls;
+using System.Windows;
 
 
 namespace ecologylab.semantics.metadata 
@@ -42,26 +45,14 @@ namespace ecologylab.semantics.metadata
 
 		public MetadataString MetaMetadataName
 		{
-			get
-			{
-				return metaMetadataName;
-			}
-			set
-			{
-				metaMetadataName = value;
-			}
+			get { return metaMetadataName; }
+			set { metaMetadataName = value; }
 		}
 
 		public List<Metadata> Mixins
 		{
-			get
-			{
-				return mixins;
-			}
-			set
-			{
-				mixins = value;
-			}
+			get { return mixins; }
+			set { mixins = value; }
 		}
 	}
 }

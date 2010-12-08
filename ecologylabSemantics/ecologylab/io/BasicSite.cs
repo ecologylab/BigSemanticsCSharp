@@ -61,7 +61,7 @@ namespace ecologylab.io
 
 		public Object key()
 		{
-			throw new NotImplementedException();
+            return domain;
 		}
 	}
 }

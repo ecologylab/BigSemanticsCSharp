@@ -16,6 +16,7 @@ using ecologylab.textformat;
 using System.Text.RegularExpressions;
 using ecologylab.semantics.metadata;
 using ecologylab.semantics.metadata.builtins;
+using System.IO;
 
 namespace ecologylab.semantics.metametadata 
 {
@@ -105,9 +106,9 @@ namespace ecologylab.semantics.metametadata
 		[simpl_nowrap]
 		private Dictionary<String, MetaMetadata> repositoryByTagName;
 
-        private Dictionary<String, MetaMetadata> repositoryByMime;
+        private Dictionary<String, MetaMetadata> repositoryByMime = new Dictionary<string,MetaMetadata>();
 
-        private Dictionary<String, MetaMetadata> repositoryBySuffix;
+        private Dictionary<String, MetaMetadata> repositoryBySuffix = new Dictionary<string,MetaMetadata>();
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -130,17 +131,45 @@ namespace ecologylab.semantics.metametadata
         #endregion
         
         public MetaMetadataRepository()
-		{ }
+		{ 
 
+        }
 
-        public static MetaMetadataRepository ReadRepository(String filename, TranslationScope mmdTScope)
+        public static MetaMetadataRepository ReadDirectoryRecursively(String path, TranslationScope mmdTScope, TranslationScope metadataTScope)
+        {
+            MetaMetadataRepository repo = new MetaMetadataRepository();
+            
+            Stack<string> stack = new Stack<string>();
+            stack.Push(path);
+            while(stack.Count > 0)
+            {
+                string dir = stack.Pop();
+                Console.WriteLine("Looking in : "  + dir);
+                String[] files = Directory.GetFiles(dir, "*.xml");
+                foreach (String file in files)
+                {
+                    MetaMetadataRepository thatRepo = ReadRepository(file, mmdTScope, metadataTScope);
+                    repo.IntegrateRepository(thatRepo);
+                }
+                foreach (String innerDir in Directory.GetDirectories(dir))
+                    if(!innerDir.Contains(".svn"))
+                        stack.Push(innerDir);
+            }
+
+            repo.BindMetadataClassDescriptorsToMetaMetadata(metadataTScope);
+
+            return repo;
+        }
+
+        public static MetaMetadataRepository ReadRepository(String filename, TranslationScope mmdTScope, TranslationScope metadataTScope)
         {
             MetaMetadataRepository repo = null;
-            Console.WriteLine("MetaMetadataRepository Reading: " + filename);
+            //Console.WriteLine("MetaMetadataRepository Reading: " + filename);
 
             try
             {
                 repo = (MetaMetadataRepository)mmdTScope.deserialize(filename);
+                repo.metadataTScope = metadataTScope;
                 repo.file = filename;
                 repo.InitializeSuffixAndMimeDicts();
             }
@@ -152,6 +181,8 @@ namespace ecologylab.semantics.metametadata
 
             return repo;
         }
+
+
 
         /**
 	     * Recursively bind MetadataFieldDescriptors to all MetaMetadataFields. Perform other
@@ -171,7 +202,8 @@ namespace ecologylab.semantics.metametadata
 			    metaMetadata.InheritMetaMetadata(this);
 			    metaMetadata.GetClassAndBindDescriptors(metadataTScope);
 			    MetadataClassDescriptor metadataClassDescriptor = metaMetadata.MetadataClassDescriptorP;
-			    if (metaMetadata.Type == null && metadataClassDescriptor != null) // don't put restatements of the same base type into
+                if (metaMetadata.Type == null && metadataClassDescriptor != null 
+                    && repositoryByClassName.ContainsKey(metadataClassDescriptor.DescribedClass.Name)) // don't put restatements of the same base type into
 																					    // *this* map
 				    repositoryByClassName.Add(metadataClassDescriptor.DescribedClass.Name, metaMetadata);
 		    }
@@ -191,7 +223,7 @@ namespace ecologylab.semantics.metametadata
 	     * Initializes HashMaps for MetaMetadata selectors by URL or pattern. Uses the ClippableDocument and Document
 	     * base classes to ensure that maps are only filled with appropriate matching MetaMetadata.
 	     */
-	    private void InitializeLocationBasedMaps()
+	    public void InitializeLocationBasedMaps()
 	    {
 		    foreach (MetaMetadata metaMetadata in repositoryByTagName.Values)
 		    {
@@ -200,6 +232,7 @@ namespace ecologylab.semantics.metametadata
 			    Type metadataClass = metaMetadata.GetMetadataClass(metadataTScope);
 			    if (metadataClass == null)
 			    {
+                    Console.WriteLine("No metadata class found for metaMetadata: " + metaMetadata.Name);
 				    continue;
 			    }
 
@@ -227,41 +260,43 @@ namespace ecologylab.semantics.metametadata
                 ParsedUri purl = selector.UrlStripped;
 			    if (purl != null)
 			    {
-                    repositoryByUrlStripped.Add(purl.GetLeftPart(UriPartial.Path), metaMetadata);
+                    MetaMetadata inMap;
+                    repositoryByUrlStripped.TryGetValue(purl.Stripped, out inMap);
+                    if (inMap == null)
+                        repositoryByUrlStripped.Add(purl.Stripped, metaMetadata);
+                    else
+                        Console.WriteLine("MetaMetadata already exists in repositoryByUrlStripped for purl\n\t: " 
+                            + purl + " :: " + inMap.Name + " Ignoring MMD: " + metaMetadata.Name);
+                        
 			    }
 			    else
 			    {
-                    ParsedUri urlPrefix = selector.UrlStripped;
-				    if (urlPrefix != null)
-				    {
-					    //urlPrefixCollection.add(urlPrefix);
-					    repositoryByUrlStripped.Add(urlPrefix.ToString(), metaMetadata);
-				    }
-				    else
-				    {
-					    // use .pattern() for comparison
-                        String domain = selector.Domain;
-					    if (domain != null)
-					    {
-                            Regex urlPattern = selector.UrlRegex;
-						    if (urlPattern != null)
-						    {
-							    List<RepositoryPatternEntry> bucket;
-                                repositoryByPattern.TryGetValue(domain, out bucket);
-							    if (bucket == null)
-							    {
-								    bucket = new List<RepositoryPatternEntry>(2);
-								    repositoryByPattern.Add(domain, bucket);
-							    }
-                                bucket.Add(new RepositoryPatternEntry(urlPattern, metaMetadata));
-						    }
-					    }
+					// use .pattern() for comparison
+                    String domain = selector.Domain ?? (selector.UrlPathTree != null ? selector.UrlPathTree.Domain : null);
+					if (domain != null)
+					{
+                        Regex urlPattern = selector.UrlRegex;
+
+                        if (urlPattern == null)
+                            urlPattern = new Regex(selector.UrlPathTree.ToString().Replace("*", "[^/]+"));
+
+						if (urlPattern != null)
+						{
+							List<RepositoryPatternEntry> bucket;
+                            repositoryByPattern.TryGetValue(domain, out bucket);
+							if (bucket == null)
+							{
+								bucket = new List<RepositoryPatternEntry>(2);
+								repositoryByPattern.Add(domain, bucket);
+							}
+                            bucket.Add(new RepositoryPatternEntry(urlPattern, metaMetadata));
+						}
 					    else
 					    {
 						    // domain only -- no pattern
 						    documentRepositoryByDomain.Add(domain, metaMetadata);
 					    }
-				    }
+					}
 			    }
 		    }
 	    }
@@ -383,7 +418,7 @@ namespace ecologylab.semantics.metametadata
         /// <param name="uri"></param>
         /// <param name="tagName"></param>
         /// <returns></returns>
-        public MetaMetadata getDocumentMM(ParsedUri uri, String tagName)
+        public MetaMetadata GetDocumentMM(ParsedUri uri, String tagName = DocumentParserTagNames.DOCUMENT_TAG)
 	    {
 		    MetaMetadata result = null;
 		    if (uri != null)
@@ -404,7 +439,7 @@ namespace ecologylab.semantics.metametadata
 
 				    if (result == null)
 				    {
-                        String domain = uri.Domain(); 
+                        String domain = uri.Domain; 
 					    if (domain != null)
 					    {
                             List<RepositoryPatternEntry> entries = null;
@@ -418,6 +453,7 @@ namespace ecologylab.semantics.metametadata
 								    if (matcher.Success)
 								    {
 									    result = entry.MetaMetadata;
+                                        break;
 								    }
 							    }
 						    }
@@ -428,14 +464,14 @@ namespace ecologylab.semantics.metametadata
 
 			    if (result == null)
 			    {
-				    String suffix = uri.Suffix();
+				    String suffix = uri.Suffix;
 
 				    if (suffix != null)
 					    result = GetMMBySuffix(suffix);
 			    }
 			    if (result == null)
 			    {
-				    String domain = uri.Domain();
+				    String domain = uri.Domain;
 				    documentRepositoryByDomain.TryGetValue(domain, out result);
 
 				    if (result != null)
@@ -465,6 +501,7 @@ namespace ecologylab.semantics.metametadata
             repositoryByTagName.TryGetValue(tagName, out result);
             return result;
         }
+
         #region Properties
 
         public String Name

@@ -196,6 +196,8 @@ namespace ecologylab.semantics.metametadata
             }
         }
 
+        #region binders
+
         internal bool GetClassAndBindDescriptors(TranslationScope metadataTScope)
         {
             Type metadataClass = GetMetadataClass(metadataTScope);
@@ -213,7 +215,7 @@ namespace ecologylab.semantics.metametadata
 			    return false;
 		    }
 		    //
-		    bindClassDescriptor(metadataClass, metadataTScope);
+		    BindClassDescriptor(metadataClass, metadataTScope);
 		    return true;
         }
 
@@ -227,7 +229,7 @@ namespace ecologylab.semantics.metametadata
 	     * @return A map of FieldDescriptors, with the field names as key, but with the mixins field
 	     *         removed.
 	     */
-	    void bindClassDescriptor(Type metadataClass, TranslationScope metadataTScope)
+	    void BindClassDescriptor(Type metadataClass, TranslationScope metadataTScope)
 	    {
 		    MetadataClassDescriptor metadataClassDescriptor = this.metadataClassDescriptor;
 		    if (metadataClassDescriptor == null)
@@ -235,7 +237,11 @@ namespace ecologylab.semantics.metametadata
 				metadataClassDescriptor = this.metadataClassDescriptor;
 				if (metadataClassDescriptor == null)
 				{
-					metadataClassDescriptor = (MetadataClassDescriptor) ClassDescriptor.GetClassDescriptor(metadataClass);
+                    try
+                    {
+                        metadataClassDescriptor = (MetadataClassDescriptor)ClassDescriptor.GetClassDescriptor(metadataClass);
+                    }
+                    catch { }
 					BindMetadataFieldDescriptors(metadataTScope, metadataClassDescriptor);
 					this.metadataClassDescriptor = metadataClassDescriptor;
 				}
@@ -244,6 +250,8 @@ namespace ecologylab.semantics.metametadata
 
         private void BindMetadataFieldDescriptors(TranslationScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
         {
+            if (Kids == null)
+                return;
             foreach (MetaMetadataField thatChild in Kids.Values)
 		    {
 			    thatChild.bindMetadataFieldDescriptor(metadataTScope, metadataClassDescriptor);
@@ -291,11 +299,13 @@ namespace ecologylab.semantics.metametadata
             }
             else
             {
-                Console.WriteLine("Ignoring <" + tagName
-                        + "> because no corresponding MetadataFieldDescriptor can be found.");
+                Console.WriteLine("Ignoring <" + tagName + "> because no corresponding MetadataFieldDescriptor can be found.");
             }
 
         }
+
+        #endregion
+
         internal Type GetMetadataClass(TranslationScope metadataTScope)
         {
             Type result = metadataClass;
@@ -306,15 +316,20 @@ namespace ecologylab.semantics.metametadata
                 result = metadataTScope.GetClassByTag(tagForTS);
                 if (result == null)
                 {
-                    if (this.GetType() == typeof(MetaMetadataCompositeField))
-                        result = metadataTScope.GetClassByTag(((MetaMetadataCompositeField)this).GetTypeOrName());
-                    if (result == null)
+                    if (typeof(MetaMetadataCompositeField).IsAssignableFrom(this.GetType()))
+                    {
+                        MetaMetadataCompositeField mmCF = ((MetaMetadataCompositeField)this);
+                        String tagToUse = mmCF.GetTypeOrName();
+                        
+                        result = metadataTScope.GetClassByTag(tagToUse);
+                    }
+                    if(result == null && ExtendsAttribute != null)
                         result = metadataTScope.GetClassByTag(ExtendsAttribute);
                 }
                 if (result != null)
                     metadataClass = result;
                 else
-                    Console.WriteLine("Cant' resolve " + this + " using " + tagForTS);
+                    Console.WriteLine("Cant' resolve metadata for " + this.Name + " using " + tagForTS);
             }
             return result;
         }
@@ -333,7 +348,7 @@ namespace ecologylab.semantics.metametadata
                     {
                         Object value = fieldDescriptor.Field.GetValue(inheritFrom);
                         fieldDescriptor.Field.SetValue(this, value);
-                        Console.WriteLine("inherit\t" + this.Name + "." + fieldDescriptor.FieldName + "\t= " + value);
+                        //Console.WriteLine("inherit\t" + this.Name + "." + fieldDescriptor.FieldName + "\t= " + value);
                     }
                 }
                 catch (Exception e)

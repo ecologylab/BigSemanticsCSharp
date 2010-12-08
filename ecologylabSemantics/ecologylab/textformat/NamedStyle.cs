@@ -108,7 +108,7 @@ namespace ecologylab.textformat
 
 		public Object key()
 		{
-			throw new NotImplementedException();
+            return name;
 		}
 	}
 }

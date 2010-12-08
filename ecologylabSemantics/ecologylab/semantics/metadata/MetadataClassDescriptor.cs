@@ -21,5 +21,11 @@ namespace ecologylab.semantics.metadata
 	{
 		public MetadataClassDescriptor()
 		{ }
+
+        public MetadataClassDescriptor(Type thatClass)
+            :base(thatClass)
+        {
+
+        }
 	}
 }

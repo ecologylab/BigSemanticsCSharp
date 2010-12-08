@@ -69,7 +69,7 @@ namespace ecologylab.semantics.metametadata
 
         private void InheritNonFieldComponentsFromMM(MetaMetadata inheritedMetaMetadata)
         {
-            Console.WriteLine("InheritNonFieldComponentsFromMM, doing nothing");
+            //Console.WriteLine("InheritNonFieldComponentsFromMM, doing nothing");
         }
 
 	}

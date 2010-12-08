@@ -143,11 +143,13 @@
 
 	<Canvas>
         <TreeView 
-            Width="Auto" Height="Auto"
-            Margin="0" Padding="0" Canvas.Left="71.666" Canvas.Top="72.666"
+            Width="259" Height="280"
+            Margin="0" Padding="0" Canvas.Left="41.666" Canvas.Top="67.666"
             ItemContainerStyle="{StaticResource TreeViewItemStyle1}"
             ItemTemplate="{DynamicResource DataTemplate1}"/>
-        <TreeView Height="252" Width="307" Canvas.Left="265" Canvas.Top="111">
+			
+			
+        <TreeView Height="252" Width="307" Canvas.Left="265" Canvas.Top="111" d:IsHidden="True">
         	<TreeViewItem Header="TreeViewItem">
         		<StackPanel Orientation="Horizontal" Width="188.073" HorizontalAlignment="Left">
         			<TextBlock TextWrapping="Wrap" Text="Label" Height="16" Margin="0,0,49.54,0" Width="50"/>

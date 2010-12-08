@@ -30,7 +30,7 @@ namespace ecologylab.semantics.actions
 		public String Value
 		{
 			get{return value;}
-			set{value = value;}
+			set{this.value = value;}
 		}
 	}
 }

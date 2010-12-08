@@ -62,7 +62,7 @@ namespace ecologylab.net
 
 		public Object key()
 		{
-			throw new NotImplementedException();
+            return Name;
 		}
 	}
 }

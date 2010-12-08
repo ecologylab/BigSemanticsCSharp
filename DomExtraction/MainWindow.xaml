@@ -3,11 +3,53 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cjc="clr-namespace:Cjc.ChromiumBrowser;assembly=Cjc.ChromiumBrowser"
         xmlns:local="clr-namespace:DomExtraction"
-        Title="MainWindow" Height="350" Width="525">
-    <Canvas x:Name="myGrid">
-        <Button Name="ClickMe" Click="GetMetadata" Margin="59,76,312,186" Canvas.Left="251" Canvas.Top="-10" Height="22">Get Plot</Button>
-        <TextBox Name="UrlTextbox" Canvas.Left="65" Canvas.Top="66" Height="22" Width="239">Enter Url</TextBox>
-        <TextBox Name="Plot" Canvas.Left="65" Canvas.Top="94" Height="131" Width="294"></TextBox>
-        <local:MMDExtractionBrowser x:Name="browser" Width="100" Height="200" Visibility="Hidden"></local:MMDExtractionBrowser>
+        xmlns:sandbox="clr-namespace:MetadataUISandbox;assembly=MetadataUISandbox"
+        xmlns:md="clr-namespace:ecologylab.semantics.metadata;assembly=ecologylabSemantics"
+        xmlns:mdb="clr-namespace:ecologylab.semantics.metadata.builtins;assembly=ecologylabSemantics"
+        xmlns:simpl="clr-namespace:ecologylab.serialization;assembly=ecologylabFundamental"
+	    xmlns:is="clr-namespace:ecologylab.semantics.interactive;assembly=ecologylabInteractiveSemantics"
+        Title="MainWindow" Height="800" Width="600">
+    <Window.Resources>
+        <is:MetadataFieldDescriptorNameConverter x:Key="nameConverter"/>
+        <is:MetadataFieldDescriptorValueConverter x:Key="valueConverter"/>
+
+    </Window.Resources>
+    <Canvas x:Name="myCanvas">
+        
+        <Button Name="GetMetadataButton" Click="GetMetadataButton_Click" Margin="59,76,312,186" Canvas.Left="402" Canvas.Top="-64" Height="22">Get Metadata Tree</Button>
+        <TextBox Name="UrlTextbox" Canvas.Left="12" Canvas.Top="12" Height="22" Width="443" GotFocus="UrlTextbox_GotFocus">Enter and IMDB Url</TextBox>
+        
+        <ContentControl x:Name="metadataContent">
+            <ContentControl.ContentTemplate>
+                <DataTemplate>
+                    <TreeView>
+                        <TreeViewItem Height="308" Width="553" Canvas.Left="12" Canvas.Top="40" ItemsSource="{Binding Path=EnumerableFields}">
+                            <TreeViewItem.Header>
+                                <TextBlock Text="Header Text"/>
+                            </TreeViewItem.Header>
+                            <TreeViewItem.ItemTemplate>
+                                <HierarchicalDataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Converter={StaticResource nameConverter}}"/>
+                                        <TextBlock>
+                                            <TextBlock.Text >
+                                                <MultiBinding Converter="{StaticResource valueConverter}" Mode="OneWay"  ConverterParameter="{x:Static TextBlock.TextProperty}">
+                                                    <Binding /><!--Sends the fieldDescriptor through-->
+                                                    <Binding >
+                                                        <Binding.RelativeSource>
+                                                            <RelativeSource Mode="FindAncestor" AncestorType="ContentControl" AncestorLevel="2" />
+                                                        </Binding.RelativeSource>
+                                                    </Binding>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                            </TreeViewItem.ItemTemplate>
+                        </TreeViewItem>
+                    </TreeView>
+                </DataTemplate>
+            </ContentControl.ContentTemplate>
+        </ContentControl>
     </Canvas>
 </Window>

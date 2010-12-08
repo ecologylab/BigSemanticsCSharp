@@ -18,6 +18,21 @@ namespace ecologylabSemantics
     {
         public static void Main()
         {
+            String path = @"C:\Users\damaraju.m2icode\workspace\cSharp\ecologylabSemantics\DomExtraction\javascript\tempJSON\";
+            MetadataScalarScalarType.init();
+            TranslationScope metadataTScope = GeneratedMetadataTranslations.Get();
+            ElementState es = metadataTScope.deserialize(path + "parsedIMDB.json", Format.JSON);
+            foreach (Object o in es.EnumerableFields)
+            {
+                if (o != null)
+                    Console.WriteLine("-- " + o.ToString());
+                else
+                    Console.WriteLine("Empty");
+            }
+        }
+
+        public static void GetRepoWithPurl()
+        {
             String workspace = @"C:\Users\damaraju.m2icode\workspace\";
             MetadataScalarScalarType.init();
             TranslationScope tScope = MetaMetadataTranslationScope.get();
@@ -28,7 +43,7 @@ namespace ecologylabSemantics
             string testFile = @"web\code\java\ecologylabSemantics\repository\";
             MetaMetadataRepository repo = MetaMetadataRepository.ReadDirectoryRecursively(workspace + testFile, tScope, metadataTScope);
 
-            MetaMetadata mmd = repo.getDocumentMM(new ParsedUri("http://www.imdb.com/title/tt1285016/"));
+            MetaMetadata mmd = repo.GetDocumentMM(new ParsedUri("http://portal.acm.org/citation.cfm?id=1459359"));
             Console.WriteLine("Got MMD : " + mmd.Name);
         }
 

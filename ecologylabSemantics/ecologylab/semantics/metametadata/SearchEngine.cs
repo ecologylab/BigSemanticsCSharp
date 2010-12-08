@@ -84,7 +84,7 @@ namespace ecologylab.semantics.metametadata
 
 		public Object key()
 		{
-			throw new NotImplementedException();
+            return name;
 		}
 	}
 }

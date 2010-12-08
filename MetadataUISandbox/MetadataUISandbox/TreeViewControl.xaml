@@ -3,37 +3,65 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:md="clr-namespace:ecologylab.semantics.metadata;assembly=ecologylabSemantics"
+    xmlns:mdb="clr-namespace:ecologylab.semantics.metadata.builtins;assembly=ecologylabSemantics"
+    xmlns:simpl="clr-namespace:ecologylab.serialization;assembly=ecologylabFundamental"
+	xmlns:is="clr-namespace:ecologylab.semantics.interactive;assembly=ecologylabInteractiveSemantics"
 	mc:Ignorable="d"
+	
 	x:Class="MetadataUISandbox.TreeViewControl"
 	x:Name="UserControl"
 	d:DesignWidth="2" d:DesignHeight="2">
 	<UserControl.Resources>
-
-		<HierarchicalDataTemplate x:Key="DataTemplate1"                                   
-			ItemsSource="{Binding SubNodes}">
-			<Grid Margin="5">
+		<is:MetadataFieldDescriptorNameConverter x:Key="nameConverter"/>
+        <is:MetadataFieldDescriptorValueConverter x:Key="valueConverter"/>
+        <DataTemplate x:Key="SimplerDataTemplate" DataType="{x:Type mdb:Document}" >
+            <StackPanel >
+                <TextBlock Text="Metadata Attribute List"></TextBlock>
+                <ListBox ItemsSource="ElementClassDescriptor.AttributeFieldDescriptors">
+                    <TextBlock Text="{Binding Converter={StaticResource nameConverter}}">
+                    
+                    </TextBlock>
+                </ListBox>
+            </StackPanel>
+        </DataTemplate>
+            
+            <HierarchicalDataTemplate x:Key="DataTemplate1"     
+			        ItemsSource="{Binding Path=ElementClassDescriptor.AttributeFieldDescriptors}">
+            <Grid Margin="5" >
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
-				<TextBlock HorizontalAlignment="Left"
+                <TextBlock 
+                    HorizontalAlignment="Right"
 					VerticalAlignment="Top"
 					Grid.Column="1"
-					Text="HEADER"
+					Text="{Binding Converter={StaticResource nameConverter}}"
 					x:Name="HeaderTextBlock"
-					TextWrapping="Wrap" />
-				<TextBox 
+					TextWrapping="Wrap">
+
+                </TextBlock>
+                <!--
+                <TextBox 
                     x:Name="ValueTextBlock"
                     HorizontalAlignment="Left"
 					Margin="2"
 					VerticalAlignment="Top"
-					Text="ValueTextBlock"
+					DataContext="{Binding ElementName=ValueTextBlock, Path=/}"
 					TextWrapping="Wrap"
-					Grid.Column="2" />
-			</Grid>
+					Grid.Column="2">
+                    <TextBox.Text >
+                        <MultiBinding Converter="{StaticResource valueConverter}" Mode="OneWay"  ConverterParameter="{x:Static TextBlock.TextProperty}">
+                            <Binding />
+                            <Binding RelativeSource="{x:Static RelativeSource.Self}"/>
+                        </MultiBinding>
+                    </TextBox.Text>
+                </TextBox>
+                -->
+            </Grid>
 		</HierarchicalDataTemplate>
-        
 		<Style x:Key="TreeViewItemFocusVisual">
 			<Setter Property="Control.Template">
 				<Setter.Value>
@@ -148,5 +176,6 @@
 			Width="Auto" Height="Auto"
 			Padding="0"
 			ItemContainerStyle="{StaticResource TreeViewItemStyle1}"
-			ItemTemplate="{DynamicResource DataTemplate1}"/>
+			ItemTemplate="{DynamicResource DataTemplate1}" />
+   
 </UserControl>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,8 @@ using CjcAwesomiumWrapper;
 using ecologylab.semantics.metametadata;
 using ecologylab.semantics.metadata.scalar.types;
 using System.Threading.Tasks;
+using ecologylab.semantics.generated;
+using ecologylab.net;
 
 
 namespace DomExtraction
@@ -17,9 +20,13 @@ namespace DomExtraction
     {
 
         TranslationScope metadataTScope;
-        String mmdJson;
+        //String mmdJson;
         String js;
         String workspace = @"C:\Users\damaraju.m2icode\workspace\";
+
+        MetaMetadataRepository repo;
+
+        Dictionary<MetaMetadata, String> mmdJSONCache = new Dictionary<MetaMetadata, String>();
 
         /// <summary>
         /// TODO: Fix instantiation of webview to not depend on overriding the ArrangeOverride method.
@@ -27,71 +34,96 @@ namespace DomExtraction
         public MMDExtractionBrowser()
             :base()
         {
+            //Init Awesomium Webview correctly.
+            Init();
+        }
+
+        /// <summary>
+        /// Does the actual Initialization of the Repository
+        /// </summary>
+        public void InitRepo()
+        {
             MetadataScalarScalarType.init();
-            TranslationScope tScope = MetaMetadataTranslationScope.get();
+            TranslationScope mmdTScope = MetaMetadataTranslationScope.get();
 
             metadataTScope = GeneratedMetadataTranslations.Get();
 
 
-            string testFile = @"web\code\java\ecologylabSemantics\repository\repositorySources\imdb.xml";
-            MetaMetadataRepository repo = (MetaMetadataRepository)tScope.deserialize(workspace + testFile);
+            string testFile = @"web\code\java\ecologylabSemantics\repository\";
+            Console.WriteLine("Initting repository");
 
-            MetaMetadata imdbTitleMMD = repo.repositoryByTagName["imdb_title"];
-            StringBuilder mmdJSON = new StringBuilder();
-            mmdJSON.Append("mmd = ");
-            imdbTitleMMD.serializeToJSON(mmdJSON);
-            mmdJSON.Append(";");
-            mmdJson = mmdJSON.ToString();
+            repo = MetaMetadataRepository.ReadDirectoryRecursively(workspace + testFile, mmdTScope, metadataTScope);
+
+
+            //TODO: implement repo.getMMD(uri) correctly.
+            //MetaMetadata imdbTitleMMD = null;// repo.repositoryByTagName["imdb_title"];
+
             js = System.IO.File.ReadAllText(workspace + @"cSharp\ecologylabSemantics\DomExtraction\javascript\mmdDomHelper.js");
-
         }
 
+        public String GetJsonMMD(ParsedUri puri)
+        {
+            MetaMetadata mmd = repo.GetDocumentMM(puri);
+            String result = null;
+            if (mmd == null)        //Should bring up the browser !
+                return result;
+            
+            mmdJSONCache.TryGetValue(mmd, out result);
 
-        
+            if (result == null)
+            {
+                StringBuilder mmdJSON = new StringBuilder();
+                mmdJSON.Append("mmd = ");
+                mmd.serializeToJSON(mmdJSON);
+                mmdJSON.Append(";");
+                result = mmdJSON.ToString();
+                mmdJSONCache.Add(mmd, result);
+            }
+            return result;
+        }
 
         /// <summary>
-        /// Attempting to create an asynchronous method that returns the metadata of the Uri if available.
+        /// An asynchronous method that returns the metadata of the Uri if available.
         /// Using C# Async CTP from http://msdn.microsoft.com/en-us/vstudio/async.aspx
         /// We would like to not have the caller create delegates for OnCompletion of this metadata extraction,
         /// but instead just use an await and continue control flow.
         /// </summary>
         /// <param name="uri"></param>
         /// <returns></returns>
-        public async Task<ElementState>  ExtractMetadata(String uri)
+        public async Task<ElementState> ExtractMetadata(ParsedUri puri=null, String uri = null)
         {
             TaskCompletionSource<ElementState> tcs = new TaskCompletionSource<ElementState>();
+            if (puri == null && uri == null)
+                return null;
+            if (uri == null)
+                uri = puri.ToString();
+            else
+                puri = new ParsedUri(uri);
 
             //We need webView to be instantiated correctly.
             SetResourceInterceptor(new ResourceBanner(uri));
             Console.WriteLine("Setting Source");
             Source = uri;
-
             FinishLoading += delegate
             {
-                if (Source == null || "about:blank".Equals(Source))
+                if (Source == null || "about:blank".Equals(Source))// || loadingComplete)
                     return;
-                Console.WriteLine("Finished loading. " + System.DateTime.Now);
-                Console.WriteLine("Executing javascript");
-                ExecuteJavascript(mmdJson.ToString());
+                Console.WriteLine("Finished loading. Executing javascript. -- " + System.DateTime.Now);
+                String jsonMMD = GetJsonMMD(puri);
+                
+                ExecuteJavascript(jsonMMD);
                 ExecuteJavascript(js);
-                Console.WriteLine("Dones execution, calling function. " + System.DateTime.Now);
+                Console.WriteLine("Done js code execution, calling function. --" + System.DateTime.Now);
                 JSValue value = ExecuteJavascriptWithResult("extractMetadata(mmd);").Get();
-                //JSValue value = browser.ExecuteJavascriptWithResult("myTest();").Get();
-                Console.WriteLine("Done getting value. Serializing JSValue now. " + System.DateTime.Now);
                 String metadataJSON = (String)value.Value();
-
-                Console.WriteLine("String MetadataJSON received. " + System.DateTime.Now);
-
-                ElementState myShinyNewMetadata = metadataTScope.deserializeString(metadataJSON, Format.JSON); //, new Uri(uri));
-
-                Console.WriteLine("My New Metadata");
+                Console.WriteLine("Done getting value. Serializing JSON string to ElementState. --" + System.DateTime.Now);
+                ElementState myShinyNewMetadata = metadataTScope.deserializeString(metadataJSON, Format.JSON); //, new ParsedUri(uri));
+                Console.WriteLine("Metadata ElementState object created. " + System.DateTime.Now);
 
                 tcs.TrySetResult(myShinyNewMetadata);
             };
 
-            //await TaskEx.ConfigureAwait(tcs.Task, true);
             return await AsyncCtpThreadingExtensions.GetAwaiter(tcs.Task);
-
         }
     }
 
@@ -99,18 +131,19 @@ namespace DomExtraction
     {
 
         String uri;
+
         public ResourceBanner(String uri) 
         {
             this.uri = uri;
+
         }
         public override ResourceResponse OnRequest(WebView caller, String url, String referrer)
         {
-            ResourceResponse bannedResponse = ResourceResponse.Create(1, "x", "text/html");
             if (url == uri)
             {
                 return new ResourceResponse();
             }
-            return bannedResponse;
+            return ResourceResponse.Create(1, "x", "text/html");
         }
     }
 }
