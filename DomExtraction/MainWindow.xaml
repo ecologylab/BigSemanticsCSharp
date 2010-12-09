@@ -12,44 +12,67 @@
     <Window.Resources>
         <is:MetadataFieldDescriptorNameConverter x:Key="nameConverter"/>
         <is:MetadataFieldDescriptorValueConverter x:Key="valueConverter"/>
+        <is:ICMTemplateSelector x:Key="metadataTemplateSelector"/>
+        
+        <HierarchicalDataTemplate x:Key="FieldDescriptorDataTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Converter={StaticResource nameConverter}}"/>
+                <TextBlock>
+                    <TextBlock.Text >
+                        <MultiBinding Converter="{StaticResource valueConverter}" Mode="OneWay"  ConverterParameter="{x:Static TextBlock.TextProperty}">
+                            <Binding /><!--Sends the fieldDescriptor through-->
+                            <Binding >
+                                <Binding.RelativeSource>
+                                    <RelativeSource Mode="FindAncestor" AncestorType="ContentControl" AncestorLevel="2" />
+                                </Binding.RelativeSource>
+                            </Binding>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </StackPanel>
+        </HierarchicalDataTemplate>
 
+        <DataTemplate x:Key="MetadataScalarDataTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Path=[0].FieldName}"/>
+                <TextBlock Text="{Binding Path=[1]}" Padding="10">
+                    <!--<TextBlock.Text >
+                        <MultiBinding Converter="{StaticResource valueConverter}" Mode="OneWay"  ConverterParameter="{x:Static TextBlock.TextProperty}">
+                            <Binding /> Sends the fieldDescriptor through
+                            <Binding >
+                                <Binding.RelativeSource>
+                                    <RelativeSource Mode="FindAncestor" AncestorType="ContentControl" AncestorLevel="2" />
+                                </Binding.RelativeSource>
+                            </Binding>
+                        </MultiBinding>
+                    </TextBlock.Text>-->
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="MetadataListDataTemplate">
+            <TreeViewItem Height="308" Width="553" Canvas.Left="12" Canvas.Top="40" ItemsSource="{Binding}" ItemTemplateSelector="{StaticResource metadataTemplateSelector}">
+                <TreeViewItem.Header>
+                    <TextBlock Text="{Binding Path=[0].FieldName}"/>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+        </DataTemplate>
+
+        <DataTemplate x:Key="MetadataDataTemplate">
+            <TreeViewItem Height="308" Width="553" Canvas.Left="12" Canvas.Top="40" ItemsSource="{Binding Path=EnumerableFields}" ItemTemplateSelector="{StaticResource metadataTemplateSelector}">
+                <TreeViewItem.Header>
+                    <TextBlock Text="{Binding Path=[0].FieldName}"/>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+        </DataTemplate>
     </Window.Resources>
     <Canvas x:Name="myCanvas">
-        
         <Button Name="GetMetadataButton" Click="GetMetadataButton_Click" Margin="59,76,312,186" Canvas.Left="402" Canvas.Top="-64" Height="22">Get Metadata Tree</Button>
         <TextBox Name="UrlTextbox" Canvas.Left="12" Canvas.Top="12" Height="22" Width="443" GotFocus="UrlTextbox_GotFocus">Enter and IMDB Url</TextBox>
-        
-        <ContentControl x:Name="metadataContent">
-            <ContentControl.ContentTemplate>
-                <DataTemplate>
-                    <TreeView>
-                        <TreeViewItem Height="308" Width="553" Canvas.Left="12" Canvas.Top="40" ItemsSource="{Binding Path=EnumerableFields}">
-                            <TreeViewItem.Header>
-                                <TextBlock Text="Header Text"/>
-                            </TreeViewItem.Header>
-                            <TreeViewItem.ItemTemplate>
-                                <HierarchicalDataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Converter={StaticResource nameConverter}}"/>
-                                        <TextBlock>
-                                            <TextBlock.Text >
-                                                <MultiBinding Converter="{StaticResource valueConverter}" Mode="OneWay"  ConverterParameter="{x:Static TextBlock.TextProperty}">
-                                                    <Binding /><!--Sends the fieldDescriptor through-->
-                                                    <Binding >
-                                                        <Binding.RelativeSource>
-                                                            <RelativeSource Mode="FindAncestor" AncestorType="ContentControl" AncestorLevel="2" />
-                                                        </Binding.RelativeSource>
-                                                    </Binding>
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </HierarchicalDataTemplate>
-                            </TreeViewItem.ItemTemplate>
-                        </TreeViewItem>
-                    </TreeView>
-                </DataTemplate>
-            </ContentControl.ContentTemplate>
+
+        <ContentControl x:Name="metadataContent" ContentTemplateSelector="{StaticResource metadataTemplateSelector}"
+                        Canvas.Left="12" Canvas.Top="50" Width="443">
+
         </ContentControl>
     </Canvas>
 </Window>

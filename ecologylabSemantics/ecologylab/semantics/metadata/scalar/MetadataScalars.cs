@@ -7,7 +7,16 @@ using ecologylab.net;
 namespace ecologylab.semantics.metadata.scalar
 {
 
-    abstract public class MetadataScalarBase<T>
+    public interface IMetadataScalar
+    {
+        Object Value
+        {
+            get;
+            set;
+        }
+    }
+
+    abstract public class MetadataScalarBase<T> : IMetadataScalar
     {
         public T value;
         public static String VALUE_FIELD_NAME	    = "value";
@@ -22,7 +31,7 @@ namespace ecologylab.semantics.metadata.scalar
             this.value = (T) value;
         }
 
-        public T Value
+        public object Value
         {
             get { return value; }
             set { this.value = (T)value; }
@@ -39,6 +48,8 @@ namespace ecologylab.semantics.metadata.scalar
         public MetadataString(){}
 
         //The termvector stuff goes here !
+
+
         /// <summary>
         /// 
         /// </summary>
