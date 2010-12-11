@@ -8,6 +8,8 @@ using ecologylab.semantics.metadata.scalar;
 using System.Collections;
 using ecologylab.semantics.metadata;
 using ecologylab.serialization;
+using ecologylab.semantics.metadata.builtins;
+using ecologylab.semantics.generated.library;
 
 namespace ecologylab.semantics.interactive
 {
@@ -20,34 +22,57 @@ namespace ecologylab.semantics.interactive
 
             object[] items = item as object[];
 
-            object theField = items == null ? item : items[1];
+            bool inList = false;
+            object theField = null;
+            if (items == null)
+                theField = item;
+            else
+            {
+                theField = items[1];
+                inList = true;
+            }
+
 
             Window pres = Application.Current.MainWindow;
 
             DataTemplate dt = null;
 
+            String key = null;
             //This might be replaced by type specific run-time generated datatemplates.
             //This code is probably not optimal for performance. Not concerned at this point.
             if (theField is IMetadataScalar)
             {
-                dt = pres.FindResource("MetadataScalarDataTemplate") as DataTemplate;
-                Console.WriteLine("Template [" + theField + "] : Scalar");
+                key = "ScalarDataTemplate";
             }
             else if (theField is IEnumerable)
             {
-                dt = pres.FindResource("MetadataListDataTemplate") as DataTemplate;
-                Console.WriteLine("Template [" + theField + "] : List");
+                key = "ListDataTemplate";
             }
+            else if (theField is Thumbinner)
+            {
+                key = "ImageDataTemplate";
+            }
+            /*else if (theField is Entity)
+            { //EntityListItemDataTemplate
+                string key = inList ? "EntityListItemDataTemplate" : "EntityDataTemplate";
+
+                dt = pres.FindResource(key) as DataTemplate;
+                Console.WriteLine("Template [" + theField + "] : " + key);
+            }*/
             else if (theField is Metadata)
             {
-                dt = pres.FindResource("MetadataDataTemplate") as DataTemplate;
-                Console.WriteLine("Template [" + theField + "] : Composite");
+                key = inList ? "CompositeListItemDataTemplate" : "CompositeDataTemplate";
             }
             else
             {
                 Console.WriteLine("Template not found for object: " + item);
             }
 
+            if (key != null)
+            {
+                dt = pres.FindResource(key) as DataTemplate;
+                Console.WriteLine("Template [" + theField + "] : " + key);
+            }
             return dt;
         }
     }

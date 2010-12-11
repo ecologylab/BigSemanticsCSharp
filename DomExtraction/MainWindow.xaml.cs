@@ -35,7 +35,7 @@ namespace DomExtraction
         MMDExtractionBrowser browser = null;
         TreeViewControl control;
 
-        string testPath = "http://www.imdb.com/title/tt1305591/";
+        string testPath = "http://en.wikipedia.org/wiki/Hyderabad,_India";
 
         public MainWindow()
         {
