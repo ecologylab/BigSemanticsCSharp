@@ -35,41 +35,30 @@
         <DataTemplate x:Key="ScalarDataTemplate">
             <StackPanel Orientation="Horizontal" Margin="-10, 0, 0, 0">
                 <TextBlock Text="{Binding Path=[0].FieldName}"/>
-                <TextBlock Text="{Binding Path=[1]}" Padding="10, 0, 0, 0">
-                    <!--<TextBlock.Text >
-                        <MultiBinding Converter="{StaticResource valueConverter}" Mode="OneWay"  ConverterParameter="{x:Static TextBlock.TextProperty}">
-                            <Binding /> Sends the fieldDescriptor through
-                            <Binding >
-                                <Binding.RelativeSource>
-                                    <RelativeSource Mode="FindAncestor" AncestorType="ContentControl" AncestorLevel="2" />
-                                </Binding.RelativeSource>
-                            </Binding>
-                        </MultiBinding>
-                    </TextBlock.Text>-->
-                </TextBlock>
+                <TextBlock Text="{Binding Path=[1]}" Padding="10, 0, 0, 0" TextWrapping="Wrap" ScrollViewer.CanContentScroll="True" MaxWidth="150"/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="ListDataTemplate">
-            <TreeViewItem ItemsSource="{Binding Path=[1]}" ItemTemplateSelector="{StaticResource metadataTemplateSelector}"  Background="Aqua" DataContext="{Binding}">
+            <TreeViewItem ItemsSource="{Binding Path=[1]}" ItemTemplateSelector="{StaticResource metadataTemplateSelector}" DataContext="{Binding}">
                 <TreeViewItem.Header>
                     <TextBlock Text="{Binding Path=[0].FieldName}"/>
                 </TreeViewItem.Header>
             </TreeViewItem>
         </DataTemplate>
 
+        <!-- This is a hack. Entities should be metadata objects-->
         <DataTemplate x:Key="EntityDataTemplate">
             <TextBlock Text="{Binding Path=Gist}"/>
         </DataTemplate>
 
-
+        <!--This is a hack. Entities should be metadata objects-->
         <DataTemplate x:Key="EntityListItemDataTemplate">
             <TextBlock Text="{Binding Path=[1].Gist}"/>
         </DataTemplate>
 
         <DataTemplate x:Key="CompositeListItemDataTemplate">
-            <TreeViewItem ItemsSource="{Binding Path=[1].EnumerableFields}" ItemTemplateSelector="{StaticResource metadataTemplateSelector}" Background="Brown" DataContext="{Binding}">
-                <!-- --> 
+            <TreeViewItem ItemsSource="{Binding Path=[1].EnumerableFields}" ItemTemplateSelector="{StaticResource metadataTemplateSelector}" DataContext="{Binding}">
                 <TreeViewItem.Header>
                     <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeViewItem}, Path=DataContext[0].FieldName}"/>
                 </TreeViewItem.Header>
@@ -77,23 +66,27 @@
         </DataTemplate>
 
         <DataTemplate x:Key="CompositeDataTemplate">
-            <TreeViewItem ItemsSource="{Binding Path=EnumerableFields}" ItemTemplateSelector="{StaticResource metadataTemplateSelector}" Background="Beige" DataContext="{Binding}">
+            <TreeViewItem ItemsSource="{Binding Path=EnumerableFields}" ItemTemplateSelector="{StaticResource metadataTemplateSelector}" DataContext="{Binding}">
                <TreeViewItem.Header>
                     <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeViewItem, AncestorLevel=3}, Path=DataContext[0].FieldName}"/>
                 </TreeViewItem.Header>
             </TreeViewItem>
         </DataTemplate>
         <DataTemplate x:Key="DocumentDataTemplate" DataType="{x:Type mdb:Document}" >
-            <TreeViewItem ItemsSource="{Binding Path=EnumerableFields}" ItemTemplateSelector="{StaticResource metadataTemplateSelector}" Background="Blue" DataContext="{Binding}">
+            <TreeViewItem ItemsSource="{Binding Path=EnumerableFields}" ItemTemplateSelector="{StaticResource metadataTemplateSelector}" DataContext="{Binding}">
                 <TreeViewItem.Header>
                     <TextBlock Text="{Binding Path=Title}"/>
                 </TreeViewItem.Header>
             </TreeViewItem>
         </DataTemplate>
-        <DataTemplate x:Key="ImageDataTemplate">
-            <Image Source="{Binding Path=ThumbImgSrc.Value}">
-                
-            </Image>
+        
+        
+        <DataTemplate x:Key="ThumbinnerDataTemplate">
+            <StackPanel Orientation="Vertical">
+                <!--<TextBlock Text="Image"></TextBlock>
+                <TextBlock Text="{Binding Path=ThumbImgSrc.Value}"></TextBlock> -->
+                <Image Source="{Binding Path=ThumbImgSrc.Value}"/>
+            </StackPanel>
         </DataTemplate>
 
     </Window.Resources>
@@ -101,9 +94,11 @@
         <Button Name="GetMetadataButton" Click="GetMetadataButton_Click" Margin="59,76,312,186" Canvas.Left="402" Canvas.Top="-64" Height="22">Get Metadata Tree</Button>
         <TextBox Name="UrlTextbox" Canvas.Left="12" Canvas.Top="12" Height="22" Width="443" GotFocus="UrlTextbox_GotFocus">Enter and IMDB Url</TextBox>
 
-        <ContentControl x:Name="metadataContent" ContentTemplate="{StaticResource DocumentDataTemplate}"
-                        Canvas.Left="12" Canvas.Top="50" Width="443" DataContext="{Binding}">
-
-        </ContentControl>
+        <ScrollViewer Canvas.Left="12" Canvas.Top="50" Width="443" MaxHeight="400" MaxWidth="443">
+            <ContentControl x:Name="metadataContent" ContentTemplate="{StaticResource DocumentDataTemplate}" DataContext="{Binding}" MaxWidth="443">
+                
+            </ContentControl>
+        </ScrollViewer>
+        
     </Canvas>
 </Window>

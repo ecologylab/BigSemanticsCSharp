@@ -28,6 +28,7 @@ namespace DomExtraction
 
         Dictionary<MetaMetadata, String> mmdJSONCache = new Dictionary<MetaMetadata, String>();
 
+        const String BLANK_PAGE = "about:blank";
         /// <summary>
         /// TODO: Fix instantiation of webview to not depend on overriding the ArrangeOverride method.
         /// </summary>
@@ -106,7 +107,7 @@ namespace DomExtraction
             Source = uri;
             FinishLoading += delegate
             {
-                if (Source == null || "about:blank".Equals(Source))// || loadingComplete)
+                if (Source == null || BLANK_PAGE.Equals(Source))// || loadingComplete)
                     return;
                 Console.WriteLine("Finished loading. Executing javascript. -- " + System.DateTime.Now);
                 String jsonMMD = GetJsonMMD(puri);
@@ -117,9 +118,9 @@ namespace DomExtraction
                 JSValue value = ExecuteJavascriptWithResult("extractMetadata(mmd);").Get();
                 String metadataJSON = (String)value.Value();
                 Console.WriteLine("Done getting value. Serializing JSON string to ElementState. --" + System.DateTime.Now);
-                ElementState myShinyNewMetadata = metadataTScope.deserializeString(metadataJSON, Format.JSON); //, new ParsedUri(uri));
+                ElementState myShinyNewMetadata = metadataTScope.deserializeString(metadataJSON, Format.JSON, new ParsedUri(uri));
                 Console.WriteLine("Metadata ElementState object created. " + System.DateTime.Now);
-
+                Source = BLANK_PAGE;
                 tcs.TrySetResult(myShinyNewMetadata);
             };
 
