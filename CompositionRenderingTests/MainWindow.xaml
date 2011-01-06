@@ -1,0 +1,33 @@
+﻿<Window x:Class="CompositionRenderingTests.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" 
+        xmlns:src="clr-namespace:CompositionRenderingTests">
+    <Window.Resources>
+        <XmlDataProvider x:Key="compositionSample" Source="C:\\Users\\damaraju.m2icode\\workspace\\cSharp\\ecologylabSemantics\\TestCases\\untitled.xml">
+            
+        </XmlDataProvider>
+        <src:SurrogateTemplateSelector x:Key="surrogateTemplateSelector"></src:SurrogateTemplateSelector>
+        <DataTemplate x:Key="textSurrogateTemplate">
+            <TextBlock Text="{Binding XPath=text_element/text/@text}"></TextBlock>
+        </DataTemplate>
+        <DataTemplate x:Key="imageSurrogateTemplate">
+            <Image Source="{Binding XPath=image_element/image/@location}"></Image>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <ItemsControl Name="compositionItemsControl" ItemsSource="{Binding XPath=composition/surrogate_state_set/surrogate_state}" ItemTemplateSelector="{StaticResource surrogateTemplateSelector}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas  Name="compositionSpace" Background="White" Width="{Binding XPath=composition/preferences/screen/@width}" Height="{Binding XPath=composition/preferences/screen/@height}" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Top" Value="{Binding XPath=visual/extent/@x}" />
+                    <Setter Property="Canvas.Left" Value="{Binding XPath=visual/extent/@y}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+    </Grid>
+</Window>
