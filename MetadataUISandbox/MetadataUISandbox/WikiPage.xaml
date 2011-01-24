@@ -1,0 +1,25 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="MetadataUISandbox.WikiPage"
+	x:Name="UserControl" d:DesignHeight="480" Width="972">
+
+	<Grid x:Name="LayoutRoot">
+		<Canvas>
+			<WrapPanel Canvas.Left="27.5" Orientation="Vertical" Canvas.Top="61" Width="447">
+				<Slider x:Name="TextSize" Maximum="30" Minimum="10" ValueChanged="TextSize_ValueChanged" />
+				<Slider x:Name="LinkSize" ToolTip="Link Size" Maximum="40" Minimum="10" SmallChange="1"/>
+				<ScrollViewer  Height="275.5" Width="447">
+					<RichTextBox  Height="Auto" Width="Auto" FontSize="10">
+						<FlowDocument>
+							<Paragraph LineStackingStrategy="MaxHeight" LineHeight="14" FontSize="{Binding Value, ElementName=TextSize}"><Run Text="Hyderabad (i /ˈhaɪdərəbɑːd/; Telugu: హైదరాబాద్ [ɦəjd̪ərɑːbɑːd̪], Urdu: حیدرآباد [ɦɛːd̪(ə)raːbaːd̪]), is the capital of the state "/><Run Text=" "/><Run Text=" "/><Run Text=" "/><Run Text="Andhra Pradesh, India" Foreground="#FF163E8D" FontSize="{Binding Value, ElementName=LinkSize}" /><Run Text=" "/><Run Text=" "/><Run Text=" "/><Run Text=". It also goes by its "/><Run Text=" "/><Run Text=" "/><Run Text=" "/><Run Text="sobriquet " Foreground="#FF163E8D" FontSize="{Binding Value, ElementName=LinkSize}"/><Run Text=" "/><Run Text=" "/><Run Text=" "/><Run Text="City of Pearls. As of 2010 it is the "/><Run Text=" "/><Run Text=" "/><Run Text=" "/><Run Text="sixth most populous city " Foreground="#FF163E8D" FontSize="{Binding Value, ElementName=LinkSize}"/><Run Text=" "/><Run Text=" "/><Run Text=" "/><Run Text="and "/><Run Text=" "/><Run Text=" "/><Run Text=" "/><Run Text="sixth-most populous urban agglomeration" Foreground="#FF163E8D" FontSize="{Binding Value, ElementName=LinkSize}"/><Run Text=" "/><Run Text="[1] in India. Hyderabad was founded by "/><Run Text=" "/><Run Text="Muhammad Quli Qutb Shah " Foreground="#FF163E8D" FontSize="{Binding Value, ElementName=LinkSize}"/><Run Text=" "/><Run Text="in 1591 on the banks of "/><Run Text=" "/><Run Text="Musi" Foreground="#FF163E8D" FontSize="{Binding Value, ElementName=LinkSize}"/><Run Text=" "/><Run Text=". Today the city covers an area of approximately 650 km².[4][5] The "/><Run Text=" "/><Run Text="twin cities " Foreground="#FF163E8D" FontSize="{Binding Value, ElementName=LinkSize}"/><Run Text=" "/><Run Text="of Hyderabad and "/><Run Text=" "/><Run Text="Secunderabad " Foreground="#FF163E8D" FontSize="{Binding Value, ElementName=LinkSize}"/><Run Text=" "/><Run Text="come under the ambit of a single municipal unit, The "/><Run Text=" "/><Run Text="Greater Hyderabad Municipal Corporation" Foreground="#FF163E8D" FontSize="{Binding Value, ElementName=LinkSize}"/><Run Text=" "/><Run Text="."/></Paragraph>							
+						</FlowDocument>
+					</RichTextBox>
+				</ScrollViewer>
+			</WrapPanel>
+		</Canvas>
+	</Grid>
+</UserControl>

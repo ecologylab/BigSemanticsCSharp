@@ -18,7 +18,7 @@
         <DataTemplate x:Key="SimplerDataTemplate" DataType="{x:Type mdb:Document}" >
             <StackPanel >
                 <TextBlock Text="Metadata Attribute List"></TextBlock>
-                <ListBox ItemsSource="ElementClassDescriptor.AttributeFieldDescriptors">
+                <ListBox ItemsSource="{Binding Path=ElementClassDescriptor.AttributeFieldDescriptors}">
                     <TextBlock Text="{Binding Converter={StaticResource nameConverter}}">
                     
                     </TextBlock>

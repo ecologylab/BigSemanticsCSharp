@@ -127,7 +127,6 @@ namespace ecologylab.semantics.interactive
             if (fd.Field == null)
                 return null;
 
-
             switch(fd.Type)
             {
                 case FieldTypes.SCALAR:

@@ -20,16 +20,18 @@ namespace ecologylab.semantics.interactive
             if (item == null)
                 return null;
 
-            object[] items = item as object[];
-
+            FieldEntry items;
             bool inList = false;
             object theField = null;
-            if (items == null)
-                theField = item;
+            if (item is FieldEntry)
+            {
+                items = (FieldEntry)item;
+                theField = items.Value;
+            }
             else
             {
-                theField = items[1];
-                inList = true;
+                theField = item;
+                inList = true; //We encounter items directly only if they exist in lists.
             }
 
 
@@ -48,10 +50,6 @@ namespace ecologylab.semantics.interactive
             {
                 key = "ListDataTemplate";
             }
-            else if (theField is Thumbinner)
-            {
-                key = "ImageDataTemplate";
-            }
             /*else if (theField is Entity)
             { //EntityListItemDataTemplate
                 string key = inList ? "EntityListItemDataTemplate" : "EntityDataTemplate";
@@ -61,6 +59,15 @@ namespace ecologylab.semantics.interactive
             }*/
             else if (theField is Metadata)
             {
+                Type t = theField.GetType();
+                string customKey = t.Name + "DataTemplate";
+                object ob = pres.TryFindResource(customKey);
+                if (ob != null)
+                {
+                    Console.WriteLine("Using custom dataTemplate: " + customKey);
+                    dt = ob as DataTemplate;
+                }
+                
                 key = inList ? "CompositeListItemDataTemplate" : "CompositeDataTemplate";
             }
             else
@@ -68,10 +75,10 @@ namespace ecologylab.semantics.interactive
                 Console.WriteLine("Template not found for object: " + item);
             }
 
-            if (key != null)
+            if (dt == null && key != null)
             {
                 dt = pres.FindResource(key) as DataTemplate;
-                Console.WriteLine("Template [" + theField + "] : " + key);
+                //Console.WriteLine("Template [" + theField + "] : " + key);
             }
             return dt;
         }

@@ -47,8 +47,6 @@ namespace DomExtraction
 
             control = new TreeViewControl();
             myCanvas.Children.Add(control);
-            
-
         }
         
         private async void InitBrowser()
@@ -78,7 +76,8 @@ namespace DomExtraction
             //In this case, the UI thread resumes normal processing of interaction,
             //returning to the following code, that would normally have been in a callback function.
             Console.WriteLine("Got Metadata for page :: " + result.Title + " at " + System.DateTime.Now);
-
+            int depth = result.GetTreeDepth();
+            Console.WriteLine("Depth : " + depth);
             ConstructMetadataTree(result);
 
             //Binding b = new Binding() { Source = result, Path= new PropertyPath("Plot.Value"),  Mode = BindingMode.TwoWay };
@@ -92,35 +91,7 @@ namespace DomExtraction
 
         private void ConstructMetadataTree(Metadata metadata)
         {
-            List<Metadata> tempList = new List<Metadata>();
-            tempList.Add(metadata);
             metadataContent.Content = metadata;
-            //metadataView.ItemsSource = metadata;
-
-            /*
-            Console.WriteLine("Starting construction: " + System.DateTime.Now);
-            ClassDescriptor classDesc = metadata.ElementClassDescriptor;
-            List<FieldDescriptor> attrs = classDesc.AttributeFieldDescriptors;
-            foreach (FieldDescriptor attr in attrs)
-            {
-                String name = attr.FieldName;
-                object value =  attr.Field.GetValue(metadata);
-                if (value == null)
-                    continue;
-                String val = value.ToString();
-                TextBlock t = new TextBlock();
-                t.TextWrapping = TextWrapping.Wrap;
-                t.MaxWidth = metadataView.Width;
-                t.Text = name + " : " + val;
-                metadataView.Items.Add(t);
-            }
-            Console.WriteLine("Done with construction: " + System.DateTime.Now);
-            List<FieldDescriptor> elementFDs = classDesc.ElementFieldDescriptors;
-            foreach (FieldDescriptor attr in elementFDs)
-            {
-                Console.WriteLine("attr: " + attr.FieldName);
-            }*/
-
         }
     }
     
