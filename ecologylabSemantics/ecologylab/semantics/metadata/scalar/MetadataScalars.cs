@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ecologylab.net;
+using System.IO;
 
 namespace ecologylab.semantics.metadata.scalar
 {
@@ -84,4 +85,13 @@ namespace ecologylab.semantics.metadata.scalar
         public MetadataStringBuilder(object value):base(value)
         {}
     }
+
+    public class MetadataFile : MetadataScalarBase<FileStream>
+    {
+        public MetadataFile() { }
+        public MetadataFile(object value)
+            : base(value)
+        { }
+    }
+
 }

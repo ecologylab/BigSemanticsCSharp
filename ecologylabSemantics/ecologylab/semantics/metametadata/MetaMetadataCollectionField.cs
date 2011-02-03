@@ -44,6 +44,9 @@ namespace ecologylab.semantics.metametadata
 		[simpl_scalar]
 		private Boolean noWrap;
 
+        [simpl_scalar]
+        private Boolean parseAsHypertext;
+
 		public MetaMetadataCollectionField()
 		{ }
 
@@ -81,5 +84,11 @@ namespace ecologylab.semantics.metametadata
 			get{return noWrap;}
 			set{noWrap = value;}
 		}
+
+        public Boolean ParseAsHypertext
+        {
+            get { return parseAsHypertext; }
+            set { parseAsHypertext = value; }
+        }
 	}
 }

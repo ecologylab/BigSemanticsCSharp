@@ -73,6 +73,8 @@
     <Compile Include="ecologylab\semantics\connectors\InfoCollector.cs" />
     <Compile Include="ecologylab\semantics\connectors\SemanticsSite.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\ClippableDocument.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\ClippableMetadata.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\Clipping.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\DebugMetadata.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Document.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Entity.cs" />

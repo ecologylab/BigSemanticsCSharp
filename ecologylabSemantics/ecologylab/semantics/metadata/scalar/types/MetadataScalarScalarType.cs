@@ -7,6 +7,7 @@ using ecologylab.serialization.types;
 using System.Reflection;
 using ecologylab.serialization;
 using ecologylab.net;
+using System.IO;
 
 namespace ecologylab.semantics.metadata.scalar.types
 {
@@ -92,7 +93,8 @@ namespace ecologylab.semantics.metadata.scalar.types
 				typeof(MetadataStringBuilderScalarType),
 				typeof(MetadataIntegerScalarType),
 				typeof(MetadataParsedURLScalarType),
-				typeof(MetadataDateScalarType) };
+				typeof(MetadataDateScalarType),
+                typeof(MetadataFileScalarType)};
 
 		public static void init()
 		{
@@ -164,4 +166,17 @@ namespace ecologylab.semantics.metadata.scalar.types
             return new MetadataDate(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
 		}
 	}
+
+    public class MetadataFileScalarType : MetadataScalarScalarType
+    {
+        public MetadataFileScalarType()
+            : base(typeof(MetadataFile), typeof(FileStream))
+        {
+
+        }
+        public override object GetInstance(string value, string[] formatStrings, IScalarUnmarshallingContext scalarUnmarshallingContext)
+        {
+            return new MetadataFile(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
+        }
+    }
 }
