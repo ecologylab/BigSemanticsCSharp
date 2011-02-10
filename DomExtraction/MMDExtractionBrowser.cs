@@ -111,7 +111,7 @@ namespace DomExtraction
                     return;
                 Console.WriteLine("Finished loading. Executing javascript. -- " + System.DateTime.Now);
                 String jsonMMD = GetJsonMMD(puri);
-                
+                Console.WriteLine("json:\n" + jsonMMD + "\n");
                 ExecuteJavascript(jsonMMD);
                 ExecuteJavascript(js);
                 Console.WriteLine("Done js code execution, calling function. --" + System.DateTime.Now);

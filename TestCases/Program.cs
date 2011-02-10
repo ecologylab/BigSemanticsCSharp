@@ -11,14 +11,56 @@ using ecologylab.semantics.metadata.scalar.types;
 using ecologylab.net;
 using ecologylab.semantics.generated;
 using System.Text.RegularExpressions;
-
+using ecologylab.semantics.generated.library;
+using ecologylab.semantics.metadata.scalar;
 namespace ecologylabSemantics
 {
     public class Tester
     {
+
+        static String path = @"C:\Users\damaraju.m2icode\workspace\cSharp\ecologylabSemantics\DomExtraction\javascript\tempJSON\";
+
         public static void Main()
         {
-            String path = @"C:\Users\damaraju.m2icode\workspace\cSharp\ecologylabSemantics\DomExtraction\javascript\tempJSON\";
+            MetadataScalarScalarType.init();
+
+            TranslationScope metadataTScope = GeneratedMetadataTranslations.Get();
+            ElementState s = metadataTScope.deserialize(path + "wikipedia-parsed-hypertext.json", Format.JSON);
+
+            //TestHypertextSerialization();
+            Console.WriteLine("Done");
+            
+        }
+
+        public static void TestHypertextSerialization()
+        {
+
+            MetadataScalarScalarType.init();
+            HypertextPara p = new HypertextPara();
+            TextRun t = new TextRun();
+            MetadataString s = new MetadataString();
+            s.Value = "This is the first part of the string. We will end this sentence with a link ";
+            t.Text = s;
+
+            LinkRun l = new LinkRun();
+            MetadataString s2 = new MetadataString();
+            s2.Value = "like so";
+            l.Text = s2;
+
+            MetadataParsedURL puri = new MetadataParsedURL();
+            puri.value = new ParsedUri("http://www.google.com");
+            l.Location = puri;
+            p.Runs = new List<Run>();
+            p.Runs.Add(t);
+            p.Runs.Add(l);
+            StringBuilder output = new StringBuilder();
+            p.serializeToJSON(output);
+            Console.WriteLine("output: " + output);
+        }
+
+        public static void TestJSONDeserialization()
+        {
+            
             MetadataScalarScalarType.init();
             TranslationScope metadataTScope = GeneratedMetadataTranslations.Get();
             ElementState es = metadataTScope.deserialize(path + "parsedIMDB.json", Format.JSON);
@@ -43,8 +85,12 @@ namespace ecologylabSemantics
             string testFile = @"web\code\java\ecologylabSemantics\repository\";
             MetaMetadataRepository repo = MetaMetadataRepository.ReadDirectoryRecursively(workspace + testFile, tScope, metadataTScope);
 
-            MetaMetadata mmd = repo.GetDocumentMM(new ParsedUri("http://portal.acm.org/citation.cfm?id=1459359"));
+            MetaMetadata mmd = repo.GetDocumentMM(new ParsedUri("http://en.wikipedia.org/wiki/Nizam_of_Hyderabad"));
+            StringBuilder b = new StringBuilder();
+            mmd.serializeToJSON(b);
             Console.WriteLine("Got MMD : " + mmd.Name);
+            Console.WriteLine("MMDJson : " + b);
+
         }
 
         public static void testPuris()

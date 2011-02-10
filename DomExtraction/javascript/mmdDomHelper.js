@@ -7,6 +7,7 @@ var currentMMDField;
 //Not to worry, we're working with standards here. Both browsers implement the XPath defined in
 // http://www.w3.org/TR/2004/NOTE-DOM-Level-3-XPath-20040226/DOM3-XPath.html
 
+
 function extractMetadata(mmd) 
 {
     mmd = mmd.meta_metadata;
@@ -33,6 +34,7 @@ function recursivelyExtractMetadata(mmd, contextNode, metadata) {
         currentMMDField = mmdField;
         console.log("Iterating to Next mmdField");
         console.log(mmdField);
+
         if (mmdField.scalar != null && mmdField.scalar.xpath != null) {
             console.log("Setting scalar: " + mmdField.scalar.name);
             extractScalar(mmdField.scalar, contextNode, metadata);
@@ -80,6 +82,12 @@ function extractCollection(mmdCollectionField, contextNode, metadata)
     var nodeList = getNodeListWithXPath(contextNode, mmdCollectionField.xpath);
     var metadataCollection = [];
 
+    if (mmdCollectionField.child_type == "hypertext_para") {
+        //Special field, for now. Parser needs to change it's ways to handle hypertext
+        parseNodeListAsHypertext(mmdCollectionField, nodeList, metadata);
+        return; //This collection is special. No further normal processing required.
+    }
+
     //Must take care of unwrapped collections. 
     //Must be an object with name = mmdField.child_type
     //Collections will always have 1 composite kid 
@@ -124,6 +132,10 @@ function extractComposite(mmdCompositeField, contextNode, metadata)
 
     console.log("Setting Composite: " + mmdCompositeField.name);
 
+    if (mmdField.parse_as_hypertext == true) {
+        parseNodeListAsHypertext(mmdField.composite, contextNode, metadata);
+    }
+
     compositeMetadata = {};
 
     console.log("Composite Recursive call: ");
@@ -139,6 +151,108 @@ function extractComposite(mmdCompositeField, contextNode, metadata)
     console.info(compositeMetadata);
     metadata[mmdCompositeField.name] = compositeMetadata;
 
+}
+
+
+
+function parseNodeListAsHypertext(mmdComposite, paras, metadata) {
+
+    console.log("Found hypertext nodes: ");
+    console.info(paras);
+
+    var parsedParas = [];
+
+    for (var resultIndex = 0; resultIndex < paras.snapshotLength; resultIndex++) {
+
+        var hypertextNode = paras.snapshotItem(resultIndex);
+        //console.log("Current Paragraph parsed: ");
+        //console.info(hypertextNode);
+        //console.log("Number of childNodes : " + hypertextNode.childNodes.length);
+
+        var paraContainer = parseHypertextParaFromNode(hypertextNode);
+
+        //console.info(hypertextPara);
+        parsedParas.push(paraContainer);
+    }
+    console.info(parsedParas);
+
+    metadata[mmdComposite.name] = parsedParas;
+}
+
+function parseHypertextParaFromNode(hypertextNode) {
+
+    //internal functions
+    function getLinkRun(node) {
+        var link_run = {};
+        link_run["text"] = node.textContent;
+        link_run["location"] = node.href;
+        link_run["title"] = node.title; //Wiki specific !
+        return link_run;
+    }
+    function getTextRun(node, formattedRun) {
+        var text_run = formattedRun == null ? {} : formattedRun;
+        text_run.text = node.textContent;
+        return text_run;
+    }
+
+    var paraContainer = {};
+    var hypertextPara = {};
+    runs = [];
+    hypertextPara["runs"] = runs;
+    paraContainer["hypertext_para"] = hypertextPara;
+
+    for (var nodeNum = 0; nodeNum < hypertextNode.childNodes.length; nodeNum++) {
+        var curNode = hypertextNode.childNodes[nodeNum];
+        var nodeName = curNode.nodeName;
+        //console.info(curNode);
+        var resNode = {};
+        if (nodeName == "#text" || nodeName == "SPAN") {
+            //console.log("Text: " + curNode.textContent);
+            resNode["text_run"] = getTextRun(curNode);
+
+        }
+        else if (nodeName == "A") {
+            //No further parsing just pull values out.
+            resNode["link_run"] = getLinkRun(curNode);
+        }
+        else if (nodeName == "B") {
+            formattedRun = {};
+            var styleInfo = {}
+
+            styleInfo["bold"] = true;
+            formattedRun["style_info"] = styleInfo;
+            if (curNode.childElementCount == 0) {
+                resNode["text_run"] = getTextRun(curNode, formattedRun);
+                //console.log("Simple bold : " + curNode.text);
+            }
+            else {
+                console.log("Bold link ?");
+                //console.log("NestedBold: ");
+                //console.info(curNode);
+            }
+        }
+        else if (nodeName == "I") {
+            formattedRun = {};
+            var styleInfo = {}
+            styleInfo["italics"] = true;
+            formattedRun["style_info"] = styleInfo;
+            resNode["text_run"] = getTextRun(curNode, formattedRun);
+        }
+        else {
+            console.log("IgnoredNode: ");
+            console.info(curNode);
+        }
+        if (!isEmpty(resNode))
+            runs.push(resNode);
+    }
+    return paraContainer;
+}
+
+//Util functions, to make the above functions a little prettier
+
+function isEmpty(ob) {
+    for(var i in ob) {return false;}
+    return true;
 }
 
 /**
