@@ -33,9 +33,8 @@ namespace DomExtraction
     {
 
         MMDExtractionBrowser browser = null;
-        TreeViewControl control;
-
-        string testPath = "http://en.wikipedia.org/wiki/Mohammed_Rafi";
+        
+        string testPath = "http://en.wikipedia.org/wiki/Hyderabad,_India";
 
         public MainWindow()
         {
@@ -45,9 +44,11 @@ namespace DomExtraction
             //myCanvas.Children.Add(browser);
             //myGrid. AddChild(browser);
 
-            control = new TreeViewControl();
-            myCanvas.Children.Add(control);
+            //control = new TreeViewControl();
+            //myCanvas.Children.Add(control);
         }
+
+
         
         private async void InitBrowser()
         {
@@ -76,9 +77,8 @@ namespace DomExtraction
             //In this case, the UI thread resumes normal processing of interaction,
             //returning to the following code, that would normally have been in a callback function.
             Console.WriteLine("Got Metadata for page :: " + result.Title + " at " + System.DateTime.Now);
-            int depth = result.GetTreeDepth();
-            Console.WriteLine("Depth : " + depth);
-            ConstructMetadataTree(result);
+
+            WikiViewer.DataContext = result;
 
             //Binding b = new Binding() { Source = result, Path= new PropertyPath("Plot.Value"),  Mode = BindingMode.TwoWay };
             //BindingOperations.SetBinding(PlotTextBox, TextBox.TextProperty, b);
@@ -89,10 +89,6 @@ namespace DomExtraction
             UrlTextbox.Text = "";
         }
 
-        private void ConstructMetadataTree(Metadata metadata)
-        {
-            metadataContent.Content = metadata;
-        }
     }
     
 

@@ -94,7 +94,9 @@ namespace ecologylab.semantics.metadata.scalar.types
 				typeof(MetadataIntegerScalarType),
 				typeof(MetadataParsedURLScalarType),
 				typeof(MetadataDateScalarType),
-                typeof(MetadataFileScalarType)};
+                typeof(MetadataFileScalarType),
+                typeof(MetadataBooleanScalarType)
+            };
 
 		public static void init()
 		{
@@ -177,6 +179,18 @@ namespace ecologylab.semantics.metadata.scalar.types
         public override object GetInstance(string value, string[] formatStrings, IScalarUnmarshallingContext scalarUnmarshallingContext)
         {
             return new MetadataFile(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
+        }
+    }
+    public class MetadataBooleanScalarType : MetadataScalarScalarType
+    {
+        public MetadataBooleanScalarType()
+            : base(typeof(MetadataBoolean), typeof(Boolean))
+        {
+
+        }
+        public override object GetInstance(string value, string[] formatStrings, IScalarUnmarshallingContext scalarUnmarshallingContext)
+        {
+            return new MetadataBoolean(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
         }
     }
 }

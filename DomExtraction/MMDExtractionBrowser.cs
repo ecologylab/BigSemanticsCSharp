@@ -12,6 +12,7 @@ using ecologylab.semantics.metadata.scalar.types;
 using System.Threading.Tasks;
 using ecologylab.semantics.generated;
 using ecologylab.net;
+using System.IO;
 
 
 namespace DomExtraction
@@ -22,8 +23,8 @@ namespace DomExtraction
         TranslationScope metadataTScope;
         //String mmdJson;
         String js;
-        String workspace = @"C:\Users\damaraju.m2icode\workspace\";
-
+        static String workspace = @"C:\Users\damaraju.m2icode\workspace\";
+        String jsPath = workspace + @"cSharp\ecologylabSemantics\DomExtraction\javascript\";
         MetaMetadataRepository repo;
 
         Dictionary<MetaMetadata, String> mmdJSONCache = new Dictionary<MetaMetadata, String>();
@@ -59,7 +60,7 @@ namespace DomExtraction
             //TODO: implement repo.getMMD(uri) correctly.
             //MetaMetadata imdbTitleMMD = null;// repo.repositoryByTagName["imdb_title"];
 
-            js = System.IO.File.ReadAllText(workspace + @"cSharp\ecologylabSemantics\DomExtraction\javascript\mmdDomHelper.js");
+            js = File.ReadAllText(jsPath + "mmdDomHelper.js");
         }
 
         public String GetJsonMMD(ParsedUri puri)
@@ -117,9 +118,20 @@ namespace DomExtraction
                 Console.WriteLine("Done js code execution, calling function. --" + System.DateTime.Now);
                 JSValue value = ExecuteJavascriptWithResult("extractMetadata(mmd);").Get();
                 String metadataJSON = (String)value.Value();
+
                 Console.WriteLine("Done getting value. Serializing JSON string to ElementState. --" + System.DateTime.Now);
                 ElementState myShinyNewMetadata = metadataTScope.deserializeString(metadataJSON, Format.JSON, new ParsedUri(uri));
                 Console.WriteLine("Metadata ElementState object created. " + System.DateTime.Now);
+
+                //DEBUGGING only, save the last translated Metadata object as json.
+                String tempJSONPath = jsPath + @"\tempJSON\lastMetadata.json";
+                Console.WriteLine("Writing out the elementstate into " + tempJSONPath);
+                StringBuilder buffy = new StringBuilder();
+                myShinyNewMetadata.serializeToJSON(buffy);
+                TextWriter tw = new StreamWriter(tempJSONPath);
+                tw.Write(buffy);
+                tw.Close();
+
                 Source = BLANK_PAGE;
                 tcs.TrySetResult(myShinyNewMetadata);
             };

@@ -94,4 +94,12 @@ namespace ecologylab.semantics.metadata.scalar
         { }
     }
 
+    public class MetadataBoolean : MetadataScalarBase<Boolean>
+    {
+        public MetadataBoolean() {}
+        public MetadataBoolean(object value)
+            : base(value)
+        { }
+    }
+
 }

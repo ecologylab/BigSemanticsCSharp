@@ -22,13 +22,18 @@ namespace ecologylabSemantics
 
         public static void Main()
         {
+
+
+
             MetadataScalarScalarType.init();
 
             TranslationScope metadataTScope = GeneratedMetadataTranslations.Get();
-            ElementState s = metadataTScope.deserialize(path + "wikipedia-parsed-hypertext.json", Format.JSON);
-
+            DateTime tStart = System.DateTime.Now;
+            ElementState s = metadataTScope.deserialize(path + "lastMetadataCleaned.json", Format.JSON);
+            Console.WriteLine("Deserialized, time : " + (System.DateTime.Now - tStart));
             //TestHypertextSerialization();
             Console.WriteLine("Done");
+            
             
         }
 

@@ -132,8 +132,11 @@ function extractComposite(mmdCompositeField, contextNode, metadata)
 
     console.log("Setting Composite: " + mmdCompositeField.name);
 
-    if (mmdField.parse_as_hypertext == true) {
-        parseNodeListAsHypertext(mmdField.composite, contextNode, metadata);
+    if (mmdCompositeField.parse_as_hypertext == true || mmdCompositeField.type == "hypertext_para") {
+        var paraNode = getNodeWithXPath(contextNode, mmdCompositeField.xpath);
+        var parsedPara = parseHypertextParaFromNode(paraNode);
+        metadata[mmdCompositeField.name] = parsedPara;
+        return;
     }
 
     compositeMetadata = {};
@@ -155,7 +158,7 @@ function extractComposite(mmdCompositeField, contextNode, metadata)
 
 
 
-function parseNodeListAsHypertext(mmdComposite, paras, metadata) {
+function parseNodeListAsHypertext(mmdCollectionField, paras, metadata) {
 
     console.log("Found hypertext nodes: ");
     console.info(paras);
@@ -169,14 +172,16 @@ function parseNodeListAsHypertext(mmdComposite, paras, metadata) {
         //console.info(hypertextNode);
         //console.log("Number of childNodes : " + hypertextNode.childNodes.length);
 
-        var paraContainer = parseHypertextParaFromNode(hypertextNode);
+        var paraContainer = {};
+        paraContainer[mmdCollectionField.child_type] = parseHypertextParaFromNode(hypertextNode);
 
+        
         //console.info(hypertextPara);
         parsedParas.push(paraContainer);
     }
     console.info(parsedParas);
 
-    metadata[mmdComposite.name] = parsedParas;
+    metadata[mmdCollectionField.name] = parsedParas;
 }
 
 function parseHypertextParaFromNode(hypertextNode) {
@@ -195,11 +200,9 @@ function parseHypertextParaFromNode(hypertextNode) {
         return text_run;
     }
 
-    var paraContainer = {};
     var hypertextPara = {};
     runs = [];
     hypertextPara["runs"] = runs;
-    paraContainer["hypertext_para"] = hypertextPara;
 
     for (var nodeNum = 0; nodeNum < hypertextNode.childNodes.length; nodeNum++) {
         var curNode = hypertextNode.childNodes[nodeNum];
@@ -245,7 +248,7 @@ function parseHypertextParaFromNode(hypertextNode) {
         if (!isEmpty(resNode))
             runs.push(resNode);
     }
-    return paraContainer;
+    return hypertextPara;
 }
 
 //Util functions, to make the above functions a little prettier

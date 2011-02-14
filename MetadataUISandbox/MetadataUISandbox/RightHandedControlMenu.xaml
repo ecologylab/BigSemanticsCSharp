@@ -1,0 +1,33 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="MetadataUISandbox.RightHandedControlMenu"
+	x:Name="UserControl"
+	d:DesignWidth="640" d:DesignHeight="480">
+
+	<Canvas x:Name="LayoutRoot">
+		<Border Height="250" Width="250" RenderTransformOrigin="0.5,0.5">
+			<Border.RenderTransform>
+				<TransformGroup>
+					<ScaleTransform/>
+					<SkewTransform/>
+					<RotateTransform Angle="22.5"/>
+					<TranslateTransform/>
+				</TransformGroup>
+			</Border.RenderTransform>
+			<Grid>
+				<Path x:Name="North" Data="M88.387835,5.74253E-07 L88.387835,124.99941 3.3260745E-06,36.611583 0.0034594352,36.608131 8.8763788,28.543869 C30.48371,10.711917 58.184821,5.74253E-07 88.387835,5.74253E-07 z" Fill="#FFF4F4F5" Height="125" Stretch="Fill" Stroke="Black" StrokeThickness="0" Width="88.388" HorizontalAlignment="Left" Margin="36.612,0,0,0" VerticalAlignment="Top"/>
+				<Path x:Name="NorthWest" Data="M36.611583,3.3260745E-06 L124.99941,88.387835 4.8483894E-07,88.387835 0.64535737,75.607335 C3.2058513,50.394576 13.259335,27.396947 28.543865,8.8763788 L36.608089,0.0035013968 z" Fill="#FFF4F4F5" Height="88.388" Stretch="Fill" Stroke="Black" StrokeThickness="0" Width="125" HorizontalAlignment="Left" Margin="0,36.612,0,0" VerticalAlignment="Top"/>
+				<Path x:Name="East" Data="M88.387832,1.0587912E-22 L88.391326,0.003494256 96.455535,8.8763716 C114.2875,30.483703 124.99941,58.184814 124.99941,88.387828 L1.7053025E-13,88.387828 z" Fill="#FFF4F4F5" Height="88.388" Stretch="Fill" Stroke="Black" StrokeThickness="0" Width="125" HorizontalAlignment="Right" Margin="0,36.612,0,0" VerticalAlignment="Top"/>
+				<Path x:Name="NorthEast" Data="M8.5265129E-14,5.74253E-07 C30.203022,5.74253E-07 57.904126,10.711917 79.511461,28.543869 L88.384384,36.608131 88.388183,36.61193 88.387832,36.611583 8.5265129E-14,124.99941 z" Fill="#FFF4F4F5" Height="125" Stretch="Fill" Stroke="Black" StrokeThickness="0" Width="88.388" HorizontalAlignment="Right" Margin="0,0,36.612,0" VerticalAlignment="Top"/>
+				<Path x:Name="SouthWest" Data="M88.387828,1.7053025E-13 L88.387828,124.99941 C58.184814,124.99941 30.483703,114.2875 8.8763716,96.455535 L0.003494256,88.391326 1.0587912E-22,88.387832 z" Fill="#FFF4F4F5" Height="125" Stretch="Fill" Stroke="Black" StrokeThickness="0" Width="88.388" HorizontalAlignment="Left" Margin="36.612,0,0,0" VerticalAlignment="Bottom"/>
+				<Path x:Name="West" Data="M3.6444334E-08,8.5265129E-14 L124.99941,8.5265129E-14 36.611583,88.387832 36.611934,88.388183 36.608131,88.384384 28.543869,79.511461 C10.711917,57.904126 5.74253E-07,30.203022 3.6444334E-08,8.5265129E-14 z" Fill="#FFF4F4F5" Height="88.388" Stretch="Fill" Stroke="Black" StrokeThickness="0" Width="125" HorizontalAlignment="Left" Margin="0,0,0,36.612" VerticalAlignment="Bottom"/>
+				<Path x:Name="SouthEast" Data="M1.7053025E-13,8.5265129E-14 L124.99941,8.5265129E-14 C124.99941,30.203022 114.2875,57.904126 96.455535,79.511461 L88.391326,88.384338 88.387832,88.387832 z" Fill="#FFF4F4F5" Height="88.388" Stretch="Fill" Stroke="Black" StrokeThickness="0" Width="125" HorizontalAlignment="Right" Margin="0,0,0,36.612" VerticalAlignment="Bottom"/>
+				<Path x:Name="South" Data="M8.5265129E-14,1.7053025E-13 L88.387832,88.387832 88.388183,88.387481 88.384338,88.391326 79.511461,96.455535 C57.904126,114.2875 30.203022,124.99941 8.5265129E-14,124.99941 z" Fill="#FFF4F4F5" Height="125" Stretch="Fill" Stroke="Black" StrokeThickness="0" Width="88.388" HorizontalAlignment="Right" Margin="0,0,36.612,0" VerticalAlignment="Bottom"/>
+			</Grid>
+		</Border>
+	</Canvas>
+</UserControl>
