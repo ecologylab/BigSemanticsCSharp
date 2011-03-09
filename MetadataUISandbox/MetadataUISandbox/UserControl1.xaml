@@ -8,9 +8,19 @@
 	x:Name="UserControl"
 	d:DesignWidth="640" d:DesignHeight="480">
 
-	<RichTextBox Block.TextAlignment="Justify">
-		<FlowDocument>
-			<Paragraph><Run Text="This is a loong piece of text. This is a loong piece of text. This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text. This is a loong piece of text. "/></Paragraph>
-		</FlowDocument>
-	</RichTextBox>
+	<StackPanel Orientation="Vertical" d:LayoutOverrides="Height">
+
+		<RichTextBox Block.TextAlignment="Justify" Height="54.8" SelectionChanged="RichTextBox_SelectionChanged">
+			<FlowDocument>
+				<Paragraph><Run Text="This is a loong piece of text. This is a loong piece of text. This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text. This is a loong piece of text. "/></Paragraph>
+			</FlowDocument>
+		</RichTextBox>
+		<RichTextBox Height="100" Width="100" HorizontalAlignment="Left"><FlowDocument><Paragraph><Run Text="RichTextBox"/></Paragraph></FlowDocument></RichTextBox>
+		<RichTextBox Height="100" SelectionChanged="RichTextBox_SelectionChanged">
+			<FlowDocument>
+				<Paragraph><Run Text="RichTextBox"/></Paragraph>
+			</FlowDocument>
+		</RichTextBox>
+		<TextBlock TextWrapping="Wrap" TextTrimming="WordEllipsis" Height="46.76" TextAlignment="Justify"><Run Text="This is a loong piece of text. This is a loong piece of text. This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text. This is a loong piece of text. "/><LineBreak/><Run Text=""/></TextBlock>
+	</StackPanel>
 </UserControl>

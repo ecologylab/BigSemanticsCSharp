@@ -42,11 +42,13 @@
     </Reference>
     <Reference Include="Microsoft.Expression.Controls" />
     <Reference Include="Microsoft.Expression.Drawing" />
+    <Reference Include="Microsoft.Expression.Interactions" />
     <Reference Include="Microsoft.Surface.Presentation" />
     <Reference Include="Microsoft.Surface.Presentation.Design" />
     <Reference Include="Microsoft.Surface.Presentation.Generic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -64,18 +66,42 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CommandBehaviorStuff\CommandBehavior.cs" />
+    <Compile Include="CommandBehaviorStuff\CommandBehaviorBinding.cs" />
+    <Compile Include="CommandBehaviorStuff\EventHandlerGenerator.cs" />
+    <Compile Include="CommandBehaviorStuff\SimpleCommand.cs" />
+    <Compile Include="Commands\Commands.cs" />
+    <Compile Include="LoadingControl\Block.xaml.cs">
+      <DependentUpon>Block.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ActivationBehaviours\DoubleTapBehaviour.cs" />
+    <Compile Include="LoadingControl\LoadingAnimation.xaml.cs">
+      <DependentUpon>LoadingAnimation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ActivationBehaviours\PressAndHoldBehaviour.cs" />
     <Compile Include="RightHandedControlMenu.xaml.cs">
       <DependentUpon>RightHandedControlMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ActivationBehaviours\TapWithSecondFingerBehaviour.cs" />
+    <Compile Include="TouchDelegates.cs" />
     <Compile Include="TreeViewControl.xaml.cs">
       <DependentUpon>TreeViewControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControl1.xaml.cs">
       <DependentUpon>UserControl1.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils.cs" />
     <Compile Include="WikiPage.xaml.cs">
       <DependentUpon>WikiPage.xaml</DependentUpon>
     </Compile>
+    <Page Include="LoadingControl\Block.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="LoadingControl\LoadingAnimation.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

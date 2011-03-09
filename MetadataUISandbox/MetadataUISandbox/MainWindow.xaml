@@ -6,25 +6,76 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 	xmlns:local="clr-namespace:MetadataUISandbox" 
 	xmlns:surface="http://schemas.microsoft.com/surface/2008" 
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+	xmlns:LoadingControl_Control="clr-namespace:LoadingControl.Control" 
+    xmlns:commands="clr-namespace:MetadataUISandbox.Commands"
 	mc:Ignorable="d"
 	x:Class="MetadataUISandbox.MainWindow"
 	x:Name="Window"
 	Title="MainWindow"
-	Width="1204" Height="1002">
-
-	<Canvas>
-		<!--<surface:SurfaceScrollViewer Canvas.Left="285" Canvas.Top="121.5" Height="508">-->
-			<StackPanel Orientation="Vertical" Height="Auto" Width="514.5"
-				Canvas.Left="187"  
-				Canvas.Top="46" 
+	Width="1204" Height="1002" WindowState="Maximized">
+	<Window.Resources>
+        <commands:CopyElementCommand x:Key="CopyElementCommand"/>
+        <commands:NavigateElementCommand x:Key="NavigateCommand"/>
+        <commands:BubbleCursorContainerCommand x:Key="BubbleCursorContainerCommand"/>
+        <local:DoubleToIntConvertor x:Key="DoubleToIntConvertor"/>
+	</Window.Resources>
+	<Canvas x:Name="MainCanvas">
+		
+		<VisualStateManager.VisualStateGroups>
+			<VisualStateGroup x:Name="VisualStateGroup">
+				<VisualStateGroup.Transitions>
+					<VisualTransition GeneratedDuration="0:0:1"/>
+				</VisualStateGroup.Transitions>
+				<VisualState x:Name="VisualState">
+					<Storyboard>
+						<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="border">
+							<EasingColorKeyFrame KeyTime="0" Value="#005A7CCE"/>
+						</ColorAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+				<VisualState x:Name="VisualState1"/>
+			</VisualStateGroup>
+		</VisualStateManager.VisualStateGroups>
+		<Border x:Name="WikiPanel" Height="Auto" Canvas.Left="325" Canvas.Top="171" Width="514.5" BorderThickness="2" BorderBrush="#FFA7A7A7" >
+			<StackPanel Orientation="Vertical" Height="615.46" 
 			>
 				<Button Content="PopulateWikiView" Click="Button_Click"/>
-				<Border d:LayoutOverrides="Height, Margin" BorderThickness="1" BorderBrush="#FF03CE19">
-					<local:WikiPage x:Name="WikiView" Width="Auto" Height="593.5" Visibility="Hidden"/>
-				</Border>
-			</StackPanel>	
-		<!--</surface:SurfaceScrollViewer>-->
-		
-	</Canvas>
+				<Canvas Height="593.5" d:LayoutOverrides="Margin">
+					<LoadingControl_Control:LoadingAnimation Visibility="Collapsed"  x:Name="loadingAnimation"  Width="514.5" Canvas.Top="225"/>
+					<local:WikiPage x:Name="WikiView" Width="512.5" Height="593.5" Visibility="Hidden"
+						local:RightHandedControlMenu.NorthZoneCommand="{StaticResource CopyElementCommand}"
+						local:RightHandedControlMenu.WestZoneCommand="{StaticResource NavigateCommand}"
+                        local:RightHandedControlMenu.SouthWestZoneCommand="{StaticResource BubbleCursorContainerCommand}"                                    
+                    />
+				</Canvas>
+			</StackPanel>
+		</Border>
+		<StackPanel Canvas.Left="23.5" Orientation="Vertical" Canvas.Top="21" Width="480.377">
+			<StackPanel Orientation="Horizontal">
+				<surface:SurfaceRadioButton x:Name="PressAndHoldRadio" Content="Press and Hold" d:LayoutOverrides="Width" GroupName="ActivationType" Checked="SurfaceRadioButton_Checked"/>
+				<surface:SurfaceSlider x:Name="timeoutSlider" Width="273" Margin="21,0,0,0" Maximum="1500" TickPlacement="TopLeft" Value="500" LargeChange="100" SmallChange="10" TickFrequency="50"/>
+				<TextBlock TextWrapping="Wrap" Width="80.46" Text="{Binding Value, Converter={StaticResource DoubleToIntConvertor}, ElementName=timeoutSlider}" HorizontalAlignment="Center" TextAlignment="Center" Height="16"/>
+			</StackPanel>
+			<surface:SurfaceRadioButton x:Name="DoubleTapRadio" Content="Double Tap" Margin="0,0,54.363,0" d:LayoutOverrides="Width" GroupName="ActivationType" Checked="SurfaceRadioButton_Checked"/>
+			<surface:SurfaceRadioButton x:Name="TapWithSecondFingerRadio" Content="Tap With Second Finger" d:LayoutOverrides="Width" GroupName="ActivationType" Checked="SurfaceRadioButton_Checked"/>
+        
+		</StackPanel>
+        
+        <!--
+        <Canvas 
+            Height="436" Canvas.Left="62" Canvas.Top="62.058" Width="375" Background="#FFCCCCCC" 
+        >
+			<i:Interaction.Behaviors>
+				<local:DoubleTapBehaviour/>
+			</i:Interaction.Behaviors>
+			<Border Height="104" Canvas.Left="66" Canvas.Top="181.942" Width="161" BorderThickness="2" BorderBrush="#FF5A7CCE" IsHitTestVisible="False"> 
+        		<Rectangle Fill="#FF8EE1F1" Stroke="#80414141" />
+        	</Border>
+			<Rectangle Fill="#FF587980" Height="93" Canvas.Left="66" Stroke="#FF414141" StrokeThickness="0.5" Canvas.Top="38.942" Width="177"/>
+		</Canvas>
+        -->
+    </Canvas>
 
 </Window>

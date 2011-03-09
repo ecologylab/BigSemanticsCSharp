@@ -22,5 +22,11 @@ namespace MetadataUISandbox
 		{
 			this.InitializeComponent();
 		}
+
+		private void RichTextBox_SelectionChanged(object sender, System.Windows.RoutedEventArgs e)
+		{
+			// TODO: Add event handler implementation here.
+            (sender as RichTextBox).SelectionOpacity = 0;
+		}
 	}
 }
