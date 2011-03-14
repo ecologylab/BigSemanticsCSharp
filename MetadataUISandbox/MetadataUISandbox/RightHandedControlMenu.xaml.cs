@@ -7,7 +7,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using MetadataUISandbox.Utilities;
+using ecologylab.semantics.metadata.builtins;
+using ecologylab.serialization;
+using MetadataUISandbox.Utils;
 
 namespace MetadataUISandbox
 {
@@ -27,34 +29,37 @@ namespace MetadataUISandbox
 
 	public partial class RightHandedControlMenu : UserControl
 	{
-	    readonly Logger _logger;
+	    readonly Logger logger;
 	    readonly List<UIElement> _zones;
-	    readonly List<String> zoneCommandNames;
+	    readonly List<String> _zoneCommandNames;
 
 	    DependencyObject visualHit;
         DependencyObject visualContainer;
 
         DispatcherTimer popUpTimer;
-        bool menuPopped = false;
+        bool _menuPopped = false;
 
         DispatcherTimer menuFadeAwayTimer;
 
 		public RightHandedControlMenu()
 		{
-		    _logger = new Logger();
+		    logger = new Logger();
 		    _zones = new List<UIElement>();
-		    zoneCommandNames = new List<String>();
+		    _zoneCommandNames = new List<String>();
 		    this.InitializeComponent();
-            _logger = new Logger();
+            logger = new Logger();
 		}
 
-        public RightHandedControlMenu(Point pos, TouchEventArgs e, DependencyObject visualContainer, DependencyObject visualElement)
+        public RightHandedControlMenu(CommandParameters parameters)
         {
-            _logger = new Logger();
+            
+            logger = new Logger();
             _zones = new List<UIElement>();
-            zoneCommandNames = new List<String>();
+            _zoneCommandNames = new List<String>();
 
-            //Set your commands from the object (upwards ?)
+
+            TouchEventArgs e = parameters.touchEventArgs;
+            //Set your commands from the object (upwards ?))
             this.InitializeComponent();
             Window parent = Application.Current.MainWindow;
 
@@ -62,31 +67,36 @@ namespace MetadataUISandbox
 
             if (capturer != null)
             {
-                _logger.Log("Event args touch device was capture by: " + capturer);
+                logger.Log("Event args touch device was capture by: " + capturer);
                 capturer.ReleaseAllTouchCaptures();
             }
 
             e.TouchDevice.Capture(this);
             e.Handled = true;
-            this.visualHit = visualElement;
-            this.visualContainer = visualContainer;
-            
+            this.visualHit = parameters.visualHit;
+            this.visualContainer = parameters.visualContainer;
+
+            var bindableRichTextBox = visualHit as BindableRichTextBox; //.GetChildAtPoint(e.GetTouchPoint((IInputElement) visualHit).Position);
+            if (bindableRichTextBox != null)
+            {
+                ElementState dataContext = bindableRichTextBox.DataContext as ElementState;
+                logger.Log("Got a rtb with Context: " + dataContext);
+            }
             //Find border for visualElement and Animating Highlight
-            DispatcherTimer captureTimer = new DispatcherTimer();
-            captureTimer.Interval = TimeSpan.FromMilliseconds(100);
+            DispatcherTimer captureTimer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(100)};
             captureTimer.Tick += (s, a) =>
             {
-                _logger.Log("Capture Timer completed");
+                logger.Log("Capture Timer completed");
 
                 foreach (TouchDevice device in this.TouchesOver)
                 {
-                    _logger.Log("Touches over : " + device.Id);
+                    logger.Log("Touches over : " + device.Id);
                     device.Capture(this);
                 }
                 captureTimer.Stop();
             };
 
-            object obj = visualElement;
+            object obj = visualHit;
 
             #region Initializing Zone and Command stuff
 
@@ -104,18 +114,18 @@ namespace MetadataUISandbox
             #endregion
 
             #region Populate zoneCommandProperties
-            zoneCommandNames.Add("NorthZoneCommand");
-            zoneCommandNames.Add("NorthWestZoneCommand");
-            zoneCommandNames.Add("WestZoneCommand");
-            zoneCommandNames.Add("SouthWestZoneCommand");
-            zoneCommandNames.Add("SouthZoneCommand");
-            zoneCommandNames.Add("SouthEastZoneCommand");
-            zoneCommandNames.Add("EastZoneCommand");
-            zoneCommandNames.Add("NorthEastZoneCommand");
+            _zoneCommandNames.Add("NorthZoneCommand");
+            _zoneCommandNames.Add("NorthWestZoneCommand");
+            _zoneCommandNames.Add("WestZoneCommand");
+            _zoneCommandNames.Add("SouthWestZoneCommand");
+            _zoneCommandNames.Add("SouthZoneCommand");
+            _zoneCommandNames.Add("SouthEastZoneCommand");
+            _zoneCommandNames.Add("EastZoneCommand");
+            _zoneCommandNames.Add("NorthEastZoneCommand");
             #endregion
 
             
-            _logger.Log("Picking up commands");
+            logger.Log("Picking up commands");
             do
             {
                 //logger.Log("\tIterating over : " + obj );
@@ -136,16 +146,17 @@ namespace MetadataUISandbox
             SouthZoneCommand = (visualContainer as UIElement).GetValue(SouthZoneCommandProperty) as ICommand;*/
             
 
-            NorthVisual_Label.Text = NorthZoneCommand != null ? (NorthZoneCommand as ILabelledCommand).GetLabel() : "";
-            NorthWestVisual_Label.Text = NorthWestZoneCommand != null ? (NorthWestZoneCommand as ILabelledCommand).GetLabel() : "";
-            WestVisual_Label.Text = WestZoneCommand != null ? (WestZoneCommand as ILabelledCommand).GetLabel() : "";
-            SouthWestVisual_Label.Text = SouthWestZoneCommand != null ? (SouthWestZoneCommand as ILabelledCommand).GetLabel() : "";
-            SouthVisual_Label.Text = SouthZoneCommand != null ? (SouthZoneCommand as ILabelledCommand).GetLabel() : "";
+            NorthVisual_Label.Text = NorthZoneCommand != null ? ((ILabelledCommand) NorthZoneCommand).GetLabel() : "";
+            NorthWestVisual_Label.Text = NorthWestZoneCommand != null ? ((ILabelledCommand) NorthWestZoneCommand).GetLabel() : "";
+            WestVisual_Label.Text = WestZoneCommand != null ? ((ILabelledCommand) WestZoneCommand).GetLabel() : "";
+            SouthWestVisual_Label.Text = SouthWestZoneCommand != null ? ((ILabelledCommand) SouthWestZoneCommand).GetLabel() : "";
+            SouthVisual_Label.Text = SouthZoneCommand != null ? ((ILabelledCommand) SouthZoneCommand).GetLabel() : "";
             #endregion
 
             Canvas mainCanvas = (Canvas)parent.FindName("MainCanvas");
-
             #region fading menu on touchup
+
+            Point canvasPos = e.GetTouchPoint(mainCanvas).Position;
 
             menuFadeAwayTimer = new DispatcherTimer();
             menuFadeAwayTimer.Interval = TimeSpan.FromSeconds(2);
@@ -160,11 +171,11 @@ namespace MetadataUISandbox
                 {
                     if (isFadingAway)
                     {
-                        _logger.Log("Menu faded");
+                        logger.Log("Menu faded");
                         mainCanvas.Children.Remove(this);
                     }
                 };
-                _logger.Log("Is fading away");
+                logger.Log("Is fading away");
                 isFadingAway = true;
                 this.BeginAnimation(UIElement.OpacityProperty, menuFadeAnim);
                 (s as DispatcherTimer).Stop(); //convention, can use menuFadeAwayTimer too.
@@ -172,13 +183,13 @@ namespace MetadataUISandbox
 
             this.TouchUp += (s, a) =>
             {
-                _logger.Log("Starting menuFadeAwayTimer");
+                logger.Log("Starting menuFadeAwayTimer");
                 menuFadeAwayTimer.Start();
             };
 
             this.TouchDown += (s, a) =>
             {
-                _logger.Log("Stopping menuFadeAwayTimer");
+                logger.Log("Stopping menuFadeAwayTimer");
                 this.BeginAnimation(OpacityProperty, menuFadeResetAnim);
                 isFadingAway = false;
                 menuFadeAwayTimer.Stop();
@@ -189,8 +200,9 @@ namespace MetadataUISandbox
             #region Attach to canvas
             
             //Set position on MainCanvas
-            this.SetValue(Canvas.LeftProperty, pos.X - 125);
-            this.SetValue(Canvas.TopProperty, pos.Y - 125);
+            this.SetValue(Canvas.LeftProperty, canvasPos.X - 125);
+            this.SetValue(Canvas.TopProperty, canvasPos.Y - 125);
+
             mainCanvas.Children.Add(this);
 
             VisualStateManager.GoToState(this, "Collapsed", false);
@@ -198,9 +210,9 @@ namespace MetadataUISandbox
             popUpTimer.Interval = TimeSpan.FromSeconds(.5);
             popUpTimer.Tick += (s, a) =>
             {
-                _logger.Log("Expanding Menu");
+                logger.Log("Expanding Menu");
                 VisualStateManager.GoToState(this, "Expanded", true);
-                menuPopped = true;
+                _menuPopped = true;
                 popUpTimer.Stop();
             };
             popUpTimer.Start();
@@ -211,7 +223,7 @@ namespace MetadataUISandbox
         private void LookForAndAttachCommand(DependencyObject element)
         {
             //Iterate through CommandProperties to see if we should add them this menu.
-            foreach (string zoneCommandName in zoneCommandNames)
+            foreach (string zoneCommandName in _zoneCommandNames)
             {
                 Type type = this.GetType();
                 DependencyProperty zoneDpProp = (DependencyProperty) type.GetField(zoneCommandName + "Property").GetValue(this);
@@ -225,11 +237,11 @@ namespace MetadataUISandbox
                 {
                     PropertyInfo propertyInfo = type.GetProperty(zoneCommandName);
                     propertyInfo.SetValue(this, elementDeclaredCommand, null);
-                    _logger.Log("\tAdding Command: " + elementDeclaredCommand + " on zoneProp: " + zoneCommandName + " declared on : " + element);
+                    logger.Log("\tAdding Command: " + elementDeclaredCommand + " on zoneProp: " + zoneCommandName + " declared on : " + element);
                 }
                 else
                 {
-                    _logger.Log("Not overwriting command: " + menuCommand + " defined on: " + element + " for zone: " + zoneDpProp);
+                    logger.Log("Not overwriting command: " + menuCommand + " defined on: " + element + " for zone: " + zoneDpProp);
                 }
             }
         }
@@ -254,7 +266,7 @@ namespace MetadataUISandbox
                 #region call command
                 if (obj == North)
                 {
-                    _logger.Log("North Zone Command: " + (NorthZoneCommand == null ? "null" : NorthZoneCommand.ToString()));
+                    logger.Log("North Zone Command: " + (NorthZoneCommand == null ? "null" : NorthZoneCommand.ToString()));
 
                     if (NorthZoneCommand != null)
                     {
@@ -264,7 +276,7 @@ namespace MetadataUISandbox
                 }
                 else if (obj == NorthWest)
                 {
-                    _logger.Log("NorthWest Zone Command: " + (NorthWestZoneCommand == null ? "null" : NorthWestZoneCommand.ToString()));
+                    logger.Log("NorthWest Zone Command: " + (NorthWestZoneCommand == null ? "null" : NorthWestZoneCommand.ToString()));
 
                     if (NorthWestZoneCommand != null)
                     {
@@ -274,7 +286,7 @@ namespace MetadataUISandbox
                 }
                 else if (obj == West)
                 {
-                    _logger.Log("West Zone Command: " + (WestZoneCommand == null ? "null" : WestZoneCommand.ToString()));
+                    logger.Log("West Zone Command: " + (WestZoneCommand == null ? "null" : WestZoneCommand.ToString()));
 
                     if (WestZoneCommand != null)
                     {
@@ -284,7 +296,7 @@ namespace MetadataUISandbox
                 }
                 else if (obj == SouthWest)
                 {
-                    _logger.Log("SouthWest Zone Command: " + (SouthWestZoneCommand == null ? "null" : SouthWestZoneCommand.ToString()));
+                    logger.Log("SouthWest Zone Command: " + (SouthWestZoneCommand == null ? "null" : SouthWestZoneCommand.ToString()));
 
                     if (SouthWestZoneCommand != null)
                     {
@@ -294,7 +306,7 @@ namespace MetadataUISandbox
                 }
                 else if (obj == South)
                 {
-                    _logger.Log("South Zone Command: " + (SouthZoneCommand == null ? "null" : SouthZoneCommand.ToString()));
+                    logger.Log("South Zone Command: " + (SouthZoneCommand == null ? "null" : SouthZoneCommand.ToString()));
 
                     if (SouthZoneCommand != null)
                     {
@@ -304,7 +316,7 @@ namespace MetadataUISandbox
                 }
                 else if (obj == SouthEast)
                 {
-                    _logger.Log("SouthEast Zone Command: " + (SouthEastZoneCommand == null ? "null" : SouthEastZoneCommand.ToString()));
+                    logger.Log("SouthEast Zone Command: " + (SouthEastZoneCommand == null ? "null" : SouthEastZoneCommand.ToString()));
 
                     if (SouthEastZoneCommand != null)
                     {
@@ -314,7 +326,7 @@ namespace MetadataUISandbox
                 }
                 else if (obj == East)
                 {
-                    _logger.Log("East Zone Command: " + (EastZoneCommand == null ? "null" : EastZoneCommand.ToString()));
+                    logger.Log("East Zone Command: " + (EastZoneCommand == null ? "null" : EastZoneCommand.ToString()));
 
                     if (EastZoneCommand != null)
                     {
@@ -324,7 +336,7 @@ namespace MetadataUISandbox
                 }
                 else if (obj == NorthEast)
                 {
-                    _logger.Log("NorthEast Zone Command: " + (NorthEastZoneCommand == null ? "null" : NorthEastZoneCommand.ToString()));
+                    logger.Log("NorthEast Zone Command: " + (NorthEastZoneCommand == null ? "null" : NorthEastZoneCommand.ToString()));
 
                     if (NorthEastZoneCommand != null)
                     {
@@ -357,7 +369,7 @@ namespace MetadataUISandbox
 
                 if (zone != ignoreZone)
                 {
-                    if (!menuPopped)
+                    if (!_menuPopped)
                     {
                         //Set opacity to zero instantly. Using DoubleAnimations seems to be the best way to do so.
                         DoubleAnimation anim = new DoubleAnimation((double)zone.GetValue(UIElement.OpacityProperty), 0, TimeSpan.FromMilliseconds(0));
@@ -370,7 +382,7 @@ namespace MetadataUISandbox
                 else
                 {
                     //First display if zone is in collapsed stage.
-                    if (!menuPopped)
+                    if (!_menuPopped)
                     {
                         DoubleAnimation anim = new DoubleAnimation((double)zone.GetValue(UIElement.OpacityProperty), 1, TimeSpan.FromMilliseconds(0));
                         zone.BeginAnimation(UIElement.OpacityProperty, anim);
@@ -390,7 +402,7 @@ namespace MetadataUISandbox
                         {
                             Window win = Application.Current.MainWindow;
                             Canvas canvas = (Canvas)win.FindName("MainCanvas");
-                            _logger.Log("Removing menu from MainCanvas");
+                            logger.Log("Removing menu from MainCanvas");
                             
                             canvas.Children.Remove(this);
                         });

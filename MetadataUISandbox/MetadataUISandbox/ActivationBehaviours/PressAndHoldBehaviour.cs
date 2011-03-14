@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Interactivity;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using MetadataUISandbox.Utils;
 using Microsoft.Surface.Presentation.Controls;
-using System.Windows.Controls;
-using MetadataUISandbox.Utilities;
 
 namespace MetadataUISandbox
 {
@@ -69,9 +65,17 @@ namespace MetadataUISandbox
                         DependencyObject acceptableResult;
                         if ((acceptableResult = (AssociatedObject as IHitTestAcceptor).AcceptableObject(result.VisualHit)) != null)
                         {
-                            logger.Log("Tap with second finger, with first finger on: " + AssociatedObject + "\n\tHitTest on : " + acceptableResult);
+                            logger.Log("Press and held on: " + AssociatedObject + "\n\tHitTest on : " + acceptableResult);
                             e.Handled = true;
-                            RightHandedControlMenu menu = new RightHandedControlMenu(pos, e, sender as DependencyObject, acceptableResult);
+
+                            CommandParameters commandParameters = new CommandParameters
+                                                                      {
+                                                                          touchEventArgs = e,
+                                                                          visualContainer = sender as DependencyObject,
+                                                                          visualHit = acceptableResult
+                                                                      };
+
+                            new RightHandedControlMenu(commandParameters);
                             
                             return HitTestResultBehavior.Stop;
                         }
@@ -91,7 +95,7 @@ namespace MetadataUISandbox
 
             TouchDelegate touchMoveDelegate = (sender, e) =>
             {
-                if (Utils.Distance(e.GetTouchPoint(parent).Position, firstTouch.Value) > 20)
+                if (Utilities.Distance(e.GetTouchPoint(parent).Position, firstTouch.Value) > 20)
                 {
                     deactivated = true;
                 }

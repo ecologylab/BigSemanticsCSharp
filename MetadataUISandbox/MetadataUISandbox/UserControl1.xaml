@@ -10,7 +10,7 @@
 
 	<StackPanel Orientation="Vertical" d:LayoutOverrides="Height">
 
-		<RichTextBox Block.TextAlignment="Justify" Height="54.8" SelectionChanged="RichTextBox_SelectionChanged">
+		<RichTextBox Block.TextAlignment="Justify" Height="54.8" SelectionChanged="RichTextBox_SelectionChanged" ForceCursor="True">
 			<FlowDocument>
 				<Paragraph><Run Text="This is a loong piece of text. This is a loong piece of text. This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text. This is a loong piece of text. "/></Paragraph>
 			</FlowDocument>
@@ -18,7 +18,7 @@
 		<RichTextBox Height="100" Width="100" HorizontalAlignment="Left"><FlowDocument><Paragraph><Run Text="RichTextBox"/></Paragraph></FlowDocument></RichTextBox>
 		<RichTextBox Height="100" SelectionChanged="RichTextBox_SelectionChanged">
 			<FlowDocument>
-				<Paragraph><Run Text="RichTextBox"/></Paragraph>
+				<Paragraph><Run Text="RichTextBox "/><Hyperlink >Some text</Hyperlink></Paragraph>
 			</FlowDocument>
 		</RichTextBox>
 		<TextBlock TextWrapping="Wrap" TextTrimming="WordEllipsis" Height="46.76" TextAlignment="Justify"><Run Text="This is a loong piece of text. This is a loong piece of text. This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text. This is a loong piece of text. "/><LineBreak/><Run Text=""/></TextBlock>

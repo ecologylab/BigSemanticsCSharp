@@ -1,75 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Media;
-using System.Windows.Data;
-using ecologylab.semantics.generated.library;
-using System.Windows.Documents;
 using System.Windows.Controls;
-using System.Diagnostics;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Media;
+using ecologylab.semantics.generated.library;
+using Run = ecologylab.semantics.generated.library.Run;
 
-/// Forgive the mess. This will get organized when there are well defined places they need to be in.
-
-namespace MetadataUISandbox.Utilities
+namespace MetadataUISandbox.Utils
 {
-
-
-    public class Utils
-    {
-        public static double Distance(Point? a, Point? b)
-        {
-            if (!a.HasValue || !b.HasValue)
-                return Double.NaN;
-            double deltaX = (a.Value.X - b.Value.X);
-            double deltaY = (a.Value.Y - b.Value.Y);
-            return Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
-        }
-    }
-
-    public class Logger
-    {
-        String _logPrefix;
-        short clsLength;
-        public Logger(short clsLength = 40)
-        {
-            this.clsLength = clsLength;
-            ResetPrefix();
-        }
-
-        public void ResetPrefix()
-        {
-            Type declType = new StackFrame(2, false).GetMethod().DeclaringType;
-            String callingClassName = (declType.DeclaringType == null ? declType.Name : declType.DeclaringType.Name);
-            _logPrefix = "[     " + callingClassName.Substring(0, callingClassName.Length < clsLength ? callingClassName.Length : clsLength).PadRight(clsLength, ' ') +
-                                "]: ";
-        }
-
-        public void Log(String val)
-        {
-            Console.WriteLine( _logPrefix + val);
-        }
-
-    }
-    
-    public interface ILabelledCommand
-    {
-        String GetLabel();
-    }
-
-    /// <summary>
-    /// Allows behaviours to request the AssociatedObject for an AcceptableObject while iterating through the visual hit test results.
-    /// 
-    /// Ideally, this would have been only a boolean. 
-    /// However, visual hit tests on RichTextObjects are funny, we might have to return an element out of the hitTestZone as the accepted object. 
-    /// 
-    /// </summary>
-    public interface IHitTestAcceptor
-    {
-        DependencyObject AcceptableObject(DependencyObject obj);
-    }
-
     delegate HitTestResultBehavior HitTestResultDelegate(HitTestResult result);
 
     public class HypertextToFlowDocumentConverter : IValueConverter
@@ -104,7 +44,7 @@ namespace MetadataUISandbox.Utilities
         {
             System.Windows.Documents.Paragraph visualPara = new System.Windows.Documents.Paragraph();
 
-            foreach (ecologylab.semantics.generated.library.Run run in p.Runs)
+            foreach (Run run in p.Runs)
             {
                 Inline visualRun = MetadataRunToVisualRun(run);
                 visualPara.Inlines.Add(visualRun);
@@ -112,9 +52,9 @@ namespace MetadataUISandbox.Utilities
             return visualPara;
         }
 
-        private System.Windows.Documents.Run MetadataRunToVisualRun(ecologylab.semantics.generated.library.Run run)
+        private System.Windows.Documents.Run MetadataRunToVisualRun(Run run)
         {
-            System.Windows.Documents.Run visualRun = new System.Windows.Documents.Run();
+            var visualRun = new System.Windows.Documents.Run();
             TextRun textRun = run as TextRun;
             visualRun.Text = (string)(textRun).Text.Value;
             if (textRun.StyleInfo != null)
@@ -129,7 +69,23 @@ namespace MetadataUISandbox.Utilities
             if (link != null)
             {
                 visualRun.Foreground = Brushes.Blue;
+                visualRun.TouchEnter += (s, e) =>
+                    {
+                        Console.WriteLine("Touch Enter: " + visualRun.Text);
+                        visualRun.Background = Brushes.LightBlue;
+                    };
+                visualRun.TouchLeave += (s,e) =>
+                    {
+                        visualRun.Background = null;                                                               
+                    };
+                visualRun.TouchUp += (s, e) =>
+                    {
+                        Console.WriteLine("Link Selected: " + link.Location);
+                    };
+                
             }
+
+            visualRun.DataContext = run;
             return visualRun;
         }
 

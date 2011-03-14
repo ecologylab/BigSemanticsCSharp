@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Interactivity;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Controls;
-using System.Diagnostics;
-using MetadataUISandbox.Utilities;
+using MetadataUISandbox.Utils;
 
 namespace MetadataUISandbox
 {
@@ -52,10 +47,10 @@ namespace MetadataUISandbox
             }
             else //Could be tap
             {
-                if (Utils.Distance(_touchHeldPos, pos) > 5)
+                if (Utilities.Distance(_touchHeldPos, pos) > 5)
                 {
                     logger.Log("Second finger down");
-                    double dist = Utils.Distance(_touchHeldPos, pos);
+                    double dist = Utilities.Distance(_touchHeldPos, pos);
                     if (dist < 100)
                     {
                         _validSecondFingerDown = true;
@@ -75,22 +70,29 @@ namespace MetadataUISandbox
         {
             Point pos = e.GetTouchPoint(_parent).Position;
 
-            if (Utils.Distance(pos, _touchHeldPos) > 20 && _validSecondFingerDown)
+            if (Utilities.Distance(pos, _touchHeldPos) > 20 && _validSecondFingerDown)
             {
                 logger.Log("Tap from second finger !!");
 
                 HitTestResultDelegate hitResultDelegate = (result) =>
                 {
-                    logger.Log("HitTest : " + result.VisualHit);
                     DependencyObject acceptableResult;
                     if ((acceptableResult = (AssociatedObject as IHitTestAcceptor).AcceptableObject(result.VisualHit)) != null)
                     {
                         logger.Log("Tap with second finger, with first finger on: " + AssociatedObject);
                         logger.Log("\tHitTest on : " + acceptableResult);
-
-                        RightHandedControlMenu menu = new RightHandedControlMenu(_touchHeldPos.Value, _touchHeld, sender as DependencyObject, acceptableResult);
-
                         e.Handled = true;
+
+                        CommandParameters commandParameters = new CommandParameters
+                        {
+                            touchEventArgs = _touchHeld,
+                            visualContainer = sender as DependencyObject,
+                            visualHit = acceptableResult
+                        };
+
+                        new RightHandedControlMenu(commandParameters);
+
+
                         return HitTestResultBehavior.Stop;
                     }
                     return HitTestResultBehavior.Continue;

@@ -7,9 +7,8 @@
 	xmlns:local="clr-namespace:MetadataUISandbox"
 	xmlns:surface="http://schemas.microsoft.com/surface/2008" 
 	mc:Ignorable="d"
-    xmlns:commands="clr-namespace:MetadataUISandbox.Commands"
-    xmlns:utils="clr-namespace:MetadataUISandbox.Utilities"
-	x:Class="MetadataUISandbox.WikiPage"
+    xmlns:commands="clr-namespace:MetadataUISandbox.Commands" 
+    xmlns:utils="clr-namespace:MetadataUISandbox.Utils" x:Class="MetadataUISandbox.WikiPage"
 	d:DesignHeight="480" 
 	Width="Auto"
 	Height="400">
@@ -49,12 +48,14 @@
 			Grid.Row="1"
 			PanningMode="VerticalOnly" 
 		>
-			<StackPanel>
+			<StackPanel >
 
                 <utils:BindableRichTextBox 
 					IsReadOnly="True" 
 					Document="{Binding IntroPara, Converter={StaticResource HypertextToFlowDocumentConverter}}" 
 					SelectionOpacity="0"
+					ForceCursor="True"
+					Cursor="None"
 					Height="Auto" Width="Auto"
                     local:RightHandedControlMenu.SouthZoneCommand="{StaticResource MagnifyElementCommand}"
                     />
@@ -98,7 +99,8 @@
                             <utils:BindableRichTextBox 
 								Block.TextAlignment="Justify"
 								IsReadOnly="True"
-								IsEnabled="False"
+								ForceCursor="True"
+								Cursor="None"
 								Document="{Binding Converter={StaticResource HypertextToFlowDocumentConverter}}" 
                                 local:RightHandedControlMenu.SouthZoneCommand="{StaticResource MagnifyElementCommand}"
 								Height="Auto" Width="Auto"/>

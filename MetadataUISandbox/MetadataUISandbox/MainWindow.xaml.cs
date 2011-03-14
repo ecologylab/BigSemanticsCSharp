@@ -1,24 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using ecologylab.semantics.metadata;
 using ecologylab.semantics.metadata.builtins;
-using ecologylab.net;
 using ecologylab.serialization;
 using ecologylab.semantics.metadata.scalar.types;
 using System.Threading.Tasks;
-using System.Windows.Threading;
-using System.IO;
 using MetadataUISandbox.ActivationBehaviours;
-using MetadataUISandbox.Utilities;
+using MetadataUISandbox.Utils;
 
 namespace MetadataUISandbox
 {
@@ -30,49 +18,59 @@ namespace MetadataUISandbox
         
         static String workspace = @"C:\Users\damaraju.m2icode\workspace\";
         String jsPath = workspace + @"cSharp\ecologylabSemantics\DomExtraction\javascript\";
-        TranslationScope ts;
+        
         DoubleTapBehaviour dblTapBehaviour = new DoubleTapBehaviour();
         TapWithSecondFingerBehaviour tapSecondFingerBehaviour = new TapWithSecondFingerBehaviour();
         PressAndHoldBehaviour pressAndHoldBehaviour = new PressAndHoldBehaviour();
+	    private Logger logger = new Logger();
+	    private Document d;
 		public MainWindow()
 		{
 			this.InitializeComponent();
             MetadataScalarScalarType.init();
-            ts = GeneratedMetadataTranslations.Get();
-
-
 		}
 
 
-        private void OnTextSelectionChanged(object sender, System.Windows.RoutedEventArgs e)
+        private void OnTextSelectionChanged(object sender, RoutedEventArgs e)
         {
             BindableRichTextBox b = (sender as BindableRichTextBox);
             if (b != null)
             {
-                b.SelectionOpacity = 0;
+                b.Selection.Select(b.Selection.Start, b.Selection.Start);
+                //b.SelectionOpacity = 0;
             }
         }
 
-		private async void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        private static Document GetMetadataFile(string filepath)
+        {
+            TranslationScope ts = GeneratedMetadataTranslations.Get();
+            DateTime tStart = DateTime.Now;
+            Document document = (Document) ts.deserialize(filepath, Format.JSON);
+            Console.WriteLine("Deserialized, time : " + (DateTime.Now - tStart));
+            return document;
+        }
+
+		private async void Button_Click(object sender, RoutedEventArgs e)
 		{
 			// Insert code required on object creation below this point.
-            (sender as UIElement).Visibility = Visibility.Collapsed;
-            loadingAnimation.Visibility = Visibility.Visible;
-            Console.WriteLine("Loaded TranslationScope" + System.DateTime.Now);
-            DateTime tStart = System.DateTime.Now;
-            Document d = (Document) await TaskEx.Run(() => ts.deserialize(jsPath + @"tempJSON\lastMetadataCleaned.json", Format.JSON));
-            //Document d = (Document)ts.deserialize(jsPath + @"tempJSON\lastMetadataCleaned.json", Format.JSON);
-            TimeSpan tEnd = System.DateTime.Now - tStart;
-            Console.WriteLine("Deserialized, time : " + tEnd);
-            tStart = System.DateTime.Now;
+            ((UIElement) sender).Visibility = System.Windows.Visibility.Collapsed;
+            loadingAnimation.Visibility = System.Windows.Visibility.Visible;
+            Console.WriteLine("Loaded TranslationScope" + DateTime.Now);
+            DateTime tStart = DateTime.Now;
+            
+            d = (Document) await TaskEx.Run(() => GetMetadataFile(jsPath + @"tempJSON\lastMetadataCleaned.json"));
+            //Document d = (Document) GetMetadataFile(jsPath + @"tempJSON\lastMetadataCleaned.json");
+            TimeSpan tEnd = DateTime.Now - tStart;
+            
+            tStart = DateTime.Now;
             WikiView.DataContext = d;
             WikiView.Visibility = System.Windows.Visibility.Visible;
             loadingAnimation.Visibility = System.Windows.Visibility.Collapsed;
             
-            Console.WriteLine("Set dataContext, time : " + (System.DateTime.Now - tStart));
+            Console.WriteLine("Set dataContext, time : " + (DateTime.Now - tStart));
 		}
 
-		private void SurfaceRadioButton_Checked(object sender, System.Windows.RoutedEventArgs e)
+		private void SurfaceRadioButton_Checked(object sender, RoutedEventArgs e)
 		{
             
             if (sender == PressAndHoldRadio && PressAndHoldRadio.IsChecked.Value)
@@ -94,7 +92,6 @@ namespace MetadataUISandbox
                 dblTapBehaviour.Detach();
             }
 		}
-
 	}
 
     public class DoubleToIntConvertor : IValueConverter

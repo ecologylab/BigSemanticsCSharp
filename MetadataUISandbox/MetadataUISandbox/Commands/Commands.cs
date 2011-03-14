@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,10 +6,29 @@ using System.Windows.Documents;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.IO;
-using MetadataUISandbox.Utilities;
+using MetadataUISandbox.Utils;
 
 namespace MetadataUISandbox.Commands
 {
+
+    public class RaiseMenuCommand : ICommand
+    {
+        public void Execute(object parameter)
+        {
+            new RightHandedControlMenu((CommandParameters)parameter);
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+    }
 
     public class CopyElementCommand : ICommand, ILabelledCommand
     {
@@ -58,7 +74,7 @@ namespace MetadataUISandbox.Commands
 
             CommandParameters cmdParams = (CommandParameters)parameters;
             logger.Log("Executing Copy command with parameter: " + cmdParams.visualHit);
-            Image img = cmdParams.visualHit as System.Windows.Controls.Image;
+            Image img = cmdParams.visualHit as Image;
             BindableRichTextBox box = cmdParams.visualHit as BindableRichTextBox;
             UIElement elem = null;
             Point[] offset = {new Point()};
@@ -68,19 +84,17 @@ namespace MetadataUISandbox.Commands
                 
                 RenderTargetBitmap bitmap = new RenderTargetBitmap((int)img.Source.Width, (int)img.Source.Height, 96, 96, PixelFormats.Pbgra32);
                 bitmap.Render(img);
-                System.Windows.Controls.Image imgCopy = new System.Windows.Controls.Image {Source = bitmap};
+                Image imgCopy = new Image {Source = bitmap};
                 elem = imgCopy;
                 offset[0] = new Point(img.ActualWidth / 2, img.ActualHeight / 2);
             }
             else if (box != null)
             {
-
-                RichTextBox boxCopy = new RichTextBox();
                 FlowDocument doc = new FlowDocument();
+                RichTextBox boxCopy = new RichTextBox {Width = box.ActualWidth, IsReadOnly = true, Document = doc};
+                
                 AddDocument(box.Document, doc);
-                boxCopy.Width = 200;
-                boxCopy.IsReadOnly = true;
-                boxCopy.Document = doc;
+                
 
                 offset[0] = new Point(50, 50);
                 elem = boxCopy;
@@ -197,6 +211,11 @@ namespace MetadataUISandbox.Commands
         public void Execute(object parameter)
         {
             Console.WriteLine("Executing Navigate command");
+            var parameters = (CommandParameters) parameter ;
+            var hit = parameters.visualHit as UIElement;
+            TextMagnifier magnifier = new TextMagnifier(hit, parameters.touchEventArgs);
+            
+
         }
     }
 

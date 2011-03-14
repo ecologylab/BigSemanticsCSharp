@@ -47,7 +47,7 @@
 					<local:WikiPage x:Name="WikiView" Width="512.5" Height="593.5" Visibility="Hidden"
 						local:RightHandedControlMenu.NorthZoneCommand="{StaticResource CopyElementCommand}"
 						local:RightHandedControlMenu.WestZoneCommand="{StaticResource NavigateCommand}"
-                        local:RightHandedControlMenu.SouthWestZoneCommand="{StaticResource BubbleCursorContainerCommand}"                                    
+						local:RightHandedControlMenu.SouthWestZoneCommand="{StaticResource BubbleCursorContainerCommand}"                                    
                     />
 				</Canvas>
 			</StackPanel>
@@ -62,8 +62,8 @@
 			<surface:SurfaceRadioButton x:Name="TapWithSecondFingerRadio" Content="Tap With Second Finger" d:LayoutOverrides="Width" GroupName="ActivationType" Checked="SurfaceRadioButton_Checked"/>
         
 		</StackPanel>
-        
-        <!--
+       
+		<!--
         <Canvas 
             Height="436" Canvas.Left="62" Canvas.Top="62.058" Width="375" Background="#FFCCCCCC" 
         >
@@ -76,6 +76,6 @@
 			<Rectangle Fill="#FF587980" Height="93" Canvas.Left="66" Stroke="#FF414141" StrokeThickness="0.5" Canvas.Top="38.942" Width="177"/>
 		</Canvas>
         -->
-    </Canvas>
+	</Canvas>
 
 </Window>

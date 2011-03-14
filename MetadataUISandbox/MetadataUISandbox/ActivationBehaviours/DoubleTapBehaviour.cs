@@ -3,7 +3,7 @@ using System.Windows.Interactivity;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Input;
-using MetadataUISandbox.Utilities;
+using MetadataUISandbox.Utils;
 
 namespace MetadataUISandbox.ActivationBehaviours
 {
@@ -45,7 +45,7 @@ namespace MetadataUISandbox.ActivationBehaviours
                 }
                 else //Could be tap
                 {
-                    if (Utils.Distance(pos, _firstUp) < 30)
+                    if (Utilities.Distance(pos, _firstUp) < 30)
                     {
                         //logger.Log("Within distance");
                         if (DateTime.Now - _firstUpTime.Value < TimeSpan.FromMilliseconds(1000))
@@ -56,9 +56,17 @@ namespace MetadataUISandbox.ActivationBehaviours
                                 DependencyObject acceptableResult;
                                 if ( (acceptableResult =  (AssociatedObject as IHitTestAcceptor).AcceptableObject(result.VisualHit)) != null)
                                 {
-                                    logger.Log("DoubleTap on: " + AssociatedObject + "\n\tHitTest on : " + acceptableResult);
+                                    logger.Log("DoubleTap on: " + AssociatedObject);
+                                    logger.Log("\tAcceptable HitTest on : " + acceptableResult);
                                     e.Handled = true;
-                                    RightHandedControlMenu menu = new RightHandedControlMenu(pos, e, sender as DependencyObject, acceptableResult);
+                                    CommandParameters commandParameters = new CommandParameters
+                                    {
+                                        touchEventArgs = e,
+                                        visualContainer = sender as DependencyObject,
+                                        visualHit = acceptableResult
+                                    };
+
+                                    new RightHandedControlMenu(commandParameters);
                                     return HitTestResultBehavior.Stop;
                                 }
                                 return HitTestResultBehavior.Continue;

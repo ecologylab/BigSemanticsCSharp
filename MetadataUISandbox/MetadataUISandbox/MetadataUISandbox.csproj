@@ -83,6 +83,9 @@
       <DependentUpon>RightHandedControlMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="ActivationBehaviours\TapWithSecondFingerBehaviour.cs" />
+    <Compile Include="TextMagnifier.xaml.cs">
+      <DependentUpon>TextMagnifier.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TouchDelegates.cs" />
     <Compile Include="TreeViewControl.xaml.cs">
       <DependentUpon>TreeViewControl.xaml</DependentUpon>
@@ -90,7 +93,8 @@
     <Compile Include="UserControl1.xaml.cs">
       <DependentUpon>UserControl1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils.cs" />
+    <Compile Include="Utils\Utilities.cs" />
+    <Compile Include="Utils\Documents.cs" />
     <Compile Include="WikiPage.xaml.cs">
       <DependentUpon>WikiPage.xaml</DependentUpon>
     </Compile>
@@ -115,6 +119,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="RightHandedControlMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TextMagnifier.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

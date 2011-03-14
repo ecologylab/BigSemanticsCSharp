@@ -172,7 +172,7 @@
 					</TransformGroup>
 				</Path.RenderTransform>
 			</Path>
-			<TextBlock x:Name="NorthVisual_Label" Height="22.667" Canvas.Left="88.999" TextWrapping="WrapWithOverflow" Text="Pull Out" Canvas.Top="14.666" Width="73" FontSize="16" FontFamily="Segoe UI Semibold" IsHitTestVisible="False" TextAlignment="Center" TextTrimming="CharacterEllipsis"/>
+			<TextBlock x:Name="NorthVisual_Label" Height="22.667" Canvas.Left="88.999" TextWrapping="WrapWithOverflow" Text="..." Canvas.Top="14.666" Width="73" FontSize="16" FontFamily="Segoe UI Semibold" IsHitTestVisible="False" TextAlignment="Center" TextTrimming="CharacterEllipsis"/>
 			<TextBlock x:Name="WestVisual_Label" Height="27" TextWrapping="WrapWithOverflow" Text="Navigate" Canvas.Top="112.562" Width="76.667" FontSize="16" FontFamily="Segoe UI Semibold" Canvas.Left="4" IsHitTestVisible="False" TextAlignment="Center" TextTrimming="CharacterEllipsis"/>
 			<TextBlock x:Name="SouthVisual_Label" Height="27" Canvas.Left="85.666" TextWrapping="WrapWithOverflow" Text="Move" Canvas.Top="215" Width="79.666" FontSize="16" FontFamily="Segoe UI Semibold" TextAlignment="Center" IsHitTestVisible="False" TextTrimming="CharacterEllipsis"/>
 			<TextBlock x:Name="SouthWestVisual_Label" Height="27" Canvas.Left="23.881" TextWrapping="WrapWithOverflow" Text="Move" Canvas.Top="170.523" Width="79.278" FontSize="16" FontFamily="Segoe UI Semibold" TextAlignment="Center" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5" TextTrimming="CharacterEllipsis">
