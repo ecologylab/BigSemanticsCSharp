@@ -11,8 +11,9 @@ using MetadataUISandbox.Utils;
 namespace MetadataUISandbox.Commands
 {
 
-    public class RaiseMenuCommand : ICommand
+    public class RaiseMenuCommand : ICommand, ILabelledCommand
     {
+
         public void Execute(object parameter)
         {
             new RightHandedControlMenu((CommandParameters)parameter);
@@ -27,6 +28,11 @@ namespace MetadataUISandbox.Commands
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        public string GetLabel()
+        {
+            return "Menu2";
         }
     }
 

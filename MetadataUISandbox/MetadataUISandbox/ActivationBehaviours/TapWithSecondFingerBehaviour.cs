@@ -20,7 +20,53 @@ namespace MetadataUISandbox
         EventHandler<TouchEventArgs> _touchDownHandler;
         EventHandler<TouchEventArgs> _touchUpHandler;
         Window _parent;
-        Logger logger = new Logger();
+        static Logger logger = new Logger();
+
+        #region Command
+        /// <summary>
+        /// Command Attached Dependency Property
+        /// </summary>
+        public static readonly DependencyProperty CommandProperty =
+            DependencyProperty.RegisterAttached(
+                "Command",
+                typeof(ICommand),
+                typeof(TapWithSecondFingerBehaviour),
+                new FrameworkPropertyMetadata(
+                    (ICommand)null,
+                    FrameworkPropertyMetadataOptions.Inherits));
+
+        private ICommand command;
+
+        /// <summary>
+        /// The command to be raised when the behaviour is performed by the user.
+        /// 
+        /// </summary>
+        public ICommand Command
+        {
+            get { return command; }
+            set { command = value; }
+        }
+
+        /// <summary>
+        /// Gets the Command property. This dependency property 
+        /// indicates ....
+        /// </summary>
+        public static ICommand GetCommand(DependencyObject d)
+        {
+            return (ICommand)d.GetValue(CommandProperty);
+        }
+
+        /// <summary>
+        /// Sets the Command property. This dependency property 
+        /// indicates ....
+        /// </summary>
+        public static void SetCommand(DependencyObject d, ICommand value)
+        {
+            d.SetValue(CommandProperty, value);
+        }
+
+        #endregion
+
         protected override void OnDetaching()
         {
             if (_touchDownHandler == null || _touchUpHandler == null )
@@ -30,7 +76,8 @@ namespace MetadataUISandbox
             AssociatedObject.TouchUp -= _touchUpHandler;
             _touchUpHandler = null;
             _touchDownHandler = null;
-        }
+
+       }
 
         void OnTouchDown(object sender, TouchEventArgs e)
         {
@@ -89,8 +136,14 @@ namespace MetadataUISandbox
                             visualContainer = sender as DependencyObject,
                             visualHit = acceptableResult
                         };
-
-                        new RightHandedControlMenu(commandParameters);
+                        
+                        if (command != null)
+                            command.Execute(commandParameters);
+                        else
+                        {
+                            logger.Log("No command has been bound to this behaviour.");
+                        }
+                        //new RightHandedControlMenu(commandParameters);
 
 
                         return HitTestResultBehavior.Stop;
@@ -117,6 +170,8 @@ namespace MetadataUISandbox
 
             _touchUpHandler = new EventHandler<TouchEventArgs>(OnTouchUp);
             AssociatedObject.TouchUp += _touchUpHandler;
+
+            this.command = (ICommand)AssociatedObject.GetValue(CommandProperty);
 
         }
         private void ClearStateVals()

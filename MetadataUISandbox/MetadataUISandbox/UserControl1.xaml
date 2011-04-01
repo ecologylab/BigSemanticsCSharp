@@ -3,6 +3,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:Custom="http://schemas.microsoft.com/surface/2008"
 	mc:Ignorable="d"
 	x:Class="MetadataUISandbox.UserControl1"
 	x:Name="UserControl"
@@ -16,11 +17,16 @@
 			</FlowDocument>
 		</RichTextBox>
 		<RichTextBox Height="100" Width="100" HorizontalAlignment="Left"><FlowDocument><Paragraph><Run Text="RichTextBox"/></Paragraph></FlowDocument></RichTextBox>
-		<RichTextBox Height="100" SelectionChanged="RichTextBox_SelectionChanged">
-			<FlowDocument>
-				<Paragraph><Run Text="RichTextBox "/><Hyperlink >Some text</Hyperlink></Paragraph>
-			</FlowDocument>
-		</RichTextBox>
-		<TextBlock TextWrapping="Wrap" TextTrimming="WordEllipsis" Height="46.76" TextAlignment="Justify"><Run Text="This is a loong piece of text. This is a loong piece of text. This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text. This is a loong piece of text. "/><LineBreak/><Run Text=""/></TextBlock>
+		<ScrollViewer
+			Height="100" Width="100" HorizontalAlignment="Left">
+			<RichTextBox Height="100" SelectionChanged="RichTextBox_SelectionChanged" Width="640">
+				<FlowDocument>
+					<Paragraph/>
+				</FlowDocument>
+			</RichTextBox>
+		</ScrollViewer>
+		<Custom:SurfaceScrollViewer Height="100" Margin="0,0,211.5,0">
+			<TextBlock TextWrapping="Wrap" TextTrimming="WordEllipsis" Height="46.76" TextAlignment="Justify" Width="640"><Run Text="This is a loong piece of text. This is a loong piece of text. This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text.  This is a loong piece of text. This is a loong piece of text. "/><LineBreak/></TextBlock>
+		</Custom:SurfaceScrollViewer>
 	</StackPanel>
 </UserControl>

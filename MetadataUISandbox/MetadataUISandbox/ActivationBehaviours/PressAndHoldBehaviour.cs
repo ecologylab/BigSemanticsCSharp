@@ -18,6 +18,51 @@ namespace MetadataUISandbox
         EventHandler<TouchEventArgs> touchUpHandler;
         EventHandler<TouchEventArgs> touchMoveHandler;
 
+        #region Command
+        /// <summary>
+        /// Command Attached Dependency Property
+        /// </summary>
+        public static readonly DependencyProperty CommandProperty =
+            DependencyProperty.RegisterAttached(
+                "Command",
+                typeof(ICommand),
+                typeof(PressAndHoldBehaviour),
+                new FrameworkPropertyMetadata(
+                    (ICommand)null,
+                    FrameworkPropertyMetadataOptions.Inherits));
+
+        private ICommand command;
+
+        /// <summary>
+        /// The command to be raised when the behaviour is performed by the user.
+        /// 
+        /// </summary>
+        public ICommand Command
+        {
+            get { return command; }
+            set { command = value; }
+        }
+
+        /// <summary>
+        /// Gets the Command property. This dependency property 
+        /// indicates ....
+        /// </summary>
+        public static ICommand GetCommand(DependencyObject d)
+        {
+            return (ICommand)d.GetValue(CommandProperty);
+        }
+
+        /// <summary>
+        /// Sets the Command property. This dependency property 
+        /// indicates ....
+        /// </summary>
+        public static void SetCommand(DependencyObject d, ICommand value)
+        {
+            d.SetValue(CommandProperty, value);
+        }
+
+        #endregion
+
         Logger logger = new Logger();
         protected override void OnDetaching()
         {
@@ -69,13 +114,19 @@ namespace MetadataUISandbox
                             e.Handled = true;
 
                             CommandParameters commandParameters = new CommandParameters
-                                                                      {
-                                                                          touchEventArgs = e,
-                                                                          visualContainer = sender as DependencyObject,
-                                                                          visualHit = acceptableResult
-                                                                      };
+                            {
+                                touchEventArgs = e,
+                                visualContainer = sender as DependencyObject,
+                                visualHit = acceptableResult
+                            };
 
-                            new RightHandedControlMenu(commandParameters);
+                            if (command != null)
+                                command.Execute(commandParameters);
+                            else
+                            {
+                                logger.Log("No command has been bound to this behaviour.");
+                            }
+                            //new RightHandedControlMenu(commandParameters);
                             
                             return HitTestResultBehavior.Stop;
                         }

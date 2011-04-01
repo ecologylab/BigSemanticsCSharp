@@ -18,6 +18,52 @@ namespace MetadataUISandbox.ActivationBehaviours
         EventHandler<TouchEventArgs> _touchUpHandler;
         Logger logger = new Logger();
 
+        #region Command
+        /// <summary>
+        /// Command Attached Dependency Property
+        /// </summary>
+        public static readonly DependencyProperty CommandProperty =
+            DependencyProperty.RegisterAttached(
+                "Command",
+                typeof(ICommand),
+                typeof(DoubleTapBehaviour),
+                new FrameworkPropertyMetadata(
+                    (ICommand)null,
+                    FrameworkPropertyMetadataOptions.Inherits));
+
+        private ICommand command;
+
+        /// <summary>
+        /// The command to be raised when the behaviour is performed by the user.
+        /// 
+        /// </summary>
+        public ICommand Command
+        {
+            get { return command; }
+            set { command = value; }
+        }
+
+        /// <summary>
+        /// Gets the Command property. This dependency property 
+        /// indicates ....
+        /// </summary>
+        public static ICommand GetCommand(DependencyObject d)
+        {
+            return (ICommand)d.GetValue(CommandProperty);
+        }
+
+        /// <summary>
+        /// Sets the Command property. This dependency property 
+        /// indicates ....
+        /// </summary>
+        public static void SetCommand(DependencyObject d, ICommand value)
+        {
+            d.SetValue(CommandProperty, value);
+        }
+
+        #endregion
+
+
         protected override void OnDetaching()
         {
             if (_touchDownHandler == null || _touchUpHandler == null)
@@ -50,7 +96,6 @@ namespace MetadataUISandbox.ActivationBehaviours
                         //logger.Log("Within distance");
                         if (DateTime.Now - _firstUpTime.Value < TimeSpan.FromMilliseconds(1000))
                         {
-
                             HitTestResultDelegate hitResultDelegate = (result) => 
                             {
                                 DependencyObject acceptableResult;
@@ -65,8 +110,13 @@ namespace MetadataUISandbox.ActivationBehaviours
                                         visualContainer = sender as DependencyObject,
                                         visualHit = acceptableResult
                                     };
-
-                                    new RightHandedControlMenu(commandParameters);
+                                    if (command != null)
+                                        command.Execute(commandParameters);
+                                    else
+                                    {
+                                        logger.Log("No command has been bound to this behaviour.");
+                                    }
+                                    //new RightHandedControlMenu(commandParameters);
                                     return HitTestResultBehavior.Stop;
                                 }
                                 return HitTestResultBehavior.Continue;

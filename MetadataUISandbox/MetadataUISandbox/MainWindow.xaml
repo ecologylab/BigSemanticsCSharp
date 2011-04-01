@@ -18,6 +18,7 @@
 	<Window.Resources>
         <commands:CopyElementCommand x:Key="CopyElementCommand"/>
         <commands:NavigateElementCommand x:Key="NavigateCommand"/>
+        <commands:RaiseMenuCommand x:Key="RaiseMenuCommand"/>
         <commands:BubbleCursorContainerCommand x:Key="BubbleCursorContainerCommand"/>
         <local:DoubleToIntConvertor x:Key="DoubleToIntConvertor"/>
 	</Window.Resources>
@@ -48,6 +49,7 @@
 						local:RightHandedControlMenu.NorthZoneCommand="{StaticResource CopyElementCommand}"
 						local:RightHandedControlMenu.WestZoneCommand="{StaticResource NavigateCommand}"
 						local:RightHandedControlMenu.SouthWestZoneCommand="{StaticResource BubbleCursorContainerCommand}"                                    
+						local:TapWithSecondFingerBehaviour.Command="{StaticResource RaiseMenuCommand}"
                     />
 				</Canvas>
 			</StackPanel>
