@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using ecologylab.serialization;
 using ecologylab.semantics.metametadata;
 using Cjc.ChromiumBrowser;
@@ -13,28 +16,134 @@ using ecologylab.semantics.generated;
 using System.Text.RegularExpressions;
 using ecologylab.semantics.generated.library;
 using ecologylab.semantics.metadata.scalar;
+using System.Windows.Input;
 namespace ecologylabSemantics
 {
     public class Tester
     {
 
         static String path = @"C:\Users\damaraju.m2icode\workspace\cSharp\ecologylabSemantics\DomExtraction\javascript\tempJSON\";
+        public class ExpandElement : ICommand
+        {
+            public String GetLabel()
+            {
+                return "Collapse";
+            }
+            public bool CanExecute(object parameter)
+            {
+                return parameter != null;
+            }
 
-        public static void Main()
+            public event EventHandler CanExecuteChanged
+            {
+                add { CommandManager.RequerySuggested += value; }
+                remove { CommandManager.RequerySuggested -= value; }
+            }
+
+            public void Execute(object parameter)
+            {
+                Console.WriteLine("Executing CollapseWikiView command");
+            }
+        }
+
+        class ClassTester : DependencyObject
+        {
+            #region NorthZoneCommand
+            ICommand northZoneCommand;
+
+            public ICommand NorthZoneCommand
+            {
+                get { return northZoneCommand; }
+                set { northZoneCommand = value; }
+            }
+
+            /// <summary>
+            /// NorthZoneCommand Attached Dependency Property
+            /// </summary>
+            public static readonly DependencyProperty NorthZoneCommandProperty =
+                DependencyProperty.RegisterAttached("NorthZoneCommand", typeof(ICommand), typeof(ClassTester),
+                    new FrameworkPropertyMetadata((ICommand)null));
+
+            /// <summary>
+            /// Gets the NorthZoneCommand property. This dependency property 
+            /// indicates ....
+            /// </summary>
+            public static ICommand GetNorthZoneCommand(DependencyObject d)
+            {
+                return (ICommand)d.GetValue(NorthZoneCommandProperty);
+            }
+
+            /// <summary>
+            /// Sets the NorthZoneCommand property. This dependency property 
+            /// indicates ....
+            /// </summary>
+            public static void SetNorthZoneCommand(DependencyObject d, ICommand value)
+            {
+                d.SetValue(NorthZoneCommandProperty, value);
+            }
+
+            #endregion
+
+            public ClassTester()
+            {
+                ICommand command = new ExpandElement();
+                var dp = NorthZoneCommandProperty;
+                PropertyInfo dp2 = this.GetType().GetProperty("NorthZoneCommand");
+//                MethodInfo zonePropSetter = this.GetType().GetMethod("SetNorthZoneCommand");
+                dp2.SetValue(this, command, null);
+                Console.WriteLine("NorthZone command is : " + this.NorthZoneCommand);
+            }
+        }
+
+
+        public static async void Main()
         {
 
+            //new ClassTester();
 
+            //MetadataScalarScalarType.init();
 
-            MetadataScalarScalarType.init();
-
-            TranslationScope metadataTScope = GeneratedMetadataTranslations.Get();
-            DateTime tStart = System.DateTime.Now;
-            ElementState s = metadataTScope.deserialize(path + "lastMetadataCleaned.json", Format.JSON);
-            Console.WriteLine("Deserialized, time : " + (System.DateTime.Now - tStart));
+            
+            //var s; //= metadataTScope.deserialize(path + "lastMetadataCleaned.json", Format.JSON);
+            /*
+            Console.WriteLine("Deserialized, time : " + timeSpan);
             //TestHypertextSerialization();
+            tStart = System.DateTime.Now;
+            s = metadataTScope.deserialize(path + "lastMetadataCleaned.json", Format.JSON);
+            timeSpan = (System.DateTime.Now - tStart);*/
+            
+
+
+            System.Threading.Tasks.Task<ElementState> t = GetMetadata();
+
+
+            Console.WriteLine("Main Thread Name: " + Thread.CurrentThread.ManagedThreadId);
+            Console.WriteLine("Now Waiting");
+            Thread.Sleep(5000);
             Console.WriteLine("Done");
-            
-            
+        }
+
+        public static async Task<ElementState> GetMetadata()
+        {
+
+            String workspace = @"C:\Users\damaraju.m2icode\workspace\";
+            String jsPath = workspace + @"cSharp\ecologylabSemantics\DomExtraction\javascript\";
+            var metadataTScope = GeneratedMetadataTranslations.Get();
+            TaskCompletionSource<ElementState> tcs = new TaskCompletionSource<ElementState>();
+            Console.WriteLine("Thread Name: " + Thread.CurrentThread.Name);
+            ElementState t = await TaskEx.Run(() =>
+            {
+                var tStart = System.DateTime.Now;
+                    Console.WriteLine("Inside TaskEx Before " + Thread.CurrentThread.ManagedThreadId);
+                    ElementState elementState = metadataTScope.deserialize(jsPath + @"tempJSON\lastMetadataCleaned.json", Format.JSON);
+                    TimeSpan timeSpan = (System.DateTime.Now - tStart);
+                    Console.WriteLine("Inside TaskEx After " + Thread.CurrentThread.ManagedThreadId);
+                    Console.WriteLine("Deserialized, time : " + timeSpan);
+                    return elementState;
+                });
+            Console.WriteLine("Done deserializing");
+            tcs.TrySetResult(t);
+            return await AsyncCtpThreadingExtensions.GetAwaiter(tcs.Task);
         }
 
         public static void TestHypertextSerialization()
@@ -43,8 +152,11 @@ namespace ecologylabSemantics
             MetadataScalarScalarType.init();
             HypertextPara p = new HypertextPara();
             TextRun t = new TextRun();
-            MetadataString s = new MetadataString();
-            s.Value = "This is the first part of the string. We will end this sentence with a link ";
+            MetadataString s = new MetadataString
+                                   {
+                                       Value =
+                                           "This is the first part of the string. We will end this sentence with a link "
+                                   };
             t.Text = s;
 
             LinkRun l = new LinkRun();
