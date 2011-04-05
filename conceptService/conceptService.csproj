@@ -47,12 +47,21 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="tscope\ConceptScope.cs" />
-    <Compile Include="wixplorer\concept\Concept.cs" />
-    <Compile Include="wixplorer\concept\ConceptGroup.cs" />
-    <Compile Include="wixplorer\concept\SingleSourceRelatedness.cs" />
-    <Compile Include="wixplorer\concept\SuggestedConcepts.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Class2.cs" />
+    <Compile Include="ecologylab\oodss\messages\RequestMessage.cs" />
+    <Compile Include="ecologylab\oodss\messages\ResponseMessage.cs" />
+    <Compile Include="ecologylab\oodss\messages\ServiceMessage.cs" />
+    <Compile Include="tscope\WikxplorerMessageTranslationScope.cs" />
+    <Compile Include="wikxplorer\messages\Concept.cs" />
+    <Compile Include="wikxplorer\messages\ConceptGroup.cs" />
+    <Compile Include="wikxplorer\messages\RelatednessRequest.cs" />
+    <Compile Include="wikxplorer\messages\RelatednessResponse.cs" />
+    <Compile Include="wikxplorer\messages\SuggestionRequest.cs" />
+    <Compile Include="wikxplorer\messages\SuggestionResponse.cs" />
+    <Compile Include="wikxplorer\messages\UpdateContextRequest.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
