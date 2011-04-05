@@ -22,7 +22,7 @@ public class StateObject {
 
 public class AsynchronousClient {
     // The port number for the remote device.
-    private const int port = 11355;//7833;
+    private const int port = 7833; // 11355;//7833;
 
     // ManualResetEvent instances signal completion.
     private static ManualResetEvent connectDone = 
@@ -42,7 +42,7 @@ public class AsynchronousClient {
             // Establish the remote endpoint for the socket.
             // The name of the 
             // remote device is "host.contoso.com".
-            IPHostEntry ipHostInfo = Dns.Resolve("127.0.0.1");
+            IPHostEntry ipHostInfo = Dns.Resolve("127.0.0.1");//"achilles.cse.tamu.edu");
             IPAddress ipAddress = ipHostInfo.AddressList[0];
             IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
             
@@ -121,6 +121,7 @@ public class AsynchronousClient {
 
     public static void ReceiveCallback(IAsyncResult ar)
     {
+        Console.WriteLine("async claa back");
         try {
             // Retrieve the state object and the client socket 
             // from the asynchronous state object.
@@ -133,6 +134,8 @@ public class AsynchronousClient {
             if (bytesRead > 0) {
                 // There might be more data, so store the data received so far.
             state.sb.Append(Encoding.ASCII.GetString(state.buffer,0,bytesRead));
+            Console.WriteLine("SB:"+state.sb);
+
 
                 // Get the rest of the data.
                 client.BeginReceive(state.buffer,0,StateObject.BufferSize,0,

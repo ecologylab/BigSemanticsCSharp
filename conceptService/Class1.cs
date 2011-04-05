@@ -119,6 +119,7 @@ namespace conceptService
             //Console.WriteLine(result);
 
             AsynchronousClient.StartClient();
+            AsynchronousClient.Receive();
             AsynchronousClient.Send("<init_connection_request/>");
             Console.ReadLine();
             SuggestionRequest sq = new SuggestionRequest();
@@ -134,11 +135,29 @@ namespace conceptService
             //r.serializeToXML(output);
             //Console.WriteLine(output);
             Console.ReadLine();
-            
-            
+
+
+
+
+            AsynchronousClient.Receive();
+            UpdateContextRequest ucr = new UpdateContextRequest();
+            ucr.Action = 1;//setAction(UpdateContextRequest.ACTION_ADD);
+            ucr.Title = "Creativity";//setTitle("Creativity");//            client.sendMessage(ucr);
+            output = new StringBuilder();
+            ucr.serializeToXML(output);
+            AsynchronousClient.Send(output.ToString());
+
+            AsynchronousClient.Receive();
+            SuggestionRequest sr = new SuggestionRequest();
+            sr.Source = "Information visualization";
+            output = new StringBuilder();
+            sr.serializeToXML(output);
+            Console.ReadLine();
+            AsynchronousClient.Send(output.ToString());
 
             
 
+            Console.ReadLine();
             //AsynchronousClient.Send(output.ToString());
             //Console.ReadLine();
             //Console.ReadLine();
