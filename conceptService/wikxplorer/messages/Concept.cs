@@ -61,7 +61,9 @@ namespace wikxplorer.messages
 
 		public Object key()
 		{
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
+            //return new object();//wut it do?
+            return title;
 		}
 	}
 }
