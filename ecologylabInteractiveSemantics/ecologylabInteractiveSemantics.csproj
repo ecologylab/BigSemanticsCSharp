@@ -2,22 +2,18 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E58326D6-5385-4859-9C6E-0E9DFDCC09DC}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{E66E57E8-D3E3-42AE-9035-C829B2E8DADB}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ecologylabInteractiveSemantics</RootNamespace>
     <AssemblyName>ecologylabInteractiveSemantics</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -26,8 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -36,55 +31,76 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
+    <Reference Include="Microsoft.Expression.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Surface.Presentation, Version=1.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
+    <Compile Include="ecologylab\interactive\ActivationBehaviours\DoubleTapBehaviour.cs" />
+    <Compile Include="ecologylab\interactive\ActivationBehaviours\PressAndHoldBehaviour.cs" />
+    <Compile Include="ecologylab\interactive\ActivationBehaviours\TapWithSecondFingerBehaviour.cs" />
+    <Compile Include="ecologylab\interactive\CommandParameters.cs" />
+    <Compile Include="ecologylab\interactive\LoadingControl\Block.xaml.cs">
+      <DependentUpon>Block.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ecologylab\interactive\LoadingControl\LoadingAnimation.xaml.cs">
+      <DependentUpon>LoadingAnimation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ecologylab\interactive\RightHandedControlMenu.xaml.cs">
+      <DependentUpon>RightHandedControlMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ecologylab\interactive\Utils\Documents.cs" />
+    <Compile Include="ecologylab\interactive\Utils\TouchDelegates.cs" />
+    <Compile Include="ecologylab\interactive\Utils\Utilities.cs" />
+    <Compile Include="ecologylab\semantics\interactive\Commands\BubbleCursorContainerCommand.cs" />
+    <Compile Include="ecologylab\semantics\interactive\Commands\CollapseElement.cs" />
+    <Compile Include="ecologylab\semantics\interactive\Commands\CopyElementCommand.cs" />
+    <Compile Include="ecologylab\semantics\interactive\Commands\ExpandElement.cs" />
+    <Compile Include="ecologylab\semantics\interactive\Commands\MagnifyElementCommand.cs" />
+    <Compile Include="ecologylab\semantics\interactive\Commands\NavigateElementCommand.cs" />
+    <Compile Include="ecologylab\semantics\interactive\Commands\RaiseMenuCommand.cs" />
+    <Compile Include="ecologylab\semantics\interactive\Controls\TextMagnifier.xaml.cs">
+      <DependentUpon>TextMagnifier.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ecologylab\semantics\interactive\Controls\WikiPage.xaml.cs">
+      <DependentUpon>WikiPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ecologylab\semantics\interactive\ICMBuilder.cs" />
+    <Compile Include="ecologylab\semantics\interactive\ICMTemplateSelector.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ecologylab\semantics\interactive\ICMTemplateSelector.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <AppDesigner Include="Properties\" />
+    <Page Include="ecologylab\interactive\LoadingControl\Block.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ecologylab\interactive\LoadingControl\LoadingAnimation.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ecologylab\interactive\RightHandedControlMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ecologylab\semantics\interactive\Controls\TextMagnifier.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ecologylab\semantics\interactive\Controls\WikiPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ecologylabFundamental.NET\ecologylabFundamental\ecologylabFundamental.NET.csproj">
