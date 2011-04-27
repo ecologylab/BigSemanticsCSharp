@@ -50,6 +50,7 @@
     <Compile Include="ecologylab\interactive\ActivationBehaviours\DoubleTapBehaviour.cs" />
     <Compile Include="ecologylab\interactive\ActivationBehaviours\PressAndHoldBehaviour.cs" />
     <Compile Include="ecologylab\interactive\ActivationBehaviours\TapWithSecondFingerBehaviour.cs" />
+    <Compile Include="ecologylab\interactive\Behaviours\DragBehaviour.cs" />
     <Compile Include="ecologylab\interactive\CommandParameters.cs" />
     <Compile Include="ecologylab\interactive\LoadingControl\Block.xaml.cs">
       <DependentUpon>Block.xaml</DependentUpon>

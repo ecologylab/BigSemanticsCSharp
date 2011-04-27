@@ -8,8 +8,6 @@ using ecologylab.interactive.Utils;
 
 namespace MetadataUISandbox
 {
-
-
     public class TapWithSecondFingerBehaviour : Behavior<UIElement>
     {
         Point? _touchHeldPos;
