@@ -17,10 +17,43 @@ using System.Text.RegularExpressions;
 using ecologylab.semantics.generated.library;
 using ecologylab.semantics.metadata.scalar;
 using System.Windows.Input;
+using ecologylab.attributes;
+using System.Dynamic;
 namespace ecologylabSemantics
 {
     public class Tester
     {
+        public class TestElementState : ElementState
+        {
+            [simpl_scalar]
+            public String SomeString; 
+
+            public TestElementState()
+            { }
+
+
+        }
+
+        public static void Main()
+        {
+            TestElementState tES = new TestElementState();
+
+            //tES.somethingElse = "New String";
+
+            tES.SomeString = "This string has \" Quotes\"";
+            var buffy = new StringBuilder();
+            tES.serializeToXML(buffy);
+
+            dynamic funkyShit = new ExpandoObject();
+
+            funkyShit.shit = "Something funky";
+
+
+            Console.WriteLine("buffy: " + funkyShit.shit);
+            //new ClassTester();
+
+
+        }
 
         static String path = @"C:\Users\damaraju.m2icode\workspace\cSharp\ecologylabSemantics\DomExtraction\javascript\tempJSON\";
         public class ExpandElement : ICommand
@@ -96,32 +129,7 @@ namespace ecologylabSemantics
         }
 
 
-        public static async void Main()
-        {
-
-            //new ClassTester();
-
-            //MetadataScalarScalarType.init();
-
-            
-            //var s; //= metadataTScope.deserialize(path + "lastMetadataCleaned.json", Format.JSON);
-            /*
-            Console.WriteLine("Deserialized, time : " + timeSpan);
-            //TestHypertextSerialization();
-            tStart = System.DateTime.Now;
-            s = metadataTScope.deserialize(path + "lastMetadataCleaned.json", Format.JSON);
-            timeSpan = (System.DateTime.Now - tStart);*/
-            
-
-
-            System.Threading.Tasks.Task<ElementState> t = GetMetadata();
-
-
-            Console.WriteLine("Main Thread Name: " + Thread.CurrentThread.ManagedThreadId);
-            Console.WriteLine("Now Waiting");
-            Thread.Sleep(5000);
-            Console.WriteLine("Done");
-        }
+      
 
         public static async Task<ElementState> GetMetadata()
         {
