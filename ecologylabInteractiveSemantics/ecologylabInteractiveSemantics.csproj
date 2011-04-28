@@ -77,8 +77,6 @@
     <Compile Include="ecologylab\semantics\interactive\Controls\WikiPage.xaml.cs">
       <DependentUpon>WikiPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ecologylab\semantics\interactive\ICMBuilder.cs" />
-    <Compile Include="ecologylab\semantics\interactive\ICMTemplateSelector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

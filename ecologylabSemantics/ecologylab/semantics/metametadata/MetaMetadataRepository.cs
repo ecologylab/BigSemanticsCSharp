@@ -196,17 +196,23 @@ namespace ecologylab.semantics.metametadata
 		    InitializeDefaultUserAgent();
 
 		    // findAndDeclareNestedMetaMetadata(metadataTScope);
+            List<MetaMetadata> nonBindingMetaMetadata = new List<MetaMetadata>();
 
 		    foreach (MetaMetadata metaMetadata in repositoryByTagName.Values)
 		    {
 			    metaMetadata.InheritMetaMetadata(this);
-			    metaMetadata.GetClassAndBindDescriptors(metadataTScope);
-			    MetadataClassDescriptor metadataClassDescriptor = metaMetadata.MetadataClassDescriptorP;
+			    bool binded = metaMetadata.GetClassAndBindDescriptors(metadataTScope);
+			    MetadataClassDescriptor metadataClassDescriptor = metaMetadata.MetadataClassDescriptor;
                 if (metaMetadata.Type == null && metadataClassDescriptor != null 
                     && repositoryByClassName.ContainsKey(metadataClassDescriptor.DescribedClass.Name)) // don't put restatements of the same base type into
 																					    // *this* map
 				    repositoryByClassName.Add(metadataClassDescriptor.DescribedClass.Name, metaMetadata);
 		    }
+
+            foreach (MetaMetadata metaMetadata in nonBindingMetaMetadata)
+            {
+                repositoryByTagName.Remove(metaMetadata.Name);
+            }
 
 		    InitializeLocationBasedMaps();
 	    }
@@ -501,6 +507,17 @@ namespace ecologylab.semantics.metametadata
             repositoryByTagName.TryGetValue(tagName, out result);
             return result;
         }
+        
+        public MetaMetadata GetByClass(Type metadataClass)
+	    {
+		    if (metadataClass == null)
+			    return null;
+
+            MetaMetadata result = null;
+		    // String tag = metadataTScope.getTag(metadataClass);
+		    repositoryByClassName.TryGetValue(metadataClass.Name, out result);
+            return result;
+	    }
 
         #region Properties
 

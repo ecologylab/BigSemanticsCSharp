@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using ecologylab.attributes;
 using ecologylab.serialization;
+using System.Reflection;
 
 namespace ecologylab.semantics.metadata 
 {
@@ -27,5 +28,10 @@ namespace ecologylab.semantics.metadata
         {
 
         }
+
+        //protected override FieldDescriptor NewFieldDescriptor(ClassDescriptor classDescriptor, FieldInfo fieldInfo, Int16 annotationType)
+        //{
+        //    return new MetadataFieldDescriptor(classDescriptor, fieldInfo, annotationType);
+        //}
 	}
 }

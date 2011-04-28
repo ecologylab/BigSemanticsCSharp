@@ -45,7 +45,7 @@ namespace ecologylab.semantics.metametadata
 			    {
 				    inheritedMetaMetadata.InheritMetaMetadata(repository);
 				    // <collection> should not inherit attributes from its child_type
-				    if (!(this.GetType().IsInstanceOfType(typeof(MetaMetadataCollectionField))))
+				    if (!(this is MetaMetadataCollectionField))
 					    InheritNonDefaultAttributes(inheritedMetaMetadata);
 				    foreach (MetaMetadataField inheritedField in inheritedMetaMetadata.Kids.Values)
 					    InheritForField(inheritedField);
@@ -72,5 +72,6 @@ namespace ecologylab.semantics.metametadata
             //Console.WriteLine("InheritNonFieldComponentsFromMM, doing nothing");
         }
 
+        public abstract MetaMetadataCompositeField getMetaMetadataCompositeField();
 	}
 }

@@ -12,6 +12,8 @@ using ecologylab.attributes;
 using ecologylab.semantics.actions;
 using ecologylab.semantics.connectors;
 using ecologylab.semantics.metadata;
+using ecologylab.generic;
+using ecologylab.serialization;
 
 namespace ecologylab.semantics.metametadata 
 {
@@ -75,6 +77,14 @@ namespace ecologylab.semantics.metametadata
 		public MetaMetadataCompositeField()
 		{ }
 
+        public MetaMetadataCompositeField(String name, DictionaryList<String, MetaMetadataField> kids)
+        {
+            this.Name = name;
+            this.Kids = new DictionaryList<String, MetaMetadataField>();
+            if (kids != null)
+                this.kids.PutAll(kids);
+        }
+
         protected override string GetMetaMetadataTagToInheritFrom()
         {
             if (Entity)
@@ -136,6 +146,32 @@ namespace ecologylab.semantics.metametadata
         public String GetTypeOrName()
         {
             return Type ?? Name;
+        }
+
+        public override MetaMetadataCompositeField getMetaMetadataCompositeField()
+        {
+            return this;
+        }
+
+        internal override bool GetClassAndBindDescriptors(TranslationScope metadataTScope)
+        {
+            Type metadataClass = GetMetadataClass(metadataTScope);
+            if (metadataClass == null)
+            {
+                //ElementState parent = Parent;
+                //Type parentType = parent.GetType();
+                //if (parent is MetaMetadataField)
+                //{
+                //    //(((MetaMetadataField)parent).kids).Remove(this.Name);
+                //}
+                //else if (parent is MetaMetadataRepository)
+                //{
+                //    // TODO remove from the repository level
+                //}
+                return false;
+            }
+            //
+            return BindClassDescriptor(metadataClass, metadataTScope);
         }
 	}
 }

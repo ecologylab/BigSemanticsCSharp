@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using ecologylab.attributes;
 using ecologylab.semantics.metadata;
+using ecologylab.generic;
+using ecologylab.serialization;
 
 namespace ecologylab.semantics.metametadata 
 {
@@ -20,6 +22,7 @@ namespace ecologylab.semantics.metametadata
 	[xml_tag("collection")]
 	public class MetaMetadataCollectionField : MetaMetadataNestedField
 	{
+        public static readonly String UNRESOLVED_NAME = "&UNRESOLVED_NAME";
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
@@ -89,6 +92,59 @@ namespace ecologylab.semantics.metametadata
         {
             get { return parseAsHypertext; }
             set { parseAsHypertext = value; }
+        }
+
+        public override MetaMetadataCompositeField getMetaMetadataCompositeField()
+        {
+            return GetChildComposite();
+        }
+
+        public MetaMetadataCompositeField GetChildComposite()
+        {
+            return (kids != null && kids.Count > 0) ? (MetaMetadataCompositeField)kids.ElementAt(0) : null;
+        }
+
+        public String DetermineCollectionChildType()
+        {
+            return (!childEntity) ? childType : DocumentParserTagNames.ENTITY;
+        }
+
+        public override void DeserializationPostHook()
+	    {
+		    String childType = DetermineCollectionChildType();
+		    MetaMetadataCompositeField composite = new MetaMetadataCompositeField(childType != null ? childType : UNRESOLVED_NAME, kids);
+		    composite.Parent    = this;
+		    composite.Type      = childType;
+		    if (kids != null)
+		        kids.Clear();
+		    else
+                kids = new DictionaryList<String, MetaMetadataField>();
+
+            kids.Add(composite.Name, composite);
+		    //composite.setPromoteChildren(this.shouldPromoteChildren());
+	    }
+
+        protected override bool bindMetadataFieldDescriptor(TranslationScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
+        {
+            String fieldName = this.GetFieldNameInCamelCase(false);
+            MetadataFieldDescriptor metadataFieldDescriptor = (MetadataFieldDescriptor)metadataClassDescriptor.
+               getFieldDescriptorByFieldName(fieldName);
+            // if we don't have a field, then this is a wrapped collection, so we need to get the wrapped
+            // field descriptor
+            if (metadataFieldDescriptor != null)
+            {
+                if (metadataFieldDescriptor.Field == null)
+                    metadataFieldDescriptor = (MetadataFieldDescriptor)metadataFieldDescriptor.WrappedFieldDescriptor;
+
+                this.MetadataFieldDescriptor = metadataFieldDescriptor;
+            }
+
+            return (metadataFieldDescriptor != null);
+        }
+
+        internal override bool GetClassAndBindDescriptors(TranslationScope metadataTScope)
+        {
+            return GetChildComposite().GetClassAndBindDescriptors(metadataTScope);
         }
 	}
 }

@@ -14,6 +14,8 @@ using ecologylab.semantics.metadata.scalar;
 using System.Collections;
 using System.Windows.Controls;
 using System.Windows;
+using ecologylab.semantics.metametadata;
+using ecologylab.net;
 
 
 namespace ecologylab.semantics.metadata 
@@ -40,6 +42,14 @@ namespace ecologylab.semantics.metadata
 		[mm_name("mixins")]
 		private List<Metadata> mixins;
 
+        private MetaMetadataCompositeField metaMetadata;
+
+        /**
+	    * Hidden reference to the MetaMetadataRepository. DO NOT access this field directly. DO NOT
+	    * create a static public accessor. -- andruid 10/7/09.
+	    */
+        private static MetaMetadataRepository repository;
+
 		public Metadata()
 		{ }
 
@@ -54,5 +64,77 @@ namespace ecologylab.semantics.metadata
 			get { return mixins; }
 			set { mixins = value; }
 		}
+
+        public MetaMetadataCompositeField MetaMetadata
+        {
+            get { return (metaMetadata == null) ? getMetaMetadata() : metaMetadata; }
+            set { metaMetadata = value; }
+        }
+
+        protected override void preTranslationProcessingHook()
+	    {
+		    getMetaMetadata();
+	    }
+
+        public ParsedUri getLocation()
+        {
+            return null;
+        }
+
+        // FIXME -- get rid of these hacks when Image extends Document
+        public bool isImage()
+        {
+            return false;
+        }
+
+        private MetaMetadataCompositeField getMetaMetadata()
+        {
+            // return getMetadataClassDescriptor().getMetaMetadata();
+            MetaMetadataCompositeField mm = metaMetadata;
+            if (mm == null && repository != null)
+            {
+                if (metaMetadataName != null) // get from saved composition
+                    mm = repository.GetByTagName(metaMetadataName.Value);
+
+                if (mm == null)
+                {
+                    ParsedUri location = getLocation();
+                    if (location != null)
+                    {
+                        //if (isImage())
+                        //    mm = repository.GetImageMM(location);
+                        //else
+                            mm = repository.GetDocumentMM(location);
+
+                        // TODO -- also try to resolve by mime type ???
+                    }
+                    if (mm == null)
+                        mm = repository.GetByClass(this.GetType());
+                    if (mm == null && this.ClassDescriptor != null)
+                    {
+                        mm = repository.GetByTagName(this.ClassDescriptor.TagName);
+                    }
+                }
+                if (mm != null)
+                    this.MetaMetadata = mm;
+                // metaMetadata = mm;
+            }
+            return mm;
+        }
+
+        public MetaMetadataOneLevelNestingEnumerator MetaMetadataIterator(MetaMetadataField metaMetadataField)
+        {
+            MetaMetadataField firstMetaMetadataField = (metaMetadataField != null) ? metaMetadataField
+                    : metaMetadata;
+
+            return new MetaMetadataOneLevelNestingEnumerator(firstMetaMetadataField, this, mixins);
+        }
+
+        public static MetaMetadataRepository MetaMetadataRepository
+        {
+            set { repository = value; }
+        }
+
+        
 	}
 }

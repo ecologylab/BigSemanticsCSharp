@@ -84,6 +84,7 @@
     <Compile Include="ecologylab\semantics\metadata\DocumentParserTagNames.cs" />
     <Compile Include="ecologylab\semantics\metadata\Metadata.cs" />
     <Compile Include="ecologylab\semantics\metadata\MetadataClassDescriptor.cs" />
+    <Compile Include="ecologylab\semantics\metadata\MetadataDeserializationHookStrategy.cs" />
     <Compile Include="ecologylab\semantics\metadata\MetadataFieldDescriptor.cs" />
     <Compile Include="ecologylab\semantics\metadata\mm_name.cs" />
     <Compile Include="ecologylab\semantics\metadata\scalar\MetadataScalars.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="ecologylab\semantics\metametadata\MetaMetadataCompositeField.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MetaMetadataField.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MetaMetadataNestedField.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\MetaMetadataOneLevelNestingEnumerator.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MetaMetadataRepository.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MetaMetadataScalarField.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MetaMetadataSelector.cs" />

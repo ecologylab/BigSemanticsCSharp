@@ -71,6 +71,7 @@ namespace MetadataUISandbox
             if (_touchDownHandler == null || _touchUpHandler == null )
                 return;
             logger.Log("Detaching TapWithSecondFinger behaviour from: " + AssociatedObject);
+
             AssociatedObject.TouchDown -= _touchDownHandler;
             AssociatedObject.TouchUp -= _touchUpHandler;
             _touchUpHandler = null;

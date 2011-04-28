@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System;   
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -26,7 +26,9 @@ namespace ecologylabSemantics
         public class TestElementState : ElementState
         {
             [simpl_scalar]
-            public String SomeString; 
+            public String SomeString;
+
+            [simpl_scalar] public ParsedUri uri;
 
             public TestElementState()
             { }
@@ -36,23 +38,25 @@ namespace ecologylabSemantics
 
         public static void Main()
         {
-            TestElementState tES = new TestElementState();
+            TestElementState tES = new TestElementState
+            {
+                SomeString = "This string has \" Quotes\" —  and & > ? > < :" + (char)0x09 + "MORE ",
+                uri = new ParsedUri("http://google.com/search?moresearches=some&more=values")
+            };
 
             //tES.somethingElse = "New String";
 
-            tES.SomeString = "This string has \" Quotes\"";
             var buffy = new StringBuilder();
             tES.serializeToXML(buffy);
+            Console.WriteLine("buffy: " + buffy);
+            TranslationScope scope = new TranslationScope("Temp", new Type[]{typeof(TestElementState)});
 
-            dynamic funkyShit = new ExpandoObject();
+            TestElementState deserializeString = (TestElementState) scope.deserializeString(buffy.ToString(), Format.XML);
 
-            funkyShit.shit = "Something funky";
+            Console.WriteLine("Done");
 
 
-            Console.WriteLine("buffy: " + funkyShit.shit);
             //new ClassTester();
-
-
         }
 
         static String path = @"C:\Users\damaraju.m2icode\workspace\cSharp\ecologylabSemantics\DomExtraction\javascript\tempJSON\";

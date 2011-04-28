@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using ecologylab.attributes;
 using ecologylab.serialization;
+using System.Reflection;
 
 namespace ecologylab.semantics.metadata 
 {
@@ -27,10 +28,45 @@ namespace ecologylab.semantics.metadata
 		public MetadataFieldDescriptor()
 		{ }
 
+        public MetadataFieldDescriptor(MetadataClassDescriptor classDescriptor, FieldInfo fieldInfo, Int16 annotationType) : base(classDescriptor, fieldInfo, annotationType)
+        { 
+            MmName = DeriveMmName();
+        }
+
+        public MetadataFieldDescriptor(MetadataClassDescriptor declaringClassDescriptor, FieldDescriptor wrappedFD, String wrapperTag)
+            : base(declaringClassDescriptor, wrappedFD, wrapperTag)
+        {
+            //MmName = DeriveMmName();
+        }
+
 		public String MmName
 		{
 			get{return mmName;}
 			set{mmName = value;}
 		}
+
+        private String DeriveMmName()
+        {
+            String result	= null;
+		
+            FieldInfo thatField = this.Field;
+            foreach (CustomAttributeData cad in thatField.GetCustomAttributesData())
+            {
+                if (cad.Constructor.DeclaringType.Name.Equals("mm_name"))
+                {
+                    result = (String) cad.ConstructorArguments[0].Value;
+                }
+            }
+
+            if (result == null)
+            {
+                result = XMLTools.GetXmlTagName(thatField.Name, null);
+                if (!this.IsScalar)
+                    System.Console.WriteLine("Missing @mm_name annotation for " + thatField + "\tusing " + result);
+            }
+
+            
+            return result;
+        }
 	}
 }
