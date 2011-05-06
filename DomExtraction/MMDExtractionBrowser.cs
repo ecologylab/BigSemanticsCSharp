@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Cjc.ChromiumBrowser;
+using ecologylab.semantics.generated.library;
+using ecologylab.semantics.interactive.Controls;
+using ecologylab.semantics.metadata;
+using ecologylab.semantics.metadata.builtins;
 using ecologylab.serialization;
 
 using CjcAwesomiumWrapper;
@@ -20,12 +25,18 @@ namespace DomExtraction
 
         TranslationScope metadataTScope;
         //String mmdJson;
-        String js;
+        String mmdDomHelperJSString;
         const String workspace = @"C:\Users\damaraju.m2icode\workspace\";
         String jsPath = workspace + @"cSharp\ecologylabSemantics\DomExtraction\javascript\";
+
+        private const String wikiCacheLocation = @"S:\currentResearchers\sashikanth\wikiCache\";
+        private const String wikiPuriPrefix = "http://en.wikipedia.org/wiki/";
         MetaMetadataRepository repo;
 
         Dictionary<MetaMetadata, String> mmdJSONCache = new Dictionary<MetaMetadata, String>();
+        Dictionary<ParsedUri, Metadata> metadataCache = new Dictionary<ParsedUri, Metadata>();
+
+        private List<String> articleTitlesCached = new List<string>();
 
         const String BLANK_PAGE = "about:blank";
         /// <summary>
@@ -51,14 +62,33 @@ namespace DomExtraction
 
             string testFile = @"web\code\java\ecologylabSemantics\repository\";
             Console.WriteLine("Initting repository");
-
+            MetaMetadataRepository.stopTheConsoleDumping = true;
             repo = MetaMetadataRepository.ReadDirectoryRecursively(workspace + testFile, mmdTScope, metadataTScope);
 
+            mmdDomHelperJSString = File.ReadAllText(jsPath + "mmdDomHelper.js");
+            
+            DirectoryInfo di = new DirectoryInfo(wikiCacheLocation);
+            FileInfo[] files = di.GetFiles("*.xml");
+            foreach(var file in files)
+            {
+                string title = file.Name.Substring(0, file.Name.IndexOf("."));
 
-            //TODO: implement repo.getMMD(uri) correctly.
-            //MetaMetadata imdbTitleMMD = null;// repo.repositoryByTagName["imdb_title"];
+                ParsedUri pur = GetPuriForWikiArticleTitle(title);
 
-            js = File.ReadAllText(jsPath + "mmdDomHelper.js");
+                Document elementState = (Document) metadataTScope.deserialize(file.FullName, Format.XML);
+                metadataCache.Add(pur, elementState);
+            }
+        }
+
+        public async Task<WikipediaPage> GetWikipediaPageForTitle(string title)
+        {
+            WikipediaPage result = (WikipediaPage) await ExtractMetadata(GetPuriForWikiArticleTitle(title));
+            return result;
+        }
+
+        public ParsedUri GetPuriForWikiArticleTitle(string title)
+        {
+            return new ParsedUri(wikiPuriPrefix + title.Replace(' ', '_'));
         }
 
         public String GetJsonMMD(ParsedUri puri)
@@ -92,7 +122,7 @@ namespace DomExtraction
         /// <returns></returns>
         public async Task<ElementState> ExtractMetadata(ParsedUri puri=null, String uri = null)
         {
-            TaskCompletionSource<ElementState> tcs = new TaskCompletionSource<ElementState>();
+            
             if (puri == null && uri == null)
                 return null;
             if (uri == null)
@@ -100,40 +130,63 @@ namespace DomExtraction
             else
                 puri = new ParsedUri(uri);
 
-            //We need webView to be instantiated correctly.
-            SetResourceInterceptor(new ResourceBanner(uri));
-            Console.WriteLine("Setting Source");
-            Source = uri;
-            FinishLoading += delegate
+            Metadata result;
+
+            TaskCompletionSource<ElementState> tcs = new TaskCompletionSource<ElementState>();
+            if (metadataCache.TryGetValue(puri, out result))
             {
-                if (Source == null || BLANK_PAGE.Equals(Source))// || loadingComplete)
-                    return;
-                Console.WriteLine("Finished loading. Executing javascript. -- " + System.DateTime.Now);
-                String jsonMMD = GetJsonMMD(puri);
-                Console.WriteLine("json:\n" + jsonMMD + "\n");
-                ExecuteJavascript(jsonMMD);
-                ExecuteJavascript(js);
-                Console.WriteLine("Done js code execution, calling function. --" + System.DateTime.Now);
-                JSValue value = ExecuteJavascriptWithResult("extractMetadata(mmd);").Get();
-                String metadataJSON = (String)value.Value();
+                tcs.TrySetResult(result);
+            }
+            else
+            {
+                Console.WriteLine("Cache Miss. Parsing webpage: " + uri);
+                //We need webView to be instantiated correctly.
+                SetResourceInterceptor(new ResourceBanner(uri));
+                Console.WriteLine("Setting Source");
+                Source = uri;
+                FinishLoading += delegate
+                {
+                    if (Source == null || BLANK_PAGE.Equals(Source))// || loadingComplete)
+                        return;
+                    Console.WriteLine("Finished loading. Executing javascript. -- " + System.DateTime.Now);
+                    String jsonMMD = GetJsonMMD(puri);
+                    //Console.WriteLine("json:\n" + jsonMMD + "\n");
+                    ExecuteJavascript(jsonMMD);
+                    ExecuteJavascript(mmdDomHelperJSString);
+                    Console.WriteLine("Done js code execution, calling function. --" + System.DateTime.Now);
+                    JSValue value = ExecuteJavascriptWithResult("extractMetadata(mmd);").Get();
+                    String metadataJSON = (String)value.Value();
+                    //Console.WriteLine(metadataJSON);
+                    Console.WriteLine("Done getting value. Serializing JSON string to ElementState. --" + System.DateTime.Now);
+                    ElementState myShinyNewMetadata = metadataTScope.deserializeString(metadataJSON, Format.JSON, new ParsedUri(uri));
+                    Console.WriteLine("Metadata ElementState object created. " + System.DateTime.Now);
 
-                Console.WriteLine("Done getting value. Serializing JSON string to ElementState. --" + System.DateTime.Now);
-                ElementState myShinyNewMetadata = metadataTScope.deserializeString(metadataJSON, Format.JSON, new ParsedUri(uri));
-                Console.WriteLine("Metadata ElementState object created. " + System.DateTime.Now);
+                    //Clean metadata
+                    WikipediaPage wikiPage = myShinyNewMetadata as WikipediaPage;
+                    wikiPage.HypertextParas = wikiPage.HypertextParas.Where(p => p.Runs != null).ToList();
+                    wikiPage.Thumbinners = wikiPage.Thumbinners.Where(thumb => thumb.ThumbImgSrc != null).ToList();
 
-                //DEBUGGING only, save the last translated Metadata object as json.
-                String tempJSONPath = jsPath + @"\tempJSON\lastMetadata.json";
-                Console.WriteLine("Writing out the elementstate into " + tempJSONPath);
-                StringBuilder buffy = new StringBuilder();
-                myShinyNewMetadata.serializeToJSON(buffy);
-                TextWriter tw = new StreamWriter(tempJSONPath);
-                tw.Write(buffy);
-                tw.Close();
+                    //DEBUGGING only, save the last translated Metadata object as json.
+                    String XMLFilePath = wikiCacheLocation + wikiPage.Title.Value.Replace(' ', '_') + ".xml";
+                    Console.WriteLine("Writing out the elementstate into " + XMLFilePath);
+                    StringBuilder buffy = new StringBuilder();
+                    wikiPage.serializeToXML(buffy);
+                    TextWriter tw = new StreamWriter(XMLFilePath);
+                    tw.Write(buffy);
+                    tw.Close();
 
-                Source = BLANK_PAGE;
-                tcs.TrySetResult(myShinyNewMetadata);
-            };
+                    /*String JSONFilePath = wikiCacheLocation + wikiPage.Title.Value.Replace(' ', '_') + ".json";
+                    Console.WriteLine("Writing out the elementstate into " + JSONFilePath);
+                    buffy = new StringBuilder();
+                    myShinyNewMetadata.serializeToJSON(buffy);
+                    tw = new StreamWriter(JSONFilePath);
+                    tw.Write(buffy);
+                    tw.Close();*/
 
+                    Source = BLANK_PAGE;
+                    tcs.TrySetResult(myShinyNewMetadata);
+                };
+            }
             return await AsyncCtpThreadingExtensions.GetAwaiter(tcs.Task);
         }
     }
