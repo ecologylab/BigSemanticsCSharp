@@ -8,16 +8,16 @@ using System.IO;
 namespace ecologylab.semantics.metadata.scalar
 {
 
-    public interface IMetadataScalar
+    public interface IMetadataScalar<T>
     {
-        Object Value
+        T Value
         {
             get;
             set;
         }
     }
 
-    abstract public class MetadataScalarBase<T> : IMetadataScalar
+    abstract public class MetadataScalarBase<T> : IMetadataScalar<T>
     {
         public T value;
         public static String VALUE_FIELD_NAME	    = "value";
@@ -32,10 +32,10 @@ namespace ecologylab.semantics.metadata.scalar
             this.value = (T) value;
         }
 
-        public object Value
+        public T Value
         {
             get { return value; }
-            set { this.value = (T)value; }
+            set { this.value = value; }
         }
 
         public override String ToString()
