@@ -18,7 +18,7 @@ namespace MetadataUISandbox.ActivationBehaviours
 
         EventHandler<TouchEventArgs> _touchDownHandler;
         EventHandler<TouchEventArgs> _touchUpHandler;
-        Logger logger = new Logger();
+        static Logger logger = new Logger();
 
         #region Command
         /// <summary>
@@ -100,18 +100,22 @@ namespace MetadataUISandbox.ActivationBehaviours
                         {
                             HitTestResultDelegate hitResultDelegate = (result) => 
                             {
-                                DependencyObject acceptableResult;
-                                if ( (acceptableResult =  (AssociatedObject as IHitTestAcceptor).AcceptableObject(result.VisualHit)) != null)
+                                var hitTestAcceptor = (AssociatedObject as IHitTestAcceptor);
+
+                                DependencyObject acceptableResult = hitTestAcceptor != null 
+                                                                    ? hitTestAcceptor.AcceptableObject(result.VisualHit) 
+                                                                    : result.VisualHit;
+                                if (acceptableResult != null)
                                 {
                                     logger.Log("DoubleTap on: " + AssociatedObject);
                                     logger.Log("\tAcceptable HitTest on : " + acceptableResult);
                                     e.Handled = true;
                                     CommandParameters commandParameters = new CommandParameters
-                                    {
-                                        touchEventArgs = e,
-                                        visualContainer = sender as DependencyObject,
-                                        visualHit = acceptableResult
-                                    };
+                                                                                {
+                                                                                    touchEventArgs = e,
+                                                                                    visualContainer = sender as DependencyObject,
+                                                                                    visualHit = acceptableResult
+                                                                                };
                                     if (command != null)
                                         command.Execute(commandParameters);
                                     else
@@ -146,7 +150,9 @@ namespace MetadataUISandbox.ActivationBehaviours
 
             _touchDownHandler = new EventHandler<TouchEventArgs>(touchDownDelegate);
 
-            AssociatedObject.TouchDown += _touchDownHandler;
+            AssociatedObject.AddHandler(UIElement.TouchDownEvent, _touchDownHandler, true);
+
+            //AssociatedObject.TouchDown += _touchDownHandler;
 
 
             TouchDelegate touchUpDelegate = (sender, e) =>
@@ -166,7 +172,8 @@ namespace MetadataUISandbox.ActivationBehaviours
 
             _touchUpHandler = new EventHandler<TouchEventArgs>(touchUpDelegate);
 
-            AssociatedObject.TouchUp += _touchUpHandler;
+            AssociatedObject.AddHandler(UIElement.TouchUpEvent, _touchUpHandler, true);
+            //AssociatedObject.TouchUp += _touchUpHandler;
         }
 
         private void ClearDblTapVals()
