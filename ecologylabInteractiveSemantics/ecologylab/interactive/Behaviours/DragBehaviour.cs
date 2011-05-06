@@ -16,20 +16,19 @@ namespace ecologylabInteractiveSemantics.ecologylab.interactive.Behaviours
             private Point dragStartPosition;
             TouchDevice draggingTouchDevice;
             public bool touchDragging;
-            private Canvas parent;
-            public DragBehavior(Canvas dragCanvas = null, bool touchDragging = false)
+            private Canvas parent = null;
+            private UIElement canvasChild = null;
+            public DragBehavior(Canvas dragCanvas = null, UIElement canvasChild = null,  bool touchDragging = false)
             {
-                parent = dragCanvas ?? VisualTreeHelper.GetParent(AssociatedObject) as Canvas;
+                parent = dragCanvas;
+                this.canvasChild = canvasChild;
                 this.touchDragging = touchDragging;
             }
-            public DragBehavior()
-            {
-                
-            }
+
 
             protected override void OnAttached()
             {
-                parent = VisualTreeHelper.GetParent(AssociatedObject) as Canvas;
+                parent = parent?? VisualTreeHelper.GetParent(AssociatedObject) as Canvas;
                 if (touchDragging)
                 {
                     AssociatedObject.TouchDown += (sender, e) =>
@@ -67,11 +66,11 @@ namespace ecologylabInteractiveSemantics.ecologylab.interactive.Behaviours
                 }
                 else
                 {
-
+                    UIElement canvasElement = canvasChild ?? AssociatedObject;
                     AssociatedObject.MouseLeftButtonDown += (sender, e) =>
                     {
-                        elementStartPosition = new Point((double)AssociatedObject.GetValue(Canvas.LeftProperty),
-                                                       (double)AssociatedObject.GetValue(Canvas.TopProperty));
+                        elementStartPosition = new Point((double)canvasElement.GetValue(Canvas.LeftProperty),
+                                                       (double)canvasElement.GetValue(Canvas.TopProperty));
                         dragStartPosition = e.GetPosition(parent);
                         AssociatedObject.CaptureMouse();
                     };
@@ -86,8 +85,8 @@ namespace ecologylabInteractiveSemantics.ecologylab.interactive.Behaviours
                         Vector diff = e.GetPosition(parent) - dragStartPosition;
                         if (AssociatedObject.IsMouseCaptured)
                         {
-                            AssociatedObject.SetValue(Canvas.LeftProperty, elementStartPosition.X + diff.X);
-                            AssociatedObject.SetValue(Canvas.TopProperty, elementStartPosition.Y + diff.Y);
+                            canvasElement.SetValue(Canvas.LeftProperty, elementStartPosition.X + diff.X);
+                            canvasElement.SetValue(Canvas.TopProperty, elementStartPosition.Y + diff.Y);
                         }
                     };
                 }
