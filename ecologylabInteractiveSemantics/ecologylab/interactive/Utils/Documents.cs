@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -7,10 +8,25 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using ecologylab.semantics.generated.library;
 using Run = ecologylab.semantics.generated.library.Run;
+using System.Linq;
+
 
 namespace ecologylab.interactive.Utils
 {
     
+    public class ParsedUriToUriConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value != null ? value.ToString() : string.Empty;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class HypertextToFlowDocumentConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -27,9 +43,9 @@ namespace ecologylab.interactive.Utils
             }
             else
             {
-                foreach (HypertextPara p in paras)
+                var goodParas = from p in paras where p != null select p ;
+                foreach (HypertextPara p in goodParas)
                 {
-
                     if (p != null && p.Runs != null && p.Runs.Count > 0)
                         doc.Blocks.Add(HypertextParaToVisualPara(p));
                 }
@@ -41,12 +57,15 @@ namespace ecologylab.interactive.Utils
 
         private System.Windows.Documents.Paragraph HypertextParaToVisualPara(HypertextPara p)
         {
-            System.Windows.Documents.Paragraph visualPara = new System.Windows.Documents.Paragraph();
-
+            var visualPara = new System.Windows.Documents.Paragraph();
             foreach (Run run in p.Runs)
             {
+                var textRun = ((TextRun) run);
+                if (textRun.Text == null || string.IsNullOrEmpty(textRun.Text.Value))
+                    continue;
                 Inline visualRun = MetadataRunToVisualRun(run);
-                visualPara.Inlines.Add(visualRun);
+                if(visualRun != null)
+                    visualPara.Inlines.Add(visualRun);
             }
             return visualPara;
         }

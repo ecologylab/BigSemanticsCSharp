@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ecologylab.interactive;
 using ecologylab.interactive.Utils;
+using ecologylabInteractiveSemantics.ecologylab.interactive.Behaviours;
 
 namespace ecologylab.semantics.interactive.Commands
 {
@@ -94,31 +95,8 @@ namespace ecologylab.semantics.interactive.Commands
             mainCanvas.Children.Add(elem);
             elem.CaptureTouch(touchPoint.TouchDevice);
             bool enteredTouch = false;
-            elem.TouchEnter += (s, e) =>
-                                   {
-                                       logger.Log("Touch Enter ");
-                                       enteredTouch = true;
-                                   };
-            elem.TouchMove += (s, e) =>
-                                  {
-                                      if (enteredTouch)
-                                      {
-
-                                          return;
-                                      }
-                                      Point p = e.GetTouchPoint(parent).Position;
-
-                                      elem.SetValue(Canvas.LeftProperty, p.X - (int)offset[0].X);
-                                      elem.SetValue(Canvas.TopProperty, p.Y - (int)offset[0].Y);
-                                  };
-
-            elem.TouchDown += (s, e) =>
-                                  {
-                                      enteredTouch = false;
-                                      offset[0] = e.GetTouchPoint(elem).Position;
-                                  };
-
-
+            DragBehavior draggable = new DragBehavior();
+            draggable.Attach(elem);
         }
     }
 }
