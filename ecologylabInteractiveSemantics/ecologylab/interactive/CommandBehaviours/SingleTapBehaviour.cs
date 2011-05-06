@@ -19,7 +19,9 @@ namespace ecologylab.interactive.CommandBehaviours
         EventHandler<TouchEventArgs> _touchDownHandler;
         EventHandler<TouchEventArgs> _touchUpHandler;
 
-
+        private MouseButtonEventHandler _mouseDownHandler;
+        private MouseButtonEventHandler _mouseUpHandler;
+        bool onlyTouch = false;
         #region Command
         /// <summary>
         /// Command Attached Dependency Property
@@ -65,8 +67,24 @@ namespace ecologylab.interactive.CommandBehaviours
 
         #endregion
 
+        public object AttachedObject{get; set;}
+
+        public SingleTapBehaviour(bool onlyTouch = false)
+        {
+            this.onlyTouch = onlyTouch;
+        }
+
         protected override void OnDetaching()
         {
+            if (_mouseUpHandler != null && _mouseDownHandler != null)
+            {
+                AssociatedObject.MouseDown -= _mouseDownHandler;
+                AssociatedObject.MouseUp -= _mouseUpHandler;
+                _mouseDownHandler = null;
+                _mouseUpHandler = null;
+            }
+            
+
             if (_touchDownHandler == null || _touchUpHandler == null)
                 return;
             AssociatedObject.TouchUp -= _touchUpHandler;
@@ -77,90 +95,127 @@ namespace ecologylab.interactive.CommandBehaviours
 
         protected override void OnAttached()
         {
+            AttachedObject = AssociatedObject;
             Window parent = Application.Current.MainWindow;
-            TouchDelegate touchDownDelegate = (sender, e) =>
+            if (onlyTouch)
             {
-                Point pos = e.GetTouchPoint(parent).Position;
-
-                if (!_firstDown.HasValue)
+                TouchDelegate touchDownDelegate = (sender, e) =>
                 {
-                    _firstDown = pos;
-                    _firstDownTime = DateTime.Now;
-                }
-                else //Could be tap
+                    Point pos = e.GetTouchPoint(parent).Position;
+
+                    OnDown(pos);
+                };
+                TouchDelegate touchUpDelegate = (sender, e) =>
                 {
-                    
+                    Point pos = e.GetTouchPoint(parent).Position;
+                    OnUp(e, pos, sender);
+                };
 
-                   // ClearDblTapVals();
-                }
-            };
+                _touchDownHandler = new EventHandler<TouchEventArgs>(touchDownDelegate);
+                _touchUpHandler = new EventHandler<TouchEventArgs>(touchUpDelegate);
+                AssociatedObject.AddHandler(UIElement.TouchDownEvent, _touchDownHandler, true);
+                AssociatedObject.AddHandler(UIElement.TouchUpEvent, _touchUpHandler, true);
 
-            _touchDownHandler = new EventHandler<TouchEventArgs>(touchDownDelegate);
-
-            AssociatedObject.AddHandler(UIElement.TouchDownEvent, _touchDownHandler, true);
-
-            //AssociatedObject.TouchDown += _touchDownHandler;
-
-
-            TouchDelegate touchUpDelegate = (sender, e) =>
+            }
+            else
             {
-                Point pos = e.GetTouchPoint(parent).Position;
-                if (Utilities.Distance(pos, _firstDown) < 30)
+                _mouseUpHandler = (s, e) =>
                 {
-                    //logger.Log("Within distance");
-                    if (DateTime.Now - _firstDownTime.Value < TimeSpan.FromMilliseconds(300))
+                    Point pos = e.GetPosition(parent);
+                    OnUp(e, pos, s);
+                };
+                _mouseDownHandler = (s, e) =>
+                {
+                    Point pos = e.GetPosition(parent);
+                    OnDown(pos);
+                };
+                AssociatedObject.MouseLeftButtonDown += _mouseDownHandler;
+                AssociatedObject.MouseLeftButtonUp += _mouseUpHandler;
+            }
+            
+            
+        }
+
+        private void OnDown(Point pos)
+        {
+            if (!_firstDown.HasValue)
+            {
+                _firstDown = pos;
+                _firstDownTime = DateTime.Now;
+            }
+        }
+
+        private void OnUp(RoutedEventArgs e, Point pos, object sender)
+        {
+            if (AssociatedObject == null)
+                return;
+
+            if (Utilities.Distance(pos, _firstDown) < 30)
+            {
+                //logger.Log("Within distance");
+                if (DateTime.Now - _firstDownTime.Value < TimeSpan.FromMilliseconds(300))
+                {
+                    HitTestResultDelegate hitResultDelegate = (result) =>
                     {
-                        HitTestResultDelegate hitResultDelegate = (result) =>
-                        {
-                            var hitTestAcceptor = (AssociatedObject as IHitTestAcceptor);
+                        var hitTestAcceptor = (AssociatedObject as IHitTestAcceptor);
 
-                            DependencyObject acceptableResult = hitTestAcceptor != null
+                        DependencyObject acceptableResult = hitTestAcceptor != null
                                                                 ? hitTestAcceptor.AcceptableObject(result.VisualHit)
                                                                 : result.VisualHit;
-                            if (acceptableResult != null)
+                        if (acceptableResult != null)
+                        {
+                            logger.Log("SingleTap on: " + AssociatedObject);
+                            logger.Log("\tAcceptable HitTest on : " + acceptableResult);
+                            e.Handled = true;
+                            CommandParameters commandParameters = new CommandParameters
                             {
-                                logger.Log("DoubleTap on: " + AssociatedObject);
-                                logger.Log("\tAcceptable HitTest on : " + acceptableResult);
-                                e.Handled = true;
-                                CommandParameters commandParameters = new CommandParameters
-                                {
-                                    touchEventArgs = e,
-                                    visualContainer = sender as DependencyObject,
-                                    visualHit = acceptableResult
-                                };
-                                if (command != null)
-                                    command.Execute(commandParameters);
-                                else
-                                {
-                                    logger.Log("No command has been bound to this behaviour.");
-                                }
-                                //new RightHandedControlMenu(commandParameters);
-                                return HitTestResultBehavior.Stop;
+                                touchEventArgs = e as TouchEventArgs,
+                                visualContainer = sender as DependencyObject,
+                                visualHit = acceptableResult
+                            };
+                            if (command != null)
+                                command.Execute(commandParameters);
+                            else
+                            {
+                                logger.Log("No command has been bound to this behaviour.");
                             }
-                            return HitTestResultBehavior.Continue;
-                        };
-                        VisualTreeHelper.HitTest(AssociatedObject, null, new HitTestResultCallback(hitResultDelegate), new PointHitTestParameters(e.GetTouchPoint(AssociatedObject).Position));
+                            ClearVals();
 
-                        //HitTestResult hitResult = VisualTreeHelper.HitTest(AssociatedObject, e.GetTouchPoint(AssociatedObject).Position);
-
-                        //DependencyObject hit = hitResult.VisualHit;
-                        //menu.CaptureTouch(e.GetTouchPoint(parent).TouchDevice);
-                    }
+                            //new RightHandedControlMenu(commandParameters);
+                            return HitTestResultBehavior.Stop;
+                        }
+                        return HitTestResultBehavior.Continue;
+                    };
+                    var mouseArgs = e as MouseEventArgs;
+                    Point p;
+                    if (mouseArgs != null)
+                        p = mouseArgs.GetPosition(AssociatedObject);
                     else
-                    {
-                        logger.Log("Too Slow");
-                    }
+                        p = (e as TouchEventArgs).GetTouchPoint(AssociatedObject).Position;
+                    VisualTreeHelper.HitTest(AssociatedObject, null, new HitTestResultCallback(hitResultDelegate), new PointHitTestParameters(p));
+
+                    //HitTestResult hitResult = VisualTreeHelper.HitTest(AssociatedObject, e.GetTouchPoint(AssociatedObject).Position);
+
+                    //DependencyObject hit = hitResult.VisualHit;
+                    //menu.CaptureTouch(e.GetTouchPoint(parent).TouchDevice);
                 }
                 else
                 {
-                    logger.Log("Too Far");
+                    logger.Log("Too Slow");
+                    ClearVals();
                 }
-            };
+            }
+            else
+            {
+                logger.Log("Too Far");
+                ClearVals();
+            }
+        }
 
-            _touchUpHandler = new EventHandler<TouchEventArgs>(touchUpDelegate);
-
-            AssociatedObject.AddHandler(UIElement.TouchUpEvent, _touchUpHandler, true);
-            //AssociatedObject.TouchUp += _touchUpHandler;
+        private void ClearVals()
+        {
+            _firstDown = null;
+            _firstDownTime = null;
         }
     }
 }

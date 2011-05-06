@@ -3,7 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using AttachedCommandBehavior;
+using ecologylab.interactive.CommandBehaviours;
 using ecologylab.interactive.Utils;
+using ecologylab.net;
 using ecologylab.semantics.generated.library;
 using ecologylabInteractiveSemantics.ecologylab.interactive.Behaviours;
 using MetadataUISandbox.ActivationBehaviours;
@@ -18,10 +20,8 @@ namespace  ecologylab.semantics.interactive.Controls
 	public partial class WikiPage : UserControl
 	{
 	    private Logger logger = new Logger();
-
 	    private WikipediaPage page;
-
-        private String Title { get; set; }
+        public String Title { get; set; }
 
 	    public WikipediaPage Page
 	    {
@@ -29,57 +29,88 @@ namespace  ecologylab.semantics.interactive.Controls
             set
             {
                 page = value;
-                //Set data context for the title.
-                WikiTitle.DataContext = page;
+                //Set data context for the Intro Para.
+                WikiTitleTextBlock.Text = page.Title.Value;
+                IntroPara.DataContext = page;
+                IntroParaText.MinWidth = 250;
             }
 	    }
 
 	    public WikiPage()
 	    {
 	        this.InitializeComponent();
+
+	        SingleTapBehaviour clickForMoreBehaviour = new SingleTapBehaviour();
+
+	        clickForMoreBehaviour.Command = new SimpleCommand()
+	        {
+	            ExecuteDelegate = commandParams =>
+	            {
+	                Console.WriteLine("Setting context for scroll viewer." + DateTime.Now);
+                    ScrollViewPage.DataContext = Page;
+                    IntroPara.Visibility = Visibility.Collapsed;
+                    ScrollViewPage.Visibility = Visibility.Visible;
+	                ScrollViewPage.Width = 250;
+	                CurrentVisualState = VisualState.FullArticle;
+                    Console.WriteLine("Scroll viewer context set." + DateTime.Now);
+	            }
+	        };
+
+	        clickForMoreBehaviour.Attach(ClickForMore);
 	    }
 
         public WikiPage(String title)
+            : this()
         {
-            this.InitializeComponent();
             Title = title;
-            WikiTitleTextBlock.Text = title;
+            WikiTitleTextBlock.Text = Title;
+
         }
-
-
-        public void GetArticle()
-        {
-            
-        }
-
-	    private void AddDoubleTapBehaviour()
-	    {
-	        DoubleTapBehaviour doubleTapOnTitle = new DoubleTapBehaviour
-	        {
-	            Command = new SimpleCommand
-	            {
-	                ExecuteDelegate = tappedParams =>
-	                {
-	                    Console.WriteLine("DoubleTapped on title");
-	                    ShowIntroPara();
-	                }
-	            }
-	        };
-	        ScrollViewPage.Visibility = Visibility.Hidden;
-	        doubleTapOnTitle.Attach(this);
-	    }
 
 	    public WikiPage(WikipediaPage page)
             :this()
         {
-            this.Page = page;
+            Page = page;
         }
 
-        public void ShowIntroPara()
+        public WikiPage(ParsedUri parsedUri, String title)
+            :this(title)
+        {
+            this.parsedUri = parsedUri;
+        }
+
+        public void ShowFullArticle()
         {
             
-            ScrollViewPage.Visibility = ScrollViewPage.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden ;
-            Console.WriteLine("Intro Para is now " + ScrollViewPage.Visibility);
+        }
+
+        public void ToggleDetailVisibility()
+        {
+            switch(CurrentVisualState)
+            {
+                case VisualState.TitleOnly:
+                    if (ScrollViewPage.DataContext == null)
+                    {
+                        IntroPara.Visibility = Visibility.Visible;
+                        CurrentVisualState = VisualState.IntroParagraph;
+                    }
+                    else
+                    {
+                        ScrollViewPage.Visibility = Visibility.Visible;
+                        CurrentVisualState = VisualState.FullArticle;
+                    }
+                    break;
+                case VisualState.IntroParagraph:
+                    IntroPara.Visibility = Visibility.Hidden;
+                    CurrentVisualState = VisualState.TitleOnly;
+                    break;
+                case VisualState.FullArticle:
+                    ScrollViewPage.Visibility = Visibility.Hidden;
+                    CurrentVisualState = VisualState.TitleOnly;
+                    break;
+
+            }
+            Console.WriteLine("VisualState is now " + CurrentVisualState);
         }
 
         public enum VisualState{ TitleOnly, IntroParagraph, IntroParagraphWithImages, FullArticle }
@@ -93,6 +124,7 @@ namespace  ecologylab.semantics.interactive.Controls
             DependencyProperty.Register("CurrentVisualState", typeof(VisualState), typeof(WikiPage),
                 new FrameworkPropertyMetadata((VisualState)VisualState.TitleOnly,
                     new PropertyChangedCallback(OnCurrentVisualStateChanged)));
+        private net.ParsedUri parsedUri;
 
         /// <summary>
         /// Gets or sets the CurrentVisualState property. This dependency property 

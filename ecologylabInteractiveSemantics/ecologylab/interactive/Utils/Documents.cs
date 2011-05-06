@@ -7,6 +7,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using ecologylab.semantics.generated.library;
+using ecologylab.semantics.interactive.Controls;
 using Run = ecologylab.semantics.generated.library.Run;
 using System.Linq;
 
@@ -86,6 +87,8 @@ namespace ecologylab.interactive.Utils
             LinkRun link = (run as LinkRun);
             if (link != null)
             {
+                Canvas mainCanvas = Application.Current.MainWindow.FindName("MainCanvas") as Canvas;
+
                 visualRun.Foreground = Brushes.Blue;
                 visualRun.TouchEnter += (s, e) =>
                     {
@@ -99,6 +102,11 @@ namespace ecologylab.interactive.Utils
                 visualRun.TouchUp += (s, e) =>
                     {
                         Console.WriteLine("Link Selected: " + link.Location);
+                        var wikiPage = new WikiPage(link.Location.Value, link.Title.Value);
+                        Point position = e.GetTouchPoint(mainCanvas).Position;
+                        wikiPage.SetValue(Canvas.LeftProperty, (double) position.X);
+                        wikiPage.SetValue(Canvas.TopProperty, (double)position.Y);
+                        mainCanvas.Children.Add(wikiPage);
                     };
                 
             }

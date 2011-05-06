@@ -26,7 +26,7 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<Border x:Name="WikiTitle" Height="Auto" CornerRadius="3" BorderThickness="2" Grid.Row="0" Padding="3,2" Background="#97C8C8C8" MinWidth="30" >
+		<Border x:Name="WikiTitle" x:FieldModifier="public" Height="Auto" CornerRadius="3" BorderThickness="2" Grid.Row="0" Padding="3,2" Background="#97C8C8C8" MinWidth="30" >
 			<TextBlock 
 					x:Name="WikiTitleTextBlock"
 					Height="Auto" 
@@ -57,24 +57,47 @@
 					DockPanel.Dock="Left" MinWidth="80" />
 			</DockPanel>-->
 		</Border>
-                <utils:BindableRichTextBox 
-					x:Name="IntroPara"
-					Visibility="Hidden"
-					IsReadOnly="True" 
-					Document="{Binding IntroPara, Converter={StaticResource HypertextToFlowDocumentConverter}}" 
-					SelectionOpacity="0"
-					ForceCursor="True"
-					Cursor="None"
-					Height="Auto" Width="Auto"
-                    interactive:RightHandedControlMenu.SouthZoneCommand="{StaticResource MagnifyElementCommand}" BorderThickness="0"
+		<StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Top"
+				x:Name="IntroPara"
+				Visibility="Hidden"
+		>
+			<utils:BindableRichTextBox 
+				x:Name="IntroParaText"
+				IsReadOnly="True"
+				Document="{Binding IntroPara, Converter={StaticResource HypertextToFlowDocumentConverter}}" 
+				SelectionOpacity="0"
+				ForceCursor="True"
+				Cursor="None"
+				Height="Auto" Width="Auto"
+					 MinWidth="40" 
+				interactive:RightHandedControlMenu.SouthZoneCommand="{StaticResource MagnifyElementCommand}" BorderThickness="0"
                     />
+			<Border 
+				x:Name="ClickForMore"
+				Background="#FFAFAFAF"
+			>
+				<TextBlock TextWrapping="Wrap" Text="More ..." FontSize="10.667" VerticalAlignment="Top" TextAlignment="Center"/>
+			
+			</Border>
+		</StackPanel>
 		<ScrollViewer 
 			Grid.Row="2"
 			PanningMode="VerticalOnly"
 			x:Name="ScrollViewPage" Visibility="Hidden"
 		>
 			<StackPanel >
-
+				<utils:BindableRichTextBox 
+					x:Name="IntroParaForScoller"
+					IsReadOnly="True" 
+					Grid.Row ="1"
+					Document="{Binding IntroPara, Converter={StaticResource HypertextToFlowDocumentConverter}}" 
+					SelectionOpacity="0"
+					ForceCursor="True"
+					Cursor="None"
+					Height="Auto" Width="Auto"
+					
+                    interactive:RightHandedControlMenu.SouthZoneCommand="{StaticResource MagnifyElementCommand}" BorderThickness="0"
+                    />
 
 				<!--
 				<ItemsControl ItemsSource="{Binding Thumbinners}" Width="Auto" Background="#7EFFFFFF" Height="300" >
