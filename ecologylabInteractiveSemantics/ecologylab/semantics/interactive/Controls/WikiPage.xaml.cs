@@ -46,6 +46,12 @@ namespace  ecologylab.semantics.interactive.Controls
             WikiTitleTextBlock.Text = title;
         }
 
+
+        public void GetArticle()
+        {
+            
+        }
+
 	    private void AddDoubleTapBehaviour()
 	    {
 	        DoubleTapBehaviour doubleTapOnTitle = new DoubleTapBehaviour
