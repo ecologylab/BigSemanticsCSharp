@@ -33,6 +33,7 @@ namespace ecologylab.semantics.metadata.builtins
 		/// </summary>
 		[mm_name("title")]
 		[simpl_scalar]
+        [simpl_composite_as_scalar]
 		private MetadataString title;
 
 		/// <summary>
@@ -112,6 +113,11 @@ namespace ecologylab.semantics.metadata.builtins
         {
             get { return favicon; }
             set { favicon = value; }
+        }
+
+        public override String ToString()
+        {
+            return (title != null) ? title.Value : base.ToString();
         }
 	}   
 }

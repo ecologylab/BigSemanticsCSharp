@@ -67,7 +67,7 @@ namespace ecologylab.semantics.metadata
 
         public MetaMetadataCompositeField MetaMetadata
         {
-            get { return (metaMetadata == null) ? getMetaMetadata() : metaMetadata; }
+            get { return metaMetadata ?? getMetaMetadata(); }
             set { metaMetadata = value; }
         }
 
@@ -124,8 +124,7 @@ namespace ecologylab.semantics.metadata
 
         public MetaMetadataOneLevelNestingEnumerator MetaMetadataIterator(MetaMetadataField metaMetadataField)
         {
-            MetaMetadataField firstMetaMetadataField = (metaMetadataField != null) ? metaMetadataField
-                    : metaMetadata;
+            MetaMetadataField firstMetaMetadataField = metaMetadataField ?? metaMetadata;
 
             return new MetaMetadataOneLevelNestingEnumerator(firstMetaMetadataField, this, mixins);
         }

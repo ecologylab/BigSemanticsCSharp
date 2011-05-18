@@ -112,10 +112,12 @@ namespace ecologylab.semantics.metametadata
         public override void DeserializationPostHook()
 	    {
 		    String childType = DetermineCollectionChildType();
-		    MetaMetadataCompositeField composite = new MetaMetadataCompositeField(childType != null ? childType : UNRESOLVED_NAME, kids);
-		    composite.Parent    = this;
-		    composite.Type      = childType;
-		    if (kids != null)
+		    MetaMetadataCompositeField composite = new MetaMetadataCompositeField(childType ?? UNRESOLVED_NAME, kids)
+		                                               {
+		                                                   Parent = this,
+		                                                   Type = childType
+		                                               };
+            if (kids != null)
 		        kids.Clear();
 		    else
                 kids = new DictionaryList<String, MetaMetadataField>();

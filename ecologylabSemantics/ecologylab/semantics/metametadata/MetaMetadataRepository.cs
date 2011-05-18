@@ -24,7 +24,8 @@ namespace ecologylab.semantics.metametadata
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	public class MetaMetadataRepository : ElementState
-    {
+	{
+	    public static bool stopTheConsoleDumping = false;
 
         #region Locals
         private static String FIREFOX_3_6_4_AGENT_STRING			= "Mozilla/5.0 (Windows; U; Windows NT 6.1; ru; rv:1.9.2.4) Gecko/20100513 Firefox/3.6.4";

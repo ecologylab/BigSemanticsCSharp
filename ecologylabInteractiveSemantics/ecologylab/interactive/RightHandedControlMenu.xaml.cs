@@ -392,7 +392,7 @@ namespace ecologylab.interactive
                             
                             canvas.Children.Remove(this);
                         });
-                        FadeOutZone(zoneDelegateHolder, new UIElement[] { labelForZone, MenuCenter }, animationCompleted: animCompleted, delay: 500);
+                        FadeOutZone(zoneDelegateHolder, new UIElement[] { labelForZone, MenuCenter }, animationCompleted: animCompleted);
                         (sender as DispatcherTimer).Stop();
                     };
                     timer.Start();

@@ -323,7 +323,8 @@ namespace ecologylab.semantics.metametadata
             }
             else
             {
-                Console.WriteLine("Ignoring <" + fieldName + "> because no corresponding MetadataFieldDescriptor can be found.");
+                if(!MetaMetadataRepository.stopTheConsoleDumping)
+                    Console.WriteLine("Ignoring <" + fieldName + "> because no corresponding MetadataFieldDescriptor can be found.");
                 return false;
             }
 
@@ -381,7 +382,7 @@ namespace ecologylab.semantics.metametadata
                 }
                 if (result != null)
                     metadataClass = result;
-                else
+                else if (!MetaMetadataRepository.stopTheConsoleDumping)
                     Console.WriteLine("Can't resolve metadata for " + this.Name + " using " + tagForTS);
             }
             return result;

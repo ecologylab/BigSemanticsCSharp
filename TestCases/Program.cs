@@ -47,15 +47,17 @@ namespace ecologylabSemantics
             //tES.somethingElse = "New String";
 
             var buffy = new StringBuilder();
-            tES.serializeToXML(buffy);
-            Console.WriteLine("buffy: " + buffy);
+            tES.serializeToJSON(buffy);
+            Console.WriteLine("buffy:\n" + buffy);
             TranslationScope scope = new TranslationScope("Temp", new Type[]{typeof(TestElementState)});
 
-            TestElementState deserializeString = (TestElementState) scope.deserializeString(buffy.ToString(), Format.XML);
+            TestElementState deserializeString = (TestElementState) scope.deserializeString(buffy.ToString(), Format.JSON);
+            buffy = new StringBuilder();
+            deserializeString.serialize(buffy, Format.JSON);
 
-            Console.WriteLine("Done");
+            Console.WriteLine("\n" + buffy);
 
-
+            Console.WriteLine("");
             //new ClassTester();
         }
 

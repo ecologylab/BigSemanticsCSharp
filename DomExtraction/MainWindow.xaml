@@ -18,6 +18,8 @@
     <Canvas x:Name="myCanvas">
         <Button Name="GetMetadataButton" Click="GetMetadataButton_Click" Margin="59,76,312,186" Canvas.Left="402" Canvas.Top="-64" Height="22">Get Metadata Tree</Button>
         <TextBox Name="UrlTextbox" Canvas.Left="12" Canvas.Top="12" Height="22" Width="443" GotFocus="UrlTextbox_GotFocus"></TextBox>
-        
+        <Border Name="SomeContainer" Height="491" Width="553" Canvas.Left="12" Canvas.Top="40">
+            
+        </Border>
     </Canvas>
 </Window>

@@ -61,8 +61,8 @@ namespace ecologylab.semantics.metadata
             if (result == null)
             {
                 result = XMLTools.GetXmlTagName(thatField.Name, null);
-                if (!this.IsScalar)
-                    System.Console.WriteLine("Missing @mm_name annotation for " + thatField + "\tusing " + result);
+                //if (!this.IsScalar)
+                    //System.Console.WriteLine("Missing @mm_name annotation for " + thatField + "\tusing " + result);
             }
 
             

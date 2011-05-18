@@ -123,8 +123,12 @@ namespace MetadataUISandbox
 
                 HitTestResultDelegate hitResultDelegate = (result) =>
                 {
-                    DependencyObject acceptableResult;
-                    if ((acceptableResult = (AssociatedObject as IHitTestAcceptor).AcceptableObject(result.VisualHit)) != null)
+                    var hitTestAcceptor = (AssociatedObject as IHitTestAcceptor);
+
+                    DependencyObject acceptableResult = hitTestAcceptor != null
+                                                            ? hitTestAcceptor.AcceptableObject(result.VisualHit)
+                                                            : result.VisualHit;
+                    if (acceptableResult != null)
                     {
                         logger.Log("Tap with second finger, with first finger on: " + AssociatedObject);
                         logger.Log("\tHitTest on : " + acceptableResult);
@@ -171,7 +175,7 @@ namespace MetadataUISandbox
             _touchUpHandler = new EventHandler<TouchEventArgs>(OnTouchUp);
             AssociatedObject.TouchUp += _touchUpHandler;
 
-            this.command = (ICommand)AssociatedObject.GetValue(CommandProperty);
+            this.command = (ICommand)AssociatedObject.GetValue(CommandProperty) ?? this.command;
 
         }
         private void ClearStateVals()

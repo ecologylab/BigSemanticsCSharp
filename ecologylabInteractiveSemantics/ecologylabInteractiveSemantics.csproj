@@ -50,6 +50,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ecologylab\interactive\Behaviours\TouchResizer.cs" />
     <Compile Include="ecologylab\interactive\CommandBehaviours\DoubleTapBehaviour.cs" />
     <Compile Include="ecologylab\interactive\CommandBehaviours\PressAndHoldBehaviour.cs" />
     <Compile Include="ecologylab\interactive\CommandBehaviours\SingleTapBehaviour.cs" />
@@ -79,9 +80,6 @@
     <Compile Include="ecologylab\semantics\interactive\Controls\TextMagnifier.xaml.cs">
       <DependentUpon>TextMagnifier.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ecologylab\semantics\interactive\Controls\WikiPage.xaml.cs">
-      <DependentUpon>WikiPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -98,10 +96,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ecologylab\semantics\interactive\Controls\TextMagnifier.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ecologylab\semantics\interactive\Controls\WikiPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
