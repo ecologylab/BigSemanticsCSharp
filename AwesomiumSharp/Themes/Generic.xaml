@@ -1,0 +1,182 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:AwesomiumSharp.Windows.Controls"
+    xmlns:cm="clr-namespace:System.ComponentModel;assembly=PresentationFramework">
+
+    <x:Array x:Key="{x:Static local:WebControl.ContextMenuInputItemsArrayRecourceKey}" Type="{x:Type DependencyObject}">
+        <MenuItem Command="Copy" CommandTarget="{Binding}" />
+        <MenuItem Command="Cut" CommandTarget="{Binding}" />
+        <MenuItem Command="Paste" CommandTarget="{Binding}" />
+    </x:Array>
+
+    <x:Array x:Key="{x:Static local:WebControl.ContextMenuSelectionItemsArrayRecourceKey}" Type="{x:Type DependencyObject}">
+        <MenuItem Command="Copy" CommandTarget="{Binding}" />
+        <MenuItem Command="{x:Static local:WebControlCommands.CopyHTML}" CommandTarget="{Binding}" />
+        <Separator />
+    </x:Array>
+
+    <x:Array x:Key="{x:Static local:WebControl.ContextMenuLinkItemsArrayRecourceKey}" Type="{x:Type DependencyObject}">
+        <MenuItem Command="{x:Static local:WebControlCommands.CopyLinkAddress}" CommandTarget="{Binding}" />
+        <Separator />
+    </x:Array>
+
+    <x:Array x:Key="{x:Static local:WebControl.ContextMenuPageItemsArrayRecourceKey}" Type="{x:Type DependencyObject}">
+        <MenuItem Command="BrowseBack" CommandTarget="{Binding}" />
+        <MenuItem Command="BrowseForward" CommandTarget="{Binding}" />
+        <MenuItem Command="Refresh" CommandTarget="{Binding}" />
+        <Separator />
+        <MenuItem Command="Print" CommandTarget="{Binding}" />
+    </x:Array>
+    
+
+    <!-- WebControl Context Menu -->
+    <ContextMenu x:Key="{x:Static local:WebControl.ContextMenuResourceKey}" DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+        <ContextMenu.Style>
+            <Style TargetType="{x:Type ContextMenu}" BasedOn="{StaticResource {x:Type ContextMenu}}">
+                <Style.Triggers>
+                    
+                    <!-- Default Items -->
+                    <DataTrigger Binding="{Binding IsEnabled}" Value="True">
+                        <Setter Property="ItemsSource">
+                            <Setter.Value>
+                                <CompositeCollection>
+                                    <CollectionContainer Collection="{DynamicResource {x:Static local:WebControl.ContextMenuPageItemsArrayRecourceKey}}" />
+                                </CompositeCollection>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                    
+                    <!-- Keyboard Focus Items -->
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsEnabled}" Value="True" />
+                            <Condition Binding="{Binding HasKeyboardFocus}" Value="True" />
+                        </MultiDataTrigger.Conditions>
+                        <Setter Property="ItemsSource">
+                            <Setter.Value>
+                                <CompositeCollection>
+                                    <CollectionContainer Collection="{DynamicResource {x:Static local:WebControl.ContextMenuInputItemsArrayRecourceKey}}" />
+                                </CompositeCollection>
+                            </Setter.Value>
+                        </Setter>
+                    </MultiDataTrigger>
+
+                    <!-- Selection Items -->
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsEnabled}" Value="True" />
+                            <Condition Binding="{Binding HasKeyboardFocus}" Value="False" />
+                            <Condition Binding="{Binding HasSelection}" Value="True" />
+                        </MultiDataTrigger.Conditions>
+                        <Setter Property="ItemsSource">
+                            <Setter.Value>
+                                <CompositeCollection>
+                                    <CollectionContainer Collection="{DynamicResource {x:Static local:WebControl.ContextMenuSelectionItemsArrayRecourceKey}}" />
+                                    <CollectionContainer Collection="{DynamicResource {x:Static local:WebControl.ContextMenuPageItemsArrayRecourceKey}}" />
+                                </CompositeCollection>
+                            </Setter.Value>
+                        </Setter>
+                    </MultiDataTrigger>
+
+                    <!-- Link Items -->
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsEnabled}" Value="True" />
+                            <Condition Binding="{Binding HasTargetURL}" Value="True" />
+                        </MultiDataTrigger.Conditions>
+                        <Setter Property="ItemsSource">
+                            <Setter.Value>
+                                <CompositeCollection>
+                                    <CollectionContainer Collection="{DynamicResource {x:Static local:WebControl.ContextMenuLinkItemsArrayRecourceKey}}" />
+                                    <CollectionContainer Collection="{DynamicResource {x:Static local:WebControl.ContextMenuPageItemsArrayRecourceKey}}" />
+                                </CompositeCollection>
+                            </Setter.Value>
+                        </Setter>
+                    </MultiDataTrigger>
+
+                </Style.Triggers>
+            </Style>
+        </ContextMenu.Style>
+        
+    </ContextMenu>
+
+
+    <!-- WebControl -->
+    <Style TargetType="{x:Type local:WebControl}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="MinWidth" Value="200" />
+        <Setter Property="MinHeight" Value="100" />
+        <Setter Property="ContextMenu" Value="{DynamicResource {x:Static local:WebControl.ContextMenuResourceKey}}" />
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="ContextMenu" Value="{x:Null}" />
+            </Trigger>
+            <Trigger Property="IsSourceControl" Value="True">
+                <Setter Property="ContextMenu" Value="{x:Null}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <!-- WebControlInvalidLayer -->
+    <Style TargetType="{x:Type local:WebControlInvalidLayer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:WebControlInvalidLayer}">
+                    <ControlTemplate.Resources>
+                        <ResourceDictionary>
+                            <ResourceDictionary.MergedDictionaries>
+                                <ResourceDictionary Source="/AwesomiumSharp;component/Images/awe_logo_txt.xaml"/>
+                            </ResourceDictionary.MergedDictionaries>
+                        </ResourceDictionary>
+                    </ControlTemplate.Resources>
+                    <Border 
+                        x:Name="Bd"
+                        Background="#96FFFFFF"
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid SnapsToDevicePixels="True">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1.5*" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Image 
+                                x:Name="aweImage" 
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Bottom" 
+                                Margin="20,5" 
+                                Source="{StaticResource AwesomiumImage}"
+                                Stretch="Uniform"/>
+                            <TextBlock 
+                                Grid.Row="1"
+                                x:Name="msgText" 
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Top" 
+                                Foreground="Red"
+                                FontSize="20"
+                                TextWrapping="Wrap"
+                                Margin="5"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsCrashed}" Value="False" />
+                                <Condition Binding="{Binding IsEnabled}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="msgText" Property="Text" Value="The view is either manually disabled or destroyed." />
+                        </MultiDataTrigger>
+                        <DataTrigger Binding="{Binding IsCrashed}" Value="True">
+                            <Setter TargetName="msgText" Property="Text" Value="This view has crashed!" />
+                        </DataTrigger>
+                        <Trigger Property="cm:DesignerProperties.IsInDesignMode" Value="True">
+                            <Setter TargetName="msgText" Property="Text" Value="The view is disabled at design time." />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
