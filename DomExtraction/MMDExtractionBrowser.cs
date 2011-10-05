@@ -1,52 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using Cjc.ChromiumBrowser;
+using AwesomiumSharp;
+using Simpl.Fundamental.Net;
+using Simpl.Serialization;
+using Simpl.Serialization.Context;
 using ecologylab.semantics.generated.library;
-using ecologylab.semantics.interactive.Controls;
 using ecologylab.semantics.metadata;
 using ecologylab.semantics.metadata.builtins;
 using ecologylab.serialization;
 
-using CjcAwesomiumWrapper;
 using ecologylab.semantics.metametadata;
 using ecologylab.semantics.metadata.scalar.types;
 
 using System.Threading.Tasks;
-using ecologylab.net;
 using System.IO;
 
 
 namespace DomExtraction
 {
-    public class MMDExtractionBrowser : WebBrowser
+    public class MMDExtractionBrowser
     {
 
         TranslationScope metadataTScope;
         //String mmdJson;
         String mmdDomHelperJSString;
-        const String workspace = @"C:\Users\damaraju.m2icode\workspace\";
-        String jsPath = workspace + @"cSharp\ecologylabSemantics\DomExtraction\javascript\";
 
-        private const String wikiCacheLocation = @"S:\currentResearchers\sashikanth\wikiCache\";
+        static readonly string appPath = System.AppDomain.CurrentDomain.BaseDirectory;
+
+        const String workspace = @"d:\develop\workspaces\";
+        private const String jsPath = workspace + @"workspaceNet\ecologylabSemantics.NET\DomExtraction\javascript\";
+
+        private static readonly string wikiCacheLocation = appPath;
         private const String wikiPuriPrefix = "http://en.wikipedia.org/wiki/";
         MetaMetadataRepository repo;
 
-        Dictionary<MetaMetadata, String> mmdJSONCache = new Dictionary<MetaMetadata, String>();
-        Dictionary<ParsedUri, Metadata> metadataCache = new Dictionary<ParsedUri, Metadata>();
+        readonly Dictionary<MetaMetadata, String> mmdJSONCache = new Dictionary<MetaMetadata, String>();
+        readonly Dictionary<ParsedUri, Metadata> metadataCache = new Dictionary<ParsedUri, Metadata>();
 
         private List<String> articleTitlesCached = new List<string>();
 
         const String BLANK_PAGE = "about:blank";
+
+        private readonly WebView webView;
+
         /// <summary>
-        /// TODO: Fix instantiation of webview to not depend on overriding the ArrangeOverride method.
+        /// 
         /// </summary>
         public MMDExtractionBrowser()
-            :base()
         {
             //Init Awesomium Webview correctly.
-            Init();
+            //Note: Do we need special settings for WebCoreConfig?
+            WebCore.Initialize(new WebCoreConfig());
+            webView = WebCore.CreateWebView(1024, 768);
         }
 
         /// <summary>
@@ -60,7 +68,7 @@ namespace DomExtraction
             metadataTScope = GeneratedMetadataTranslations.Get();
 
 
-            string testFile = @"web\code\java\ecologylabSemantics\repository\";
+            const string testFile = @"ecologylab\ecologylabSemantics\repository\";
             Console.WriteLine("Initting repository");
             MetaMetadataRepository.stopTheConsoleDumping = true;
             repo = MetaMetadataRepository.ReadDirectoryRecursively(workspace + testFile, mmdTScope, metadataTScope);
@@ -75,7 +83,7 @@ namespace DomExtraction
 
                 ParsedUri pur = GetPuriForWikiArticleTitle(title);
 
-                Document elementState = (Document) metadataTScope.deserialize(file.FullName, Format.XML);
+                Document elementState = (Document) metadataTScope.Deserialize(file.FullName, StringFormat.Xml);
                 metadataCache.Add(pur, elementState);
             }
         }
@@ -104,7 +112,8 @@ namespace DomExtraction
             {
                 StringBuilder mmdJSON = new StringBuilder();
                 mmdJSON.Append("mmd = ");
-                mmd.serializeToJSON(mmdJSON);
+                ClassDescriptor.Serialize(mmd, StringFormat.Json, null);
+                //mmd.serialize(mmdJSON, null);
                 mmdJSON.Append(";");
                 result = mmdJSON.ToString();
                 mmdJSONCache.Add(mmd, result);
@@ -141,28 +150,37 @@ namespace DomExtraction
             {
                 Console.WriteLine("Cache Miss. Parsing webpage: " + uri);
                 //We need webView to be instantiated correctly.
-                SetResourceInterceptor(new ResourceBanner(uri));
+                webView.ClearAllURLFilters();
+                //Only accept requests for this particular uri
+                
+                webView.AddURLFilter(uri);
+                //TODO: At a later date, when we want to allow javascript requests, this must change.
+                //webView.AddURLFilter("*.js");
                 Console.WriteLine("Setting Source");
-                Source = uri;
-                FinishLoading += delegate
+                webView.Source = uri;
+                webView.DomReady += delegate
                 {
-                    if (Source == null || BLANK_PAGE.Equals(Source))// || loadingComplete)
-                        return;
+                    //if (Source == null || BLANK_PAGE.Equals(Source))// || loadingComplete)
+                    //   return;
+                    webView.Stop(); // Stopping further requests.
                     Console.WriteLine("Finished loading. Executing javascript. -- " + System.DateTime.Now);
                     String jsonMMD = GetJsonMMD(puri);
                     //Console.WriteLine("json:\n" + jsonMMD + "\n");
-                    ExecuteJavascript(jsonMMD);
-                    ExecuteJavascript(mmdDomHelperJSString);
+                    webView.ExecuteJavascript(jsonMMD);
+                    webView.ExecuteJavascript(mmdDomHelperJSString);
                     Console.WriteLine("Done js code execution, calling function. --" + System.DateTime.Now);
-                    JSValue value = ExecuteJavascriptWithResult("extractMetadata(mmd);").Get();
-                    String metadataJSON = (String)value.Value();
+                    //TODO: Currently executes asynchronously. Can we make this asynchronous?
+                    JSValue value = webView.ExecuteJavascriptWithResult("extractMetadata(mmd);");
+                    String metadataJSON = value.ToString();
                     //Console.WriteLine(metadataJSON);
                     Console.WriteLine("Done getting value. Serializing JSON string to ElementState. --" + System.DateTime.Now);
-                    ElementState myShinyNewMetadata = metadataTScope.deserializeString(metadataJSON, Format.JSON, new ParsedUri(uri));
+                    ElementState myShinyNewMetadata = (ElementState) metadataTScope.Deserialize(metadataJSON, StringFormat.Json);
                     Console.WriteLine("Metadata ElementState object created. " + System.DateTime.Now);
 
                     //Clean metadata
                     WikipediaPage wikiPage = myShinyNewMetadata as WikipediaPage;
+                    Debug.Assert(wikiPage != null, "wikiPage is null");
+
                     wikiPage.HypertextParas = wikiPage.HypertextParas.Where(p => p.Runs != null).ToList();
                     wikiPage.Thumbinners = wikiPage.Thumbinners.Where(thumb => thumb.ThumbImgSrc != null).ToList();
 
@@ -170,7 +188,8 @@ namespace DomExtraction
                     String XMLFilePath = wikiCacheLocation + wikiPage.Title.Value.Replace(' ', '_') + ".xml";
                     Console.WriteLine("Writing out the elementstate into " + XMLFilePath);
                     StringBuilder buffy = new StringBuilder();
-                    wikiPage.serializeToXML(buffy);
+                    //TODO FIXME Use class descriptor for serialization
+                    //wikiPage.serializeToXML(buffy, null);
                     TextWriter tw = new StreamWriter(XMLFilePath);
                     tw.Write(buffy);
                     tw.Close();
@@ -183,31 +202,11 @@ namespace DomExtraction
                     tw.Write(buffy);
                     tw.Close();*/
 
-                    Source = BLANK_PAGE;
+                    
                     tcs.TrySetResult(myShinyNewMetadata);
                 };
             }
-            return await AsyncCtpThreadingExtensions.GetAwaiter(tcs.Task);
-        }
-    }
-
-    public class ResourceBanner : ResourceInterceptorBase
-    {
-
-        String uri;
-
-        public ResourceBanner(String uri) 
-        {
-            this.uri = uri;
-
-        }
-        public override ResourceResponse OnRequest(WebView caller, String url, String referrer)
-        {
-            if (url == uri)
-            {
-                return new ResourceResponse();
-            }
-            return ResourceResponse.Create(1, "x", "text/html");
+            return await tcs.Task;
         }
     }
 }
