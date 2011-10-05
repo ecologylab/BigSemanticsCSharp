@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
 using System.Threading.Tasks;
-using ecologylab.semantics.generated.library;
-using ecologylab.semantics.interactive.Controls;
+using System.Windows;
 using ecologylab.semantics.metadata.builtins;
 
 
@@ -13,7 +9,7 @@ namespace DomExtraction
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         MMDExtractionBrowser browser = null;
         
