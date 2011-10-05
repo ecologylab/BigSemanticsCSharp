@@ -8,28 +8,30 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization.types;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization.Types;
+
 
 namespace ecologylab.semantics.metametadata 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	[xml_tag("scalar")]
+	[SimplInherit]
+	[SimplTag("scalar")]
 	public class MetaMetadataScalarField : MetaMetadataField
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private ScalarType scalarType;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_composite]
+		[SimplComposite]
 		private RegexFilter filter;
 
 		public MetaMetadataScalarField()

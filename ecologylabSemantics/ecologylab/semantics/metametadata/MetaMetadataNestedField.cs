@@ -8,15 +8,15 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.generic;
+using Simpl.Serialization.Attributes;
+
 
 namespace ecologylab.semantics.metametadata 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
+	[SimplInherit]
 	public abstract class MetaMetadataNestedField : MetaMetadataField
 	{
 		public MetaMetadataNestedField()

@@ -8,7 +8,7 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 using ecologylab.semantics.metadata.scalar;
 using ecologylab.semantics.metadata;
 
@@ -17,38 +17,38 @@ namespace ecologylab.semantics.metadata.builtins
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_descriptor_classes(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
+	[SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
 	public class Clipping : Metadata
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
 		[mm_name("caption")]
-		[simpl_scalar]
+		[SimplScalar]
 		private MetadataString caption;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private MetadataString context;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private MetadataString xpath;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_composite]
+		[SimplComposite]
 		private Document source;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_composite]
+		[SimplComposite]
 		private Document outlink;
 
 		public Clipping()

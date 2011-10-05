@@ -8,7 +8,7 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 using ecologylab.semantics.metadata.scalar;
 using ecologylab.semantics.metadata;
 
@@ -17,14 +17,14 @@ namespace ecologylab.semantics.metadata.builtins
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_descriptor_classes(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
-	[simpl_inherit]
+	[SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
+	[SimplInherit]
 	public class DebugMetadata : Metadata
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		[mm_name("new_term_vector")]
 		private MetadataStringBuilder newTermVector;
 

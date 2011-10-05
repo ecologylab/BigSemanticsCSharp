@@ -8,35 +8,36 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization;
-using ecologylab.serialization.types.element;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization;
+using Simpl.Serialization.Types.Element;
+
 
 namespace ecologylab.net 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	public class UserAgent : ElementState, Mappable
+	public class UserAgent : ElementState, IMappable
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String name;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[xml_tag("string")]
-		[simpl_scalar]
+		[SimplTag("string")]
+		[SimplScalar]
 		private String userAgentString;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[xml_tag("default")]
-		[simpl_scalar]
+		[SimplTag("default")]
+		[SimplScalar]
 		private Boolean defaultAgent;
 
 		public UserAgent()
@@ -60,7 +61,7 @@ namespace ecologylab.net
 			set{defaultAgent = value;}
 		}
 
-		public Object key()
+		public object Key()
 		{
             return Name;
 		}

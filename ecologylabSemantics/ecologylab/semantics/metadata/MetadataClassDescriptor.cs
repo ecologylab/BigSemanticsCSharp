@@ -8,8 +8,8 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization;
 using System.Reflection;
 
 namespace ecologylab.semantics.metadata 
@@ -17,11 +17,9 @@ namespace ecologylab.semantics.metadata
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
+	[SimplInherit]
 	public class MetadataClassDescriptor : ClassDescriptor
 	{
-		public MetadataClassDescriptor()
-		{ }
 
         public MetadataClassDescriptor(Type thatClass)
             :base(thatClass)

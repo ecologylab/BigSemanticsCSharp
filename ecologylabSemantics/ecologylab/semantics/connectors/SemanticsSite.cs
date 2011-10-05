@@ -8,7 +8,7 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 using ecologylab.io;
 
 namespace ecologylab.semantics.connectors 
@@ -16,7 +16,7 @@ namespace ecologylab.semantics.connectors
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
+	[SimplInherit]
 	public class SemanticsSite : BasicSite
 	{
 		public SemanticsSite()

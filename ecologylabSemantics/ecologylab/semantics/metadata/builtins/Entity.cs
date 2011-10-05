@@ -8,9 +8,10 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization.Types.Element;
 using ecologylab.semantics.metadata.scalar;
-using ecologylab.serialization.types.element;
+
 using ecologylab.semantics.metadata;
 
 namespace ecologylab.semantics.metadata.builtins 
@@ -18,22 +19,22 @@ namespace ecologylab.semantics.metadata.builtins
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_descriptor_classes(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
-	[simpl_inherit]
-	public class Entity<D> : Metadata, Mappable
+	[SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
+	[SimplInherit]
+	public class Entity<D> : Metadata, IMappable
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
-		[simpl_hints(new Hint[] { Hint.XML_LEAF })]
+		[SimplScalar]
+		[SimplHints(new Hint[] { Hint.XmlLeaf })]
 		private MetadataString gist;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
-		[simpl_hints(new Hint[] { Hint.XML_LEAF })]
+		[SimplScalar]
+		[SimplHints(new Hint[] { Hint.XmlLeaf })]
 		private MetadataParsedURL location;
 
 		public Entity()
@@ -51,7 +52,7 @@ namespace ecologylab.semantics.metadata.builtins
 			set{location = value;}
 		}
 
-		public Object key()
+		public object Key()
 		{
 			throw new NotImplementedException();
 		}

@@ -8,57 +8,59 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization;
-using ecologylab.serialization.types.element;
+using Simpl.Serialization;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization;
+using Simpl.Serialization.Types.Element;
+
 
 namespace ecologylab.textformat 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	public class NamedStyle : ElementState, Mappable
+	public class NamedStyle : ElementState, IMappable
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String name;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Boolean underline;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Int32 fontSize;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Int32 alignment;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Int32 faceIndex;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Int32 fontStyle;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Int32 strokeStyle;
 
 		public NamedStyle()
@@ -106,7 +108,7 @@ namespace ecologylab.textformat
 			set{strokeStyle = value;}
 		}
 
-		public Object key()
+		public object Key()
 		{
             return name;
 		}

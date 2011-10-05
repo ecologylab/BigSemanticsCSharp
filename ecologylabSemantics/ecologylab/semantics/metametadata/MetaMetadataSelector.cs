@@ -8,9 +8,10 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization;
-using ecologylab.serialization.types.element;
+using Simpl.Fundamental.Net;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization;
+using Simpl.Serialization.Types.Element;
 using ecologylab.net;
 
 namespace ecologylab.semantics.metametadata 
@@ -18,63 +19,63 @@ namespace ecologylab.semantics.metametadata
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	public class MetaMetadataSelector : ElementState, Mappable
+	[SimplInherit]
+	public class MetaMetadataSelector : ElementState, IMappable
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String name;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String prefName;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String defaultPref;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private ParsedUri urlStripped;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private ParsedUri urlPathTree;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private System.Text.RegularExpressions.Regex urlRegex;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String domain;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_collection("mime_type")]
-		[simpl_nowrap]
+		[SimplCollection("mime_type")]
+		[SimplNoWrap]
 		private List<String> mimeTypes;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_collection("suffix")]
-		[simpl_nowrap]
+		[SimplCollection("suffix")]
+		[SimplNoWrap]
 		private List<String> suffixes;
 
         public static MetaMetadataSelector NULL_SELECTOR = new MetaMetadataSelector();
@@ -139,7 +140,7 @@ namespace ecologylab.semantics.metametadata
 		}
         #endregion
         
-        public Object key()
+        public object Key()
 		{
             return name;
 		}

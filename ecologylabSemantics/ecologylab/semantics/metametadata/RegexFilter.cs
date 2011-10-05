@@ -8,8 +8,8 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization;
 using System.Text.RegularExpressions;
 
 namespace ecologylab.semantics.metametadata 
@@ -17,20 +17,19 @@ namespace ecologylab.semantics.metametadata
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	public class RegexFilter : ElementState
-	{
+	public class RegexFilter 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
-		[simpl_hints(new Hint[] { Hint.XML_ATTRIBUTE })]
+		[SimplScalar]
+		[SimplHints(new Hint[] { Hint.XmlAttribute })]
 		private Regex regex;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
-		[simpl_hints(new Hint[] { Hint.XML_ATTRIBUTE })]
+		[SimplScalar]
+		[SimplHints(new Hint[] { Hint.XmlAttribute })]
 		private String replace;
 
 		public RegexFilter()

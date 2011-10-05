@@ -8,8 +8,9 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization;
+using Simpl.Fundamental.Net;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization;
 using ecologylab.semantics.metadata.scalar;
 using System.Collections;
 using System.Windows.Controls;
@@ -23,22 +24,22 @@ namespace ecologylab.semantics.metadata
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_descriptor_classes(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
+	[SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
 	public class Metadata : ElementState
-	{
+    {
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
-		[xml_other_tags(new String[]{"meta_metadata_name", })]
-		[xml_tag("mm_name")]
+		[SimplScalar]
+		[SimplOtherTags(new String[]{"meta_metadata_name", })]
+		[SimplTag("mm_name")]
 		private MetadataString metaMetadataName;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
 		[semantics_mixin]
-		[simpl_collection("mixins")]
+		[SimplCollection("mixins")]
 		[mm_name("mixins")]
 		private List<Metadata> mixins;
 
@@ -71,10 +72,10 @@ namespace ecologylab.semantics.metadata
             set { metaMetadata = value; }
         }
 
-        protected override void preTranslationProcessingHook()
+        /*protected override void DeserializationPreHook()
 	    {
 		    getMetaMetadata();
-	    }
+	    }*/
 
         public ParsedUri getLocation()
         {
@@ -110,10 +111,10 @@ namespace ecologylab.semantics.metadata
                     }
                     if (mm == null)
                         mm = repository.GetByClass(this.GetType());
-                    if (mm == null && this.ClassDescriptor != null)
-                    {
-                        mm = repository.GetByTagName(this.ClassDescriptor.TagName);
-                    }
+//                    if (mm == null && this.ClassDescriptor != null)
+//                    {
+//                        mm = repository.GetByTagName(this.ClassDescriptor.TagName);
+//                    }
                 }
                 if (mm != null)
                     this.MetaMetadata = mm;

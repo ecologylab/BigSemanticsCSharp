@@ -8,8 +8,8 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization;
 using System.Reflection;
 
 namespace ecologylab.semantics.metadata 
@@ -22,11 +22,8 @@ namespace ecologylab.semantics.metadata
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String mmName;
-
-		public MetadataFieldDescriptor()
-		{ }
 
         public MetadataFieldDescriptor(MetadataClassDescriptor classDescriptor, FieldInfo fieldInfo, Int16 annotationType) : base(classDescriptor, fieldInfo, annotationType)
         { 
@@ -60,7 +57,7 @@ namespace ecologylab.semantics.metadata
 
             if (result == null)
             {
-                result = XMLTools.GetXmlTagName(thatField.Name, null);
+                result = "";//TODO FIXME XMLTools.GetXmlTagName(thatField.Name, null);
                 //if (!this.IsScalar)
                     //System.Console.WriteLine("Missing @mm_name annotation for " + thatField + "\tusing " + result);
             }

@@ -8,22 +8,22 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 
 namespace ecologylab.semantics.actions 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	[xml_tag("not")]
+	[SimplInherit]
+	[SimplTag("not")]
 	public class NotCondition : Condition
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_composite]
-		[simpl_scope("condition_scope")]
+		[SimplComposite]
+		[SimplScope("condition_scope")]
 		private Condition check;
 
 		public NotCondition()

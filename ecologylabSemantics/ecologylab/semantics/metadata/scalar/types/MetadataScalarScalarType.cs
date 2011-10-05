@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using ecologylab.serialization.types.scalar;
-using ecologylab.serialization.types;
+using Simpl.Fundamental.Net;
+using Simpl.Serialization.Context;
+using Simpl.Serialization.Types;
+using Simpl.Serialization.Types.Scalar;
 using System.Reflection;
-using ecologylab.serialization;
-using ecologylab.net;
 using System.IO;
 
 namespace ecologylab.semantics.metadata.scalar.types
@@ -23,11 +21,11 @@ namespace ecologylab.semantics.metadata.scalar.types
 		/// <param name="metadataScalarTypeClass"></param>
 		/// <param name="valueClass"></param>
 		public MetadataScalarScalarType(Type metadataScalarTypeClass, Type valueClass)
-			:base(metadataScalarTypeClass)
+            : base(metadataScalarTypeClass, metadataScalarTypeClass.Name, metadataScalarTypeClass.Name, metadataScalarTypeClass.Name)
 		{
 			// Get type handles for Test<String> and its field.
 
-			this.valueScalarType = TypeRegistry.GetType(valueClass);
+		    this.valueScalarType = null;//TODO FIXME TypeRegistry.GetType(valueClass);
 			valueField = metadataScalarTypeClass.GetField(MetadataScalarBase<object>.VALUE_FIELD_NAME);
 
             Object t = typeof(Type);
@@ -102,7 +100,7 @@ namespace ecologylab.semantics.metadata.scalar.types
 		{
 			if (!metadataScalarTypesRegistered)
 			{
-				TypeRegistry.Register(METADATA_SCALAR_TYPES);
+				//TypeRegistry.RegisterTypes(METADATA_SCALAR_TYPES);//TODO FIXME
 				metadataScalarTypesRegistered = true;
 			}
 		}

@@ -8,46 +8,47 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization;
-using ecologylab.serialization.types.element;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization;
+using Simpl.Serialization.Types.Element;
+
 
 namespace ecologylab.semantics.metametadata 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[xml_tag("arg")]
-	public class Argument : ElementState, Mappable
+	[SimplTag("arg")]
+	public class Argument : ElementState, IMappable
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String value;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String name;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String check;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String context;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Boolean isNested;
 
 		public Argument()
@@ -83,7 +84,7 @@ namespace ecologylab.semantics.metametadata
 			set{isNested = value;}
 		}
 
-		public Object key()
+		public object Key()
 		{
             return name;
 		}

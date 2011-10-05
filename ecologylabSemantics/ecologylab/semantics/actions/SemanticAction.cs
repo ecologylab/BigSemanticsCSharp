@@ -8,49 +8,48 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 using ecologylab.semantics.metametadata;
-using ecologylab.serialization;
+using Simpl.Serialization;
 
 namespace ecologylab.semantics.actions 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	public class SemanticAction<IC, SAH> : ElementState
-	{
+	public class SemanticAction<IC, SAH> 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_collection]
-		[simpl_scope("condition_scope")]
-		[simpl_nowrap]
+		[SimplCollection]
+		[SimplScope("condition_scope")]
+		[SimplNoWrap]
 		private List<Condition> checks;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_nowrap]
-		[simpl_map("arg")]
+		[SimplNoWrap]
+		[SimplMap("arg")]
 		private Dictionary<String, Argument> args;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
-		[xml_tag("object")]
+		[SimplScalar]
+		[SimplTag("object")]
 		private String objectStr;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String name;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String error;
 
 		public SemanticAction()

@@ -8,14 +8,14 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 
 namespace ecologylab.semantics.actions 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
+	[SimplInherit]
     public class Otherwise<IC, SAH> : NestedSemanticAction<IC, SAH>
 	{
 		public Otherwise()

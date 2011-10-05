@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Simpl.Serialization.Context;
 using ecologylab.semantics.metametadata;
-using ecologylab.serialization;
+using Simpl.Serialization;
 
 namespace ecologylab.semantics.metadata
 {
@@ -22,7 +23,7 @@ namespace ecologylab.semantics.metadata
          */
         public void deserializationPreHook(ElementState es, FieldDescriptor fd)
         {
-            if (es is Metadata)
+            if ( es is Metadata)
             {
                 Metadata deserializedMetadata = (Metadata)es;
                 if (_currentMMstack.Count == 0)
@@ -39,7 +40,7 @@ namespace ecologylab.semantics.metadata
                         mmName = mfd.MmName;
                     }
                     else
-                        mmName = XMLTools.GetXmlTagName(fd.FieldName, null);
+                        mmName = "";//TODO FIXME XMLTools.GetXmlTagName(fd.FieldName, null);
 
                     MetaMetadataNestedField currentMM = _currentMMstack.Peek();
                     MetaMetadataNestedField childMMNested = (MetaMetadataNestedField)currentMM.LookupChild(mmName);
@@ -84,6 +85,16 @@ namespace ecologylab.semantics.metadata
                 System.Console.WriteLine("No meta-metadata in root after direct binding :-(");
                 return false;
             }
+        }
+
+        public void DeserializationPreHook(object o, FieldDescriptor fd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeserializationPostHook(object o, FieldDescriptor fd)
+        {
+            throw new NotImplementedException();
         }
     }
 }

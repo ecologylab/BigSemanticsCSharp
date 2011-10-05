@@ -8,7 +8,7 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 using ecologylab.semantics.metadata.scalar;
 using ecologylab.semantics.metadata;
 
@@ -17,55 +17,55 @@ namespace ecologylab.semantics.metadata.builtins
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_descriptor_classes(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
-	[simpl_inherit]
+	[SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
+	[SimplInherit]
 	public class Document : ClippableMetadata
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
 		[mm_name("location")]
-		[simpl_scalar]
+		[SimplScalar]
 		private MetadataParsedURL location;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
 		[mm_name("title")]
-		[simpl_scalar]
-        [simpl_composite_as_scalar]
+		[SimplScalar]
+        [SimplCompositeAsScalar]
 		private MetadataString title;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
 		[mm_name("description")]
-		[simpl_scalar]
+		[SimplScalar]
 		private MetadataString description;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
-		[simpl_hints(new Hint[] { Hint.XML_LEAF })]
+		[SimplScalar]
+		[SimplHints(new Hint[] { Hint.XmlLeaf })]
 		private MetadataString query;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
 		[mm_name("generation")]
-		[simpl_scalar]
+		[SimplScalar]
 		private MetadataInteger generation;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
 		[mm_name("page_structure")]
-		[simpl_scalar]
+		[SimplScalar]
 		private MetadataString pageStructure;
 
         [mm_name("favicon")]
-        [simpl_scalar]
+        [SimplScalar]
         private MetadataParsedURL favicon;
 
 

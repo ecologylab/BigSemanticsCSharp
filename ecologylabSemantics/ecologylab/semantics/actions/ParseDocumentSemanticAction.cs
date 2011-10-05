@@ -8,36 +8,36 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 
 namespace ecologylab.semantics.actions 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	[xml_tag("parse_document")]
+	[SimplInherit]
+	[SimplTag("parse_document")]
     public class ParseDocumentSemanticAction<IC, SAH> : SemanticAction<IC, SAH> 
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
-		[simpl_hints(new Hint[] { Hint.XML_ATTRIBUTE })]
+		[SimplScalar]
+		[SimplHints(new Hint[] { Hint.XmlAttribute })]
 		private Boolean now;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
-		[simpl_hints(new Hint[] { Hint.XML_ATTRIBUTE })]
+		[SimplScalar]
+		[SimplHints(new Hint[] { Hint.XmlAttribute })]
 		private Boolean onlyPickTopDocuments;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
-		[simpl_hints(new Hint[] { Hint.XML_ATTRIBUTE })]
+		[SimplScalar]
+		[SimplHints(new Hint[] { Hint.XmlAttribute })]
 		private Int32 numberOfTopDocuments;
 
 		public ParseDocumentSemanticAction()

@@ -8,45 +8,46 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization;
-using ecologylab.serialization.types.element;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization;
+using Simpl.Serialization.Types.Element;
+
 
 namespace ecologylab.semantics.metametadata 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	public class SearchEngine : ElementState, Mappable
+	public class SearchEngine : ElementState, IMappable
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String name;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String urlPrefix;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String urlSuffix;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String numResultString;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String startString;
 
 		public SearchEngine()
@@ -82,7 +83,7 @@ namespace ecologylab.semantics.metametadata
 			set{startString = value;}
 		}
 
-		public Object key()
+		public object Key()
 		{
             return name;
 		}

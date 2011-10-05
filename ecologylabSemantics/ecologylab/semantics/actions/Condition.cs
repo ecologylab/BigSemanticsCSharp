@@ -8,16 +8,15 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization;
 
 namespace ecologylab.semantics.actions 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	public class Condition : ElementState
-	{
+	[SimplInherit]
+	public class Condition 	{
 	}
 }

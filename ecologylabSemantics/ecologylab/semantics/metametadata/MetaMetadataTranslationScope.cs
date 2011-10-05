@@ -9,7 +9,7 @@ using ecologylab.textformat;
 using ecologylab.semantics.actions;
 using ecologylab.semantics.connectors;
 using ecologylab.io;
-using ecologylab.serialization;
+using Simpl.Serialization;
 
 namespace ecologylab.semantics.metametadata
 {

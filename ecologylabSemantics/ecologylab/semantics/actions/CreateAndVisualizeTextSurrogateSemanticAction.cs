@@ -8,15 +8,15 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 
 namespace ecologylab.semantics.actions 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	[xml_tag("create_and_visualize_text_surrogate")]
+	[SimplInherit]
+	[SimplTag("create_and_visualize_text_surrogate")]
     public class CreateAndVisualizeTextSurrogateSemanticAction<IC, SAH> : SemanticAction<IC, SAH>
 	{
 		public CreateAndVisualizeTextSurrogateSemanticAction()

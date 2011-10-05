@@ -8,70 +8,71 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Fundamental.Generic;
+using Simpl.Serialization.Attributes;
 using ecologylab.semantics.actions;
 using ecologylab.semantics.connectors;
 using ecologylab.semantics.metadata;
-using ecologylab.generic;
-using ecologylab.serialization;
+
+using Simpl.Serialization;
 
 namespace ecologylab.semantics.metametadata 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	[xml_tag("composite")]
+	[SimplInherit]
+	[SimplTag("composite")]
 	public class MetaMetadataCompositeField : MetaMetadataNestedField
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String type;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Boolean entity;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String userAgentName;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String userAgentString;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String parser;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_collection]
-		[simpl_scope("semantic_action_translation_scope")]
+		[SimplCollection]
+		[SimplScope("semantic_action_translation_scope")]
 		private List<SemanticAction<InfoCollector, SemanticActionHandler>> semanticActions;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_collection("def_var")]
-		[simpl_nowrap]
+		[SimplCollection("def_var")]
+		[SimplNoWrap]
 		private List<DefVar> defVars;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Boolean reloadPageFirstTime;
 
 		public MetaMetadataCompositeField()

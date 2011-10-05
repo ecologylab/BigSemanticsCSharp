@@ -8,23 +8,23 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 
 namespace ecologylab.semantics.actions 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	[xml_tag("or")]
+	[SimplInherit]
+	[SimplTag("or")]
 	public class OrCondition : Condition
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_collection]
-		[simpl_scope("condition_scope")]
-		[simpl_nowrap]
+		[SimplCollection]
+		[SimplScope("condition_scope")]
+		[SimplNoWrap]
 		private List<Condition> checks;
 
 		public OrCondition()

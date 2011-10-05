@@ -8,15 +8,16 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization.Attributes;
 
 namespace ecologylab.semantics.actions 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	[xml_tag("create_semantic_anchor")]
+    [SimplInherit]
+	[SimplTag("create_semantic_anchor")]
     public class CreateSemanticAnchorSemanticAction<IC, SAH> : SemanticAction<IC, SAH>
 	{
 		public CreateSemanticAnchorSemanticAction()

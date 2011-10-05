@@ -8,21 +8,21 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 
 namespace ecologylab.semantics.actions 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	[xml_tag("search")]
+	[SimplInherit]
+	[SimplTag("search")]
     public class SearchSemanticAction<IC, SAH> : SemanticAction<IC, SAH> 
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String engine;
 
 		public SearchSemanticAction()

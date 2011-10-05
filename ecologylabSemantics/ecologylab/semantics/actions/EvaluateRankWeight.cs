@@ -8,15 +8,15 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 
 namespace ecologylab.semantics.actions 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	[xml_tag("eval_rank_wt")]
+	[SimplInherit]
+	[SimplTag("eval_rank_wt")]
     public class EvaluateRankWeight<IC, SAH> : SemanticAction<IC, SAH> 
 	{
 		public EvaluateRankWeight()

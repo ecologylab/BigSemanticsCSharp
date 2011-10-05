@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ecologylab.generic;
+using Simpl.Fundamental.Generic;
+
 using ecologylab.semantics.metadata;
 
 namespace ecologylab.semantics.metametadata

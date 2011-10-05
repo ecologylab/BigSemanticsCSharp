@@ -8,28 +8,28 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 
 namespace ecologylab.semantics.actions 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	[xml_tag("choose")]
+	[SimplInherit]
+	[SimplTag("choose")]
     public class ChooseSemanticAction<IC, SAH> : SemanticAction<IC, SAH>
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_nowrap]
-		[simpl_collection("case")]
+		[SimplNoWrap]
+		[SimplCollection("case")]
         private List<IfSemanticAction<IC, SAH>> cases;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_composite]
+		[SimplComposite]
         private Otherwise<IC, SAH> otherwise;
 
 		public ChooseSemanticAction()

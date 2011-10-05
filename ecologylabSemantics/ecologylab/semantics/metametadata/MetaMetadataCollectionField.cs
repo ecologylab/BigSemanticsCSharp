@@ -8,46 +8,47 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Fundamental.Generic;
+using Simpl.Serialization.Attributes;
 using ecologylab.semantics.metadata;
-using ecologylab.generic;
-using ecologylab.serialization;
+
+using Simpl.Serialization;
 
 namespace ecologylab.semantics.metametadata 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	[xml_tag("collection")]
+	[SimplInherit]
+	[SimplTag("collection")]
 	public class MetaMetadataCollectionField : MetaMetadataNestedField
 	{
         public static readonly String UNRESOLVED_NAME = "&UNRESOLVED_NAME";
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String childTag;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String childType;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Boolean childEntity;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Boolean noWrap;
 
-        [simpl_scalar]
+        [SimplScalar]
         private Boolean parseAsHypertext;
 
 		public MetaMetadataCollectionField()
@@ -109,7 +110,8 @@ namespace ecologylab.semantics.metametadata
             return (!childEntity) ? childType : DocumentParserTagNames.ENTITY;
         }
 
-        public override void DeserializationPostHook()
+        /*
+        public override void DeserializationPostHook(object o, FieldDescriptor fd)
 	    {
 		    String childType = DetermineCollectionChildType();
 		    MetaMetadataCompositeField composite = new MetaMetadataCompositeField(childType ?? UNRESOLVED_NAME, kids)
@@ -124,19 +126,18 @@ namespace ecologylab.semantics.metametadata
 
             kids.Add(composite.Name, composite);
 		    //composite.setPromoteChildren(this.shouldPromoteChildren());
-	    }
+	    }*/
 
         protected override bool bindMetadataFieldDescriptor(TranslationScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
         {
             String fieldName = this.GetFieldNameInCamelCase(false);
-            MetadataFieldDescriptor metadataFieldDescriptor = (MetadataFieldDescriptor)metadataClassDescriptor.
-               getFieldDescriptorByFieldName(fieldName);
+            MetadataFieldDescriptor metadataFieldDescriptor = (MetadataFieldDescriptor)metadataClassDescriptor.GetFieldDescriptorByFieldName(fieldName);
             // if we don't have a field, then this is a wrapped collection, so we need to get the wrapped
             // field descriptor
             if (metadataFieldDescriptor != null)
             {
-                if (metadataFieldDescriptor.Field == null)
-                    metadataFieldDescriptor = (MetadataFieldDescriptor)metadataFieldDescriptor.WrappedFieldDescriptor;
+                //if (metadataFieldDescriptor.Field == null)
+                //    metadataFieldDescriptor = (MetadataFieldDescriptor)metadataFieldDescriptor.WrappedFieldDescriptor;
 
                 this.MetadataFieldDescriptor = metadataFieldDescriptor;
             }

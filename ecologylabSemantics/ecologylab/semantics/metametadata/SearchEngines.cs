@@ -8,20 +8,19 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization;
 
 namespace ecologylab.semantics.metametadata 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	public class SearchEngines : ElementState
-	{
+	public class SearchEngines 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_map("search_engine")]
+		[SimplMap("search_engine")]
 		private Dictionary<String, SearchEngine> searchEngine;
 
 		public SearchEngines()

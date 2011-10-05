@@ -8,23 +8,23 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 
 namespace ecologylab.semantics.actions 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	[xml_tag("set_field")]
+	[SimplInherit]
+	[SimplTag("set_field")]
     public class SetFieldSemanticAction<IC, SAH> : SemanticAction<IC, SAH> 
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
-		[xml_tag("value")]
-		[simpl_hints(new Hint[] { Hint.XML_ATTRIBUTE })]
+		[SimplScalar]
+		[SimplTag("value")]
+		[SimplHints(new Hint[] { Hint.XmlAttribute })]
 		private String valueName;
 
 		public SetFieldSemanticAction()

@@ -8,8 +8,9 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization;
+using Simpl.Fundamental.Net;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization;
 using ecologylab.net;
 using ecologylab.semantics.connectors;
 using ecologylab.textformat;
@@ -23,8 +24,7 @@ namespace ecologylab.semantics.metametadata
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	public class MetaMetadataRepository : ElementState
-	{
+	public class MetaMetadataRepository 	{
 	    public static bool stopTheConsoleDumping = false;
 
         #region Locals
@@ -59,52 +59,52 @@ namespace ecologylab.semantics.metametadata
         /// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String name;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[xml_tag("package")]
-		[simpl_scalar]
+		[SimplTag("package")]
+		[SimplScalar]
 		private String packageAttribute;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_map("user_agent")]
+		[SimplMap("user_agent")]
 		private Dictionary<String, UserAgent> userAgents;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_map("search_engine")]
+		[SimplMap("search_engine")]
 		private Dictionary<String, SearchEngine> searchEngines;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_map("named_style")]
+		[SimplMap("named_style")]
 		private Dictionary<String, NamedStyle> namedStyles;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String defaultUserAgentName;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_nowrap]
-		[simpl_collection("cookie_processing")]
+		[SimplNoWrap]
+		[SimplCollection("cookie_processing")]
 		private List<CookieProcessing> cookieProcessors;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_map("meta_metadata")]
-		[simpl_nowrap]
+		[SimplMap("meta_metadata")]
+		[SimplNoWrap]
 		private Dictionary<String, MetaMetadata> repositoryByTagName;
 
         private Dictionary<String, MetaMetadata> repositoryByMime = new Dictionary<string,MetaMetadata>();
@@ -114,14 +114,14 @@ namespace ecologylab.semantics.metametadata
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_map("selector")]
-		[simpl_nowrap]
+		[SimplMap("selector")]
+		[SimplNoWrap]
 		private Dictionary<String, MetaMetadataSelector> selectorsByName;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_map("site")]
+		[SimplMap("site")]
 		private Dictionary<String, SemanticsSite> sites;
 
         private TranslationScope metadataTScope;
@@ -169,7 +169,7 @@ namespace ecologylab.semantics.metametadata
 
             try
             {
-                repo = (MetaMetadataRepository)mmdTScope.deserialize(filename);
+                repo = (MetaMetadataRepository)mmdTScope.Deserialize(filename, StringFormat.Xml);
                 repo.metadataTScope = metadataTScope;
                 repo.file = filename;
                 repo.InitializeSuffixAndMimeDicts();
@@ -382,7 +382,7 @@ namespace ecologylab.semantics.metametadata
             {
                 foreach (MetaMetadata mmd in otherRepositoryByTagName.Values)
                 {
-                    mmd.Parent = this;
+                    //mmd.Parent = this; //TODO FIXME MMD Hierarchy still needs to extend ElementState !!!
                     if (mmd.PackageAttribute == null)
                         mmd.PackageAttribute = repository.packageAttribute;
                 }
@@ -399,8 +399,7 @@ namespace ecologylab.semantics.metametadata
         /// <param name="destDict"></param>
         /// <returns></returns>
         public bool MergeDictionaries<String, T>(Dictionary<String, T> srcDict, Dictionary<String, T> destDict)
-            where T : ElementState
-        {
+            where T :ElementState {
             if (destDict == null)
                 return false;
 

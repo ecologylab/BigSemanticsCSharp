@@ -8,48 +8,49 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization.types.element;
-using ecologylab.serialization;
+using Simpl.Serialization.Attributes;
+
+using Simpl.Serialization;
+using Simpl.Serialization.Types.Element;
 
 namespace ecologylab.semantics.metametadata 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	public class MetaMetadata : MetaMetadataCompositeField, Mappable
+	[SimplInherit]
+	public class MetaMetadata : MetaMetadataCompositeField, IMappable
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_composite]
+		[SimplComposite]
 		private MetaMetadataSelector selector;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[xml_tag("package")]
-		[simpl_scalar]
+		[SimplTag("package")]
+		[SimplScalar]
 		private String packageAttribute;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Boolean dontGenerateClass;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_collection("mixins")]
-		[simpl_nowrap]
+		[SimplCollection("mixins")]
+		[SimplNoWrap]
 		private List<String> mixins;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String collectionOf;
 
 		public MetaMetadata()

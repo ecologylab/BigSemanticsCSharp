@@ -8,12 +8,14 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization;
-using ecologylab.serialization.types.element;
+using Simpl.Fundamental.Generic;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization;
+using Simpl.Serialization.Types;
+using Simpl.Serialization.Types.Element;
 using ecologylab.semantics.metadata;
-using ecologylab.generic;
-using ecologylab.serialization.types;
+
+
 using System.Text.RegularExpressions;
 
 namespace ecologylab.semantics.metametadata 
@@ -21,8 +23,8 @@ namespace ecologylab.semantics.metametadata
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
-	public class MetaMetadataField : ElementState, Mappable, IEnumerable<MetaMetadataField>
+	[SimplInherit]
+	public class MetaMetadataField : ElementState, IMappable, IEnumerable<MetaMetadataField>
     {
         #region Variables
 
@@ -32,100 +34,100 @@ namespace ecologylab.semantics.metametadata
         /// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String name;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String comment;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String tag;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String xpath;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String contextNode;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[xml_tag("extends")]
-		[simpl_scalar]
+		[SimplTag("extends")]
+		[SimplScalar]
 		protected String extendsAttribute;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_map]
-		[simpl_classes(new Type[] { typeof(MetaMetadataField), typeof(MetaMetadataScalarField), typeof(MetaMetadataCompositeField), typeof(MetaMetadataCollectionField) })]
-		[simpl_nowrap]
+		[SimplMap]
+		[SimplClasses(new Type[] { typeof(MetaMetadataField), typeof(MetaMetadataScalarField), typeof(MetaMetadataCompositeField), typeof(MetaMetadataCollectionField) })]
+		[SimplNoWrap]
 		protected DictionaryList<String, MetaMetadataField> kids;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Boolean hide;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Boolean alwaysShow;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String style;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Single layer;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String navigatesTo;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String shadows;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String label;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Boolean isFacet;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Boolean ignoreInTermVector;
 
         protected MetadataClassDescriptor metadataClassDescriptor;
@@ -283,8 +285,8 @@ namespace ecologylab.semantics.metametadata
                         if (scalar.Filter != null)
                         {
                             MetadataFieldDescriptor fd = scalar.MetadataFieldDescriptor;
-                            fd.RegexPattern = scalar.Filter.RegexPattern;
-                            fd.RegexReplacement = scalar.Filter.Replace;
+                            //fd.RegexPattern = scalar.Filter.RegexPattern;
+                            //fd.RegexReplacement = scalar.Filter.Replace;
                         }
                     }
 
@@ -315,7 +317,7 @@ namespace ecologylab.semantics.metametadata
         protected virtual bool bindMetadataFieldDescriptor(TranslationScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
         {
             String fieldName = this.GetFieldNameInCamelCase(false);// TODO -- is this the correct tag?
-            MetadataFieldDescriptor = (MetadataFieldDescriptor)metadataClassDescriptor.getFieldDescriptorByFieldName(fieldName);
+            MetadataFieldDescriptor = (MetadataFieldDescriptor)metadataClassDescriptor.GetFieldDescriptorByFieldName(fieldName);
 
             if (MetadataFieldDescriptor != null)
             {
@@ -338,7 +340,7 @@ namespace ecologylab.semantics.metametadata
             String rst = _capFieldNameInJava;
             if (rst == null)
             {
-                rst = XMLTools.CamelCaseFromXMLElementName(Name, true);
+                rst = "";//TODO FIXME XMLTools.CamelCaseFromXMLElementName(Name, true);
                 _capFieldNameInJava = rst;
             }
             return _capFieldNameInJava;
@@ -352,7 +354,7 @@ namespace ecologylab.semantics.metametadata
             String rst = _fieldNameInJava;
             if (rst == null)
             {
-                rst = XMLTools.FieldNameFromElementName(this.Name);
+                rst = "";//TODO FIXME XMLTools.FieldNameFromElementName(this.Name);
                 _fieldNameInJava = rst;
             }
             return _fieldNameInJava;
@@ -390,11 +392,11 @@ namespace ecologylab.semantics.metametadata
 
         internal void InheritNonDefaultAttributes(MetaMetadataField inheritFrom)
         {
-            ClassDescriptor classDescriptor = ClassDescriptor;
+            ClassDescriptor classDescriptor = null;// = ClassDescriptor;
 
             foreach (FieldDescriptor fieldDescriptor in classDescriptor.AttributeFieldDescriptors)
             {
-                ScalarType scalarType = fieldDescriptor.GetScalarType();
+                ScalarType scalarType = null;//TODO FIXME fieldDescriptor.GetScalarType();
                 try
                 {
                     if (scalarType != null && scalarType.IsDefaultValue(fieldDescriptor.Field, this)
@@ -408,7 +410,7 @@ namespace ecologylab.semantics.metametadata
                 catch (Exception e)
                 {
                     // TODO Auto-generated catch block
-                    Console.WriteLine("inherit\t" + this.Name + "." + fieldDescriptor.FieldName + " Failed, ignore it.\n" + e);
+                    Console.WriteLine("inherit\t" + this.Name + "." + fieldDescriptor.Name + " Failed, ignore it.\n" + e);
                 }
             }
 
@@ -528,7 +530,7 @@ namespace ecologylab.semantics.metametadata
         }
 
         #endregion
-        public Object key()
+        public object Key()
 		{
             return name;
 		}

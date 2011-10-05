@@ -8,22 +8,22 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
+using Simpl.Serialization.Attributes;
 
 namespace ecologylab.semantics.actions 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[simpl_inherit]
+	[SimplInherit]
     public class NestedSemanticAction<IC, SAH> : SemanticAction<IC, SAH>
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_nowrap]
-		[simpl_collection]
-		[simpl_scope("semantic_action_translation_scope")]
+		[SimplNoWrap]
+		[SimplCollection]
+		[SimplScope("semantic_action_translation_scope")]
         private List<SemanticAction<IC, SAH>> nestedSemanticActionList;
 
 		public NestedSemanticAction()

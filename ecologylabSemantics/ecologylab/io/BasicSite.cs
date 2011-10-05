@@ -8,34 +8,35 @@
 
 using System;
 using System.Collections.Generic;
-using ecologylab.attributes;
-using ecologylab.serialization;
-using ecologylab.serialization.types.element;
+using Simpl.Serialization.Attributes;
+using Simpl.Serialization;
+using Simpl.Serialization.Types.Element;
+
 
 namespace ecologylab.io 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	[xml_tag("site")]
-	public class BasicSite : ElementState, Mappable
+	[SimplTag("site")]
+	public class BasicSite : ElementState, IMappable
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private String domain;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Single minDownloadInterval;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[simpl_scalar]
+		[SimplScalar]
 		private Boolean ignoreSemanticBoost;
 
 		public BasicSite()
@@ -59,7 +60,7 @@ namespace ecologylab.io
 			set{ignoreSemanticBoost = value;}
 		}
 
-		public Object key()
+		public object Key()
 		{
             return domain;
 		}
