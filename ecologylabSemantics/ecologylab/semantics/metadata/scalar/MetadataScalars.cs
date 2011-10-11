@@ -67,6 +67,20 @@ namespace ecologylab.semantics.metadata.scalar
         {}
 
     }
+    public class MetadataFloat : MetadataScalarBase<float>
+    {
+        public MetadataFloat(){}
+        public MetadataFloat(object value):base(value)
+        {}
+
+    }
+    public class MetadataDouble: MetadataScalarBase<double>
+    {
+        public MetadataDouble(){}
+        public MetadataDouble(object value):base(value)
+        {}
+
+    }
     public class MetadataParsedURL : MetadataScalarBase<ParsedUri>
     {
         public MetadataParsedURL(){}

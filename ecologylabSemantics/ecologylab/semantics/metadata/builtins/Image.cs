@@ -24,7 +24,7 @@ namespace ecologylab.semantics.metadata.builtins
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[mm_name("local_location")]
+		[MmName("local_location")]
 		[SimplScalar]
 		private MetadataFile localLocation;
 

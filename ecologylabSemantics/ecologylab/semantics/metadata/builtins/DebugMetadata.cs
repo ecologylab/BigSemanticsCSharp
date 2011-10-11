@@ -25,7 +25,7 @@ namespace ecologylab.semantics.metadata.builtins
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
 		[SimplScalar]
-		[mm_name("new_term_vector")]
+		[MmName("new_term_vector")]
 		private MetadataStringBuilder newTermVector;
 
 		public DebugMetadata()

@@ -40,7 +40,7 @@ namespace ecologylab.semantics.metadata
 		/// </summary>
 		[semantics_mixin]
 		[SimplCollection("mixins")]
-		[mm_name("mixins")]
+		[MmName("mixins")]
 		private List<Metadata> mixins;
 
         private MetaMetadataCompositeField metaMetadata;

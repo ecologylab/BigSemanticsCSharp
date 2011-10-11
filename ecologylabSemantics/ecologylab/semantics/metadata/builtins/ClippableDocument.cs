@@ -30,7 +30,7 @@ namespace ecologylab.semantics.metadata.builtins
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[mm_name("caption")]
+		[MmName("caption")]
 		[SimplScalar]
 		private MetadataString caption;
 

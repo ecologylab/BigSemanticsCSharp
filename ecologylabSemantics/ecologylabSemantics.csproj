@@ -75,10 +75,12 @@
     <Compile Include="ecologylab\semantics\metadata\builtins\ClippableDocument.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\ClippableMetadata.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Clipping.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\CompoundDocument.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\DebugMetadata.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Document.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Entity.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Image.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\MetadataBuiltinsTranslationScope.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Surrogate.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Text.cs" />
     <Compile Include="ecologylab\semantics\metadata\DocumentParserTagNames.cs" />
@@ -86,7 +88,7 @@
     <Compile Include="ecologylab\semantics\metadata\MetadataClassDescriptor.cs" />
     <Compile Include="ecologylab\semantics\metadata\MetadataDeserializationHookStrategy.cs" />
     <Compile Include="ecologylab\semantics\metadata\MetadataFieldDescriptor.cs" />
-    <Compile Include="ecologylab\semantics\metadata\mm_name.cs" />
+    <Compile Include="ecologylab\semantics\metadata\MmName.cs" />
     <Compile Include="ecologylab\semantics\metadata\scalar\MetadataScalars.cs" />
     <Compile Include="ecologylab\semantics\metadata\scalar\types\MetadataScalarScalarType.cs" />
     <Compile Include="ecologylab\semantics\metadata\semantics_mixin.cs" />

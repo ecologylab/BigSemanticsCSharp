@@ -24,14 +24,14 @@ namespace ecologylab.semantics.metadata.builtins
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[mm_name("location")]
+		[MmName("location")]
 		[SimplScalar]
 		private MetadataParsedURL location;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[mm_name("title")]
+		[MmName("title")]
 		[SimplScalar]
         [SimplCompositeAsScalar]
 		private MetadataString title;
@@ -39,7 +39,7 @@ namespace ecologylab.semantics.metadata.builtins
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[mm_name("description")]
+		[MmName("description")]
 		[SimplScalar]
 		private MetadataString description;
 
@@ -53,18 +53,18 @@ namespace ecologylab.semantics.metadata.builtins
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[mm_name("generation")]
+		[MmName("generation")]
 		[SimplScalar]
 		private MetadataInteger generation;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[mm_name("page_structure")]
+		[MmName("page_structure")]
 		[SimplScalar]
 		private MetadataString pageStructure;
 
-        [mm_name("favicon")]
+        [MmName("favicon")]
         [SimplScalar]
         private MetadataParsedURL favicon;
 

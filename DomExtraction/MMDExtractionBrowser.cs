@@ -17,6 +17,7 @@ using ecologylab.semantics.metadata.scalar.types;
 
 using System.Threading.Tasks;
 using System.IO;
+using ecologylab.semantics.generated.library.wikipedia;
 
 
 namespace DomExtraction
@@ -65,7 +66,7 @@ namespace DomExtraction
             MetadataScalarScalarType.init();
             TranslationScope mmdTScope = MetaMetadataTranslationScope.get();
 
-            metadataTScope = GeneratedMetadataTranslations.Get();
+            metadataTScope = RepositoryMetadataTranslationScope.Get();
 
 
             const string testFile = @"ecologylab\ecologylabSemantics\repository\";
