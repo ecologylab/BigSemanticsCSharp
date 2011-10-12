@@ -24,9 +24,9 @@ namespace ecologylab.semantics.metadata.builtins
       typeof(Text),
     };
 
-    public static TranslationScope Get()
+    public static SimplTypesScope Get()
     {
-      return TranslationScope.Get(NAME, Translations);
+      return SimplTypesScope.Get(NAME, Translations);
     }
   }
 }

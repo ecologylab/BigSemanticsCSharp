@@ -154,7 +154,7 @@ namespace ecologylab.semantics.metametadata
             return this;
         }
 
-        internal override bool GetClassAndBindDescriptors(TranslationScope metadataTScope)
+        internal override bool GetClassAndBindDescriptors(SimplTypesScope metadataTScope)
         {
             Type metadataClass = GetMetadataClass(metadataTScope);
             if (metadataClass == null)

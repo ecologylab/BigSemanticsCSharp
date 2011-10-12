@@ -226,7 +226,7 @@ namespace ecologylab.semantics.metametadata
 
         #region binders
 
-        internal virtual bool GetClassAndBindDescriptors(TranslationScope metadataTScope)
+        internal virtual bool GetClassAndBindDescriptors(SimplTypesScope metadataTScope)
         {
             return true;
         }
@@ -241,7 +241,7 @@ namespace ecologylab.semantics.metametadata
 	     * @return A map of FieldDescriptors, with the field names as key, but with the mixins field
 	     *         removed.
 	     */
-	    protected bool BindClassDescriptor(Type metadataClass, TranslationScope metadataTScope)
+	    protected bool BindClassDescriptor(Type metadataClass, SimplTypesScope metadataTScope)
 	    {
 		    MetadataClassDescriptor metadataClassDescriptor = this.metadataClassDescriptor;
 		    if (metadataClassDescriptor == null)
@@ -266,7 +266,7 @@ namespace ecologylab.semantics.metametadata
             return true;
 	    }
 
-        private void BindMetadataFieldDescriptors(TranslationScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
+        private void BindMetadataFieldDescriptors(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
         {
             if (Kids == null && _bindFieldDescriptorsFinished)
                 return;
@@ -314,7 +314,7 @@ namespace ecologylab.semantics.metametadata
             return kids != null && kids.Count > 0;
         }
 
-        protected virtual bool bindMetadataFieldDescriptor(TranslationScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
+        protected virtual bool bindMetadataFieldDescriptor(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
         {
             String fieldName = this.GetFieldNameInCamelCase(false);// TODO -- is this the correct tag?
             MetadataFieldDescriptor = (MetadataFieldDescriptor)metadataClassDescriptor.GetFieldDescriptorByFieldName(fieldName);
@@ -362,7 +362,7 @@ namespace ecologylab.semantics.metametadata
 
         #endregion
 
-        internal Type GetMetadataClass(TranslationScope metadataTScope)
+        internal Type GetMetadataClass(SimplTypesScope metadataTScope)
         {
             Type result = metadataClass;
 

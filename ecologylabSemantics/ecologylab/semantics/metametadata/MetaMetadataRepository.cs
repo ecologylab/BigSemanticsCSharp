@@ -124,7 +124,7 @@ namespace ecologylab.semantics.metametadata
 		[SimplMap("site")]
 		private Dictionary<String, SemanticsSite> sites;
 
-        private TranslationScope metadataTScope;
+        private SimplTypesScope metadataTScope;
 
         private String defaultUserAgentString = null;
 
@@ -136,7 +136,7 @@ namespace ecologylab.semantics.metametadata
 
         }
 
-        public static MetaMetadataRepository ReadDirectoryRecursively(String path, TranslationScope mmdTScope, TranslationScope metadataTScope)
+        public static MetaMetadataRepository ReadDirectoryRecursively(String path, SimplTypesScope mmdTScope, SimplTypesScope metadataTScope)
         {
             MetaMetadataRepository repo = new MetaMetadataRepository();
             
@@ -162,7 +162,7 @@ namespace ecologylab.semantics.metametadata
             return repo;
         }
 
-        public static MetaMetadataRepository ReadRepository(String filename, TranslationScope mmdTScope, TranslationScope metadataTScope)
+        public static MetaMetadataRepository ReadRepository(String filename, SimplTypesScope mmdTScope, SimplTypesScope metadataTScope)
         {
             MetaMetadataRepository repo = null;
             //Console.WriteLine("MetaMetadataRepository Reading: " + filename);
@@ -191,7 +191,7 @@ namespace ecologylab.semantics.metametadata
 	     * 
 	     * @param metadataTScope
 	     */
-	    public void BindMetadataClassDescriptorsToMetaMetadata(TranslationScope metadataTScope)
+	    public void BindMetadataClassDescriptorsToMetaMetadata(SimplTypesScope metadataTScope)
 	    {
 		    this.metadataTScope = metadataTScope;
 		    InitializeDefaultUserAgent();

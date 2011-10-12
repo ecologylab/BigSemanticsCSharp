@@ -69,11 +69,11 @@ namespace ecologylab.semantics.metametadata
             typeof(SemanticAction<InfoCollector, SemanticActionHandler>)
         };
 
-        public static TranslationScope get()
+        public static SimplTypesScope get()
         {
-            TranslationScope semanticActionScope    = TranslationScope.Get("semantic_action_translation_scope", semanticActionClasses);
-            TranslationScope conditionScope         = TranslationScope.Get("condition_scope", conditionClasses);
-            TranslationScope mmdScope               = TranslationScope.Get("meta_metadata", translations);
+            SimplTypesScope semanticActionScope    = SimplTypesScope.Get("semantic_action_translation_scope", semanticActionClasses);
+            SimplTypesScope conditionScope         = SimplTypesScope.Get("condition_scope", conditionClasses);
+            SimplTypesScope mmdScope               = SimplTypesScope.Get("meta_metadata", translations);
             mmdScope.AddTranslations(semanticActionScope);
             mmdScope.AddTranslations(conditionScope);
             return mmdScope;

@@ -128,7 +128,7 @@ namespace ecologylab.semantics.metametadata
 		    //composite.setPromoteChildren(this.shouldPromoteChildren());
 	    }*/
 
-        protected override bool bindMetadataFieldDescriptor(TranslationScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
+        protected override bool bindMetadataFieldDescriptor(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
         {
             String fieldName = this.GetFieldNameInCamelCase(false);
             MetadataFieldDescriptor metadataFieldDescriptor = (MetadataFieldDescriptor)metadataClassDescriptor.GetFieldDescriptorByFieldName(fieldName);
@@ -145,7 +145,7 @@ namespace ecologylab.semantics.metametadata
             return (metadataFieldDescriptor != null);
         }
 
-        internal override bool GetClassAndBindDescriptors(TranslationScope metadataTScope)
+        internal override bool GetClassAndBindDescriptors(SimplTypesScope metadataTScope)
         {
             return GetChildComposite().GetClassAndBindDescriptors(metadataTScope);
         }

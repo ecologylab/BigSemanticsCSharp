@@ -25,7 +25,7 @@ namespace DomExtraction
     public class MMDExtractionBrowser
     {
 
-        TranslationScope metadataTScope;
+        SimplTypesScope metadataTScope;
         //String mmdJson;
         String mmdDomHelperJSString;
 
@@ -64,7 +64,7 @@ namespace DomExtraction
         public void InitRepo()
         {
             MetadataScalarScalarType.init();
-            TranslationScope mmdTScope = MetaMetadataTranslationScope.get();
+            SimplTypesScope mmdTScope = MetaMetadataTranslationScope.get();
 
             metadataTScope = RepositoryMetadataTranslationScope.Get();
 
@@ -113,7 +113,7 @@ namespace DomExtraction
             {
                 StringBuilder mmdJSON = new StringBuilder();
                 mmdJSON.Append("mmd = ");
-                ClassDescriptor.Serialize(mmd, StringFormat.Json, null);
+                SimplTypesScope.Serialize(mmd, StringFormat.Json, null);
                 //mmd.serialize(mmdJSON, null);
                 mmdJSON.Append(";");
                 result = mmdJSON.ToString();
