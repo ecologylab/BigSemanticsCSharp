@@ -45,6 +45,7 @@ namespace DomExtraction
 
         private void GetMetadataButton_Click(object sender, RoutedEventArgs e)
         {
+            //InitBrowser();
             DoStuff();
         }
 

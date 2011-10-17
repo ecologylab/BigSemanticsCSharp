@@ -16,7 +16,7 @@ namespace ecologylab.semantics.actions
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	[SimplInherit]
-    public class NestedSemanticAction<IC, SAH> : SemanticAction<IC, SAH>
+    public class NestedSemanticAction : SemanticAction
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -24,12 +24,12 @@ namespace ecologylab.semantics.actions
 		[SimplNoWrap]
 		[SimplCollection]
 		[SimplScope("semantic_action_translation_scope")]
-        private List<SemanticAction<IC, SAH>> nestedSemanticActionList;
+        private List<SemanticAction> nestedSemanticActionList;
 
 		public NestedSemanticAction()
 		{ }
 
-        public List<SemanticAction<IC, SAH>> NestedSemanticActionList
+        public List<SemanticAction> NestedSemanticActionList
 		{
 			get{return nestedSemanticActionList;}
 			set{nestedSemanticActionList = value;}

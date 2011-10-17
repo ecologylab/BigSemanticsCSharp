@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Simpl.Serialization.Attributes;
 using Simpl.Serialization;
 using System.Reflection;
+using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata 
 {
@@ -42,7 +43,8 @@ namespace ecologylab.semantics.metadata
 			set{mmName = value;}
 		}
 
-        private String DeriveMmName()
+
+	    private String DeriveMmName()
         {
             String result	= null;
 		

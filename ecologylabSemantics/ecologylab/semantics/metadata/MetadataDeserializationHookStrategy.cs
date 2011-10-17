@@ -44,7 +44,7 @@ namespace ecologylab.semantics.metadata
 
                     MetaMetadataNestedField currentMM = _currentMMstack.Peek();
                     MetaMetadataNestedField childMMNested = (MetaMetadataNestedField)currentMM.LookupChild(mmName);
-                    MetaMetadataCompositeField childMMComposite = childMMNested.getMetaMetadataCompositeField();
+                    MetaMetadataCompositeField childMMComposite = childMMNested.GetMetaMetadataCompositeField();
                     deserializedMetadata.MetaMetadata = childMMComposite;
                     _currentMMstack.Push(childMMComposite);
                 }
@@ -56,36 +56,36 @@ namespace ecologylab.semantics.metadata
             if (es is Metadata)
                 _currentMMstack.Pop();
         }
-
-        private bool bindMetaMetadataToMetadata(MetaMetadataField deserializationMM, MetaMetadataField originalMM)
-        {
-            if (deserializationMM != null) // should be always
-            {
-                MetadataClassDescriptor originalClassDescriptor = originalMM.MetadataClassDescriptor;
-                MetadataClassDescriptor deserializationClassDescriptor = deserializationMM.MetadataClassDescriptor;
-
-                // quick fix for a NullPointerException for RSS. originalClassDescriptor can be null because
-                // it might be a meta-metadata that does not generate metadata class, e.g. xml
-                if (originalClassDescriptor == null)
-                    return true; // use the one from deserialization
-
-                bool sameMetadataSubclass = originalClassDescriptor.Equals(deserializationClassDescriptor);
-                // if they have the same metadataClassDescriptor, they can be of the same type, or one
-                // of them is using "type=" attribute.
-                bool useMmdFromDeserialization = sameMetadataSubclass
-                        && (deserializationMM.Type != null);
-                if (!useMmdFromDeserialization && !sameMetadataSubclass)
-                    // if they have different metadataClassDescriptor, need to choose the more specific one
-                    useMmdFromDeserialization = originalClassDescriptor.DescribedClass.IsAssignableFrom(
-                            deserializationClassDescriptor.DescribedClass);
-                return useMmdFromDeserialization;
-            }
-            else
-            {
-                System.Console.WriteLine("No meta-metadata in root after direct binding :-(");
-                return false;
-            }
-        }
+//
+//        private bool bindMetaMetadataToMetadata(MetaMetadataField deserializationMM, MetaMetadataField originalMM)
+//        {
+//            if (deserializationMM != null) // should be always
+//            {
+//                MetadataClassDescriptor originalClassDescriptor = originalMM.MetadataClassDescriptor;
+//                MetadataClassDescriptor deserializationClassDescriptor = deserializationMM.MetadataClassDescriptor;
+//
+//                // quick fix for a NullPointerException for RSS. originalClassDescriptor can be null because
+//                // it might be a meta-metadata that does not generate metadata class, e.g. xml
+//                if (originalClassDescriptor == null)
+//                    return true; // use the one from deserialization
+//
+//                bool sameMetadataSubclass = originalClassDescriptor.Equals(deserializationClassDescriptor);
+//                // if they have the same metadataClassDescriptor, they can be of the same type, or one
+//                // of them is using "type=" attribute.
+//                bool useMmdFromDeserialization = sameMetadataSubclass
+//                        && (deserializationMM.Type != null);
+//                if (!useMmdFromDeserialization && !sameMetadataSubclass)
+//                    // if they have different metadataClassDescriptor, need to choose the more specific one
+//                    useMmdFromDeserialization = originalClassDescriptor.DescribedClass.IsAssignableFrom(
+//                            deserializationClassDescriptor.DescribedClass);
+//                return useMmdFromDeserialization;
+//            }
+//            else
+//            {
+//                System.Console.WriteLine("No meta-metadata in root after direct binding :-(");
+//                return false;
+//            }
+//        }
 
         public void DeserializationPreHook(object o, FieldDescriptor fd)
         {

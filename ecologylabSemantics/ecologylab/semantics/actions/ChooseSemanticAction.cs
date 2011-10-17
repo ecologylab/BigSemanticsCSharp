@@ -17,31 +17,31 @@ namespace ecologylab.semantics.actions
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("choose")]
-    public class ChooseSemanticAction<IC, SAH> : SemanticAction<IC, SAH>
+    public class ChooseSemanticAction : SemanticAction
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
 		[SimplNoWrap]
 		[SimplCollection("case")]
-        private List<IfSemanticAction<IC, SAH>> cases;
+        private List<IfSemanticAction> cases;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
 		[SimplComposite]
-        private Otherwise<IC, SAH> otherwise;
+        private Otherwise otherwise;
 
 		public ChooseSemanticAction()
 		{ }
 
-        public List<IfSemanticAction<IC, SAH>> Cases
+        public List<IfSemanticAction> Cases
 		{
 			get{return cases;}
 			set{cases = value;}
 		}
 
-		public Otherwise<IC, SAH> Otherwise
+		public Otherwise Otherwise
 		{
 			get{return otherwise;}
 			set{otherwise = value;}

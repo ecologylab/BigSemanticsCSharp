@@ -17,7 +17,7 @@ namespace ecologylab.semantics.actions
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("if")]
-    public class IfSemanticAction<IC, SAH> : NestedSemanticAction<IC, SAH> 
+    public class IfSemanticAction : NestedSemanticAction 
 	{
 		public IfSemanticAction()
 		{ }

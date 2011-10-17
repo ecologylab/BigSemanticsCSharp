@@ -44,6 +44,30 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DocumentationFile>bin\Debug\AwesomiumSharp.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\Release\AwesomiumSharp.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -166,14 +190,16 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>XCOPY ..\..\awesomium\bin\release\avformat-52.dll "$(TargetDir)" /i /y
-XCOPY ..\..\awesomium\bin\release\avutil-50.dll "$(TargetDir)" /i /y
-XCOPY ..\..\awesomium\bin\release\Awesomium.dll "$(TargetDir)" /i /y
-XCOPY ..\..\awesomium\bin\release\AwesomiumProcess.exe "$(TargetDir)" /i /y
-XCOPY ..\..\awesomium\bin\Release\locales\en-US.dll "$(TargetDir)locales\" /i /y
+    <PostBuildEvent>echo "ProjectDir:"
+echo "\t$(TargetDir)"
+XCOPY $(SolutionDir)AwesomiumSharp\awesomium\bin\release\avformat-52.dll "$(TargetDir)" /i /y
+XCOPY $(SolutionDir)AwesomiumSharp\awesomium\bin\release\avutil-50.dll "$(TargetDir)" /i /y
+XCOPY $(SolutionDir)AwesomiumSharp\awesomium\bin\release\Awesomium.dll "$(TargetDir)" /i /y
+XCOPY $(SolutionDir)AwesomiumSharp\awesomium\bin\release\AwesomiumProcess.exe "$(TargetDir)" /i /y
+XCOPY $(SolutionDir)AwesomiumSharp\awesomium\bin\Release\locales\en-US.dll "$(TargetDir)locales\" /i /y
 
-XCOPY ..\..\awesomium\bin\debug\Awesomium_d.dll "$(TargetDir)" /i /y
-XCOPY ..\..\awesomium\bin\debug\AwesomiumProcess_d.exe "$(TargetDir)" /i /y
+XCOPY $(SolutionDir)AwesomiumSharp\awesomium\bin\debug\Awesomium_d.dll "$(TargetDir)" /i /y
+XCOPY $(SolutionDir)AwesomiumSharp\awesomium\bin\debug\AwesomiumProcess_d.exe "$(TargetDir)" /i /y
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

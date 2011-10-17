@@ -17,7 +17,8 @@ namespace ecologylab.semantics.actions
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	public class SemanticAction<IC, SAH> 	{
+	public class SemanticAction
+	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>

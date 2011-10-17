@@ -8,11 +8,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
 using Simpl.Fundamental.Generic;
 using Simpl.Serialization.Attributes;
+using Simpl.Serialization.Types;
 using ecologylab.semantics.metadata;
 
 using Simpl.Serialization;
+using ecologylab.semantics.metadata.scalar.types;
 
 namespace ecologylab.semantics.metametadata 
 {
@@ -42,7 +46,14 @@ namespace ecologylab.semantics.metametadata
 		[SimplScalar]
 		private Boolean childEntity;
 
-		/// <summary>
+        [SimplScalar] 
+        [MmDontInherit]
+        private String   childExtends;
+
+
+	    private MetadataScalarType	childScalarType;
+        
+        /// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
 		[SimplScalar]
@@ -64,8 +75,52 @@ namespace ecologylab.semantics.metametadata
                 return null;
         }
 
+	    protected override void InheritMetaMetadataHelper()
+	    {
+            /*
+         * the childComposite should hide all complexity between collection fields and composite fields,
+         * through hooks when necessary.
+         */
+            int typeCode = this. GetFieldType();
+            switch (typeCode)
+            {
+                case FieldTypes.CollectionElement:
+                    {
+                        // prepare childComposite: possibly new name, type, extends, tag and inheritedField
+                        MetaMetadataCompositeField childComposite = this.GetChildComposite();
+                        if (childComposite.Name == UNRESOLVED_NAME)
+                            childComposite.Name = (childType ?? Name);
+                        childComposite.Type = childType; // here not using setter to reduce unnecessary re-assignment of this.childType
+                        childComposite.ExtendsAttribute = ChildExtends;
+                        childComposite.Tag = childTag;
+                        childComposite.Repository = Repository;
+                        childComposite.PackageName = PackageName;
 
-		public String ChildTag
+                        MetaMetadataCollectionField inheritedField = (MetaMetadataCollectionField)InheritedField;
+                        if (inheritedField != null)
+                            childComposite.InheritedField = inheritedField.GetChildComposite();
+                        childComposite.DeclaringMmd = DeclaringMmd;
+                        childComposite.MmdScope = MmdScope;
+
+                        childComposite.InheritMetaMetadata(); // inheritedMmd might be inferred from type/extends
+
+                        InheritedMmd = childComposite.InheritedMmd;
+                        MmdScope = childComposite.MmdScope;
+                        break;
+                    }
+                case FieldTypes.CollectionScalar:
+                    {
+                        MetaMetadataField inheritedField = InheritedField;
+                        if (inheritedField != null)
+                            InheritAttributes(inheritedField);
+                        break;
+                    }
+            }
+	    }
+
+
+	    
+	    public String ChildTag
 		{
 			get{return childTag;}
 			set{childTag = value;}
@@ -95,7 +150,19 @@ namespace ecologylab.semantics.metametadata
             set { parseAsHypertext = value; }
         }
 
-        public override MetaMetadataCompositeField getMetaMetadataCompositeField()
+	    public string ChildExtends
+	    {
+	        get { return childExtends; }
+	        set { childExtends = value; }
+	    }
+
+	    public MetadataScalarType ChildScalarType
+	    {
+	        get { return childScalarType; }
+	        set { childScalarType = value; }
+	    }
+
+	    public override MetaMetadataCompositeField GetMetaMetadataCompositeField()
         {
             return GetChildComposite();
         }
@@ -128,26 +195,72 @@ namespace ecologylab.semantics.metametadata
 		    //composite.setPromoteChildren(this.shouldPromoteChildren());
 	    }*/
 
-        protected override bool bindMetadataFieldDescriptor(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
-        {
-            String fieldName = this.GetFieldNameInCamelCase(false);
-            MetadataFieldDescriptor metadataFieldDescriptor = (MetadataFieldDescriptor)metadataClassDescriptor.GetFieldDescriptorByFieldName(fieldName);
-            // if we don't have a field, then this is a wrapped collection, so we need to get the wrapped
-            // field descriptor
-            if (metadataFieldDescriptor != null)
-            {
-                //if (metadataFieldDescriptor.Field == null)
-                //    metadataFieldDescriptor = (MetadataFieldDescriptor)metadataFieldDescriptor.WrappedFieldDescriptor;
+//        protected override bool bindMetadataFieldDescriptor(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
+//        {
+//            String fieldName = this.GetFieldNameInCamelCase(false);
+//            MetadataFieldDescriptor metadataFieldDescriptor = (MetadataFieldDescriptor)metadataClassDescriptor.GetFieldDescriptorByFieldName(fieldName);
+//            // if we don't have a field, then this is a wrapped collection, so we need to get the wrapped
+//            // field descriptor
+//            if (metadataFieldDescriptor != null)
+//            {
+//                //if (metadataFieldDescriptor.Field == null)
+//                //    metadataFieldDescriptor = (MetadataFieldDescriptor)metadataFieldDescriptor.WrappedFieldDescriptor;
+//
+//                this.MetadataFieldDescriptor = metadataFieldDescriptor;
+//            }
+//
+//            return (metadataFieldDescriptor != null);
+//        }
 
-                this.MetadataFieldDescriptor = metadataFieldDescriptor;
-            }
+	    public override string GetTypeName()
+	    {
+	        throw new NotImplementedException();
+	    }
 
-            return (metadataFieldDescriptor != null);
-        }
-
-        internal override bool GetClassAndBindDescriptors(SimplTypesScope metadataTScope)
+	    internal override bool GetClassAndBindDescriptors(SimplTypesScope metadataTScope)
         {
             return GetChildComposite().GetClassAndBindDescriptors(metadataTScope);
         }
 	}
+
+    internal class MetaMetadataClassDescriptor : ClassDescriptor
+    {
+        public MetaMetadataClassDescriptor(Type thatClass) : base(thatClass)
+        {
+        }
+
+        public MetaMetadataClassDescriptor(string tagName, string comment, string describedClassPackageName, string describedClassSimpleName, ClassDescriptor superClass, List<string> interfaces) : base(tagName, comment, describedClassPackageName, describedClassSimpleName, superClass, interfaces)
+        {
+        }
+    }
+
+    internal class MetaMetadataFieldDescriptor : FieldDescriptor
+    {
+
+        public bool IsInheritable { get; set; }
+        /**
+	     * Should this field be inherited in meta-metadata
+	     */
+
+        public MetaMetadataFieldDescriptor(ClassDescriptor declaringClassDescriptor, FieldInfo field, int annotationType) // String nameSpacePrefix
+	        : base(declaringClassDescriptor, field, annotationType)
+	    {
+		    if (field != null)
+		    {
+                IsInheritable = !field.IsDefined(typeof(MmDontInherit), false); //isAnnotationPresent(mm_dont_inherit.class);
+		    }
+		    else
+		    {
+			    IsInheritable				= true;
+		    }
+	    }
+	
+	    public MetaMetadataFieldDescriptor(ClassDescriptor baseClassDescriptor, FieldDescriptor wrappedFD, String wrapperTag) 
+        : base(baseClassDescriptor, wrappedFD, wrapperTag)
+	    {
+		    IsInheritable = true;
+	    }
+
+        
+    }
 }

@@ -17,7 +17,7 @@ namespace ecologylab.semantics.actions
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("get_field")]
-    public class GetFieldSemanticAction<IC, SAH> : SemanticAction<IC, SAH> 
+    public class GetFieldSemanticAction : SemanticAction 
 	{
 		public GetFieldSemanticAction()
 		{ }

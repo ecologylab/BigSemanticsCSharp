@@ -8,70 +8,96 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Simpl.Serialization.Attributes;
 
 using Simpl.Serialization;
 using Simpl.Serialization.Types.Element;
+using ecologylab.semantics.actions;
+using ecologylab.semantics.metadata;
 
 namespace ecologylab.semantics.metametadata 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
+	
 	[SimplInherit]
 	public class MetaMetadata : MetaMetadataCompositeField, IMappable
 	{
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplComposite]
-		private MetaMetadataSelector selector;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
+        [SimplScalar]
+	    protected string ormInheritanceStrategy;
+		
+        [SimplNoWrap]
+        [SimplCollection("selector")]
+		private List<MetaMetadataSelector> selectors;
+
 		[SimplTag("package")]
 		[SimplScalar]
-		private String packageAttribute;
+		private String packageName;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
 		[SimplScalar]
 		private Boolean dontGenerateClass;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplCollection("mixins")]
+        [SimplScalar]
+        private String parser;
+
+        [SimplCollection]
+        [SimplScope(SemanticActionTranslationScope.ScopeName)]
+	    private List<SemanticAction> beforeSemanticActions;
+
+        [SimplCollection]
+        [SimplScope(SemanticActionTranslationScope.ScopeName)]
+        private List<SemanticAction> semanticActions;
+
+        [SimplCollection]
+        [SimplScope(SemanticActionTranslationScope.ScopeName)]
+        private List<SemanticAction> afterSemanticActions;
+
+        [SimplScalar]
+        [MmDontInherit]
+	    private Boolean builtIn;
+
+        [SimplScalar]
+	    private RedirectHandling redirectHandling;
+
+        [SimplCollection("mixins")]
 		[SimplNoWrap]
 		private List<String> mixins;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
 		[SimplScalar]
 		private String collectionOf;
 
-		public MetaMetadata()
+	    [SimplCollection("url_generator")] 
+        [SimplNoWrap]
+        private List<UrlGenerator> urlGenerators;
+
+        [SimplMap("link_with")]
+        private Dictionary<String, LinkWith> linkWiths;
+
+        [SimplScalar]
+        [SimplHints(new Hint[] { Hint.XmlAttribute })]
+        private Visibility visibility;
+
+        private Dictionary<String, MetaMetadataField> naturalIds = new Dictionary<String, MetaMetadataField>();
+
+	    private FileInfo file;
+	    private SimplTypesScope localMetadataTranslationScope;
+
+
+	    public MetaMetadata()
 		{ }
 
         protected override string GetMetaMetadataTagToInheritFrom()
         {
-            return extendsAttribute ?? base.GetMetaMetadataTagToInheritFrom();
+            return ExtendsAttribute ?? base.GetMetaMetadataTagToInheritFrom();
         }
 
         #region Properties
-        public MetaMetadataSelector Selector
-        {
-            get { return selector ?? MetaMetadataSelector.NULL_SELECTOR; }
-            set { selector = value; }
-        }
 
-        public String PackageAttribute
+
+        public String PackageName
         {
-            get { return packageAttribute; }
-            set { packageAttribute = value; }
+            get { return packageName; }
+            set { packageName = value; }
         }
 
         public Boolean DontGenerateClass
@@ -91,6 +117,101 @@ namespace ecologylab.semantics.metametadata
             get { return collectionOf; }
             set { collectionOf = value; }
         }
-        #endregion
+
+	    /// <summary>
+	    /// missing java doc comments or could not find the source file.
+	    /// </summary>
+	    public List<MetaMetadataSelector> Selectors
+	    {
+	        get { return selectors; }
+	        set { selectors = value; }
+	    }
+
+        public Visibility Visibility
+	    {
+	        get { return visibility; }
+	        set { visibility = value; }
+	    }
+
+        public FileInfo File { get; set; }
+
+	    public Dictionary<string, MetaMetadataField> NaturalIds
+	    {
+	        get { return naturalIds; }
+	        set { naturalIds = value; }
+	    }
+
+	    #endregion
+
+	    object IMappable.Key()
+        {
+            return Name;
+        }
+
+		public bool IsDerivedFrom(MetaMetadata baseMmd)
+	    {
+		    MetaMetadata mmd = this;
+		    while (mmd != null)
+		    {
+                if (mmd == baseMmd)
+				    return true;
+			    mmd = mmd.InheritedMmd;
+		    }
+		    return false;
+	    }
+
+	    public new MetadataClassDescriptor BindMetadataClassDescriptor(SimplTypesScope metadataTScope)
+	    {
+            if (metadataClassDescriptor != null)
+                return metadataClassDescriptor;
+
+            // create a temporary local metadata translation scope
+            SimplTypesScope localMetadataTScope = SimplTypesScope.Get("mmd_local_tscope:" + Name,  metadataTScope );
+
+            // record the initial number of classes in the local translation scope
+	        if (localMetadataTScope.EntriesByClassName != null)
+	        {
+	            int initialLocalTScopeSize = localMetadataTScope.EntriesByClassName.Count;
+
+	            // do actual stuff ...
+	            base.BindMetadataClassDescriptor(localMetadataTScope);
+
+	            // if tag overlaps, or there are fields using classes not in metadataTScope, use localTScope
+	            MetadataClassDescriptor thisCd = this.MetadataClassDescriptor;
+	            if (thisCd != null)
+	            {
+	                MetadataClassDescriptor thatCd = (MetadataClassDescriptor)metadataTScope.GetClassDescriptorByTag(thisCd.TagName);
+	                if (thisCd != thatCd)
+	                {
+	                    localMetadataTScope.AddTranslation(thisCd);
+	                    this.localMetadataTranslationScope = localMetadataTScope;
+	                }
+	                else if (localMetadataTScope.EntriesByClassName.Count > initialLocalTScopeSize)
+	                    this.localMetadataTranslationScope = localMetadataTScope;
+	                else
+	                    this.localMetadataTranslationScope = metadataTScope;
+	            }
+
+	            // return the bound metadata class descriptor
+	            return thisCd;
+	        }
+	        return null;
+	    }
+	}
+
+    public enum RedirectHandling
+    {
+	    REDIRECT_USUAL,
+	    REDIRECT_FOLLOW_DONT_RESET_LOCATION,
+	    REDIRECT_FOLLOW_GET_NEW_MM,
+	
     }
+
+    public enum Visibility
+    {
+        GLOBAL,
+        PACKAGE,
+    }
+
+
 }

@@ -8,11 +8,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using Simpl.Fundamental.Collections;
+using Simpl.Fundamental.Generic;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization.Attributes;
 using Simpl.Serialization;
 using ecologylab.net;
 using ecologylab.semantics.connectors;
+using ecologylab.semantics.metadata.scalar.types;
 using ecologylab.textformat;
 using System.Text.RegularExpressions;
 using ecologylab.semantics.metadata;
@@ -24,37 +29,38 @@ namespace ecologylab.semantics.metametadata
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	public class MetaMetadataRepository 	{
+	public class MetaMetadataRepository : ElementState
+    {
 	    public static bool stopTheConsoleDumping = false;
 
         #region Locals
         private static String FIREFOX_3_6_4_AGENT_STRING			= "Mozilla/5.0 (Windows; U; Windows NT 6.1; ru; rv:1.9.2.4) Gecko/20100513 Firefox/3.6.4";
-	    private Dictionary<String, MetaMetadata>    
-            repositoryByClassName                       = new Dictionary<String, MetaMetadata>();
+	    private readonly Dictionary<String, MetaMetadata>    
+            _repositoryByClassName;
 
 	    /**
 	     * Repository with noAnchorNoQuery URL string as key.
 	     */
-	    private Dictionary<String, MetaMetadata>    
-            documentRepositoryByUrlStripped	            = new Dictionary<String, MetaMetadata>();
+	    private readonly Dictionary<String, MetaMetadata>    
+            _documentRepositoryByUrlStripped;
 
 	    /**
 	     * Repository with domain as key.
 	     */
-	    private Dictionary<String, MetaMetadata>    
-            documentRepositoryByDomain		            = new Dictionary<String, MetaMetadata>();
+	    private readonly Dictionary<String, MetaMetadata>    
+            _documentRepositoryByDomain;
 
 	    /**
 	     * Repository for ClippableDocument and its subclasses.
 	     */
-	    private Dictionary<String, MetaMetadata>    
-            clippableDocumentRepositoryByUrlStripped    = new Dictionary<String, MetaMetadata>();
+	    private readonly Dictionary<String, MetaMetadata>    
+            _clippableDocumentRepositoryByUrlStripped;
 
-	    private Dictionary<String, List<RepositoryPatternEntry>>	
-            documentRepositoryByPattern			        = new Dictionary<String, List<RepositoryPatternEntry>>();
+	    private readonly Dictionary<String, List<RepositoryPatternEntry>>	
+            _documentRepositoryByPattern;
 
-	    private Dictionary<String, List<RepositoryPatternEntry>>	
-            clippableDocumentRepositoryByPattern	    = new Dictionary<String, List<RepositoryPatternEntry>>();
+	    private readonly Dictionary<String, List<RepositoryPatternEntry>>	
+            _clippableDocumentRepositoryByPattern;
 
         /// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -67,7 +73,7 @@ namespace ecologylab.semantics.metametadata
 		/// </summary>
 		[SimplTag("package")]
 		[SimplScalar]
-		private String packageAttribute;
+		private String packageName;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -101,16 +107,19 @@ namespace ecologylab.semantics.metametadata
 		private List<CookieProcessing> cookieProcessors;
 
 		/// <summary>
-		/// missing java doc comments or could not find the source file.
+		/// The map from meta-metadata name (currently simple name, but might be extended to fully
+	    /// qualified name in the future) to meta-metadata objects. This collection is filled during the
+	    /// loading process.
 		/// </summary>
 		[SimplMap("meta_metadata")]
 		[SimplNoWrap]
-		private Dictionary<String, MetaMetadata> repositoryByTagName;
+		private Dictionary<String, MetaMetadata> _repositoryByName;
 
-        private Dictionary<String, MetaMetadata> repositoryByMime = new Dictionary<string,MetaMetadata>();
+        private Dictionary<String, MetaMetadata> _repositoryByMime = new Dictionary<string,MetaMetadata>();
 
-        private Dictionary<String, MetaMetadata> repositoryBySuffix = new Dictionary<string,MetaMetadata>();
+        private Dictionary<String, MetaMetadata> _repositoryBySuffix = new Dictionary<string,MetaMetadata>();
 
+        private Dictionary<string, MultiAncestorScope<MetaMetadata>> packageMmdScopes;
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
@@ -124,99 +133,89 @@ namespace ecologylab.semantics.metametadata
 		[SimplMap("site")]
 		private Dictionary<String, SemanticsSite> sites;
 
-        private SimplTypesScope metadataTScope;
+	    private String defaultUserAgentString = null;
 
-        private String defaultUserAgentString = null;
 
-        String file;
-        #endregion
+        public SimplTypesScope MetadataTScope { get; set; }
+
+        public string File { get; set; }
+
+        private static bool initializedTypes;
+
+
+	    #endregion
         
         public MetaMetadataRepository()
-		{ 
-
-        }
-
-        public static MetaMetadataRepository ReadDirectoryRecursively(String path, SimplTypesScope mmdTScope, SimplTypesScope metadataTScope)
         {
-            MetaMetadataRepository repo = new MetaMetadataRepository();
-            
-            Stack<string> stack = new Stack<string>();
-            stack.Push(path);
-            while(stack.Count > 0)
-            {
-                string dir = stack.Pop();
-                Console.WriteLine("Looking in : "  + dir);
-                String[] files = Directory.GetFiles(dir, "*.xml");
-                foreach (String file in files)
-                {
-                    MetaMetadataRepository thatRepo = ReadRepository(file, mmdTScope, metadataTScope);
-                    repo.IntegrateRepository(thatRepo);
-                }
-                foreach (String innerDir in Directory.GetDirectories(dir))
-                    if(!innerDir.Contains(".svn"))
-                        stack.Push(innerDir);
-            }
-
-            repo.BindMetadataClassDescriptorsToMetaMetadata(metadataTScope);
-
-            return repo;
+            _clippableDocumentRepositoryByPattern       = new Dictionary<String, List<RepositoryPatternEntry>>();
+            _documentRepositoryByPattern                = new Dictionary<String, List<RepositoryPatternEntry>>();
+            _clippableDocumentRepositoryByUrlStripped   = new Dictionary<String, MetaMetadata>();
+            _documentRepositoryByDomain                 = new Dictionary<String, MetaMetadata>();
+            _documentRepositoryByUrlStripped            = new Dictionary<String, MetaMetadata>();
+            _repositoryByClassName                      = new Dictionary<String, MetaMetadata>();
         }
 
-        public static MetaMetadataRepository ReadRepository(String filename, SimplTypesScope mmdTScope, SimplTypesScope metadataTScope)
-        {
-            MetaMetadataRepository repo = null;
-            //Console.WriteLine("MetaMetadataRepository Reading: " + filename);
-
-            try
-            {
-                repo = (MetaMetadataRepository)mmdTScope.Deserialize(filename, StringFormat.Xml);
-                repo.metadataTScope = metadataTScope;
-                repo.file = filename;
-                repo.InitializeSuffixAndMimeDicts();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Couldn't translate repository file: " + filename);
-                Console.WriteLine(e);
-            }
-
-            return repo;
-        }
-
-
-
-        /**
-	     * Recursively bind MetadataFieldDescriptors to all MetaMetadataFields. Perform other
-	     * initialization.
-	     * 
-	     * @param metadataTScope
-	     */
+        /// <summary>
+        /// 
+	    /// Recursively bind MetadataFieldDescriptors to all MetaMetadataFields. Perform other
+	    /// initialization.
+        /// </summary>
+        /// <param name="metadataTScope"></param>
 	    public void BindMetadataClassDescriptorsToMetaMetadata(SimplTypesScope metadataTScope)
 	    {
-		    this.metadataTScope = metadataTScope;
-		    InitializeDefaultUserAgent();
+		    this.MetadataTScope = metadataTScope;
 
-		    // findAndDeclareNestedMetaMetadata(metadataTScope);
-            List<MetaMetadata> nonBindingMetaMetadata = new List<MetaMetadata>();
+            TraverseAndInheritMetaMetadata();
 
-		    foreach (MetaMetadata metaMetadata in repositoryByTagName.Values)
+            // global metadata classes
+		    // use another copy because we may modify the scope during the process
+		    List<MetaMetadata> mmds = new   List<MetaMetadata>(_repositoryByName.Values);
+		    foreach (MetaMetadata mmd in  mmds)
 		    {
-			    metaMetadata.InheritMetaMetadata(this);
-			    bool binded = metaMetadata.GetClassAndBindDescriptors(metadataTScope);
-			    MetadataClassDescriptor metadataClassDescriptor = metaMetadata.MetadataClassDescriptor;
-                if (metaMetadata.Type == null && metadataClassDescriptor != null 
-                    && repositoryByClassName.ContainsKey(metadataClassDescriptor.DescribedClass.Name)) // don't put restatements of the same base type into
-																					    // *this* map
-				    repositoryByClassName.Add(metadataClassDescriptor.DescribedClass.Name, metaMetadata);
+			    MetadataClassDescriptor mcd = mmd.BindMetadataClassDescriptor(metadataTScope);
+			    if (mcd == null)
+			    {
+				    Debug.WriteLine("Cannot bind metadata class descriptor for " + mmd);
+				    this.RepositoryByName.Remove(mmd.Name);
+			    }
 		    }
-
-            foreach (MetaMetadata metaMetadata in nonBindingMetaMetadata)
-            {
-                repositoryByTagName.Remove(metaMetadata.Name);
-            }
+		
+		    // other initialization stuffs
+		    foreach (MetaMetadata mmd in RepositoryByName.Values)
+		    {
+			    MetadataClassDescriptor mcd = mmd.MetadataClassDescriptor;
+			    if (mcd != null)
+				    RepositoryByClassName.Put(mcd.DescribedClass.Name, mmd);
+			
+			    //mmd.setUpLinkWith(this); //Note Implement linking.
+		    }
 
 		    InitializeLocationBasedMaps();
 	    }
+
+
+	    private void TraverseAndInheritMetaMetadata()
+	    {
+	        if (_repositoryByName != null && _repositoryByName.Count > 0)
+		    {
+			    // make another copy because we may modify the collection (e.g. for adding inline definitions)
+			    foreach (MetaMetadata metaMetadata in _repositoryByName.Values)
+			    {
+				    metaMetadata.Repository = this;
+				    metaMetadata.InheritMetaMetadata();
+			    }
+		    }
+	    }
+
+	    public static void InitializeTypes()
+        {
+            if(!initializedTypes)
+            {
+                initializedTypes = true;
+                MetadataScalarType.init();
+                MetadataBuiltinsTranslationScope.Get();
+            }
+        }
 
         private void InitializeDefaultUserAgent()
         {
@@ -232,11 +231,11 @@ namespace ecologylab.semantics.metametadata
 	     */
 	    public void InitializeLocationBasedMaps()
 	    {
-		    foreach (MetaMetadata metaMetadata in repositoryByTagName.Values)
+		    foreach (MetaMetadata metaMetadata in _repositoryByName.Values)
 		    {
 			    // metaMetadata.inheritMetaMetadata(this);
 
-			    Type metadataClass = metaMetadata.GetMetadataClass(metadataTScope);
+			    Type metadataClass = metaMetadata.GetMetadataClass(MetadataTScope);
 			    if (metadataClass == null)
 			    {
                     Console.WriteLine("No metadata class found for metaMetadata: " + metaMetadata.Name);
@@ -248,13 +247,13 @@ namespace ecologylab.semantics.metametadata
 
 			    if (typeof(ClippableDocument).IsAssignableFrom(metadataClass))
 			    {
-				    repositoryByUrlStripped = clippableDocumentRepositoryByUrlStripped;
-				    repositoryByPattern = clippableDocumentRepositoryByPattern;
+				    repositoryByUrlStripped = _clippableDocumentRepositoryByUrlStripped;
+				    repositoryByPattern = _clippableDocumentRepositoryByPattern;
 			    }
 			    else if (typeof(Document).IsAssignableFrom(metadataClass))
 			    {
-				    repositoryByUrlStripped = documentRepositoryByUrlStripped;
-				    repositoryByPattern = documentRepositoryByPattern;
+				    repositoryByUrlStripped = _documentRepositoryByUrlStripped;
+				    repositoryByPattern = _documentRepositoryByPattern;
 			    }
 			    else
 				    continue;
@@ -263,7 +262,7 @@ namespace ecologylab.semantics.metametadata
 			    // if something is there, then we need to check to see if it has its cf pref set
 			    // if not, then if I am null then I win
 
-			    MetaMetadataSelector selector = metaMetadata.Selector;
+                MetaMetadataSelector selector = metaMetadata.Selectors[0];//Note: Needs to consider all selectors. 
                 ParsedUri purl = selector.UrlStripped;
 			    if (purl != null)
 			    {
@@ -301,7 +300,7 @@ namespace ecologylab.semantics.metametadata
 					    else
 					    {
 						    // domain only -- no pattern
-						    documentRepositoryByDomain.Add(domain, metaMetadata);
+						    _documentRepositoryByDomain.Add(domain, metaMetadata);
 					    }
 					}
 			    }
@@ -312,46 +311,47 @@ namespace ecologylab.semantics.metametadata
         /// <summary>
         /// This initalizes the map based on mime type and suffix.
         /// </summary>
-        private void InitializeSuffixAndMimeDicts()
+        public void InitializeSuffixAndMimeDicts()
         {
-            if (repositoryByTagName == null)
+            if (_repositoryByName == null)
 			    return;
 
-		    foreach (MetaMetadata metaMetadata in repositoryByTagName.Values)
+		    foreach (MetaMetadata metaMetadata in _repositoryByName.Values)
 		    {
-                MetaMetadataSelector selector = metaMetadata.Selector;
-			    List<String> suffixes = selector.Suffixes;
-			    if (suffixes != null)
-			    {
-				    foreach (String suffix in suffixes)
-				    {
-					    // FIXME-- Ask whether the suffix and mime should be
-					    // inherited or not
-					    if (!repositoryBySuffix.ContainsKey(suffix))
-						    repositoryBySuffix.Add(suffix, metaMetadata);
-				    }
-			    }
+		        if (metaMetadata.Selectors == null || metaMetadata.Selectors.Count <= 0) continue;
 
-                List<String> mimeTypes = selector.MimeTypes;
-			    if (mimeTypes != null)
-			    {
-				    foreach (String mimeType in mimeTypes)
-				    {
-					    // FIXME -- Ask whether the suffix and mime should be
-					    // inherited or not
-					    if (!repositoryByMime.ContainsKey(mimeType))
-						    repositoryByMime.Add(mimeType, metaMetadata);
-				    }
-			    }
+		        MetaMetadataSelector selector = metaMetadata.Selectors[0];//Note: Needs to consider all selectors. 
+		        List<String> suffixes = selector.Suffixes;
+		        if (suffixes != null)
+		        {
+		            foreach (String suffix in suffixes)
+		            {
+		                // FIXME-- Ask whether the suffix and mime should be
+		                // inherited or not
+		                if (!_repositoryBySuffix.ContainsKey(suffix))
+		                    _repositoryBySuffix.Add(suffix, metaMetadata);
+		            }
+		        }
 
+		        List<String> mimeTypes = selector.MimeTypes;
+		        if (mimeTypes != null)
+		        {
+		            foreach (String mimeType in mimeTypes)
+		            {
+		                // FIXME -- Ask whether the suffix and mime should be
+		                // inherited or not
+		                if (!_repositoryByMime.ContainsKey(mimeType))
+		                    _repositoryByMime.Add(mimeType, metaMetadata);
+		            }
+		        }
 		    }
         }
 
-        /// <summary>
-        /// Integrate the contents of otherRepository with this one.
-        /// </summary>
-        /// <param name="otherRepository"></param>
-        public void IntegrateRepository(MetaMetadataRepository repository)
+	    /// <summary>
+	    /// Integrate the contents of otherRepository with this one.
+	    /// </summary>
+	    /// <param name="repository"></param>
+	    public void IntegrateRepository(MetaMetadataRepository repository)
         {
             // combine userAgents
             if (!MergeDictionaries(repository.userAgents, this.userAgents))
@@ -369,27 +369,27 @@ namespace ecologylab.semantics.metametadata
             if (!MergeDictionaries(repository.sites, this.sites))
                 this.sites = repository.sites;
 
+            if (!MergeDictionaries(repository._repositoryByMime, this._repositoryByMime))
+                this._repositoryByMime = repository._repositoryByMime;
 
-            if (!MergeDictionaries(repository.repositoryByMime, this.repositoryByMime))
-                this.repositoryByMime = repository.repositoryByMime;
+            if (!MergeDictionaries(repository._repositoryBySuffix, this._repositoryBySuffix))
+                this._repositoryBySuffix = repository._repositoryBySuffix;
 
-            if (!MergeDictionaries(repository.repositoryBySuffix, this.repositoryBySuffix))
-                this.repositoryBySuffix = repository.repositoryBySuffix;
-
-            Dictionary<String, MetaMetadata> otherRepositoryByTagName = repository.repositoryByTagName;
+            Dictionary<String, MetaMetadata> otherRepositoryByTagName = repository._repositoryByName;
             //set metaMetadata to have the correct parent repository in ElementState
             if (otherRepositoryByTagName != null)
             {
                 foreach (MetaMetadata mmd in otherRepositoryByTagName.Values)
                 {
-                    //mmd.Parent = this; //TODO FIXME MMD Hierarchy still needs to extend ElementState !!!
-                    if (mmd.PackageAttribute == null)
-                        mmd.PackageAttribute = repository.packageAttribute;
+                    mmd.Parent = this; 
+                    if (mmd.PackageName == null)
+                        mmd.PackageName = repository.packageName;
                 }
+
+                if (!MergeDictionaries(otherRepositoryByTagName, this._repositoryByName))
+                    this._repositoryByName = otherRepositoryByTagName;
             }
 
-            if (!MergeDictionaries(otherRepositoryByTagName, this.repositoryByTagName))
-                this.repositoryByTagName = otherRepositoryByTagName;
         }
 
         /// <summary>
@@ -434,7 +434,7 @@ namespace ecologylab.semantics.metametadata
                     
 				    String noAnchorNoQueryPageString = uri.GetLeftPart(UriPartial.Path);
 
-                    documentRepositoryByUrlStripped.TryGetValue(noAnchorNoQueryPageString, out result);
+                    _documentRepositoryByUrlStripped.TryGetValue(noAnchorNoQueryPageString, out result);
 
 				    if (result == null)
 				    {
@@ -449,7 +449,7 @@ namespace ecologylab.semantics.metametadata
 					    if (domain != null)
 					    {
                             List<RepositoryPatternEntry> entries = null;
-                            documentRepositoryByPattern.TryGetValue(domain, out entries);
+                            _documentRepositoryByPattern.TryGetValue(domain, out entries);
 
 						    if (entries != null)
 						    {
@@ -478,7 +478,7 @@ namespace ecologylab.semantics.metametadata
 			    if (result == null)
 			    {
 				    String domain = uri.Domain;
-				    documentRepositoryByDomain.TryGetValue(domain, out result);
+				    _documentRepositoryByDomain.TryGetValue(domain, out result);
 
 				    if (result != null)
 					    Console.WriteLine("Matched by domain = " + domain + "\t" + result);
@@ -494,17 +494,17 @@ namespace ecologylab.semantics.metametadata
         private MetaMetadata GetMMBySuffix(string suffix)
         {
             MetaMetadata result = null;
-            repositoryBySuffix.TryGetValue(suffix, out result);
+            _repositoryBySuffix.TryGetValue(suffix, out result);
             return result;
             
         }
         
-        public MetaMetadata GetByTagName(String tagName)
+        public MetaMetadata GetMMByName(String tagName)
         {
             if (tagName == null)
                 return null;
             MetaMetadata result = null;
-            repositoryByTagName.TryGetValue(tagName, out result);
+            _repositoryByName.TryGetValue(tagName, out result);
             return result;
         }
         
@@ -515,7 +515,7 @@ namespace ecologylab.semantics.metametadata
 
             MetaMetadata result = null;
 		    // String tag = metadataTScope.getTag(metadataClass);
-		    repositoryByClassName.TryGetValue(metadataClass.Name, out result);
+		    RepositoryByClassName.TryGetValue(metadataClass.Name, out result);
             return result;
 	    }
 
@@ -527,10 +527,10 @@ namespace ecologylab.semantics.metametadata
 			set{name = value;}
 		}
 
-		public String PackageAttribute
+		public String PackageName
 		{
-			get{return packageAttribute;}
-			set{packageAttribute = value;}
+			get{return packageName;}
+			set{packageName = value;}
 		}
 
 		public Dictionary<String, UserAgent> UserAgents
@@ -568,10 +568,10 @@ namespace ecologylab.semantics.metametadata
 			set{cookieProcessors = value;}
 		}
 
-		public Dictionary<String, MetaMetadata> RepositoryByTagName
+		public Dictionary<String, MetaMetadata> RepositoryByName
 		{
-			get{return repositoryByTagName;}
-			set{repositoryByTagName = value;}
+			get{return _repositoryByName;}
+			set{_repositoryByName = value;}
 		}
 
 		public Dictionary<String, MetaMetadataSelector> SelectorsByName
@@ -585,6 +585,18 @@ namespace ecologylab.semantics.metametadata
 			get{return sites;}
 			set{sites = value;}
         }
-        #endregion
+
+	    public Dictionary<string, MultiAncestorScope<MetaMetadata>> PackageMmdScopes
+	    {
+	        get { return packageMmdScopes; }
+	        set { packageMmdScopes = value; }
+	    }
+
+	    public Dictionary<string, MetaMetadata> RepositoryByClassName
+	    {
+	        get { return _repositoryByClassName; }
+	    }
+
+	    #endregion
     }
 }

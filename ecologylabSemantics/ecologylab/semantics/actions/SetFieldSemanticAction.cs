@@ -17,7 +17,7 @@ namespace ecologylab.semantics.actions
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("set_field")]
-    public class SetFieldSemanticAction<IC, SAH> : SemanticAction<IC, SAH> 
+    public class SetFieldSemanticAction : SemanticAction 
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.

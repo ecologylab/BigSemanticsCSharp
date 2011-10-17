@@ -17,7 +17,7 @@ namespace ecologylab.semantics.actions
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("set_metadata")]
-    public class SetMetadataSemanticAction<IC, SAH> : SemanticAction<IC, SAH> 
+    public class SetMetadataSemanticAction : SemanticAction 
 	{
 		public SetMetadataSemanticAction()
 		{ }

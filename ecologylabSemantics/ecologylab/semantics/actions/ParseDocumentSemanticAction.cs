@@ -17,7 +17,7 @@ namespace ecologylab.semantics.actions
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("parse_document")]
-    public class ParseDocumentSemanticAction<IC, SAH> : SemanticAction<IC, SAH> 
+    public class ParseDocumentSemanticAction : SemanticAction 
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.

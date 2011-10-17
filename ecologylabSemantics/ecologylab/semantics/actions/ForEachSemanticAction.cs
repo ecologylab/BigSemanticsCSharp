@@ -17,7 +17,7 @@ namespace ecologylab.semantics.actions
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("for_each")]
-    public class ForEachSemanticAction<IC, SAH> : NestedSemanticAction<IC, SAH>
+    public class ForEachSemanticAction : NestedSemanticAction
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.

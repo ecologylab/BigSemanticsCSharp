@@ -8,7 +8,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using Simpl.Fundamental.Collections;
+using Simpl.Fundamental.Generic;
+using Simpl.Serialization;
 using Simpl.Serialization.Attributes;
+using ecologylab.semantics.metadata;
 
 
 namespace ecologylab.semantics.metametadata 
@@ -19,59 +24,311 @@ namespace ecologylab.semantics.metametadata
 	[SimplInherit]
 	public abstract class MetaMetadataNestedField : MetaMetadataField
 	{
-		public MetaMetadataNestedField()
+
+        [SimplScalar]
+        [SimplHints(new Hint[] { Hint.XmlAttribute })]
+        [SimplTag("package")]
+        private String packageName;
+
+        [SimplComposite]
+        [SimplTag("field_parser")]
+        private FieldParserElement fieldParserElement;
+
+        [SimplScalar]
+        [SimplHints(new Hint[] { Hint.XmlAttribute })]
+        private Boolean promoteChildren;
+
+        [SimplScalar]
+        [SimplHints(new Hint[] { Hint.XmlAttribute })]
+        private String polymorphicScope;
+
+        [SimplScalar]
+        [SimplHints(new Hint[] { Hint.XmlAttribute })]
+        private String polymorphicClasses;
+
+        [SimplScalar]
+        [SimplHints(new Hint[] { Hint.XmlAttribute })]
+        private String schemaOrgItemtype;
+
+        /**
+         * the mmd used by this nested field. corresponding attributes: (child_)type/extends. could be a
+         * generated one for inline definitions.
+         */
+        private MetaMetadata inheritedMmd;
+
+        /**
+         * should we generate a metadata class descriptor for this field. used by the compiler.
+         */
+        private bool newMetadataClass = false;
+
+        private bool mmdScopeTraversed = false;
+
+
+        private MultiAncestorScope<MetaMetadata> mmdScope;
+
+	    protected MetaMetadataNestedField()
 		{ }
 
         abstract protected String GetMetaMetadataTagToInheritFrom();
 
-        internal void InheritMetaMetadata(MetaMetadataRepository repository)
+        public void InheritMetaMetadata()
         {
-            if (!inheritMetaMetadataFinished)
-		    {
-			    /**************************************************************************************
-			     * Inheritance works here in a top-down manner: first we know the type or extends of a
-			     * meta-metadata, from which we can infer scalar_type/type/child_type of its first-level
-			     * children (those not defined inline). In this way we can resolve type information
-			     * recursively.
-			     **************************************************************************************/
+            if (inheritMetaMetadataFinished || inheritInProcess) return;
 
-			    /*
-			     * tagName will be type / extends attribute for <composite>, or child_type attribute for
-			     * <collection>
-			     */
-			    String tagName = GetMetaMetadataTagToInheritFrom();
-			    MetaMetadata inheritedMetaMetadata = repository.GetByTagName(tagName);
-			    if (inheritedMetaMetadata != null)
-			    {
-				    inheritedMetaMetadata.InheritMetaMetadata(repository);
-				    // <collection> should not inherit attributes from its child_type
-				    if (!(this is MetaMetadataCollectionField))
-					    InheritNonDefaultAttributes(inheritedMetaMetadata);
-				    foreach (MetaMetadataField inheritedField in inheritedMetaMetadata.Kids.Values)
-					    InheritForField(inheritedField);
-				    InheritNonFieldComponentsFromMM(inheritedMetaMetadata);
-			    }
-
-			    if (Kids != null)
-			    {
-				    foreach (MetaMetadataField childField in Kids.Values)
-				    {
-					    if (childField.GetType().IsInstanceOfType(typeof(MetaMetadataNestedField)))
-						    ((MetaMetadataNestedField) childField).InheritMetaMetadata(repository);
-				    }
-
-				    SortForDisplay();
-			    }
-
-			    inheritMetaMetadataFinished = true;
-		    }
+            Debug.WriteLine("inheriting " + this);
+            inheritInProcess = true;
+            InheritMetaMetadataHelper();
+            this.SortForDisplay();
+            inheritInProcess = false;
+            inheritFinished = true;
+            inheritMetaMetadataFinished = true;
         }
 
-        private void InheritNonFieldComponentsFromMM(MetaMetadata inheritedMetaMetadata)
+	    protected abstract void InheritMetaMetadataHelper();
+
+	    public String PackageName
+        {
+            get { return packageName; }
+            set { packageName = value; }
+        }
+
+        public FieldParserElement FieldParserElement
+        {
+            get { return fieldParserElement; }
+            set { fieldParserElement = value; }
+        }
+
+        public Boolean PromoteChildren
+        {
+            get { return promoteChildren; }
+            set { promoteChildren = value; }
+        }
+
+        public String PolymorphicScope
+        {
+            get { return polymorphicScope; }
+            set { polymorphicScope = value; }
+        }
+
+        public String PolymorphicClasses
+        {
+            get { return polymorphicClasses; }
+            set { polymorphicClasses = value; }
+        }
+
+        public String SchemaOrgItemtype
+        {
+            get { return schemaOrgItemtype; }
+            set { schemaOrgItemtype = value; }
+        }
+
+	    public MultiAncestorScope<MetaMetadata> MmdScope
+	    {
+	        get { return mmdScope; }
+	        set { mmdScope = value; }
+	    }
+
+	    public MetaMetadata InheritedMmd
+	    {
+	        get { return inheritedMmd; }
+	        set { inheritedMmd = value; }
+	    }
+
+	    public bool NewMetadataClass
+	    {
+	        get { return newMetadataClass; }
+	        set { newMetadataClass = value; }
+	    }
+
+	    public bool MmdScopeTraversed
+	    {
+	        get { return mmdScopeTraversed; }
+	        set { mmdScopeTraversed = value; }
+	    }
+
+	    private void InheritNonFieldComponentsFromMM(MetaMetadata inheritedMetaMetadata)
         {
             //Console.WriteLine("InheritNonFieldComponentsFromMM, doing nothing");
         }
 
-        public abstract MetaMetadataCompositeField getMetaMetadataCompositeField();
+        public abstract MetaMetadataCompositeField GetMetaMetadataCompositeField();
+
+	    public override String GetTypeName()
+	    {
+		    String result = null;
+            Type thisType = GetType();
+            if (thisType == typeof(MetaMetadataCompositeField))
+		    {
+			    MetaMetadataCompositeField mmcf = (MetaMetadataCompositeField) this;
+			    if (mmcf.Type != null)
+				    result = mmcf.Type;
+		    }
+            else if (thisType == typeof(MetaMetadataCollectionField))
+		    {
+			    MetaMetadataCollectionField mmcf = (MetaMetadataCollectionField) this;
+                if (mmcf.ChildType != null)
+                    result = mmcf.ChildType;
+                else if (mmcf.ChildScalarType != null)
+                    result = mmcf.ChildScalarType.CSharpTypeName;
+		    }
+
+		    if (result == null)
+		    {
+			    MetaMetadataField inherited = InheritedField;
+			    if (inherited != null)
+			    {
+				    // use inherited field's type
+				    result = inherited.GetTypeName();
+			    }
+		    }
+
+            return result ?? (Name);
+	    }
+
+        protected MetadataClassDescriptor BindMetadataClassDescriptor(SimplTypesScope metadataTScope)
+	    {
+            MetadataClassDescriptor metadataCd = this.metadataClassDescriptor;
+            if (metadataCd == null)
+            {
+                this.InheritMetaMetadata();
+
+                String metadataClassSimpleName = this.GetMetadataClassSimpleName();
+                // first look up by simple name, since package names for some built-ins are wrong
+                
+                metadataCd = (MetadataClassDescriptor) metadataTScope.EntriesByClassSimpleName.Get(metadataClassSimpleName);
+                if (metadataCd == null)
+                {
+                    String metadataClassName = this.GetMetadataClassName();
+
+                    metadataCd = (MetadataClassDescriptor) metadataTScope.EntriesByClassName.Get(metadataClassName);
+                    if (metadataCd == null)
+                    {
+                        try
+                        {
+                            Type metadataType= Type.GetType(metadataClassName);
+                            this.metadataClass = metadataType;
+                            metadataCd = (MetadataClassDescriptor)ClassDescriptor.GetClassDescriptor(metadataClass);
+                            metadataTScope.AddTranslation(metadataClass);
+                        }
+                        catch (Exception e)
+                        {
+                            //						e.printStackTrace();
+                            //						throw new MetaMetadataException("Cannot find metadata class: " + metadataClassName);
+                            Debug.WriteLine("Cannot find metadata class: " + metadataClassName);
+                        }
+                    }
+                }
+
+                if (metadataCd != null)
+                {
+                    this.metadataClassDescriptor = metadataCd; // early assignment to prevent infinite loop
+                    this.BindMetadataFieldDescriptors(metadataTScope, metadataCd);
+                }
+            }
+            return metadataCd;
+	    }
+
+        /**
+	 * bind metadata field descriptors to sub-fields of this nested field, with field names as keys,
+	 * but without mixins field.
+	 * <p>
+	 * sub-fields that lack corresponding field descriptors will be removed from this nested field.
+	 * <p>
+	 * note that this field no longer uses a boolean flag to prevent multiple invocation. this should
+	 * have been done by the bindClassDescriptor() method.
+	 * 
+	 * @param metadataTScope
+	 *          the translation scope of (generated) metadata classes.
+	 * @param metadataClassDescriptor
+	 *          the metadata class descriptor where field descriptors can be found.
+	 */
+        protected void BindMetadataFieldDescriptors(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
+	    {
+		    // copy the kids collection first to prevent modification to the collection during iteration (which may invalidate the iterator).
+		    List<MetaMetadataField> fields = new List<MetaMetadataField>(kids.Values);
+		    foreach (MetaMetadataField thatChild in fields)
+		    {
+			    // look up by field name and bind
+			    MetadataFieldDescriptor metadataFieldDescriptor = thatChild.BindMetadataFieldDescriptor(metadataTScope, metadataClassDescriptor);
+			    if (metadataFieldDescriptor == null)
+			    {
+				    Debug.WriteLine("Cannot bind metadata field descriptor for " + thatChild);
+				    this.kids.Remove(thatChild.Name);
+				    continue;
+			    }
+
+			    // process hide and shadows
+			    HashSet<String> nonDisplayedFieldNames = NonDisplayedFieldNames;
+			    if (thatChild.Hide)
+				    nonDisplayedFieldNames.Add(thatChild.Name);
+			    if (thatChild.Shadows != null)
+				    nonDisplayedFieldNames.Add(thatChild.Shadows);
+
+			    // recursively process sub-fields
+			    if (thatChild is MetaMetadataScalarField)
+			    {
+				    // process regex filter
+				    MetaMetadataScalarField scalar = (MetaMetadataScalarField) thatChild;
+				    if (scalar.Filter != null)
+				    {
+					    MetadataFieldDescriptor fd = scalar.MetadataFieldDescriptor;
+					    if (fd != null)
+					    {
+					        fd.FilterRegex = scalar.Filter.RegexPattern;
+                            fd.FilterReplace = scalar.Filter.Replace;
+					    }
+                            
+					    else
+						    Debug.WriteLine("Encountered null fd for scalar: " + scalar);
+				    }
+			    }
+			    else if (thatChild.GetType() == typeof(MetaMetadataNestedField) && thatChild.HasChildren())
+			    {
+				    // bind class descriptor for nested sub-fields
+				    MetaMetadataNestedField nested = (MetaMetadataNestedField) thatChild;
+				    MetadataFieldDescriptor fd = nested.MetadataFieldDescriptor;
+				    if (fd.IsPolymorphic)
+				    {
+					    Debug.WriteLine("Polymorphic field: " + nested + ", not binding an element class descriptor.");
+				    }
+				    else
+				    {
+					    MetadataClassDescriptor elementClassDescriptor = ((MetaMetadataNestedField) thatChild).BindMetadataClassDescriptor(metadataTScope);
+					    if (elementClassDescriptor != null)
+					    {
+						    MetaMetadata mmdForThatChild = nested.InheritedMmd;
+						    if (mmdForThatChild != null && mmdForThatChild.MetadataClassDescriptor == null)
+    //							mmdForThatChild.setMetadataClassDescriptor(elementClassDescriptor);
+							    mmdForThatChild.BindMetadataClassDescriptor(metadataTScope);
+					    }
+					    else
+					    {
+						    Debug.WriteLine("Cannot determine elementClassDescriptor for " + thatChild);
+						    this.kids.Remove(thatChild.Name);
+					    }
+				    }
+			    }
+
+			    if (GetType() == typeof(MetaMetadata))
+			    {
+				    MetaMetadata mmd = (MetaMetadata) this;
+				    String naturalId = thatChild.AsNaturalId;
+				    if (naturalId != null)
+				    {
+					    mmd.NaturalIds.Put(naturalId, thatChild);
+				    }
+			    }
+		    }
+	    }
+
+	    private string GetMetadataClassName()
+	    {
+            return InheritedMmd.GetMetadataClassSimpleName();
+	    }
+
+	    private string GetMetadataClassSimpleName()
+	    {
+	        return InheritedMmd.GetMetadataClassSimpleName();
+	    }
 	}
 }

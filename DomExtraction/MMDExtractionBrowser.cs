@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using AwesomiumSharp;
+using DomExtraction.Properties;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
 using Simpl.Serialization.Context;
@@ -31,8 +32,8 @@ namespace DomExtraction
 
         static readonly string appPath = System.AppDomain.CurrentDomain.BaseDirectory;
 
-        const String workspace = @"d:\develop\workspaces\";
-        private const String jsPath = workspace + @"workspaceNet\ecologylabSemantics.NET\DomExtraction\javascript\";
+        static readonly String workspace = appPath + @"..\..\..\";
+        private String jsPath = workspace + @"DomExtraction\javascript\";
 
         private static readonly string wikiCacheLocation = appPath;
         private const String wikiPuriPrefix = "http://en.wikipedia.org/wiki/";
@@ -45,7 +46,7 @@ namespace DomExtraction
 
         const String BLANK_PAGE = "about:blank";
 
-        private readonly WebView webView;
+        private WebView webView;
 
         /// <summary>
         /// 
@@ -54,8 +55,30 @@ namespace DomExtraction
         {
             //Init Awesomium Webview correctly.
             //Note: Do we need special settings for WebCoreConfig?
-            WebCore.Initialize(new WebCoreConfig());
-            webView = WebCore.CreateWebView(1024, 768);
+            //var webCoreConfig = new WebCoreConfig();
+            WebCoreConfig config = new WebCoreConfig
+            {
+                // !THERE CAN ONLY BE A SINGLE WebCore RUNNING PER PROCESS!
+                // We have ensured that our application is single instance,
+                // with the use of the WPFSingleInstance utility.
+                // We can now safely enable cache and cookies.
+                SaveCacheAndCookies = true,
+                // In case our application is installed in ProgramFiles,
+                // we wouldn't want the WebCore to attempt to create folders
+                // and files in there. We do not have the required privileges.
+                // Furthermore, it is important to allow each user account
+                // have its own cache and cookies. So, there's no better place
+                // than the Application User Data Path.
+                EnablePlugins = true,
+                HomeURL = @"http:\\www.google.com",
+                // ...Se comments for UserDataPath.
+                // Let's gather some extra info for this sample.
+                LogLevel = LogLevel.Verbose
+            };
+
+            WebCore.Initialize(config, false);
+            
+            InitRepo();
         }
 
         /// <summary>
@@ -63,30 +86,29 @@ namespace DomExtraction
         /// </summary>
         public void InitRepo()
         {
-            MetadataScalarScalarType.init();
-            SimplTypesScope mmdTScope = MetaMetadataTranslationScope.get();
-
+            MetadataScalarType.init();
+            SimplTypesScope mmdTScope = MetaMetadataTranslationScope.Get();
             metadataTScope = RepositoryMetadataTranslationScope.Get();
 
-
-            const string testFile = @"ecologylab\ecologylabSemantics\repository\";
+            
+            const string testFile = @"MetaMetadataRepository\";
             Console.WriteLine("Initting repository");
             MetaMetadataRepository.stopTheConsoleDumping = true;
-            repo = MetaMetadataRepository.ReadDirectoryRecursively(workspace + testFile, mmdTScope, metadataTScope);
+            repo = MetaMetadataRepositoryLoader.ReadDirectoryRecursively(workspace + testFile, mmdTScope, metadataTScope);
 
             mmdDomHelperJSString = File.ReadAllText(jsPath + "mmdDomHelper.js");
             
-            DirectoryInfo di = new DirectoryInfo(wikiCacheLocation);
-            FileInfo[] files = di.GetFiles("*.xml");
-            foreach(var file in files)
-            {
-                string title = file.Name.Substring(0, file.Name.IndexOf("."));
-
-                ParsedUri pur = GetPuriForWikiArticleTitle(title);
-
-                Document elementState = (Document) metadataTScope.Deserialize(file.FullName, StringFormat.Xml);
-                metadataCache.Add(pur, elementState);
-            }
+//            DirectoryInfo di = new DirectoryInfo(wikiCacheLocation);
+//            FileInfo[] files = di.GetFiles("*.xml");
+//            foreach(var file in files)
+//            {
+//                string title = file.Name.Substring(0, file.Name.IndexOf("."));
+//
+//                ParsedUri pur = GetPuriForWikiArticleTitle(title);
+//
+//                Document elementState = (Document) metadataTScope.Deserialize(file.FullName, StringFormat.Xml);
+//                metadataCache.Add(pur, elementState);
+//            }
         }
 
         public async Task<WikipediaPage> GetWikipediaPageForTitle(string title)
@@ -150,6 +172,7 @@ namespace DomExtraction
             else
             {
                 Console.WriteLine("Cache Miss. Parsing webpage: " + uri);
+                webView = WebCore.CreateWebView(1024, 768);
                 //We need webView to be instantiated correctly.
                 webView.ClearAllURLFilters();
                 //Only accept requests for this particular uri

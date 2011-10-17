@@ -28,8 +28,8 @@ namespace ecologylab.semantics.metametadata
             typeof(SearchEngine),
             typeof(UserAgent), 
             typeof(NamedStyle), 
-            typeof(SemanticAction<InfoCollector, SemanticActionHandler>),
-            typeof(NestedSemanticAction<InfoCollector, SemanticActionHandler>),
+            typeof(SemanticAction),
+            typeof(NestedSemanticAction),
             typeof(SemanticsSite),
             typeof(BasicSite),
             typeof(Argument),
@@ -50,28 +50,11 @@ namespace ecologylab.semantics.metametadata
             typeof(Null)
         };
 
-        static Type[] semanticActionClasses = {
-            //SemanticAction scope
-            typeof(BackOffFromSiteSemanticAction<InfoCollector, SemanticActionHandler>),
-            typeof(ChooseSemanticAction<InfoCollector, SemanticActionHandler>),
-            //typeof(ChooseSemanticAction.Otherwise), //FIXME: Unsupported
-            typeof(CreateAndVisualizeImgSurrogateSemanticAction<InfoCollector, SemanticActionHandler>),
-            typeof(CreateAndVisualizeTextSurrogateSemanticAction<InfoCollector, SemanticActionHandler>),
-            typeof(CreateSemanticAnchorSemanticAction<InfoCollector, SemanticActionHandler>),
-            typeof(EvaluateRankWeight<InfoCollector, SemanticActionHandler>),
-            typeof(ForEachSemanticAction<InfoCollector, SemanticActionHandler>),
-            typeof(GetFieldSemanticAction<InfoCollector, SemanticActionHandler>),
-            typeof(IfSemanticAction<InfoCollector, SemanticActionHandler>),
-            typeof(ParseDocumentSemanticAction<InfoCollector, SemanticActionHandler>),
-            typeof(SearchSemanticAction<InfoCollector, SemanticActionHandler>),
-            typeof(SetFieldSemanticAction<InfoCollector, SemanticActionHandler>),
-            typeof(SetMetadataSemanticAction<InfoCollector, SemanticActionHandler>),
-            typeof(SemanticAction<InfoCollector, SemanticActionHandler>)
-        };
 
-        public static SimplTypesScope get()
+
+        public static SimplTypesScope Get()
         {
-            SimplTypesScope semanticActionScope    = SimplTypesScope.Get("semantic_action_translation_scope", semanticActionClasses);
+            SimplTypesScope semanticActionScope    = SemanticActionTranslationScope.Get();
             SimplTypesScope conditionScope         = SimplTypesScope.Get("condition_scope", conditionClasses);
             SimplTypesScope mmdScope               = SimplTypesScope.Get("meta_metadata", translations);
             mmdScope.AddTranslations(semanticActionScope);

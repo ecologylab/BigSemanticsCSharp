@@ -95,7 +95,7 @@ namespace ecologylab.semantics.metadata
             if (mm == null && repository != null)
             {
                 if (metaMetadataName != null) // get from saved composition
-                    mm = repository.GetByTagName(metaMetadataName.Value);
+                    mm = repository.GetMMByName(metaMetadataName.Value);
 
                 if (mm == null)
                 {

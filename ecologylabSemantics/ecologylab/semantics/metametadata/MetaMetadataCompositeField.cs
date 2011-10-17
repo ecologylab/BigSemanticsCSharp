@@ -8,10 +8,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using Simpl.Fundamental.Collections;
 using Simpl.Fundamental.Generic;
 using Simpl.Serialization.Attributes;
 using ecologylab.semantics.actions;
-using ecologylab.semantics.connectors;
 using ecologylab.semantics.metadata;
 
 using Simpl.Serialization;
@@ -60,7 +61,7 @@ namespace ecologylab.semantics.metametadata
 		/// </summary>
 		[SimplCollection]
 		[SimplScope("semantic_action_translation_scope")]
-		private List<SemanticAction<InfoCollector, SemanticActionHandler>> semanticActions;
+		private List<SemanticAction> semanticActions;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -74,6 +75,11 @@ namespace ecologylab.semantics.metametadata
 		/// </summary>
 		[SimplScalar]
 		private Boolean reloadPageFirstTime;
+
+	    [SimplTag("extends")]
+        [SimplScalar] 
+        [MmDontInherit] private string extendsAttribute;
+
 
 		public MetaMetadataCompositeField()
 		{ }
@@ -96,13 +102,309 @@ namespace ecologylab.semantics.metametadata
                 return null;
         }
 
-		public String Type
+
+	    protected override void InheritMetaMetadataHelper()
+        {
+            // init
+            MetaMetadataRepository repository = Repository;
+
+            // determine the structure we should inherit from
+            MetaMetadata inheritedMmd = FindOrGenerateInheritedMetaMetadata(repository);
+            if (inheritedMmd != null)
+            {
+                inheritedMmd.InheritMetaMetadata();
+                InheritFromInheritedMmd(inheritedMmd);
+                InheritMetaMetadataFrom(repository, inheritedMmd);
+            }
+            MetaMetadataCompositeField inheritedField = (MetaMetadataCompositeField)InheritedField;
+            if (inheritedField != null)
+            {
+                inheritedField.Repository = repository;
+                inheritedField.InheritMetaMetadata();
+                InheritMetaMetadataFrom(repository, inheritedField);
+            }
+
+            // for the root meta-metadata, this may happend
+            if (inheritedMmd == null && inheritedField == null)
+                InheritMetaMetadataFrom(repository, null);
+        }
+
+        protected void InheritMetaMetadataFrom(MetaMetadataRepository repository, MetaMetadataCompositeField inheritedStructure)
+	    {
+		    // init nested fields inside this
+		    foreach (MetaMetadataField f in kids.Values)
+			    if (f.GetType() == typeof(MetaMetadataNestedField))
+			    {
+				    f.Repository = (repository);
+				    MetaMetadataNestedField nested = (MetaMetadataNestedField) f;
+				    if (nested.PackageName == null)
+					    nested.PackageName = PackageName;
+				    nested.MmdScope = MmdScope;
+			    }
+		
+		    // inherit fields with attributes from inheritedStructure
+		    // if inheritedStructure == null, this must be the root meta-metadata
+		    if (inheritedStructure != null)
+		    {
+			    foreach (MetaMetadataField field in inheritedStructure.kids.Values)
+			    {
+				    if (field.GetType() == typeof(MetaMetadataNestedField))
+				    {
+					    ((MetaMetadataNestedField) field).InheritMetaMetadata();
+				    }
+				    String fieldName = field.Name;
+			        MetaMetadataField fieldLocal;
+                    kids.TryGetValue(fieldName, out fieldLocal);
+
+			        if (fieldLocal == null) continue;
+
+			        Debug.WriteLine("inheriting field: " + fieldLocal + " <= " + field);
+			        if (field.GetType() != fieldLocal.GetType())
+			            Debug.WriteLine("local field " + fieldLocal + " hides field " + fieldLocal + " with the same name in super mmd type!");
+			        // debug("inheriting field " + fieldLocal + " from " + field);
+			        if (field != fieldLocal)
+			            fieldLocal.InheritedField = field;
+			        fieldLocal.DeclaringMmd = field.DeclaringMmd;
+			        fieldLocal.InheritAttributes(field);
+			        if (fieldLocal.GetType() == typeof(MetaMetadataNestedField))
+			        ((MetaMetadataNestedField) fieldLocal).PackageName = ((MetaMetadataNestedField) field).PackageName;
+			    }
+		    }
+
+		    // recursively call inheritMetaMetadata() on nested fields
+		    foreach (MetaMetadataField f in kids.Values)
+		    {
+			    // a new field is defined inside this mmd
+			    if (f.DeclaringMmd == this && f.InheritedField == null)
+				    NewMetadataClass = true;
+
+			    // recursively call this method on nested fields
+			    f.Repository = repository;
+			    if (f.GetType() == typeof(MetaMetadataNestedField))
+			    {
+				    MetaMetadataNestedField f1 = (MetaMetadataNestedField) f;
+				    f1.InheritMetaMetadata();
+				    if (f1.NewMetadataClass)
+					    NewMetadataClass = true;
+				
+				    MetaMetadataNestedField f0 = (MetaMetadataNestedField) f.InheritedField;
+				    if (f0 != null && f0.GetTypeName() != f1.GetTypeName())
+				    {
+					    // inherited field w changing base type (polymorphic case)
+					    f1.InheritMetaMetadata();
+					    MetaMetadata mmd0 = f0.InheritedMmd;
+					    MetaMetadata mmd1 = f1.InheritedMmd;
+					    if (mmd1.IsDerivedFrom(mmd0))
+						    NewMetadataClass = true;
+					    else
+						    throw new MetaMetadataException("incompatible types: " + f0 + " => " + f1);
+				    }
+			    }
+		    }
+		
+		    // clone fields only declared in inheritedStructure.
+		    // must clone them after recursively calling inheritMetaMetadata(), so that their nested
+		    // structures (which may be inherited too) can be cloned.
+		    if (inheritedStructure != null)
+		    {
+			    foreach (MetaMetadataField field in inheritedStructure.kids.Values)
+			    {
+				    String fieldName = field.Name;
+			        MetaMetadataField fieldLocal;
+                    kids.TryGetValue(fieldName, out fieldLocal);
+
+				    if (fieldLocal == null)
+				    {
+    //					MetaMetadataField clonedField = (MetaMetadataField) field.clone();
+    //					clonedField.setParent(this);
+    //					this.getChildMetaMetadata().put(fieldName, clonedField);
+					    kids.Put(fieldName, field);
+				    }
+			    }
+		    }
+	    }
+
+        /**
+         * inherit stuffs from inheritedMmd of this composite field.
+         * 
+         * @param inheritedMmd
+         */
+        protected void InheritFromInheritedMmd(MetaMetadata inheritedMmd)
+        {
+            MmdScope = new MultiAncestorScope<MetaMetadata>(MmdScope, inheritedMmd.MmdScope);
+        }
+
+        /**
+         * find inherited meta-metadata for this field/mmd. for fields, inheritedMmd is the mmd type it is
+         * using for itself or its children. for mmd, inheritedMmd is the mmd it directly uses (through
+         * type/extends). this method will use generatedMmd() to automatically generate a mmd definition
+         * when needed.
+         * 
+         * @param repository
+         * @return
+         */
+        protected MetaMetadata FindOrGenerateInheritedMetaMetadata(MetaMetadataRepository repository)
+        {
+            MetaMetadata inheritedMmd = this.InheritedMmd;
+            if (inheritedMmd == null)
+            {
+                MultiAncestorScope<MetaMetadata> mmdScope = this.MmdScope;
+                MetaMetadata tempType;
+                if (ExtendsAttribute != null)
+                {
+                    // determine new type name
+                    String newTypeName = this.Type;
+                    
+                    mmdScope.TryGetValue(newTypeName, out tempType);
+                    if (newTypeName != null &&  tempType!= null)
+                        // currently we don't encourage re-using existing name. however, in the future, when package names are available, we can change this.
+                        throw new MetaMetadataException("meta-metadata '" + newTypeName + "' already exists! please use another name to prevent name collision. hint: use 'tag' to change the tag if needed.");
+                    if (newTypeName == null)
+                        newTypeName = this.Name;
+                    if (newTypeName == null)
+                        throw new MetaMetadataException("attribute 'name' must be specified: " + this);
+
+                    // determine from which meta-metadata to inherit
+                    String inheritedMmdName = ExtendsAttribute;
+                    mmdScope.TryGetValue(inheritedMmdName, out tempType);
+                    if (inheritedMmdName == null || tempType == null)
+                        throw new MetaMetadataException("super type not specified or not found: " + this + ", super type name: " + inheritedMmdName);
+                    
+                    mmdScope.TryGetValue(inheritedMmdName, out inheritedMmd);
+
+                    // generate inline mmds and put it into current scope
+                    MetaMetadata generatedMmd = this.generateMetaMetadata(newTypeName, inheritedMmd);
+                    mmdScope.Put(newTypeName, generatedMmd);
+                    mmdScope.Put(generatedMmd.Name, generatedMmd);
+
+                    // recursively do inheritance on generated mmd
+                    generatedMmd.InheritMetaMetadata(); // this will set generateClassDescriptor to true if necessary
+
+                    MakeThisFieldUseMmd(newTypeName, generatedMmd);
+                    return generatedMmd;
+                }
+                else
+                {
+                    // use type / extends
+                    String inheritedMmdName = Type ?? Name;
+                    mmdScope.TryGetValue(inheritedMmdName, out tempType);
+                    if (inheritedMmdName == null && tempType == null)
+                    {
+                        inheritedMmdName = ExtendsAttribute;
+                        if (inheritedMmdName == null)
+//                            throw new MetaMetadataException("no type / extends defined for " + this);
+                            Debug.WriteLine("no type / extends defined for " + this);
+                        NewMetadataClass = true;
+                    }
+
+
+                    if (inheritedMmdName != null)
+                    {
+                        mmdScope.TryGetValue(inheritedMmdName, out inheritedMmd);
+
+                        if (inheritedMmd != null && inheritedMmdName != inheritedMmd.Name)
+                        {
+                            // could be inline mmd
+                            MakeThisFieldUseMmd(GetTypeOrName(), inheritedMmd);
+                        }
+
+                        if (inheritedMmd == null)
+                            throw new MetaMetadataException("meta-metadata not found: " + inheritedMmdName + " (if you want to define new types inline, you need to specify extends/child_extends)");
+                    }
+                    else
+                    {
+                        
+                        Debug.WriteLine("No InheritedMMD Found");
+                    }
+
+                    // process normal mmd / field
+                    Debug.WriteLine("setting " + this + ".inheritedMmd to " + inheritedMmd);
+                    InheritedMmd = inheritedMmd;
+                }
+            }
+            return inheritedMmd;
+        }
+
+        /**
+         * set attributes and other members of this field, so that it is equivalent to define this field
+         * using a specific (inline) meta-metadata.
+         * 
+         * @param previousName
+         *          the previous name of this field (in contrast to generated names for inline
+         *          meta-metadatas).
+         * @param mmd
+         */
+        protected void MakeThisFieldUseMmd(String previousName, MetaMetadata mmd)
+        {
+            // must set this before generatedMmd.inheritMetaMetadata() to meet inheritMetaMetadata() prerequisites
+            InheritedMmd = mmd;
+            // make this field as if is using generatedMmd as type
+            Type = mmd.Name;
+            ExtendsAttribute = null;
+            if (Tag == null)
+                Tag = previousName; // but keep the tag name
+        }
+
+
+	    /**
+         * this method generates a new mmd from this field, and makes this field as if is using that mmd
+         * as type.
+         * 
+         * @param previousName
+         * @param inheritedMmd
+         * @return
+         */
+        protected MetaMetadata generateMetaMetadata(String previousName, MetaMetadata inheritedMmd)
+	{
+		String generatedName = getGeneratedMmdName2(previousName);
+		
+		// generate the mmd and set attributes
+            MetaMetadata generatedMmd = new MetaMetadata
+                                            {
+                                                Name = generatedName,
+                                                PackageName = PackageName,
+                                                Type = null,
+                                                InheritedMmd = inheritedMmd,
+                                                ExtendsAttribute = inheritedMmd.Name,
+                                                Repository = Repository,
+                                                Visibility = Visibility.PACKAGE,
+                                                MmdScope =
+                                                    new MultiAncestorScope<MetaMetadata>(this.MmdScope,
+                                                                                         inheritedMmd.MmdScope)
+                                            };
+		if (SchemaOrgItemtype != null)
+		    generatedMmd.SchemaOrgItemtype = SchemaOrgItemtype;
+		generatedMmd.NewMetadataClass = true;
+		
+		// move nested fields (they will be cloned later)
+		foreach(String kidKey in this.kids.Keys)
+		{
+		    MetaMetadataField kid;
+            kids.TryGetValue(kidKey, out kid);
+			generatedMmd.Kids.Put(kidKey, kid);
+			kid.Parent = generatedMmd;
+		}
+		kids.Clear();
+		
+		MakeThisFieldUseMmd(previousName, generatedMmd);
+		return generatedMmd;
+	}
+
+
+
+        private String getGeneratedMmdName2(String previousName)
+        {
+            return previousName;
+        }
+
+
+	    public String Type
 		{
 			get{return type;}
 			set{type = value;}
 		}
 
-		public Boolean Entity
+	    public Boolean Entity
 		{
 			get{return entity;}
 			set{entity = value;}
@@ -126,7 +428,7 @@ namespace ecologylab.semantics.metametadata
 			set{parser = value;}
 		}
 
-        public List<SemanticAction<InfoCollector, SemanticActionHandler>> SemanticActions
+        public List<SemanticAction> SemanticActions
 		{
 			get{return semanticActions;}
 			set{semanticActions = value;}
@@ -144,35 +446,41 @@ namespace ecologylab.semantics.metametadata
 			set{reloadPageFirstTime = value;}
 		}
 
-        public String GetTypeOrName()
+	    public string ExtendsAttribute
+	    {
+	        get { return extendsAttribute; }
+	        set { extendsAttribute = value; }
+	    }
+
+	    public String GetTypeOrName()
         {
             return Type ?? Name;
         }
 
-        public override MetaMetadataCompositeField getMetaMetadataCompositeField()
+        public override MetaMetadataCompositeField GetMetaMetadataCompositeField()
         {
             return this;
         }
 
-        internal override bool GetClassAndBindDescriptors(SimplTypesScope metadataTScope)
-        {
-            Type metadataClass = GetMetadataClass(metadataTScope);
-            if (metadataClass == null)
-            {
-                //ElementState parent = Parent;
-                //Type parentType = parent.GetType();
-                //if (parent is MetaMetadataField)
-                //{
-                //    //(((MetaMetadataField)parent).kids).Remove(this.Name);
-                //}
-                //else if (parent is MetaMetadataRepository)
-                //{
-                //    // TODO remove from the repository level
-                //}
-                return false;
-            }
-            //
-            return BindClassDescriptor(metadataClass, metadataTScope);
-        }
+//        internal override bool GetClassAndBindDescriptors(SimplTypesScope metadataTScope)
+//        {
+//            Type metadataClass = GetMetadataClass(metadataTScope);
+//            if (metadataClass == null)
+//            {
+//                //ElementState parent = Parent;
+//                //Type parentType = parent.GetType();
+//                //if (parent is MetaMetadataField)
+//                //{
+//                //    //(((MetaMetadataField)parent).kids).Remove(this.Name);
+//                //}
+//                //else if (parent is MetaMetadataRepository)
+//                //{
+//                //    // TODO remove from the repository level
+//                //}
+//                return false;
+//            }
+//            //
+//            return BindClassDescriptor(metadataClass, metadataTScope);
+//        }
 	}
 }

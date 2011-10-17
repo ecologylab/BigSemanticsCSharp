@@ -35,7 +35,14 @@ namespace ecologylab.semantics.metametadata
 		public RegexFilter()
 		{ }
 
-		public Regex RegexPattern
+	    public RegexFilter(Regex regexPattern, string replace)
+	    {
+	        regex = regexPattern;
+	        this.replace = replace;
+
+	    }
+
+	    public Regex RegexPattern
 		{
 			get{return regex;}
 			set{regex = value;}

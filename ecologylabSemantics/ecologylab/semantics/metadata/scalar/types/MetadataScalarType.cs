@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization.Context;
@@ -9,42 +10,33 @@ using System.IO;
 
 namespace ecologylab.semantics.metadata.scalar.types
 {
-	public abstract class MetadataScalarScalarType : ReferenceType
+	public class MetadataScalarType : ReferenceType
 	{
-		ScalarType              valueScalarType;
-		FieldInfo               valueField;
+	    ScalarType              valueScalarType;
+	    FieldInfo               valueField;
 		private static Boolean  metadataScalarTypesRegistered = false;
 
+
+        public MetadataScalarType()
+            : this(typeof(MetadataScalarType), typeof(ScalarType))
+        {
+            
+        }
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="metadataScalarTypeClass"></param>
 		/// <param name="valueClass"></param>
-		public MetadataScalarScalarType(Type metadataScalarTypeClass, Type valueClass)
-            : base(metadataScalarTypeClass, metadataScalarTypeClass.Name, metadataScalarTypeClass.Name, metadataScalarTypeClass.Name)
+		protected MetadataScalarType(Type metadataScalarTypeClass, Type valueClass)
+            : base(metadataScalarTypeClass, metadataScalarTypeClass.Name, null, null)
 		{
 			// Get type handles for Test<String> and its field.
 
-		    this.valueScalarType = null;//TODO FIXME TypeRegistry.GetType(valueClass);
+            this.valueScalarType = TypeRegistry.GetScalarType(valueClass);
 			valueField = metadataScalarTypeClass.GetField(MetadataScalarBase<object>.VALUE_FIELD_NAME);
-
-            Object t = typeof(Type);
-            /*
-             * http://msdn.microsoft.com/en-us/library/ms145335.aspx
-             Apparantly this is the way to get FieldInfo of a generic type parameter field 
-             * But .GetField seems to be working fine.
-            if (valueField == null)
-            {
-                Type baseType = metadataScalarTypeClass.BaseType;
-
-                RuntimeTypeHandle rth = metadataScalarTypeClass.TypeHandle;
-                RuntimeFieldHandle rfh = metadataScalarTypeClass.GetField(MetadataScalarBase<object>.VALUE_FIELD_NAME).FieldHandle;
-
-                valueField = FieldInfo.GetFieldFromHandle(rfh, rth); 
-            }
-			*/
+           
             if (ValueField == null)
-				Console.WriteLine(metadataScalarTypeClass.Name + " does not have a valueField");
+				Debug.WriteLine(metadataScalarTypeClass.Name + " does not have a valueField");
 		}
 
 		/// <summary>
@@ -56,14 +48,18 @@ namespace ecologylab.semantics.metadata.scalar.types
 			get{ return valueField; }
 		}
 
-		public override bool SetField(object context, FieldInfo field, string valueString, string[] format, IScalarUnmarshallingContext scalarUnmarshallingContext)
+	    public override object GetInstance(string value, string[] formatStrings, IScalarUnmarshallingContext unmarshallingContext)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public override bool SetField(object context, FieldInfo field, string valueString, string[] format, IScalarUnmarshallingContext scalarUnmarshallingContext)
 		{
 			if (valueString == null)
 				return true;
 			bool result = false;
-			Object valueObject;
 
-            valueObject = valueScalarType.GetInstance(valueString, format, scalarUnmarshallingContext);
+		    object valueObject = valueScalarType.GetInstance(valueString, format, scalarUnmarshallingContext);
 			if (valueObject != null)
 			{
 				Object metadataScalarContext = field.GetValue(context);
@@ -85,28 +81,32 @@ namespace ecologylab.semantics.metadata.scalar.types
 			return valueScalarType.GetInstance(value, formatStrings, scalarUnmarshallingContext);
 		}
 
-		public static Type[]	METADATA_SCALAR_TYPES	=
-			{ 
-				typeof(MetadataStringScalarType),
-				typeof(MetadataStringBuilderScalarType),
-				typeof(MetadataIntegerScalarType),
-				typeof(MetadataParsedURLScalarType),
-				typeof(MetadataDateScalarType),
-                typeof(MetadataFileScalarType),
-                typeof(MetadataBooleanScalarType)
-            };
-
 		public static void init()
 		{
 			if (!metadataScalarTypesRegistered)
 			{
-				//TypeRegistry.RegisterTypes(METADATA_SCALAR_TYPES);//TODO FIXME
+				SimplType[]	METADATA_SCALAR_TYPES	=
+			    { 
+				    
+                    new MetadataStringScalarType(),
+				    new MetadataStringBuilderScalarType(),
+				    new MetadataIntegerScalarType(),
+				    new MetadataParsedURLScalarType(),
+				    new MetadataDateScalarType(),
+                    new MetadataFileScalarType(),
+                    new MetadataFloatScalarType(),
+                    new MetadataDoubleScalarType(),
+                    new MetadataBooleanScalarType(),
+                    new MetadataScalarTypeType(),
+                };
+
+                //TypeRegistry.RegisterTypes(METADATA_SCALAR_TYPES);//TODO FIXME
 				metadataScalarTypesRegistered = true;
 			}
 		}
 	}
 
-	public class MetadataStringScalarType : MetadataScalarScalarType
+	public class MetadataStringScalarType : MetadataScalarType
 	{
 		public MetadataStringScalarType()
 			: base(typeof(MetadataString), typeof(String))
@@ -118,7 +118,7 @@ namespace ecologylab.semantics.metadata.scalar.types
             return new MetadataString(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
 		}
 	}
-	public class MetadataStringBuilderScalarType : MetadataScalarScalarType
+	public class MetadataStringBuilderScalarType : MetadataScalarType
 	{
 		public MetadataStringBuilderScalarType()
 			: base(typeof(MetadataStringBuilder), typeof(StringBuilder))
@@ -130,7 +130,7 @@ namespace ecologylab.semantics.metadata.scalar.types
             return new MetadataStringBuilder(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
 		}
 	}
-	public class MetadataIntegerScalarType : MetadataScalarScalarType
+	public class MetadataIntegerScalarType : MetadataScalarType
 	{
 		public MetadataIntegerScalarType()
 			: base(typeof(MetadataInteger), typeof(int))
@@ -142,7 +142,20 @@ namespace ecologylab.semantics.metadata.scalar.types
             return new MetadataStringBuilder(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
 		}
 	}
-	public class MetadataParsedURLScalarType : MetadataScalarScalarType
+    public class MetadataFloatScalarType : MetadataScalarType
+    {
+        public MetadataFloatScalarType()
+            : base(typeof(MetadataFloat), typeof(float))
+        {
+
+        }
+        public override object GetInstance(string value, string[] formatStrings, IScalarUnmarshallingContext scalarUnmarshallingContext)
+        {
+            return new MetadataFloat(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
+        }
+    }
+    
+    public class MetadataParsedURLScalarType : MetadataScalarType
 	{
 		public MetadataParsedURLScalarType()
 			: base(typeof(MetadataParsedURL), typeof(ParsedUri))
@@ -154,7 +167,7 @@ namespace ecologylab.semantics.metadata.scalar.types
             return new MetadataParsedURL(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
 		}
 	}
-	public class MetadataDateScalarType : MetadataScalarScalarType
+	public class MetadataDateScalarType : MetadataScalarType
 	{
 		public MetadataDateScalarType()
 			: base(typeof(MetadataDate), typeof(DateTime))
@@ -167,7 +180,7 @@ namespace ecologylab.semantics.metadata.scalar.types
 		}
 	}
 
-    public class MetadataFileScalarType : MetadataScalarScalarType
+    public class MetadataFileScalarType : MetadataScalarType
     {
         public MetadataFileScalarType()
             : base(typeof(MetadataFile), typeof(FileStream))
@@ -179,7 +192,21 @@ namespace ecologylab.semantics.metadata.scalar.types
             return new MetadataFile(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
         }
     }
-    public class MetadataBooleanScalarType : MetadataScalarScalarType
+
+    public class MetadataDoubleScalarType : MetadataScalarType
+    {
+        public MetadataDoubleScalarType()
+            : base(typeof(MetadataDouble), typeof(double))
+        {
+
+        }
+        public override object GetInstance(string value, string[] formatStrings, IScalarUnmarshallingContext scalarUnmarshallingContext)
+        {
+            return new MetadataDouble(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
+        }
+    }
+
+    public class MetadataBooleanScalarType : MetadataScalarType
     {
         public MetadataBooleanScalarType()
             : base(typeof(MetadataBoolean), typeof(Boolean))

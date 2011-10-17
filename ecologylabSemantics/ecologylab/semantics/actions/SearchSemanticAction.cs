@@ -17,7 +17,7 @@ namespace ecologylab.semantics.actions
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("search")]
-    public class SearchSemanticAction<IC, SAH> : SemanticAction<IC, SAH> 
+    public class SearchSemanticAction : SemanticAction 
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.

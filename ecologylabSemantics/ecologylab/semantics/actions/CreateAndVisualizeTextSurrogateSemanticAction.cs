@@ -17,7 +17,7 @@ namespace ecologylab.semantics.actions
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("create_and_visualize_text_surrogate")]
-    public class CreateAndVisualizeTextSurrogateSemanticAction<IC, SAH> : SemanticAction<IC, SAH>
+    public class CreateAndVisualizeTextSurrogateSemanticAction : SemanticAction
 	{
 		public CreateAndVisualizeTextSurrogateSemanticAction()
 		{ }

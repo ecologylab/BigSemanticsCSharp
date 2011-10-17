@@ -15,7 +15,7 @@ namespace ecologylab.semantics.actions
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("back_off_from_site")]
-    public class BackOffFromSiteSemanticAction<IC, SAH> : SemanticAction<IC, SAH> 
+    public class BackOffFromSiteSemanticAction : SemanticAction 
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.

@@ -16,7 +16,7 @@ namespace ecologylab.semantics.actions
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	[SimplInherit]
-    public class Otherwise<IC, SAH> : NestedSemanticAction<IC, SAH>
+    public class Otherwise : NestedSemanticAction
 	{
 		public Otherwise()
 		{ }

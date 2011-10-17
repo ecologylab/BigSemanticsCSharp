@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Simpl.Serialization.Attributes;
 using Simpl.Serialization.Attributes;
 using Simpl.Serialization.Types;
+using ecologylab.semantics.metadata.scalar.types;
 
 
 namespace ecologylab.semantics.metametadata 
@@ -25,8 +26,9 @@ namespace ecologylab.semantics.metametadata
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[SimplScalar]
-		private ScalarType scalarType;
+
+        [SimplScalar]
+		private MetadataScalarType scalarType;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -37,7 +39,7 @@ namespace ecologylab.semantics.metametadata
 		public MetaMetadataScalarField()
 		{ }
 
-		public ScalarType ScalarTypeP
+        public MetadataScalarType ScalarTypeP
 		{
 			get{return scalarType;}
 			set{scalarType = value;}
@@ -48,5 +50,10 @@ namespace ecologylab.semantics.metametadata
 			get{return filter;}
 			set{filter = value;}
 		}
+
+	    public override string GetTypeName()
+	    {
+            throw new MetaMetadataException("no mmd name for scalar fields!");
+	    }
 	}
 }

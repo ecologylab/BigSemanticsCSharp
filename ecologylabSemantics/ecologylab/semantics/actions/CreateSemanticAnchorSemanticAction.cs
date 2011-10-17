@@ -18,7 +18,7 @@ namespace ecologylab.semantics.actions
 	/// </summary>
     [SimplInherit]
 	[SimplTag("create_semantic_anchor")]
-    public class CreateSemanticAnchorSemanticAction<IC, SAH> : SemanticAction<IC, SAH>
+    public class CreateSemanticAnchorSemanticAction : SemanticAction
 	{
 		public CreateSemanticAnchorSemanticAction()
 		{ }

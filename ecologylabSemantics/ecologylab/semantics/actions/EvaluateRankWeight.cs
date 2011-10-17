@@ -17,7 +17,7 @@ namespace ecologylab.semantics.actions
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("eval_rank_wt")]
-    public class EvaluateRankWeight<IC, SAH> : SemanticAction<IC, SAH> 
+    public class EvaluateRankWeight : SemanticAction 
 	{
 		public EvaluateRankWeight()
 		{ }

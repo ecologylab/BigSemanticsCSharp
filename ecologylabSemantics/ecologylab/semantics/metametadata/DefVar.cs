@@ -46,8 +46,9 @@ namespace ecologylab.semantics.metametadata
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[SimplScalar]
-		private ScalarType scalarType;
+		//[SimplScalar]
+
+		//private ScalarType scalarType;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -88,11 +89,11 @@ namespace ecologylab.semantics.metametadata
 			set{contextNode = value;}
 		}
 
-		public ScalarType ScalarTypeP
-		{
-			get{return scalarType;}
-			set{scalarType = value;}
-		}
+//		public ScalarType ScalarTypeP
+//		{
+//			get{return scalarType;}
+//			set{scalarType = value;}
+//		}
 
 		public String Value
 		{
