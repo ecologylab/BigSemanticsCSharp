@@ -89,7 +89,7 @@ namespace ecologylab.semantics.metametadata
             this.Name = name;
             this.Kids = new DictionaryList<String, MetaMetadataField>();
             if (kids != null)
-                this.kids.PutAll(kids);
+                this.Kids.PutAll(kids);
         }
 
         protected override string GetMetaMetadataTagToInheritFrom()
@@ -132,7 +132,7 @@ namespace ecologylab.semantics.metametadata
         protected void InheritMetaMetadataFrom(MetaMetadataRepository repository, MetaMetadataCompositeField inheritedStructure)
 	    {
 		    // init nested fields inside this
-		    foreach (MetaMetadataField f in kids.Values)
+		    foreach (MetaMetadataField f in Kids.Values)
 			    if (f.GetType() == typeof(MetaMetadataNestedField))
 			    {
 				    f.Repository = (repository);
@@ -146,7 +146,7 @@ namespace ecologylab.semantics.metametadata
 		    // if inheritedStructure == null, this must be the root meta-metadata
 		    if (inheritedStructure != null)
 		    {
-			    foreach (MetaMetadataField field in inheritedStructure.kids.Values)
+			    foreach (MetaMetadataField field in inheritedStructure.Kids.Values)
 			    {
 				    if (field.GetType() == typeof(MetaMetadataNestedField))
 				    {
@@ -172,7 +172,7 @@ namespace ecologylab.semantics.metametadata
 		    }
 
 		    // recursively call inheritMetaMetadata() on nested fields
-		    foreach (MetaMetadataField f in kids.Values)
+		    foreach (MetaMetadataField f in Kids.Values)
 		    {
 			    // a new field is defined inside this mmd
 			    if (f.DeclaringMmd == this && f.InheritedField == null)
@@ -207,7 +207,7 @@ namespace ecologylab.semantics.metametadata
 		    // structures (which may be inherited too) can be cloned.
 		    if (inheritedStructure != null)
 		    {
-			    foreach (MetaMetadataField field in inheritedStructure.kids.Values)
+			    foreach (MetaMetadataField field in inheritedStructure.Kids.Values)
 			    {
 				    String fieldName = field.Name;
 			        MetaMetadataField fieldLocal;
@@ -254,26 +254,24 @@ namespace ecologylab.semantics.metametadata
                 {
                     // determine new type name
                     String newTypeName = this.Type;
-                    
-                    mmdScope.TryGetValue(newTypeName, out tempType);
-                    if (newTypeName != null &&  tempType!= null)
+
+                    if (newTypeName != null &&  mmdScope.Get(newTypeName)!= null)
                         // currently we don't encourage re-using existing name. however, in the future, when package names are available, we can change this.
                         throw new MetaMetadataException("meta-metadata '" + newTypeName + "' already exists! please use another name to prevent name collision. hint: use 'tag' to change the tag if needed.");
-                    if (newTypeName == null)
-                        newTypeName = this.Name;
+                    
+                    newTypeName = newTypeName ?? this.Name;
+
                     if (newTypeName == null)
                         throw new MetaMetadataException("attribute 'name' must be specified: " + this);
 
                     // determine from which meta-metadata to inherit
                     String inheritedMmdName = ExtendsAttribute;
-                    mmdScope.TryGetValue(inheritedMmdName, out tempType);
-                    if (inheritedMmdName == null || tempType == null)
+                    inheritedMmd = mmdScope.Get(inheritedMmdName);
+                    if (inheritedMmd == null)
                         throw new MetaMetadataException("super type not specified or not found: " + this + ", super type name: " + inheritedMmdName);
-                    
-                    mmdScope.TryGetValue(inheritedMmdName, out inheritedMmd);
 
                     // generate inline mmds and put it into current scope
-                    MetaMetadata generatedMmd = this.generateMetaMetadata(newTypeName, inheritedMmd);
+                    MetaMetadata generatedMmd = GenerateMetaMetadata(newTypeName, inheritedMmd);
                     mmdScope.Put(newTypeName, generatedMmd);
                     mmdScope.Put(generatedMmd.Name, generatedMmd);
 
@@ -287,7 +285,7 @@ namespace ecologylab.semantics.metametadata
                 {
                     // use type / extends
                     String inheritedMmdName = Type ?? Name;
-                    mmdScope.TryGetValue(inheritedMmdName, out tempType);
+                    tempType = mmdScope.Get(inheritedMmdName);
                     if (inheritedMmdName == null && tempType == null)
                     {
                         inheritedMmdName = ExtendsAttribute;
@@ -300,7 +298,7 @@ namespace ecologylab.semantics.metametadata
 
                     if (inheritedMmdName != null)
                     {
-                        mmdScope.TryGetValue(inheritedMmdName, out inheritedMmd);
+                        inheritedMmd = mmdScope.Get(inheritedMmdName);
 
                         if (inheritedMmd != null && inheritedMmdName != inheritedMmd.Name)
                         {
@@ -354,7 +352,7 @@ namespace ecologylab.semantics.metametadata
          * @param inheritedMmd
          * @return
          */
-        protected MetaMetadata generateMetaMetadata(String previousName, MetaMetadata inheritedMmd)
+        protected MetaMetadata GenerateMetaMetadata(String previousName, MetaMetadata inheritedMmd)
 	{
 		String generatedName = getGeneratedMmdName2(previousName);
 		
@@ -377,15 +375,17 @@ namespace ecologylab.semantics.metametadata
 		generatedMmd.NewMetadataClass = true;
 		
 		// move nested fields (they will be cloned later)
-		foreach(String kidKey in this.kids.Keys)
-		{
-		    MetaMetadataField kid;
-            kids.TryGetValue(kidKey, out kid);
-			generatedMmd.Kids.Put(kidKey, kid);
-			kid.Parent = generatedMmd;
-		}
-		kids.Clear();
-		
+        if (kids != null && kids.Count > 0)
+        {
+            foreach (String kidKey in this.kids.Keys)
+            {
+                MetaMetadataField kid;
+                kids.TryGetValue(kidKey, out kid);
+                generatedMmd.Kids.Put(kidKey, kid);
+                kid.Parent = generatedMmd;
+            }
+            kids.Clear();
+        }
 		MakeThisFieldUseMmd(previousName, generatedMmd);
 		return generatedMmd;
 	}

@@ -453,8 +453,8 @@ namespace ecologylab.semantics.metametadata
 
         public DictionaryList<String, MetaMetadataField> Kids
 		{
-			get{return kids;}
-			set{kids = value;}
+			get { return kids ?? (kids = new DictionaryList<string, MetaMetadataField>()); }
+            set{kids = value;}
 		}
 
 		public Boolean Hide
@@ -713,6 +713,11 @@ namespace ecologylab.semantics.metametadata
                 _capFieldNameInCSharp = rst;
             }
             return _capFieldNameInCSharp;
+        }
+
+        public override string ToString()
+        {
+            return "MetaMetadata [" + Name + "]";
         }
 
         /**

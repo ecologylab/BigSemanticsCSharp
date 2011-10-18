@@ -245,7 +245,7 @@ namespace ecologylab.semantics.metametadata
         protected void BindMetadataFieldDescriptors(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
 	    {
 		    // copy the kids collection first to prevent modification to the collection during iteration (which may invalidate the iterator).
-		    List<MetaMetadataField> fields = new List<MetaMetadataField>(kids.Values);
+		    List<MetaMetadataField> fields = new List<MetaMetadataField>(Kids.Values);
 		    foreach (MetaMetadataField thatChild in fields)
 		    {
 			    // look up by field name and bind
@@ -304,7 +304,7 @@ namespace ecologylab.semantics.metametadata
 					    else
 					    {
 						    Debug.WriteLine("Cannot determine elementClassDescriptor for " + thatChild);
-						    this.kids.Remove(thatChild.Name);
+						    this.Kids.Remove(thatChild.Name);
 					    }
 				    }
 			    }

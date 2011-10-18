@@ -55,7 +55,7 @@ namespace ecologylab.semantics.metametadata
         public static MetaMetadataRepository ReadRepository(String filename, SimplTypesScope mmdTScope, SimplTypesScope metadataTScope, MetaMetadataRepository mainRepo)
         {
             MetaMetadataRepository repo = null;
-            //Console.WriteLine("MetaMetadataRepository Reading: " + filename);
+            Console.WriteLine("MetaMetadataRepository Reading:\t\t" + filename);
 
             try
             {
