@@ -36,29 +36,33 @@ namespace ecologylabSemantics
 
         }
 
+        
+        //String mmdJson;
+        String mmdDomHelperJSString;
+
+        static readonly string appPath = System.AppDomain.CurrentDomain.BaseDirectory;
+
+        static readonly String workspace = appPath + @"..\..\..\";
+
+        private static readonly string wikiCacheLocation = appPath;
+        private const String wikiPuriPrefix = "http://en.wikipedia.org/wiki/";
+        MetaMetadataRepository repo;
+
         public static void Main()
         {
-//            TestElementState tES = new TestElementState
-//            {
-//                SomeString = "This string has \" Quotes\" —  and & > ? > < :" + (char)0x09 + "MORE ",
-//                uri = new ParsedUri("http://google.com/search?moresearches=some&more=values")
-//            };
-//
-//            //tES.somethingElse = "New String";
-//
-//            var buffy = new StringBuilder();
-//            tES.serializeToJSON(buffy);
-//            Console.WriteLine("buffy:\n" + buffy);
-//            TranslationScope scope = new TranslationScope("Temp", new Type[]{typeof(TestElementState)});
-//
-//            TestElementState deserializeString = (TestElementState) scope.Deserialize(buffy.ToString(),  StringFormat.Json);
-//            buffy = new StringBuilder();
-//            deserializeString.serialize(buffy, Format.JSON);
-//
-//            Console.WriteLine("\n" + buffy);
-//
-//            Console.WriteLine("");
-            //new ClassTester();
+            String jsPath = workspace + @"DomExtraction\javascript\";
+
+            MetadataScalarType.init();
+            SimplTypesScope mmdTScope = MetaMetadataTranslationScope.Get();
+            var metadataTScope = RepositoryMetadataTranslationScope.Get();
+
+
+            const string testFile = @"MetaMetadataRepository\";
+            Console.WriteLine("Initting repository");
+            MetaMetadataRepository.stopTheConsoleDumping = true;
+            var repo = MetaMetadataRepositoryLoader.ReadDirectoryRecursively(workspace + testFile, mmdTScope, metadataTScope);
+
+            var mmdDomHelperJSString = File.ReadAllText(jsPath + "mmdDomHelper.js");
         }
 //
 //        static String path = @"C:\Users\damaraju.m2icode\workspace\cSharp\ecologylabSemantics\DomExtraction\javascript\tempJSON\";
