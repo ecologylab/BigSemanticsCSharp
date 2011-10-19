@@ -78,10 +78,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AwesomiumSharp\AwesomiumSharp.csproj">
-      <Project>{1614289C-5F21-4934-9143-A47755D7C0A6}</Project>
-      <Name>AwesomiumSharp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ecologylabGeneratedSemantics\ecologylabGeneratedSemantics.csproj">
       <Project>{3121E696-14DE-4987-BCED-588E4AB9259F}</Project>
       <Name>ecologylabGeneratedSemantics</Name>
