@@ -24,6 +24,7 @@ namespace ecologylab.semantics.metametadata
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("composite")]
+    [SimplDescriptorClasses(new[] { typeof(MetaMetadataClassDescriptor), typeof(MetaMetadataFieldDescriptor) })]
 	public class MetaMetadataCompositeField : MetaMetadataNestedField
 	{
 		/// <summary>
@@ -129,7 +130,7 @@ namespace ecologylab.semantics.metametadata
                 InheritMetaMetadataFrom(repository, null);
         }
 
-        protected void InheritMetaMetadataFrom(MetaMetadataRepository repository, MetaMetadataCompositeField inheritedStructure)
+        protected virtual void InheritMetaMetadataFrom(MetaMetadataRepository repository, MetaMetadataCompositeField inheritedStructure)
 	    {
 		    // init nested fields inside this
 		    foreach (MetaMetadataField f in Kids.Values)
@@ -176,7 +177,7 @@ namespace ecologylab.semantics.metametadata
 		    {
 			    // a new field is defined inside this mmd
 			    if (f.DeclaringMmd == this && f.InheritedField == null)
-				    NewMetadataClass = true;
+				    SetNewMetadataClass(true);
 
 			    // recursively call this method on nested fields
 			    f.Repository = repository;
@@ -184,8 +185,8 @@ namespace ecologylab.semantics.metametadata
 			    {
 				    MetaMetadataNestedField f1 = (MetaMetadataNestedField) f;
 				    f1.InheritMetaMetadata();
-				    if (f1.NewMetadataClass)
-					    NewMetadataClass = true;
+				    if (f1.IsNewMetadataClass())
+				        SetNewMetadataClass(true);
 				
 				    MetaMetadataNestedField f0 = (MetaMetadataNestedField) f.InheritedField;
 				    if (f0 != null && f0.GetTypeName() != f1.GetTypeName())
@@ -195,7 +196,7 @@ namespace ecologylab.semantics.metametadata
 					    MetaMetadata mmd0 = f0.InheritedMmd;
 					    MetaMetadata mmd1 = f1.InheritedMmd;
 					    if (mmd1.IsDerivedFrom(mmd0))
-						    NewMetadataClass = true;
+						    SetNewMetadataClass( true);
 					    else
 						    throw new MetaMetadataException("incompatible types: " + f0 + " => " + f1);
 				    }
@@ -229,7 +230,7 @@ namespace ecologylab.semantics.metametadata
          * 
          * @param inheritedMmd
          */
-        protected void InheritFromInheritedMmd(MetaMetadata inheritedMmd)
+        protected virtual void InheritFromInheritedMmd(MetaMetadata inheritedMmd)
         {
             MmdScope = new MultiAncestorScope<MetaMetadata>(MmdScope, inheritedMmd.MmdScope);
         }
@@ -243,7 +244,7 @@ namespace ecologylab.semantics.metametadata
          * @param repository
          * @return
          */
-        protected MetaMetadata FindOrGenerateInheritedMetaMetadata(MetaMetadataRepository repository)
+        protected virtual MetaMetadata FindOrGenerateInheritedMetaMetadata(MetaMetadataRepository repository)
         {
             MetaMetadata inheritedMmd = this.InheritedMmd;
             if (inheritedMmd == null)
@@ -292,7 +293,7 @@ namespace ecologylab.semantics.metametadata
                         if (inheritedMmdName == null)
 //                            throw new MetaMetadataException("no type / extends defined for " + this);
                             Debug.WriteLine("no type / extends defined for " + this);
-                        NewMetadataClass = true;
+                        SetNewMetadataClass( true);
                     }
 
 
@@ -372,7 +373,7 @@ namespace ecologylab.semantics.metametadata
                                             };
 		if (SchemaOrgItemtype != null)
 		    generatedMmd.SchemaOrgItemtype = SchemaOrgItemtype;
-		generatedMmd.NewMetadataClass = true;
+		generatedMmd.SetNewMetadataClass( true);
 		
 		// move nested fields (they will be cloned later)
         if (kids != null && kids.Count > 0)
@@ -482,5 +483,6 @@ namespace ecologylab.semantics.metametadata
 //            //
 //            return BindClassDescriptor(metadataClass, metadataTScope);
 //        }
+	    
 	}
 }

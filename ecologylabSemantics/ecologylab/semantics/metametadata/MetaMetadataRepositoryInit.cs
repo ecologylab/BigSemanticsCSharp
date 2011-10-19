@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Simpl.Serialization;
-using ecologylab.semantics.metadata.builtins;
+using ecologylab.semantics.generated.library;
 using ecologylab.semantics.namesandnums;
 
 namespace ecologylab.semantics.metametadata
@@ -66,7 +66,7 @@ namespace ecologylab.semantics.metametadata
 	     * 
 	     * @param metadataTranslationScope
 	     */
-	    protected MetaMetadataRepositoryInit(SimplTypesScope metadataTranslationScope)
+	    public MetaMetadataRepositoryInit(SimplTypesScope metadataTranslationScope, string repoLocation)
 	    {
 //		    if (SingletonApplicationEnvironment.isInUse() && !SingletonApplicationEnvironment.runningInEclipse())
 //		    {
@@ -79,13 +79,13 @@ namespace ecologylab.semantics.metametadata
 //		    }
 //		    else
 		    {
-			    METAMETADATA_REPOSITORY_DIR_FILE 	= new FileInfo(DEFAULT_REPOSITORY_LOCATION);
+                METAMETADATA_REPOSITORY_DIR_FILE = new FileInfo(repoLocation);
 		    }
 
             this.metadataTranslationScope = metadataTranslationScope;
 		    Debug.WriteLine("\t\t-- Reading meta_metadata from " + METAMETADATA_REPOSITORY_DIR_FILE);
 
-            META_METADATA_REPOSITORY = MetaMetadataRepositoryLoader.ReadDirectoryRecursively(DEFAULT_REPOSITORY_LOCATION, MetaMetadataTranslationScope.Get(), metadataTranslationScope);
+            META_METADATA_REPOSITORY = MetaMetadataRepositoryLoader.ReadDirectoryRecursively(repoLocation, MetaMetadataTranslationScope.Get(), metadataTranslationScope);
 		
 		    DOCUMENT_META_METADATA          = META_METADATA_REPOSITORY.GetMMByName(DOCUMENT_TAG);
 		    PDF_META_METADATA               = META_METADATA_REPOSITORY.GetMMByName(PDF_TAG);

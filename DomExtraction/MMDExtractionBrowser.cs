@@ -4,15 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using AwesomiumSharp;
-using DomExtraction.Properties;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
-using Simpl.Serialization.Context;
 using ecologylab.semantics.generated.library;
-using ecologylab.semantics.metadata;
-using ecologylab.semantics.metadata.builtins;
-using ecologylab.serialization;
-
 using ecologylab.semantics.metametadata;
 using ecologylab.semantics.metadata.scalar.types;
 
@@ -94,7 +88,10 @@ namespace DomExtraction
             const string testFile = @"MetaMetadataRepository\";
             Console.WriteLine("Initting repository");
             MetaMetadataRepository.stopTheConsoleDumping = true;
-            repo = MetaMetadataRepositoryLoader.ReadDirectoryRecursively(workspace + testFile, mmdTScope, metadataTScope);
+
+            var initter = new MetaMetadataRepositoryInit(mmdTScope, workspace + testFile);
+            repo = initter.GetMetaMetadataRepository();
+            //repo = MetaMetadataRepositoryLoader.ReadDirectoryRecursively(workspace + testFile, mmdTScope, metadataTScope);
 
             mmdDomHelperJSString = File.ReadAllText(jsPath + "mmdDomHelper.js");
             

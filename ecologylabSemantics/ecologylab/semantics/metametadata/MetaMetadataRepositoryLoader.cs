@@ -46,9 +46,6 @@ namespace ecologylab.semantics.metametadata
                 foreach (string innerDir in directories.Where(innerDir => !innerDir.Contains(".svn")))
                     stack.Push(innerDir);
             }
-
-            mainRepo.BindMetadataClassDescriptorsToMetaMetadata(metadataTScope);
-
             return mainRepo;
         }
 

@@ -9,7 +9,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Simpl.Fundamental.Collections;
 using Simpl.Fundamental.Generic;
 using Simpl.Fundamental.Net;
@@ -17,12 +16,11 @@ using Simpl.Serialization.Attributes;
 using Simpl.Serialization;
 using ecologylab.net;
 using ecologylab.semantics.connectors;
+using ecologylab.semantics.generated.library;
 using ecologylab.semantics.metadata.scalar.types;
 using ecologylab.textformat;
 using System.Text.RegularExpressions;
 using ecologylab.semantics.metadata;
-using ecologylab.semantics.metadata.builtins;
-using System.IO;
 
 namespace ecologylab.semantics.metametadata 
 {
@@ -170,6 +168,7 @@ namespace ecologylab.semantics.metametadata
             // global metadata classes
 		    // use another copy because we may modify the scope during the process
 		    List<MetaMetadata> mmds = new   List<MetaMetadata>(_repositoryByName.Values);
+            
 		    foreach (MetaMetadata mmd in  mmds)
 		    {
 			    MetadataClassDescriptor mcd = mmd.BindMetadataClassDescriptor(metadataTScope);
@@ -262,48 +261,54 @@ namespace ecologylab.semantics.metametadata
 			    // if something is there, then we need to check to see if it has its cf pref set
 			    // if not, then if I am null then I win
 
-                MetaMetadataSelector selector = metaMetadata.Selectors[0];//Note: Needs to consider all selectors. 
-                ParsedUri purl = selector.UrlStripped;
-			    if (purl != null)
-			    {
-                    MetaMetadata inMap;
-                    repositoryByUrlStripped.TryGetValue(purl.Stripped, out inMap);
-                    if (inMap == null)
-                        repositoryByUrlStripped.Add(purl.Stripped, metaMetadata);
+                //MetaMetadataSelector selector = metaMetadata.Selectors[0];//Note: Needs to consider all selectors. 
+
+                if (metaMetadata.Selectors == null || metaMetadata.Selectors.Count == 0)
+                    continue;
+                foreach (MetaMetadataSelector selector in metaMetadata.Selectors)
+                {
+
+                    ParsedUri purl = selector.UrlStripped;
+                    if (purl != null)
+                    {
+                        MetaMetadata inMap;
+                        repositoryByUrlStripped.TryGetValue(purl.Stripped, out inMap);
+                        if (inMap == null)
+                            repositoryByUrlStripped.Add(purl.Stripped, metaMetadata);
+                        else
+                            Console.WriteLine("MetaMetadata already exists in repositoryByUrlStripped for purl\n\t: "
+                                + purl + " :: " + inMap.Name + " Ignoring MMD: " + metaMetadata.Name);
+
+                    }
                     else
-                        Console.WriteLine("MetaMetadata already exists in repositoryByUrlStripped for purl\n\t: " 
-                            + purl + " :: " + inMap.Name + " Ignoring MMD: " + metaMetadata.Name);
-                        
-			    }
-			    else
-			    {
-					// use .pattern() for comparison
-                    String domain = selector.Domain ?? (selector.UrlPathTree != null ? selector.UrlPathTree.Domain : null);
-					if (domain != null)
-					{
-                        Regex urlPattern = selector.UrlRegex;
+                    {
+                        // use .pattern() for comparison
+                        String domain = selector.Domain ?? (selector.UrlPathTree != null ? selector.UrlPathTree.Domain : null);
+                        if (domain != null)
+                        {
+                            Regex urlPattern = selector.UrlRegex ??
+                                               new Regex(selector.UrlPathTree.ToString().Replace("*", "[^/]+"));
 
-                        if (urlPattern == null)
-                            urlPattern = new Regex(selector.UrlPathTree.ToString().Replace("*", "[^/]+"));
 
-						if (urlPattern != null)
-						{
-							List<RepositoryPatternEntry> bucket;
-                            repositoryByPattern.TryGetValue(domain, out bucket);
-							if (bucket == null)
-							{
-								bucket = new List<RepositoryPatternEntry>(2);
-								repositoryByPattern.Add(domain, bucket);
-							}
-                            bucket.Add(new RepositoryPatternEntry(urlPattern, metaMetadata));
-						}
-					    else
-					    {
-						    // domain only -- no pattern
-						    _documentRepositoryByDomain.Add(domain, metaMetadata);
-					    }
-					}
-			    }
+                            if (urlPattern != null)
+                            {
+                                List<RepositoryPatternEntry> bucket;
+                                repositoryByPattern.TryGetValue(domain, out bucket);
+                                if (bucket == null)
+                                {
+                                    bucket = new List<RepositoryPatternEntry>(2);
+                                    repositoryByPattern.Add(domain, bucket);
+                                }
+                                bucket.Add(new RepositoryPatternEntry(urlPattern, metaMetadata));
+                            }
+                            else
+                            {
+                                // domain only -- no pattern
+                                _documentRepositoryByDomain.Add(domain, metaMetadata);
+                            }
+                        }
+                    }
+                }
 		    }
 	    }
 
@@ -389,6 +394,7 @@ namespace ecologylab.semantics.metametadata
                 if (!MergeDictionaries(otherRepositoryByTagName, this._repositoryByName))
                     this._repositoryByName = otherRepositoryByTagName;
             }
+	        //MetadataTScope = repository.MetadataTScope;
 
         }
 

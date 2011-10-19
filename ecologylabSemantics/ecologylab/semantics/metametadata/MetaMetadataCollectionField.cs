@@ -25,6 +25,7 @@ namespace ecologylab.semantics.metametadata
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("collection")]
+    [SimplDescriptorClasses(new[] { typeof(MetaMetadataClassDescriptor), typeof(MetaMetadataFieldDescriptor) })]
 	public class MetaMetadataCollectionField : MetaMetadataNestedField
 	{
         public static readonly String UNRESOLVED_NAME = "&UNRESOLVED_NAME";
@@ -227,6 +228,7 @@ namespace ecologylab.semantics.metametadata
     {
         public MetaMetadataClassDescriptor(Type thatClass) : base(thatClass)
         {
+
         }
 
         public MetaMetadataClassDescriptor(string tagName, string comment, string describedClassPackageName, string describedClassSimpleName, ClassDescriptor superClass, List<string> interfaces) : base(tagName, comment, describedClassPackageName, describedClassSimpleName, superClass, interfaces)

@@ -20,10 +20,12 @@ namespace ecologylab.semantics.metametadata
 {
 	
 	[SimplInherit]
+    [SimplDescriptorClasses(new[] { typeof(MetaMetadataClassDescriptor), typeof(MetaMetadataFieldDescriptor) })]
 	public class MetaMetadata : MetaMetadataCompositeField, IMappable
 	{
+	    private const string ROOT_MMD_NAME = "metadata";
 
-        [SimplScalar]
+	    [SimplScalar]
 	    protected string ormInheritanceStrategy;
 		
         [SimplNoWrap]
@@ -141,6 +143,12 @@ namespace ecologylab.semantics.metametadata
 	        set { naturalIds = value; }
 	    }
 
+	    public bool IsBuiltIn
+	    {
+	        get { return builtIn; }
+	        set { builtIn = value; }
+	    }
+
 	    #endregion
 
 	    object IMappable.Key()
@@ -160,6 +168,45 @@ namespace ecologylab.semantics.metametadata
 		    return false;
 	    }
 
+        protected override void InheritMetaMetadataHelper()
+        {
+//		debug("processing mmd: " + this);
+		
+		    // init each field's declaringMmd to this (some of them may change during inheritance)
+		    foreach (MetaMetadataField field in Kids.Values)
+			    field.DeclaringMmd = this;
+            
+            base.InheritMetaMetadataHelper();
+        }
+
+        protected override void InheritFromInheritedMmd(MetaMetadata inheritedMmd)
+        {
+            base.InheritFromInheritedMmd(inheritedMmd);
+            InheritAttributes(inheritedMmd);
+            
+            //InheritSemanticActions(inheritedMmd);
+        }
+
+        protected override void InheritMetaMetadataFrom(MetaMetadataRepository repository, MetaMetadataCompositeField inheritedStructure)
+	    {
+		    base.InheritMetaMetadataFrom(repository, inheritedStructure);
+		
+		    // for fields referring to this meta-metadata type
+		    // need to do inheritMetaMetadata() again after copying fields from this.getInheritedMmd()
+		    foreach (MetaMetadataField f in this.Kids.Values)
+		    {
+			    if (f.GetType() ==  typeof(MetaMetadataNestedField))
+			    {
+				    MetaMetadataNestedField nested = (MetaMetadataNestedField) f;
+				    if (nested.InheritedMmd == this)
+				    {
+					    nested.ClearInheritFinishedOrInProgressFlag();
+					    nested.InheritMetaMetadata();
+				    }
+			    }
+		    }
+	    }
+
 	    public new MetadataClassDescriptor BindMetadataClassDescriptor(SimplTypesScope metadataTScope)
 	    {
             if (metadataClassDescriptor != null)
@@ -169,36 +216,90 @@ namespace ecologylab.semantics.metametadata
             SimplTypesScope localMetadataTScope = SimplTypesScope.Get("mmd_local_tscope:" + Name,  metadataTScope );
 
             // record the initial number of classes in the local translation scope
-	        if (localMetadataTScope.EntriesByClassName != null)
+
+	        int initialLocalTScopeSize = localMetadataTScope.EntriesByClassName.Count;
+
+	        // do actual stuff ...
+	        base.BindMetadataClassDescriptor(localMetadataTScope);
+
+	        // if tag overlaps, or there are fields using classes not in metadataTScope, use localTScope
+	        MetadataClassDescriptor thisCd = this.MetadataClassDescriptor;
+	        if (thisCd != null)
 	        {
-	            int initialLocalTScopeSize = localMetadataTScope.EntriesByClassName.Count;
-
-	            // do actual stuff ...
-	            base.BindMetadataClassDescriptor(localMetadataTScope);
-
-	            // if tag overlaps, or there are fields using classes not in metadataTScope, use localTScope
-	            MetadataClassDescriptor thisCd = this.MetadataClassDescriptor;
-	            if (thisCd != null)
+	            MetadataClassDescriptor thatCd = (MetadataClassDescriptor)metadataTScope.GetClassDescriptorByTag(thisCd.TagName);
+	            if (thisCd != thatCd)
 	            {
-	                MetadataClassDescriptor thatCd = (MetadataClassDescriptor)metadataTScope.GetClassDescriptorByTag(thisCd.TagName);
-	                if (thisCd != thatCd)
-	                {
-	                    localMetadataTScope.AddTranslation(thisCd);
-	                    this.localMetadataTranslationScope = localMetadataTScope;
-	                }
-	                else if (localMetadataTScope.EntriesByClassName.Count > initialLocalTScopeSize)
-	                    this.localMetadataTranslationScope = localMetadataTScope;
-	                else
-	                    this.localMetadataTranslationScope = metadataTScope;
+	                localMetadataTScope.AddTranslation(thisCd);
+	                this.localMetadataTranslationScope = localMetadataTScope;
 	            }
-
-	            // return the bound metadata class descriptor
-	            return thisCd;
+	            else if (localMetadataTScope.EntriesByClassName.Count > initialLocalTScopeSize)
+	                this.localMetadataTranslationScope = localMetadataTScope;
+	            else
+	                this.localMetadataTranslationScope = metadataTScope;
 	        }
-	        return null;
-	    }
-                                           
 
+	        // return the bound metadata class descriptor
+	        return thisCd;
+	    }
+
+        protected override MetaMetadata FindOrGenerateInheritedMetaMetadata(MetaMetadataRepository repository)
+        {
+            if (MetaMetadata.IsRootMetaMetadata(this))
+                return null;
+
+            MetaMetadata inheritedMmd = this.InheritedMmd;
+            if (inheritedMmd == null)
+            {
+                String inheritedMmdName = this.Type;
+                if (inheritedMmdName == null)
+                {
+                    inheritedMmdName = this.ExtendsAttribute;
+                    SetNewMetadataClass(true);
+                }
+                if (inheritedMmdName == null)
+                    throw new MetaMetadataException("no type/extends specified: " + this);
+                inheritedMmd = this.MmdScope.Get(inheritedMmdName);
+                if (inheritedMmd == null)
+                    throw new MetaMetadataException("meta-metadata '" + inheritedMmdName + "' not found.");
+                InheritedMmd = inheritedMmd;
+            }
+            return inheritedMmd;
+        }
+
+	    private static bool IsRootMetaMetadata(MetaMetadata mmd)
+	    {
+	        return mmd.Name.Equals(ROOT_MMD_NAME);
+
+	    }
+
+
+	    protected override String GetMetadataClassName()
+        {
+            return this.PackageName + "." + GetMetadataClassSimpleName();
+        }
+
+        protected override string GetMetadataClassSimpleName()
+	    {
+            if (IsBuiltIn || IsNewMetadataClass())
+            {
+                // new definition
+                return XmlTools.CamelCaseFromXMLElementName(Name, true);// ClassNameFromElementName(Name);
+            }
+            else
+            {
+                // re-using existing type
+                // do not use this.type directly because we don't know if that is a definition or just re-using exsiting type
+                MetaMetadata inheritedMmd = InheritedMmd;
+                if (inheritedMmd == null)
+                    InheritMetaMetadata(); // currently, this should never happend because we call this method after inheritance process.
+                return inheritedMmd == null ? null : inheritedMmd.GetMetadataClassSimpleName();
+            }
+	    }
+
+	    public override bool IsNewMetadataClass()
+	    {
+	        return base.IsNewMetadataClass() && !IsBuiltIn;
+	    }
 	}
 
     public enum RedirectHandling

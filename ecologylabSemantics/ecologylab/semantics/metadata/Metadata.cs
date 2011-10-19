@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization.Attributes;
 using Simpl.Serialization;
+using ecologylab.semantics.metadata;
 using ecologylab.semantics.metadata.scalar;
 using System.Collections;
 using System.Windows.Controls;
@@ -19,7 +20,7 @@ using ecologylab.semantics.metametadata;
 using ecologylab.net;
 
 
-namespace ecologylab.semantics.metadata 
+namespace ecologylab.semantics.generated.library
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.

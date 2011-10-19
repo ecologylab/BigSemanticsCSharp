@@ -21,6 +21,7 @@ namespace ecologylab.semantics.metametadata
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("scalar")]
+    [SimplDescriptorClasses(new[] { typeof(MetaMetadataClassDescriptor), typeof(MetaMetadataFieldDescriptor) })]
 	public class MetaMetadataScalarField : MetaMetadataField
 	{
 		/// <summary>

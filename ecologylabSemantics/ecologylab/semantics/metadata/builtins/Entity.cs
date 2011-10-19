@@ -14,7 +14,7 @@ using ecologylab.semantics.metadata.scalar;
 
 using ecologylab.semantics.metadata;
 
-namespace ecologylab.semantics.metadata.builtins 
+namespace ecologylab.semantics.generated.library 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.

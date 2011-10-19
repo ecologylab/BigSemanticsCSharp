@@ -5,7 +5,7 @@ using System.Text;
 using ecologylab.semantics.metadata;
 using Simpl.Serialization;
 
-namespace ecologylab.semantics.metadata.builtins
+namespace ecologylab.semantics.generated.library 
 {
   public class MetadataBuiltinsTranslationScope
   {

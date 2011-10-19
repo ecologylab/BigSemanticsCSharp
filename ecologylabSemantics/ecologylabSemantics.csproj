@@ -70,6 +70,11 @@
     <Compile Include="ecologylab\semantics\actions\SemanticActionTranslationScope.cs" />
     <Compile Include="ecologylab\semantics\actions\SetFieldSemanticAction.cs" />
     <Compile Include="ecologylab\semantics\actions\SetMetadataSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\Annotation.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\DocumentMetadataWrap.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\ImageClipping.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\MediaClipping.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\TextClipping.cs" />
     <Compile Include="ecologylab\semantics\metadata\MmDontInherit.cs" />
     <Compile Include="ecologylab\semantics\metadata\scalar\types\MetadataDoubleScalarType.cs" />
     <Compile Include="ecologylab\semantics\metadata\scalar\types\MetadataScalarTypeType.cs" />

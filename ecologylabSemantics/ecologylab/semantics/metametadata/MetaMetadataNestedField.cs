@@ -22,10 +22,12 @@ namespace ecologylab.semantics.metametadata
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	[SimplInherit]
+    [SimplDescriptorClasses(new[] { typeof(MetaMetadataClassDescriptor), typeof(MetaMetadataFieldDescriptor) })]
 	public abstract class MetaMetadataNestedField : MetaMetadataField
 	{
+	    private const string AsemblyQualifiedNameForGeneratedSemantics = ", ecologylabGeneratedSemantics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
 
-        [SimplScalar]
+	    [SimplScalar]
         [SimplHints(new Hint[] { Hint.XmlAttribute })]
         [SimplTag("package")]
         private String packageName;
@@ -59,10 +61,9 @@ namespace ecologylab.semantics.metametadata
         /**
          * should we generate a metadata class descriptor for this field. used by the compiler.
          */
-        private bool newMetadataClass = false;
+        private bool _isNewMetadataClass;
 
-        private bool mmdScopeTraversed = false;
-
+        private bool mmdScopeTraversed;
 
         private MultiAncestorScope<MetaMetadata> mmdScope;
 
@@ -75,13 +76,13 @@ namespace ecologylab.semantics.metametadata
         {
             if (inheritMetaMetadataFinished || inheritInProcess) return;
 
-            Debug.WriteLine("inheriting " + this);
+            //Debug.WriteLine("inheriting " + this);
             inheritInProcess = true;
             InheritMetaMetadataHelper();
             this.SortForDisplay();
             inheritInProcess = false;
             inheritFinished = true;
-            inheritMetaMetadataFinished = true;
+            //inheritMetaMetadataFinished = true;
         }
 
 	    protected abstract void InheritMetaMetadataHelper();
@@ -134,11 +135,15 @@ namespace ecologylab.semantics.metametadata
 	        set { inheritedMmd = value; }
 	    }
 
-	    public bool NewMetadataClass
+	    public virtual bool IsNewMetadataClass()
 	    {
-	        get { return newMetadataClass; }
-	        set { newMetadataClass = value; }
-	    }
+	         return _isNewMetadataClass; 
+        }
+
+        public void SetNewMetadataClass(bool b)
+        {
+            _isNewMetadataClass = b;
+        }
 
 	    public bool MmdScopeTraversed
 	    {
@@ -205,10 +210,18 @@ namespace ecologylab.semantics.metametadata
                     {
                         try
                         {
-                            Type metadataType= Type.GetType(metadataClassName);
+                            Type metadataType = Type.GetType(metadataClassName) ?? Type.GetType(metadataClassName + AsemblyQualifiedNameForGeneratedSemantics);
                             this.metadataClass = metadataType;
-                            metadataCd = (MetadataClassDescriptor)ClassDescriptor.GetClassDescriptor(metadataClass);
-                            metadataTScope.AddTranslation(metadataClass);
+                            if(metadataClass != null)
+                            {
+                                metadataCd = (MetadataClassDescriptor)ClassDescriptor.GetClassDescriptor(metadataClass);
+                                metadataTScope.AddTranslation(metadataClass);
+                            }
+                            else
+                            {
+                                Debug.WriteLine("Cannot find metadata class: " + metadataClassName);    
+                            }
+                                
                         }
                         catch (Exception e)
                         {
@@ -321,14 +334,22 @@ namespace ecologylab.semantics.metametadata
 		    }
 	    }
 
-	    private string GetMetadataClassName()
+	    protected virtual string GetMetadataClassName()
 	    {
-            return InheritedMmd.GetMetadataClassSimpleName();
+	        return InheritedMmd.GetMetadataClassName();
 	    }
 
-	    private string GetMetadataClassSimpleName()
+	    protected virtual string GetMetadataClassSimpleName()
 	    {
 	        return InheritedMmd.GetMetadataClassSimpleName();
 	    }
+
+	    public void ClearInheritFinishedOrInProgressFlag()
+	    {
+	        inheritFinished = false;
+	        inheritInProcess = false;
+	    }
+
+
 	}
 }

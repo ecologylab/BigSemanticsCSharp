@@ -50,6 +50,8 @@ namespace ecologylabSemantics
 
         public static void Main()
         {
+
+            Console.WriteLine(typeof(PdfMixin).AssemblyQualifiedName);
             String jsPath = workspace + @"DomExtraction\javascript\";
 
             MetadataScalarType.init();

@@ -21,10 +21,8 @@ using System.Text.RegularExpressions;
 
 namespace ecologylab.semantics.metametadata 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
 	[SimplInherit]
+    [SimplDescriptorClasses(new[] { typeof(MetaMetadataClassDescriptor), typeof(MetaMetadataFieldDescriptor)})]
 	public abstract class MetaMetadataField : ElementState, IMappable, IEnumerable<MetaMetadataField>
     {
         #region Variables
@@ -605,7 +603,7 @@ namespace ecologylab.semantics.metametadata
 
 	    public void InheritAttributes(MetaMetadataField inheritFrom)
         {
-            MetaMetadataClassDescriptor classDescriptor = (MetaMetadataClassDescriptor)ClassDescriptor.GetClassDescriptor(this); ;
+            var classDescriptor = ClassDescriptor.GetClassDescriptor(this);
 
             foreach (MetaMetadataFieldDescriptor fieldDescriptor in classDescriptor.AllFieldDescriptors)
             {
