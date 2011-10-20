@@ -21,22 +21,39 @@ using System.Windows.Input;
 namespace ecologylabSemantics
 {
     public class Tester
-    {
+    { 
+        [SimplInherit]
+        [SimplTag("test")]
         public class TestElementState : ElementState
         {
             [SimplScalar]
+            [SimplTag("key")]
             public String SomeString;
 
             [SimplScalar]
+            // [SimplHints(new Hint[] {Hint.XmlLeaf})]
             public ParsedUri uri;
 
             public TestElementState()
             { }
-
-
         }
 
-        
+      public static void Main(string[] args)
+      {
+        SimplTypesScope scope = SimplTypesScope.Get("hcc", typeof (TestElementState));
+        TestElementState tes = new TestElementState();
+        tes.SomeString = "abc ";
+        tes.uri = new ParsedUri("http://example.com");
+        SimplTypesScope.Serialize(tes, StringFormat.Xml, Console.Out);
+        Console.WriteLine();
+
+
+        string xml = "<test_element key=\"abc \" uri=\"http://example.com/\"/>";
+        var tes1 = scope.Deserialize(xml, StringFormat.Xml);
+        Console.WriteLine();
+      }
+
+        /*
         //String mmdJson;
         String mmdDomHelperJSString;
 
@@ -299,5 +316,6 @@ namespace ecologylabSemantics
 //            outfile.Write(outBuffy);
 //            outfile.Close();
 //        }
+      */
     }
 }
