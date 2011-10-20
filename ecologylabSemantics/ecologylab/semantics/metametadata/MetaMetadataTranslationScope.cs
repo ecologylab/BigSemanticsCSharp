@@ -10,6 +10,7 @@ using ecologylab.semantics.actions;
 using ecologylab.semantics.connectors;
 using ecologylab.io;
 using Simpl.Serialization;
+using ecologylabSemantics.ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metametadata
 {
@@ -18,11 +19,6 @@ namespace ecologylab.semantics.metametadata
         static Type[] translations = {
             typeof(MetadataClassDescriptor),
             typeof(MetadataFieldDescriptor),
-            typeof(MetaMetadataField),
-            typeof(MetaMetadataScalarField),
-            typeof(MetaMetadataCompositeField),
-            typeof(MetaMetadataNestedField),
-            typeof(MetaMetadataCollectionField),
             typeof(MetaMetadata),
             typeof(SearchEngines),
             typeof(SearchEngine),
@@ -54,12 +50,13 @@ namespace ecologylab.semantics.metametadata
 
         public static SimplTypesScope Get()
         {
-            SimplTypesScope semanticActionScope    = SemanticActionTranslationScope.Get();
-            SimplTypesScope conditionScope         = SimplTypesScope.Get("condition_scope", conditionClasses);
-            SimplTypesScope mmdScope               = SimplTypesScope.Get("meta_metadata", translations);
-            mmdScope.AddTranslations(semanticActionScope);
-            mmdScope.AddTranslations(conditionScope);
-            return mmdScope;
+          SimplTypesScope semanticActionScope = SemanticActionTranslationScope.Get();
+          SimplTypesScope conditionScope = SimplTypesScope.Get("condition_scope", conditionClasses);
+          SimplTypesScope mmdScope = SimplTypesScope.Get("meta_metadata", MetaMetadataFieldTranslationScope.Get(),
+                                                         translations);
+          mmdScope.AddTranslations(semanticActionScope);
+          mmdScope.AddTranslations(conditionScope);
+          return mmdScope;
         }
     }
 }

@@ -18,6 +18,7 @@ using ecologylab.semantics.metadata;
 
 
 using System.Text.RegularExpressions;
+using ecologylabSemantics.ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metametadata 
 {
@@ -65,7 +66,8 @@ namespace ecologylab.semantics.metametadata
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
 		[SimplMap]
-		[SimplClasses(new Type[] { typeof(MetaMetadataField), typeof(MetaMetadataScalarField), typeof(MetaMetadataCompositeField), typeof(MetaMetadataCollectionField) })]
+		// [SimplClasses(new Type[] { typeof(MetaMetadataField), typeof(MetaMetadataScalarField), typeof(MetaMetadataCompositeField), typeof(MetaMetadataCollectionField) })]
+		[SimplScope(MetaMetadataFieldTranslationScope.NAME)]
 		[SimplNoWrap]
 		protected DictionaryList<String, MetaMetadataField> kids;
 
