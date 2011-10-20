@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AsyncCtpLibrary">
-      <HintPath>..\..\ecologylabFundamental.NET\Simpl.Serialization\Lib\AsyncCtpLibrary.dll</HintPath>
+      <HintPath>..\Simpl.Serialization\Lib\AsyncCtpLibrary.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
