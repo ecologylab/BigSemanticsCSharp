@@ -23,7 +23,6 @@ namespace ecologylabSemantics
     public class Tester
     { 
         [SimplInherit]
-        [SimplTag("test")]
         public class TestElementState : ElementState
         {
             [SimplScalar]
@@ -48,7 +47,7 @@ namespace ecologylabSemantics
         Console.WriteLine();
 
 
-        string xml = "<test_element key=\"abc \" uri=\"http://example.com/\"/>";
+        string xml = "<test_element_state key=\"abc \" uri=\"http://example.com/\"/>";
         var tes1 = scope.Deserialize(xml, StringFormat.Xml);
         Console.WriteLine();
       }
