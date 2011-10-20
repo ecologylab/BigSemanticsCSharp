@@ -68,8 +68,10 @@ namespace RSSReader.ViewModels
       {
         ObservableCollection<FeedViewModel> fakeFeeds = new ObservableCollection<FeedViewModel>();
         Item item = new Item();
-        item.DcCreator = new MetadataString("creator");
-        item.DcDescription = new MetadataString("blablabla");
+        item.DcCreator = new MetadataString("samzenpus");
+        item.DcTitle = new MetadataString("Federated Media Lands WordPress.com Deal");
+        item.DcDescription = new MetadataString(@"Federated Media has just announced a partnership with WordPress.com. This deal follows shortly after Federated Media acquired the advertising network Lijit. The deal will include all of the blogs that are hosted under the company which comes to around 25 million. WordPress.com users will now be able to choose to allow sponsored posts, and Federated Media ads on their blog.");
+        item.DcDate = new MetadataDate(DateTime.Parse("2011-10-20T00:25:00+00:00"));
         FeedViewModel vm = new RssItemFeedViewModel(item);
         fakeFeeds.Add(vm);
         Feeds = fakeFeeds;
