@@ -195,6 +195,8 @@ namespace DomExtraction
 
                     String jsonMMD = GetJsonMMD(mmd);
                     //Console.WriteLine("json:\n" + jsonMMD + "\n");
+                    jsonMMD = jsonMMD.Replace("\\", "\\\\");
+
                     webView.ExecuteJavascript(jsonMMD);
                     webView.ExecuteJavascript(mmdDomHelperJSString);
                     Console.WriteLine("Done js code execution, calling function. --" + System.DateTime.Now);

@@ -196,23 +196,6 @@ namespace ecologylab.semantics.metametadata
 		    //composite.setPromoteChildren(this.shouldPromoteChildren());
 	    }*/
 
-//        protected override bool bindMetadataFieldDescriptor(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
-//        {
-//            String fieldName = this.GetFieldNameInCamelCase(false);
-//            MetadataFieldDescriptor metadataFieldDescriptor = (MetadataFieldDescriptor)metadataClassDescriptor.GetFieldDescriptorByFieldName(fieldName);
-//            // if we don't have a field, then this is a wrapped collection, so we need to get the wrapped
-//            // field descriptor
-//            if (metadataFieldDescriptor != null)
-//            {
-//                //if (metadataFieldDescriptor.Field == null)
-//                //    metadataFieldDescriptor = (MetadataFieldDescriptor)metadataFieldDescriptor.WrappedFieldDescriptor;
-//
-//                this.MetadataFieldDescriptor = metadataFieldDescriptor;
-//            }
-//
-//            return (metadataFieldDescriptor != null);
-//        }
-
 	    public override string GetTypeName()
 	    {
 	        throw new NotImplementedException();

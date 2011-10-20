@@ -22,14 +22,14 @@ function extractMetadata(mmd)
 
 function recursivelyExtractMetadata(mmd, contextNode, metadata) {
     if (metadata == null || metadata == undefined)
-        var metadata = {}; //Output
+        metadata = {}; //Output
 
     if (mmd.kids == null || mmd.kids.length == 0) {
         console.log("\t\tMMD has no kids: " + mmd.name);
         return; //Nothing to do here.
     }
     if (contextNode == null || contextNode == undefined)
-        var contextNode = document;
+        contextNode = document;
     for (mmdFieldIndex in mmd.kids) {
         var mmdField = mmd.kids[mmdFieldIndex];
         currentMMDField = mmdField;
@@ -120,8 +120,8 @@ function extractCollection(mmdCollectionField, contextNode, metadata)
     var extractedCollection = {};
     console.log("Metadata Collection: ");
     console.info(metadataCollection);
-    //extractedCollection[mmdCollectionField.child_type] = metadataCollection;
-    metadata[mmdCollectionField.name] = metadataCollection;
+    extractedCollection[mmdCollectionField.child_type] = metadataCollection;
+    metadata[mmdCollectionField.name] = extractedCollection;
 }
 
 function extractComposite(mmdCompositeField, contextNode, metadata)

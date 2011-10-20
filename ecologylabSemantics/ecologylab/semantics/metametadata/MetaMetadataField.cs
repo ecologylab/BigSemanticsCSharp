@@ -189,60 +189,6 @@ namespace ecologylab.semantics.metametadata
             return this.kids;
         }
 
-//        protected void InheritForField(MetaMetadataField fieldToInheritFrom)
-//        {
-//            String fieldName = fieldToInheritFrom.Name;
-//            // this is for the case when meta_metadata has no meta_metadata fields of its own. It just
-//            // inherits from super class.
-//
-//            DictionaryList<String, MetaMetadataField> childMetaMetadata = Kids;
-//            if (childMetaMetadata == null)
-//            {
-//                childMetaMetadata = InitializeChildMetaMetadata();
-//            }
-//
-//            // *do not* override fields in here with fields from super classes.
-//
-//            MetaMetadataField fieldToInheritTo;
-//            childMetaMetadata.TryGetValue(fieldName, out fieldToInheritTo);
-//
-//            if (fieldToInheritTo is MetaMetadataCollectionField)
-//		    {
-//			    MetaMetadataCompositeField childComposite = ((MetaMetadataCollectionField) fieldToInheritTo).GetMetaMetadataCompositeField();
-//			    if (childComposite != null)
-//			    {
-//                    MetaMetadataCompositeField inheritedChildComposite = ((MetaMetadataCollectionField)fieldToInheritFrom).GetMetaMetadataCompositeField();
-//				
-//				    if (MetaMetadataCollectionField.UNRESOLVED_NAME == childComposite.Name)
-//				    {
-//					    fieldToInheritTo.kids.Remove(MetaMetadataCollectionField.UNRESOLVED_NAME);
-//					    childComposite.InheritNonDefaultAttributes(inheritedChildComposite);
-//					    childComposite.Name = inheritedChildComposite.Name;
-//					    fieldToInheritTo.kids.Add(childComposite.Name, childComposite);
-//				    }
-//			    }
-//		    }
-//
-//            if (fieldToInheritTo == null)
-//            {
-//                childMetaMetadata.Add(fieldName, fieldToInheritFrom);
-//                fieldToInheritTo = fieldToInheritFrom;
-//            }
-//            else
-//            {
-//                fieldToInheritTo.InheritNonDefaultAttributes(fieldToInheritFrom);
-//            }
-//
-//            DictionaryList<String, MetaMetadataField> inheritedChildMetaMetadata = fieldToInheritFrom.Kids;
-//            if (inheritedChildMetaMetadata != null)
-//            {
-//                foreach (MetaMetadataField grandChildMetaMetadataField in inheritedChildMetaMetadata.Values)
-//                {
-//                    fieldToInheritTo.InheritForField(grandChildMetaMetadataField);
-//                }
-//            }
-//        }
-
         #region binders
 
         internal virtual bool GetClassAndBindDescriptors(SimplTypesScope metadataTScope)
@@ -620,8 +566,7 @@ namespace ecologylab.semantics.metametadata
                         {
                             Object value = fieldDescriptor.Field.GetValue(inheritFrom);
                             fieldDescriptor.Field.SetValue(this, value);
-                            //						debug("inherit\t" + this.getName() + "." + fieldDescriptor.getFieldName() + "\t= "
-                            //								+ value);
+                            Debug.WriteLine("inherit\t" + this.Name + "." + fieldDescriptor.Name + "\t= " + value);
                         }
                     }
                     catch (Exception e)
