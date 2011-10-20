@@ -13,6 +13,7 @@ using ecologylab.semantics.metadata.scalar.types;
 using System.Threading.Tasks;
 using System.IO;
 using ecologylab.semantics.generated.library.wikipedia;
+using Simpl.Serialization.Context;
 
 
 namespace DomExtraction
@@ -71,7 +72,7 @@ namespace DomExtraction
             };
 
             WebCore.Initialize(config, false);
-            
+
             InitRepo();
         }
 
@@ -84,33 +85,33 @@ namespace DomExtraction
             SimplTypesScope mmdTScope = MetaMetadataTranslationScope.Get();
             metadataTScope = RepositoryMetadataTranslationScope.Get();
 
-            
+
             const string testFile = @"MetaMetadataRepository\";
             Console.WriteLine("Initting repository");
             MetaMetadataRepository.stopTheConsoleDumping = true;
 
-            var initter = new MetaMetadataRepositoryInit(mmdTScope, workspace + testFile);
+            var initter = new MetaMetadataRepositoryInit(metadataTScope, workspace + testFile);
             repo = initter.GetMetaMetadataRepository();
             //repo = MetaMetadataRepositoryLoader.ReadDirectoryRecursively(workspace + testFile, mmdTScope, metadataTScope);
 
             mmdDomHelperJSString = File.ReadAllText(jsPath + "mmdDomHelper.js");
-            
-//            DirectoryInfo di = new DirectoryInfo(wikiCacheLocation);
-//            FileInfo[] files = di.GetFiles("*.xml");
-//            foreach(var file in files)
-//            {
-//                string title = file.Name.Substring(0, file.Name.IndexOf("."));
-//
-//                ParsedUri pur = GetPuriForWikiArticleTitle(title);
-//
-//                Document elementState = (Document) metadataTScope.Deserialize(file.FullName, StringFormat.Xml);
-//                metadataCache.Add(pur, elementState);
-//            }
+
+            //            DirectoryInfo di = new DirectoryInfo(wikiCacheLocation);
+            //            FileInfo[] files = di.GetFiles("*.xml");
+            //            foreach(var file in files)
+            //            {
+            //                string title = file.Name.Substring(0, file.Name.IndexOf("."));
+            //
+            //                ParsedUri pur = GetPuriForWikiArticleTitle(title);
+            //
+            //                Document elementState = (Document) metadataTScope.Deserialize(file.FullName, StringFormat.Xml);
+            //                metadataCache.Add(pur, elementState);
+            //            }
         }
 
         public async Task<WikipediaPage> GetWikipediaPageForTitle(string title)
         {
-            WikipediaPage result = (WikipediaPage) await ExtractMetadata(GetPuriForWikiArticleTitle(title));
+            WikipediaPage result = (WikipediaPage)await ExtractMetadata(GetPuriForWikiArticleTitle(title));
             return result;
         }
 
@@ -119,20 +120,21 @@ namespace DomExtraction
             return new ParsedUri(wikiPuriPrefix + title.Replace(' ', '_'));
         }
 
-        public String GetJsonMMD(ParsedUri puri)
+        public String GetJsonMMD(MetaMetadata mmd)
         {
-            MetaMetadata mmd = repo.GetDocumentMM(puri);
+            
             String result = null;
             if (mmd == null)        //Should bring up the browser !
                 return result;
-            
+
             mmdJSONCache.TryGetValue(mmd, out result);
 
             if (result == null)
             {
                 StringBuilder mmdJSON = new StringBuilder();
+                StringWriter writer = new StringWriter(mmdJSON);
                 mmdJSON.Append("mmd = ");
-                SimplTypesScope.Serialize(mmd, StringFormat.Json, null);
+                SimplTypesScope.Serialize(mmd, StringFormat.Json, writer);
                 //mmd.serialize(mmdJSON, null);
                 mmdJSON.Append(";");
                 result = mmdJSON.ToString();
@@ -149,9 +151,9 @@ namespace DomExtraction
         /// </summary>
         /// <param name="uri"></param>
         /// <returns></returns>
-        public async Task<ElementState> ExtractMetadata(ParsedUri puri=null, String uri = null)
+        public async Task<ElementState> ExtractMetadata(ParsedUri puri = null, String uri = null)
         {
-            
+
             if (puri == null && uri == null)
                 return null;
             if (uri == null)
@@ -173,19 +175,25 @@ namespace DomExtraction
                 //We need webView to be instantiated correctly.
                 webView.ClearAllURLFilters();
                 //Only accept requests for this particular uri
-                
+
                 webView.AddURLFilter(uri);
                 //TODO: At a later date, when we want to allow javascript requests, this must change.
                 //webView.AddURLFilter("*.js");
                 Console.WriteLine("Setting Source");
                 webView.Source = uri;
-                webView.DomReady += delegate
+                webView.LoadCompleted += delegate
                 {
                     //if (Source == null || BLANK_PAGE.Equals(Source))// || loadingComplete)
                     //   return;
                     webView.Stop(); // Stopping further requests.
                     Console.WriteLine("Finished loading. Executing javascript. -- " + System.DateTime.Now);
-                    String jsonMMD = GetJsonMMD(puri);
+                    MetaMetadata mmd = repo.GetDocumentMM(puri);
+
+                    var mmdCD = mmd.MetadataClassDescriptor;
+                    if(metadataTScope.GetClassDescriptorByTag(mmd.Name) == null)
+                        metadataTScope.EntriesByTag.Add(mmd.Name, mmdCD);
+
+                    String jsonMMD = GetJsonMMD(mmd);
                     //Console.WriteLine("json:\n" + jsonMMD + "\n");
                     webView.ExecuteJavascript(jsonMMD);
                     webView.ExecuteJavascript(mmdDomHelperJSString);
@@ -195,25 +203,30 @@ namespace DomExtraction
                     String metadataJSON = value.ToString();
                     //Console.WriteLine(metadataJSON);
                     Console.WriteLine("Done getting value. Serializing JSON string to ElementState. --" + System.DateTime.Now);
-                    ElementState myShinyNewMetadata = (ElementState) metadataTScope.Deserialize(metadataJSON, StringFormat.Json);
+                    //.
+                    //metadataTScope.Deserialize()
+                    TranslationContext c = new TranslationContext();
+                    c.SetUriContext(puri);
+
+                    ElementState myShinyNewMetadata = (ElementState)metadataTScope.Deserialize(metadataJSON, c, null, StringFormat.Json);
                     Console.WriteLine("Metadata ElementState object created. " + System.DateTime.Now);
 
                     //Clean metadata
-                    WikipediaPage wikiPage = myShinyNewMetadata as WikipediaPage;
-                    Debug.Assert(wikiPage != null, "wikiPage is null");
-
-                    wikiPage.HypertextParas = wikiPage.HypertextParas.Where(p => p.Runs != null).ToList();
-                    wikiPage.Thumbinners = wikiPage.Thumbinners.Where(thumb => thumb.ThumbImgSrc != null).ToList();
-
+//                    WikipediaPage wikiPage = myShinyNewMetadata as WikipediaPage;
+//                    Debug.Assert(wikiPage != null, "wikiPage is null");
+//
+//                    wikiPage.HypertextParas = wikiPage.HypertextParas.Where(p => p.Runs != null).ToList();
+//                    wikiPage.Thumbinners = wikiPage.Thumbinners.Where(thumb => thumb.ThumbImgSrc != null).ToList();
+//
                     //DEBUGGING only, save the last translated Metadata object as json.
-                    String XMLFilePath = wikiCacheLocation + wikiPage.Title.Value.Replace(' ', '_') + ".xml";
-                    Console.WriteLine("Writing out the elementstate into " + XMLFilePath);
-                    StringBuilder buffy = new StringBuilder();
+//                    String XMLFilePath = wikiCacheLocation + wikiPage.Title.Value.Replace(' ', '_') + ".xml";
+//                    Console.WriteLine("Writing out the elementstate into " + XMLFilePath);
+//                    StringBuilder buffy = new StringBuilder();
                     //TODO FIXME Use class descriptor for serialization
                     //wikiPage.serializeToXML(buffy, null);
-                    TextWriter tw = new StreamWriter(XMLFilePath);
-                    tw.Write(buffy);
-                    tw.Close();
+//                    TextWriter tw = new StreamWriter(XMLFilePath);
+//                    tw.Write(buffy);
+//                    tw.Close();
 
                     /*String JSONFilePath = wikiCacheLocation + wikiPage.Title.Value.Replace(' ', '_') + ".json";
                     Console.WriteLine("Writing out the elementstate into " + JSONFilePath);
@@ -223,7 +236,7 @@ namespace DomExtraction
                     tw.Write(buffy);
                     tw.Close();*/
 
-                    
+
                     tcs.TrySetResult(myShinyNewMetadata);
                 };
             }

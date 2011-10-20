@@ -55,7 +55,7 @@ namespace ecologylab.semantics.metadata.scalar.types
 
 	    public override bool SetField(object context, FieldInfo field, string valueString, string[] format, IScalarUnmarshallingContext scalarUnmarshallingContext)
 		{
-			if (valueString == null)
+			if (valueString == null || string.IsNullOrWhiteSpace(valueString))
 				return true;
 			bool result = false;
 

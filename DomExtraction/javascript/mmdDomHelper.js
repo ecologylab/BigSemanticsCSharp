@@ -15,6 +15,7 @@ function extractMetadata(mmd)
     var returnVal = {};
     returnVal[mmd.name] = metadata;
 
+    //return returnVal;
     return JSON.stringify(returnVal);
 
 }
@@ -41,10 +42,12 @@ function recursivelyExtractMetadata(mmd, contextNode, metadata) {
         }
 
         if (mmdField.collection != null) {
+            console.log("Setting Collection: " + mmdField.collection.name);
             extractCollection(mmdField.collection, contextNode, metadata);
         }
 
         if (mmdField.composite != null) {
+            console.log("Setting Composite: " + mmdField.composite.name);
             extractComposite(mmdField.composite, contextNode, metadata);
         }
         console.log("Recursive extraction result: ");
@@ -88,33 +91,37 @@ function extractCollection(mmdCollectionField, contextNode, metadata)
         return; //This collection is special. No further normal processing required.
     }
 
-
     var collectionFields = mmdCollectionField.kids;
+
     if (collectionFields == null || collectionFields == undefined)
         console.log("Oops, collection fields doesn't exist");
     for (var resultIndex = 0; resultIndex < nodeList.snapshotLength; resultIndex++) {
         console.log("\tCollection Result Index: " + resultIndex);
         //recursive call.
         var recursiveContext = nodeList.snapshotItem(resultIndex);
+        var metadataCollectionItem = {};
         for (var fieldIndex = 0; fieldIndex < collectionFields.length; fieldIndex++) {
             var recursiveField = collectionFields[fieldIndex];
             console.log("\tCollection Recursive Call: ");
             console.log(recursiveField);
+            
             if (recursiveField.scalar != null)
-                extractScalar(recursiveField.scalar, recursiveContext, metadataCollection);
+                extractScalar(recursiveField.scalar, recursiveContext, metadataCollectionItem);
             else if (recursiveField.collection != null)
-                extractCollection(recursiveField.collection, recursiveContext, metadataCollection);
+                extractCollection(recursiveField.collection, recursiveContext, metadataCollectionItem);
             else if (recursiveField.composite != null)
-                extractComposite(recursiveField.composite, recursiveContext, metadataCollection);
+                extractComposite(recursiveField.composite, recursiveContext, metadataCollectionItem);
+            
             console.log("Metadata Collection Item: ");
             console.info(metadataCollection);
         }
+        metadataCollection.push(metadataCollectionItem);
     }
     var extractedCollection = {};
     console.log("Metadata Collection: ");
     console.info(metadataCollection);
-    extractedCollection[mmdCollectionField.child_type] = metadataCollection;
-    metadata[mmdCollectionField.name] = extractedCollection;
+    //extractedCollection[mmdCollectionField.child_type] = metadataCollection;
+    metadata[mmdCollectionField.name] = metadataCollection;
 }
 
 function extractComposite(mmdCompositeField, contextNode, metadata)

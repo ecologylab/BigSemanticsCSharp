@@ -58,13 +58,16 @@ namespace ecologylabSemantics
             SimplTypesScope mmdTScope = MetaMetadataTranslationScope.Get();
             var metadataTScope = RepositoryMetadataTranslationScope.Get();
 
+            string jsonText = File.ReadAllText("AcmPortal.json");
+            metadataTScope.EntriesByTag.Add("acm_portal", metadataTScope.EntriesByClassSimpleName.Get("ScholarlyPublication"));
 
-            const string testFile = @"MetaMetadataRepository\";
-            Console.WriteLine("Initting repository");
-            MetaMetadataRepository.stopTheConsoleDumping = true;
-            var repo = MetaMetadataRepositoryLoader.ReadDirectoryRecursively(workspace + testFile, mmdTScope, metadataTScope);
+            TranslationContext translationContext = new TranslationContext();
+            translationContext.SetUriContext(
+                new ParsedUri("http://dl.acm.org/citation.cfm?id=1753855&dl=GUIDE&coll=GUIDE"));
+            var el = metadataTScope.Deserialize(jsonText, translationContext, null, StringFormat.Json);
 
-            var mmdDomHelperJSString = File.ReadAllText(jsPath + "mmdDomHelper.js");
+            Console.WriteLine("Should throw an Error _jsonReader.Value is null");
+
         }
 //
 //        static String path = @"C:\Users\damaraju.m2icode\workspace\cSharp\ecologylabSemantics\DomExtraction\javascript\tempJSON\";
