@@ -176,7 +176,7 @@ namespace ecologylab.semantics.metametadata
             DictionaryList<String, MetaMetadataField> childMetaMetadata = Kids;
             if (childMetaMetadata != null)
             {
-                childMetaMetadata.Values.Sort(delegate(MetaMetadataField f1, MetaMetadataField f2) { return -Math.Sign(f1.Layer - f2.Layer); });
+                childMetaMetadata.ValuesInList.Sort(delegate(MetaMetadataField f1, MetaMetadataField f2) { return -Math.Sign(f1.Layer - f2.Layer); });
             }
 
             fieldsSortedForDisplay = true;
@@ -379,7 +379,7 @@ namespace ecologylab.semantics.metametadata
 			set{comment = value;}
 		}
 
-		public String Tag
+		public virtual String Tag
 		{
 			get{return tag;}
 			set{tag = value;}
@@ -588,7 +588,8 @@ namespace ecologylab.semantics.metametadata
 				String fieldName = this.GetFieldName(false);
 				if (metadataFieldDescriptor == null)
 				{
-					metadataFieldDescriptor = (MetadataFieldDescriptor) metadataClassDescriptor.GetFieldDescriptorByFieldName(fieldName);
+          FieldDescriptor fd = metadataClassDescriptor.GetFieldDescriptorByFieldName(fieldName);
+				  metadataFieldDescriptor = (MetadataFieldDescriptor) fd;
 					if (metadataFieldDescriptor != null)
 					{
 						// FIXME is the following "if" statement still useful? I never see the condition is
@@ -596,7 +597,10 @@ namespace ecologylab.semantics.metametadata
 						// if we don't have a field, then this is a wrapped collection, so we need to get the
 						// wrapped field descriptor
 						if (metadataFieldDescriptor.Field == null)
-							metadataFieldDescriptor = (MetadataFieldDescriptor) metadataFieldDescriptor.WrappedFd;
+						{
+						  FieldDescriptor wfd = metadataFieldDescriptor.WrappedFd;
+						  metadataFieldDescriptor = (MetadataFieldDescriptor) wfd;
+						}
 
 						this.metadataFieldDescriptor = metadataFieldDescriptor;
 						

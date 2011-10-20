@@ -122,6 +122,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AwesomiumSharp\AwesomiumSharp.csproj">
+      <Project>{1614289C-5F21-4934-9143-A47755D7C0A6}</Project>
+      <Name>AwesomiumSharp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DomExtraction\DomExtraction.csproj">
       <Project>{02F10B1D-CA26-4B23-988E-A96DDEB4F44A}</Project>
       <Name>DomExtraction</Name>

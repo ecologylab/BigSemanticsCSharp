@@ -74,7 +74,7 @@ namespace ecologylab.semantics.metametadata
 
         public void InheritMetaMetadata()
         {
-            if (inheritMetaMetadataFinished || inheritInProcess) return;
+            if (inheritFinished || inheritInProcess) return;
 
             //Debug.WriteLine("inheriting " + this);
             inheritInProcess = true;

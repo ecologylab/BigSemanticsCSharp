@@ -133,7 +133,8 @@ namespace ecologylab.semantics.metametadata
         protected virtual void InheritMetaMetadataFrom(MetaMetadataRepository repository, MetaMetadataCompositeField inheritedStructure)
 	    {
 		    // init nested fields inside this
-		    foreach (MetaMetadataField f in Kids.Values)
+          var subfields = Kids.Values;
+		    foreach (MetaMetadataField f in subfields)
 			    if (f.GetType() == typeof(MetaMetadataNestedField))
 			    {
 				    f.Repository = (repository);
@@ -147,7 +148,8 @@ namespace ecologylab.semantics.metametadata
 		    // if inheritedStructure == null, this must be the root meta-metadata
 		    if (inheritedStructure != null)
 		    {
-			    foreach (MetaMetadataField field in inheritedStructure.Kids.Values)
+		      var inheritedStructSubfields = inheritedStructure.Kids.Values;
+			    foreach (MetaMetadataField field in inheritedStructSubfields)
 			    {
 				    if (field.GetType() == typeof(MetaMetadataNestedField))
 				    {
@@ -173,7 +175,7 @@ namespace ecologylab.semantics.metametadata
 		    }
 
 		    // recursively call inheritMetaMetadata() on nested fields
-		    foreach (MetaMetadataField f in Kids.Values)
+		    foreach (MetaMetadataField f in subfields)
 		    {
 			    // a new field is defined inside this mmd
 			    if (f.DeclaringMmd == this && f.InheritedField == null)
@@ -208,7 +210,8 @@ namespace ecologylab.semantics.metametadata
 		    // structures (which may be inherited too) can be cloned.
 		    if (inheritedStructure != null)
 		    {
-			    foreach (MetaMetadataField field in inheritedStructure.Kids.Values)
+		      var inheritedStructSubfields = inheritedStructure.Kids.Values;
+			    foreach (MetaMetadataField field in inheritedStructSubfields)
 			    {
 				    String fieldName = field.Name;
 			        MetaMetadataField fieldLocal;
@@ -402,8 +405,25 @@ namespace ecologylab.semantics.metametadata
 	    public String Type
 		{
 			get{return type;}
-			set{type = value;}
+      set
+      {
+        type = value;
+        if (TypeChangeListener != null)
+          TypeChangeListener(value);
+      }
 		}
+
+	  public delegate void TypeChanged(String newType);
+
+	  public delegate void ExtendsChanged(String newExtends);
+
+	  public delegate void TagChanged(String newTag);
+
+    public TypeChanged TypeChangeListener { get; set; }
+
+    public ExtendsChanged ExtendsChangeListener { get; set; }
+
+    public TagChanged TagChangeListener { get; set; }
 
 	    public Boolean Entity
 		{
@@ -447,13 +467,28 @@ namespace ecologylab.semantics.metametadata
 			set{reloadPageFirstTime = value;}
 		}
 
-	    public string ExtendsAttribute
+	  public string ExtendsAttribute
+	  {
+	    get { return extendsAttribute; }
+	    set
 	    {
-	        get { return extendsAttribute; }
-	        set { extendsAttribute = value; }
+	      extendsAttribute = value;
+	      if (ExtendsChangeListener != null)
+          ExtendsChangeListener(value);
 	    }
+	  }
 
-	    public String GetTypeOrName()
+	  public override string Tag
+	  {
+      get { return base.Tag; }
+      set
+      {
+        base.Tag = value;
+        if (TagChangeListener != null) TagChangeListener(value);
+      }
+	  }
+
+	  public String GetTypeOrName()
         {
             return Type ?? Name;
         }
