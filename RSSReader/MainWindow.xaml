@@ -10,7 +10,7 @@
             <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Margin="5">Paste feed URLs, one per line:</Label>
-        <TextBox Grid.Row="1" Margin="5" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" Foreground="Gray" />
+        <TextBox Grid.Row="1" Margin="5" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" />
         <Button Grid.Row="2" Content="Show feeds" Width="150" Height="30" Margin="5" Command="{Binding ShowFeedsCommand}" />
         <ListView Grid.Row="3" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch" ItemsSource="{Binding Feeds}">
             <ListView.ItemTemplate>
@@ -23,7 +23,7 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" MinHeight="200" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />

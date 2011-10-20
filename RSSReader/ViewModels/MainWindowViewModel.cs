@@ -21,7 +21,7 @@ namespace RSSReader.ViewModels
 
     private ICommand                            _showFeedsCommand;
 
-    private ObservableCollection<string>        _feedURLs;
+    private string                              _feedURLs;
 
     private ObservableCollection<FeedViewModel> _feeds;
 
@@ -30,7 +30,7 @@ namespace RSSReader.ViewModels
       _browser = new MMDExtractionBrowser();
     }
 
-    public ObservableCollection<string> FeedURLs
+    public string FeedURLs
     {
       get { return this._feedURLs; }
       set
@@ -74,6 +74,7 @@ namespace RSSReader.ViewModels
         item.DcDate = new MetadataDate(DateTime.Parse("2011-10-20T00:25:00+00:00"));
         FeedViewModel vm = new RssItemFeedViewModel(item);
         fakeFeeds.Add(vm);
+        fakeFeeds.Add(vm);
         Feeds = fakeFeeds;
       }
     }
@@ -90,7 +91,7 @@ namespace RSSReader.ViewModels
       var newFeeds = new ObservableCollection<FeedViewModel>();
       if (FeedURLs != null)
       {
-        foreach (string url in FeedURLs)
+        foreach (string url in FeedURLs.Split(new char[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries))
         {
           var puri = new ParsedUri(url);
           Document feedDoc = (Document) await _browser.ExtractMetadata(puri);
