@@ -37,54 +37,30 @@ namespace ecologylabSemantics
             { }
         }
 
-      public static void Main(string[] args)
-      {
-        SimplTypesScope scope = SimplTypesScope.Get("hcc", typeof (TestElementState));
-        TestElementState tes = new TestElementState();
-        tes.SomeString = "abc ";
-        tes.uri = new ParsedUri("http://example.com");
-        SimplTypesScope.Serialize(tes, StringFormat.Xml, Console.Out);
-        Console.WriteLine();
-
-
-        string xml = "<test_element_state key=\"abc \" uri=\"http://example.com/\"/>";
-        var tes1 = scope.Deserialize(xml, StringFormat.Xml);
-        Console.WriteLine();
-      }
-
-        /*
-        //String mmdJson;
-        String mmdDomHelperJSString;
+        // String mmdJson;
+        // String mmdDomHelperJSString;
+        // private static readonly string wikiCacheLocation = appPath;
+        // private const String wikiPuriPrefix = "http://en.wikipedia.org/wiki/";
+        // MetaMetadataRepository repo;
 
         static readonly string appPath = System.AppDomain.CurrentDomain.BaseDirectory;
-
-        static readonly String workspace = appPath + @"..\..\..\";
-
-        private static readonly string wikiCacheLocation = appPath;
-        private const String wikiPuriPrefix = "http://en.wikipedia.org/wiki/";
-        MetaMetadataRepository repo;
+        static readonly string workspace = appPath + @"..\..\..\";
 
         public static void Main()
         {
+          MetadataScalarType.init();
+          var mdTScope = RepositoryMetadataTranslationScope.Get();
 
-            Console.WriteLine(typeof(PdfMixin).AssemblyQualifiedName);
-            String jsPath = workspace + @"DomExtraction\javascript\";
+          string jsPath = workspace + @"DomExtraction\javascript\tempJSON\";
+          string jsonText = File.ReadAllText(jsPath + @"acmPortal.json");
+          var scholarlyArticleCD = mdTScope.EntriesByClassSimpleName.Get("ScholarlyArticle");
+          mdTScope.EntriesByTag["acm_portal"] = scholarlyArticleCD;
 
-            MetadataScalarType.init();
-            SimplTypesScope mmdTScope = MetaMetadataTranslationScope.Get();
-            var metadataTScope = RepositoryMetadataTranslationScope.Get();
-
-            string jsonText = File.ReadAllText("AcmPortal.json");
-            metadataTScope.EntriesByTag.Add("acm_portal", metadataTScope.EntriesByClassSimpleName.Get("ScholarlyPublication"));
-
-            TranslationContext translationContext = new TranslationContext();
-            translationContext.SetUriContext(
-                new ParsedUri("http://dl.acm.org/citation.cfm?id=1753855&dl=GUIDE&coll=GUIDE"));
-            var el = metadataTScope.Deserialize(jsonText, translationContext, null, StringFormat.Json);
-
-            Console.WriteLine("Should throw an Error _jsonReader.Value is null");
-
+          TranslationContext translationContext = new TranslationContext();
+          translationContext.SetUriContext(new ParsedUri("http://dl.acm.org/citation.cfm?id=1871437.1871580&preflayout=flat"));
+          var mdObj = mdTScope.Deserialize(jsonText, translationContext, null, StringFormat.Json);
         }
+
 //
 //        static String path = @"C:\Users\damaraju.m2icode\workspace\cSharp\ecologylabSemantics\DomExtraction\javascript\tempJSON\";
 //        public class ExpandElement : ICommand
@@ -315,6 +291,5 @@ namespace ecologylabSemantics
 //            outfile.Write(outBuffy);
 //            outfile.Close();
 //        }
-      */
     }
 }

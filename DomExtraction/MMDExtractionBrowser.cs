@@ -7,6 +7,7 @@ using AwesomiumSharp;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
 using ecologylab.semantics.generated.library;
+using ecologylab.semantics.metadata;
 using ecologylab.semantics.metametadata;
 using ecologylab.semantics.metadata.scalar.types;
 
@@ -195,7 +196,7 @@ namespace DomExtraction
 
                     String jsonMMD = GetJsonMMD(mmd);
                     //Console.WriteLine("json:\n" + jsonMMD + "\n");
-                    jsonMMD = jsonMMD.Replace("\\", "\\\\");
+                    //jsonMMD = jsonMMD.Replace("\\", "\\\\");
 
                     webView.ExecuteJavascript(jsonMMD);
                     webView.ExecuteJavascript(mmdDomHelperJSString);
@@ -203,7 +204,7 @@ namespace DomExtraction
                     //TODO: Currently executes asynchronously. Can we make this asynchronous?
                     JSValue value = webView.ExecuteJavascriptWithResult("extractMetadata(mmd);");
                     String metadataJSON = value.ToString();
-                    //Console.WriteLine(metadataJSON);
+                    Console.WriteLine(metadataJSON);
                     Console.WriteLine("Done getting value. Serializing JSON string to ElementState. --" + System.DateTime.Now);
                     //.
                     //metadataTScope.Deserialize()

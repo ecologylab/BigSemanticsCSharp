@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Simpl.Serialization;
-using ecologylab.semantics.generated.library;
+using ecologylab.semantics.metadata.builtins;
 using ecologylab.semantics.namesandnums;
 
 namespace ecologylab.semantics.metametadata

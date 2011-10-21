@@ -17,7 +17,7 @@ using ecologylab.collections;
 using ecologylab.semantics.metadata;
 using ecologylab.semantics.metadata.scalar;
 
-namespace ecologylab.semantics.generated.library 
+namespace ecologylab.semantics.metadata.builtins 
 {
 	[SimplInherit]
     [SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]

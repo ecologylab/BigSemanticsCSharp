@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Simpl.Fundamental.Generic;
-using ecologylab.semantics.generated.library;
 using ecologylab.semantics.metadata;
 
 namespace ecologylab.semantics.metametadata

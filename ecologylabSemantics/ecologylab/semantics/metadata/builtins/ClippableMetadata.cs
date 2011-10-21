@@ -10,7 +10,7 @@ using System;
 using Simpl.Serialization.Attributes;
 using ecologylab.semantics.metadata;
 
-namespace ecologylab.semantics.generated.library 
+namespace ecologylab.semantics.metadata.builtins 
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.

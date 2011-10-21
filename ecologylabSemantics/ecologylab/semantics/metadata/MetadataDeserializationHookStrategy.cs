@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Simpl.Serialization.Context;
-using ecologylab.semantics.generated.library;
 using ecologylab.semantics.metametadata;
 using Simpl.Serialization;
 

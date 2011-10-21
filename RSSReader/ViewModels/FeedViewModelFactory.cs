@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using ecologylab.semantics.generated.library;
 using ecologylab.semantics.generated.library.rss;
+using ecologylab.semantics.metadata.builtins;
 
 namespace RSSReader.ViewModels
 {

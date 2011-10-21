@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using ecologylab.semantics.generated.library;
+using ecologylab.semantics.metadata.builtins;
 
 
 namespace DomExtraction

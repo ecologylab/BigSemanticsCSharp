@@ -16,6 +16,7 @@ using DomExtraction;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
 using ecologylab.semantics.generated.library;
+using ecologylab.semantics.metadata.builtins;
 
 namespace MmTest
 {

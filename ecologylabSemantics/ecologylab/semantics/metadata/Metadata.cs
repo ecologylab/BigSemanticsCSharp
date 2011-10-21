@@ -20,7 +20,7 @@ using ecologylab.semantics.metametadata;
 using ecologylab.net;
 
 
-namespace ecologylab.semantics.generated.library
+namespace ecologylab.semantics.metadata
 {
 	/// <summary>
 	/// missing java doc comments or could not find the source file.

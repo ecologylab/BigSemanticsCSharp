@@ -16,7 +16,7 @@ using Simpl.Serialization.Attributes;
 using Simpl.Serialization;
 using ecologylab.net;
 using ecologylab.semantics.connectors;
-using ecologylab.semantics.generated.library;
+using ecologylab.semantics.metadata.builtins;
 using ecologylab.semantics.metadata.scalar.types;
 using ecologylab.textformat;
 using System.Text.RegularExpressions;

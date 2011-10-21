@@ -9,6 +9,7 @@ using DomExtraction;
 using Simpl.Fundamental.Net;
 using ecologylab.semantics.generated.library;
 using ecologylab.semantics.generated.library.rss;
+using ecologylab.semantics.metadata.builtins;
 using ecologylab.semantics.metadata.scalar;
 
 namespace RSSReader.ViewModels
