@@ -75,7 +75,10 @@ function extractScalar(mmdScalarField, contextNode, metadata)
 
     stringValue = stringValue.trim().replace(new RegExp(regex, 'g'), replace);
 
-    metadata[mmdScalarField.name] = stringValue;
+    if (mmdScalarField.tag != null && mmdScalarField.tag != mmdScalarField.name)
+        metadata[mmdScalarField.tag] = stringValue;
+    else
+        metadata[mmdScalarField.name] = stringValue;
 }
 
 function extractCollection(mmdCollectionField, contextNode, metadata)

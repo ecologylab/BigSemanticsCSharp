@@ -137,6 +137,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="javascript\tempJSON\acmPortal.json" />
     <None Include="javascript\tempJSON\parsedIMDB.json" />
     <None Include="javascript\tempJSON\simpleHypertext.json" />
     <None Include="javascript\tempJSON\wikipedia-parsed-hypertext.json" />
