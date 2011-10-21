@@ -190,6 +190,8 @@ namespace DomExtraction
                     Console.WriteLine("Finished loading. Executing javascript. -- " + System.DateTime.Now);
                     MetaMetadata mmd = repo.GetDocumentMM(puri);
 
+                    // this manipulation of metadata class descriptors is just a workaround.
+                    // the correct way of doing this might be to use some hook strategy.
                     var mmdCD = mmd.MetadataClassDescriptor;
                     if(metadataTScope.GetClassDescriptorByTag(mmd.Name) == null)
                         metadataTScope.EntriesByTag.Add(mmd.Name, mmdCD);
