@@ -16,6 +16,7 @@ namespace ecologylab.semantics.metadata.builtins
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	[SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
+    [SimplInherit]
 	public class ClippableMetadata : Metadata
 	{
 		/// <summary>
