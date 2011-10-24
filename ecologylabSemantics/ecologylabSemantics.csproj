@@ -91,6 +91,7 @@
     <Compile Include="ecologylab\semantics\documentparsers\DirectBindingParser.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\DocumentParser.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\FieldParserBase.cs" />
+    <Compile Include="ecologylab\semantics\documentparsers\ParserBase.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\RegexPostParser.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\XPathParser.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Annotation.cs" />
