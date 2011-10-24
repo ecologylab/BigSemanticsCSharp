@@ -74,7 +74,7 @@ namespace MetaSearch
 
       var metaSearch = new MetaSearch();
       metaSearch.Search(urls);
-      SimplTypesScope.Serialize(metaSearch, StringFormat.Xml, new StreamWriter("metaSearch.xml"));
+      SimplTypesScope.Serialize(metaSearch, new StreamWriter("metaSearch.xml"), StringFormat.Xml);
     }
 
   }

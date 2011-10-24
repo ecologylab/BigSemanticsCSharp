@@ -39,7 +39,7 @@ namespace MmTest
       Document doc = (await _browser.ExtractMetadata(puri)) as Document;
       StringBuilder sb = new StringBuilder();
       TextWriter tw = new StringWriter(sb);
-      SimplTypesScope.Serialize(doc, StringFormat.Xml, tw);
+      SimplTypesScope.Serialize(doc, tw, StringFormat.Xml);
       tw.Close();
       MetadataArea.Text = sb.ToString();
     }
