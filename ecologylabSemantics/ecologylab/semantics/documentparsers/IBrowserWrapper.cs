@@ -11,5 +11,7 @@ namespace ecologylab.semantics.documentparsers
     public interface IBrowserWrapper
     {
         Task<Document> ExtractMetadata(ParsedUri puri);
+
+        // potentially other methods ...
     }
 }

@@ -88,6 +88,7 @@
     <Compile Include="ecologylab\semantics\actions\SemanticActionTranslationScope.cs" />
     <Compile Include="ecologylab\semantics\actions\SetFieldSemanticAction.cs" />
     <Compile Include="ecologylab\semantics\actions\SetMetadataSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\documentparsers\BrowserPool.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\IBrowserWrapper.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\DirectBindingParser.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\DocumentParser.cs" />

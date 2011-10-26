@@ -38,11 +38,7 @@ namespace MmTest
       {
           ParsedUri puri = new ParsedUri(UrlBox.Text);
           Document doc = _semanticsSessionScope.GetDocument(puri);
-          StringBuilder sb = new StringBuilder();
-          TextWriter tw = new StringWriter(sb);
-          SimplTypesScope.Serialize(doc, StringFormat.Xml, tw);
-          tw.Close();
-          MetadataArea.Text = sb.ToString();
+          MetadataArea.Text = SimplTypesScope.Serialize(doc, StringFormat.Xml);
       }
   }
 }
