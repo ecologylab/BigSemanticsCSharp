@@ -32,7 +32,7 @@ namespace ecologylab.semantics.documentparsers
 
         static DocumentParser()
         {
-            RegisterDocumentParser("xpath", () => new XPathParser2());
+            RegisterDocumentParser("xpath", () => new XPathParser());
             RegisterDocumentParser("direct", () => new DirectBindingParser());
         }
 

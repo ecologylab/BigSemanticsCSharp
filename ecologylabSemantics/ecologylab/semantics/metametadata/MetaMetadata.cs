@@ -39,9 +39,6 @@ namespace ecologylab.semantics.metametadata
 		[SimplScalar]
 		private Boolean dontGenerateClass;
 
-        [SimplScalar]
-        private String parser;
-
         [SimplCollection]
         [SimplScope(SemanticActionTranslationScope.ScopeName)]
 	    private List<SemanticAction> beforeSemanticActions;
