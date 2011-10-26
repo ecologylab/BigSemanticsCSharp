@@ -2,19 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Simpl.Fundamental.Net;
+using ecologylab.semantics.metadata.builtins;
 
 namespace ecologylab.semantics.documentparsers
 {
-    abstract class ParserBase : DocumentParser
+    public interface IBrowserWrapper
     {
-
-        private ParsedUri _puri;
-
-        public ParserBase(ParsedUri puri)
-        {
-            _puri = puri;
-        }
-
+        Task<Document> ExtractMetadata(ParsedUri puri);
     }
 }

@@ -40,7 +40,8 @@ namespace ecologylab.semantics.metametadata
                 foreach (String file in files)
                 {
                     MetaMetadataRepository thatRepo = ReadRepository(file, mmdTScope, metadataTScope, mainRepo);
-                    mainRepo.IntegrateRepository(thatRepo);
+                    if (thatRepo != null)
+                        mainRepo.IntegrateRepository(thatRepo);
                 }
                 string[] directories = Directory.GetDirectories(dir);
                 foreach (string innerDir in directories.Where(innerDir => !innerDir.Contains(".svn")))

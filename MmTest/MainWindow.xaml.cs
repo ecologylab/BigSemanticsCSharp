@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using DomExtraction;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
+using ecologylab.semantics.collecting;
 using ecologylab.semantics.generated.library;
 using ecologylab.semantics.metadata.builtins;
 
@@ -25,23 +26,23 @@ namespace MmTest
   /// </summary>
   public partial class MainWindow : Window
   {
-    private MMDExtractionBrowser _browser;
+      private SemanticsSessionScope _semanticsSessionScope;
 
-    public MainWindow()
-    {
-      InitializeComponent();
-      _browser = new MMDExtractionBrowser();
-    }
+      public MainWindow()
+      {
+          InitializeComponent();
+          _semanticsSessionScope = new SemanticsSessionScope(RepositoryMetadataTranslationScope.Get(), @"");
+      }
 
-    private async void BtnGetMetadata_Click(object sender, RoutedEventArgs e)
-    {
-      ParsedUri puri = new ParsedUri(UrlBox.Text);
-      Document doc = (await _browser.ExtractMetadata(puri)) as Document;
-      StringBuilder sb = new StringBuilder();
-      TextWriter tw = new StringWriter(sb);
-      SimplTypesScope.Serialize(doc, tw, StringFormat.Xml);
-      tw.Close();
-      MetadataArea.Text = sb.ToString();
-    }
+      private async void BtnGetMetadata_Click(object sender, RoutedEventArgs e)
+      {
+          ParsedUri puri = new ParsedUri(UrlBox.Text);
+          Document doc = _semanticsSessionScope.GetDocument(puri);
+          StringBuilder sb = new StringBuilder();
+          TextWriter tw = new StringWriter(sb);
+          SimplTypesScope.Serialize(doc, StringFormat.Xml, tw);
+          tw.Close();
+          MetadataArea.Text = sb.ToString();
+      }
   }
 }

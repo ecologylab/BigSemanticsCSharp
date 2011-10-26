@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
+using Simpl.Fundamental.Net;
 using ecologylab.semantics.generated.library;
 using ecologylab.semantics.metadata.builtins;
 
@@ -53,7 +54,7 @@ namespace DomExtraction
         private async void DoStuff()
         {
             Console.WriteLine("Getting Metadata" + System.DateTime.Now);
-            Document result = (Document)await browser.ExtractMetadata(uri: UrlTextbox.Text);
+            Document result = (Document)await browser.ExtractMetadata(new ParsedUri(UrlTextbox.Text));
 
             //Execution resumes when result is obtained.
             //In this case, the UI thread resumes normal processing of interaction,

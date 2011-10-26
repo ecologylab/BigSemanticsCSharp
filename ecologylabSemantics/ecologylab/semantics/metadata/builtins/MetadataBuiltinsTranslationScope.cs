@@ -4,29 +4,35 @@ using System.Linq;
 using System.Text;
 using ecologylab.semantics.metadata;
 using Simpl.Serialization;
+using ecologylab.semantics.metadata.scalar.types;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
-  public class MetadataBuiltinsTranslationScope
-  {
-    public static string NAME = "metadata_builtin_translations";
-
-    protected static Type[] Translations =
+    public class MetadataBuiltinsTranslationScope
     {
-      typeof(Metadata),
-      typeof(Document),
-      typeof(CompoundDocument),
-      typeof(ClippableDocument),
-      typeof(ClippableMetadata),
-      typeof(Clipping),
-      typeof(DebugMetadata),
-      typeof(Image),
-      typeof(Text),
-    };
+        public static string NAME = "metadata_builtin_translations";
 
-    public static SimplTypesScope Get()
-    {
-      return SimplTypesScope.Get(NAME, Translations);
+        protected static Type[] Translations =
+            {
+                typeof (Metadata),
+                typeof (Document),
+                typeof (CompoundDocument),
+                typeof (ClippableDocument),
+                typeof (ClippableMetadata),
+                typeof (Clipping),
+                typeof (DebugMetadata),
+                typeof (Image),
+                typeof (Text),
+            };
+
+        static MetadataBuiltinsTranslationScope()
+        {
+            MetadataScalarType.init();
+        }
+
+        public static SimplTypesScope Get()
+        {
+            return SimplTypesScope.Get(NAME, Translations);
+        }
     }
-  }
 }

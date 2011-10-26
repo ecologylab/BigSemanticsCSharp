@@ -2,39 +2,47 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Simpl.Fundamental.Net;
+using ecologylab.semantics.collecting;
+using ecologylab.semantics.metadata.builtins;
+using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.documentparsers
 {
-  abstract class DocumentParser
-  {
-
-    private static Dictionary<string, Type> _registeredDocumentParsers = new Dictionary<string, Type>();
-
-    public static void RegisterDocumentParser(string parserName, Type parserType)
+    public abstract class DocumentParser
     {
-      if (typeof(DocumentParser).IsAssignableFrom(parserType))
-      {
-        _registeredDocumentParsers[parserName] = parserType;
-      }
+
+        public static readonly string DEFAULT_PARSER_NAME = "xpath";
+
+        public delegate DocumentParser DocumentParserFactoryMethod();
+
+        private static Dictionary<string, DocumentParserFactoryMethod> _registeredDocumentParserFactoryMethods =
+            new Dictionary<string, DocumentParserFactoryMethod>();
+
+        public static void RegisterDocumentParser(string parserName, DocumentParserFactoryMethod factoryMethod)
+        {
+            if (factoryMethod != null)
+                _registeredDocumentParserFactoryMethods[parserName] = factoryMethod;
+        }
+
+        public static DocumentParser GetDocumentParser(string parserName)
+        {
+            if (parserName == null)
+                return null;
+            DocumentParserFactoryMethod factoryMethod = _registeredDocumentParserFactoryMethods[parserName];
+            return factoryMethod != null ? factoryMethod() : null;
+        }
+
+        static DocumentParser()
+        {
+            RegisterDocumentParser("xpath", () => new XPathParser());
+            RegisterDocumentParser("direct", () => new DirectBindingParser());
+        }
+
+        /// <summary>
+        /// The main parsing happens here.
+        /// </summary>
+        public abstract Document Parse(SemanticsSessionScope semanticsSessionScope, ParsedUri puri, MetaMetadata metaMetadata);
+
     }
-
-    static DocumentParser()
-    {
-      RegisterDocumentParser("xpath", typeof(XPathParser));
-    }
-
-      /// <summary>
-      /// The main parsing happens here.
-      /// This method signature itself doesn't define how meta-metadata is provided and how parsed metadata object is returned.
-      /// Instead, each parser type can define their own ways, e.g. using constructors.
-      /// </summary>
-    public abstract void Parse();
-
-      /// <summary>
-      /// This method is called after Parse(), and should try to get more information from what we get from Parse().
-      /// Currently, this includes regular expression based filtering (for XPathParser) and field parsers.
-      /// </summary>
-    public abstract void PostParse();
-
-  }
 }

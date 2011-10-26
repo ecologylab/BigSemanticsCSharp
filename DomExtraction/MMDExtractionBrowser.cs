@@ -8,6 +8,7 @@ using Simpl.Fundamental.Net;
 using Simpl.Serialization;
 using ecologylab.semantics.generated.library;
 using ecologylab.semantics.metadata;
+using ecologylab.semantics.metadata.builtins;
 using ecologylab.semantics.metametadata;
 using ecologylab.semantics.metadata.scalar.types;
 
@@ -15,11 +16,12 @@ using System.Threading.Tasks;
 using System.IO;
 using ecologylab.semantics.generated.library.wikipedia;
 using Simpl.Serialization.Context;
+using ecologylab.semantics.documentparsers;
 
 
 namespace DomExtraction
 {
-    public class MMDExtractionBrowser
+    public class MMDExtractionBrowser : IBrowserWrapper
     {
 
         SimplTypesScope metadataTScope;
@@ -150,24 +152,20 @@ namespace DomExtraction
         /// We would like to not have the caller create delegates for OnCompletion of this metadata extraction,
         /// but instead just use an await and continue control flow.
         /// </summary>
-        /// <param name="uri"></param>
+        /// <param name="puri"></param>
         /// <returns></returns>
-        public async Task<ElementState> ExtractMetadata(ParsedUri puri = null, String uri = null)
+        public async Task<Document> ExtractMetadata(ParsedUri puri)
         {
-
-            if (puri == null && uri == null)
+            if (puri == null)
                 return null;
-            if (uri == null)
-                uri = puri.ToString();
-            else
-                puri = new ParsedUri(uri);
 
+            string uri = puri.AbsoluteUri;
             Metadata result;
 
-            TaskCompletionSource<ElementState> tcs = new TaskCompletionSource<ElementState>();
+            TaskCompletionSource<Document> tcs = new TaskCompletionSource<Document>();
             if (metadataCache.TryGetValue(puri, out result))
             {
-                tcs.TrySetResult(result);
+                tcs.TrySetResult(result as Document);
             }
             else
             {
@@ -213,7 +211,7 @@ namespace DomExtraction
                     TranslationContext c = new TranslationContext();
                     c.SetUriContext(puri);
 
-                    ElementState myShinyNewMetadata = (ElementState)metadataTScope.Deserialize(metadataJSON, c, null, StringFormat.Json);
+                    Document myShinyNewMetadata = (Document)metadataTScope.Deserialize(metadataJSON, c, null, StringFormat.Json);
                     Console.WriteLine("Metadata ElementState object created. " + System.DateTime.Now);
 
                     //Clean metadata
