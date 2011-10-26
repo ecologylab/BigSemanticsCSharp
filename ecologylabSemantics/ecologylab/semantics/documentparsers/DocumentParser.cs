@@ -6,16 +6,13 @@ using Simpl.Fundamental.Net;
 using ecologylab.semantics.collecting;
 using ecologylab.semantics.metadata.builtins;
 using ecologylab.semantics.metametadata;
+using System.IO;
+using System.Net;
 
 namespace ecologylab.semantics.documentparsers
 {
     public abstract class DocumentParser
     {
-
-        public static readonly string DEFAULT_PARSER_NAME = "xpath";
-
-        public delegate DocumentParser DocumentParserFactoryMethod();
-
         private static Dictionary<string, DocumentParserFactoryMethod> _registeredDocumentParserFactoryMethods =
             new Dictionary<string, DocumentParserFactoryMethod>();
 
@@ -35,14 +32,34 @@ namespace ecologylab.semantics.documentparsers
 
         static DocumentParser()
         {
-            RegisterDocumentParser("xpath", () => new XPathParser());
+            RegisterDocumentParser("xpath", () => new XPathParser2());
             RegisterDocumentParser("direct", () => new DirectBindingParser());
         }
 
         /// <summary>
         /// The main parsing happens here.
         /// </summary>
-        public abstract Document Parse(SemanticsSessionScope semanticsSessionScope, ParsedUri puri, MetaMetadata metaMetadata);
+        public abstract void Parse(SemanticsSessionScope semanticsSessionScope, ParsedUri puri, MetaMetadata metaMetadata);
 
+        public DocumentParsingDone DocumentParsingDoneHandler { get; set; }
+
+        protected Stream OpenStreamForParsedUri(ParsedUri puri)
+        {
+            if (puri.IsFile)
+            {
+                // TODO
+            }
+            else
+            {
+                var response = WebRequest.Create(puri).GetResponse();
+                var stream = response.GetResponseStream();
+                return stream;
+            }
+            return null;
+        }
     }
+
+    public delegate DocumentParser DocumentParserFactoryMethod();
+
+    public delegate void DocumentParsingDone(Document parsedDoc);
 }

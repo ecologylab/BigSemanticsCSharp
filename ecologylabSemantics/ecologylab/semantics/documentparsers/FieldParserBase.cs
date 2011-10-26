@@ -11,7 +11,7 @@ namespace ecologylab.semantics.documentparsers
 {
   class FieldParserBase : DocumentParser
   {
-      public override Document Parse(SemanticsSessionScope semanticsSessionScope, ParsedUri puri, MetaMetadata metaMetadata)
+      public override void Parse(SemanticsSessionScope semanticsSessionScope, ParsedUri puri, MetaMetadata metaMetadata)
       {
           throw new NotImplementedException();
       }

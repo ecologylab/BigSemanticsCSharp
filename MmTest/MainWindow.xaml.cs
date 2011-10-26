@@ -21,24 +21,29 @@ using ecologylab.semantics.metadata.builtins;
 
 namespace MmTest
 {
-  /// <summary>
-  /// Interaction logic for MainWindow.xaml
-  /// </summary>
-  public partial class MainWindow : Window
-  {
-      private SemanticsSessionScope _semanticsSessionScope;
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        private SemanticsSessionScope _semanticsSessionScope;
 
-      public MainWindow()
-      {
-          InitializeComponent();
-          _semanticsSessionScope = new SemanticsSessionScope(RepositoryMetadataTranslationScope.Get(), @"");
-      }
+        public MainWindow()
+        {
+            InitializeComponent();
+            _semanticsSessionScope = new SemanticsSessionScope(
+                RepositoryMetadataTranslationScope.Get(),
+                @"..\..\..\MetaMetadataRepository\"
+                );
+        }
 
-      private async void BtnGetMetadata_Click(object sender, RoutedEventArgs e)
-      {
-          ParsedUri puri = new ParsedUri(UrlBox.Text);
-          Document doc = _semanticsSessionScope.GetDocument(puri);
-          MetadataArea.Text = SimplTypesScope.Serialize(doc, StringFormat.Xml);
-      }
-  }
+        private void BtnGetMetadata_Click(object sender, RoutedEventArgs e)
+        {
+            ParsedUri puri = new ParsedUri(UrlBox.Text);
+            _semanticsSessionScope.GetDocument(puri, (parsedDoc) =>
+            {
+                MetadataArea.Text = SimplTypesScope.Serialize(parsedDoc, StringFormat.Xml);
+            });
+        }
+    }
 }

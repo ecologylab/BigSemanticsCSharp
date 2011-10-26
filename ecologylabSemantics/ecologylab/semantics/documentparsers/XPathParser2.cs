@@ -6,7 +6,6 @@ using System.Text;
 using AwesomiumSharp;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
-using ecologylab.semantics.generated.library;
 using ecologylab.semantics.metadata;
 using ecologylab.semantics.metadata.builtins;
 using ecologylab.semantics.metametadata;
@@ -14,41 +13,23 @@ using ecologylab.semantics.metadata.scalar.types;
 
 using System.Threading.Tasks;
 using System.IO;
-using ecologylab.semantics.generated.library.wikipedia;
 using Simpl.Serialization.Context;
+using ecologylab.semantics.collecting;
 
 
-namespace DomExtraction
+namespace ecologylab.semantics.documentparsers
 {
-    public class MMDExtractionBrowser
+    public class XPathParser2 : DocumentParser
     {
 
-        SimplTypesScope metadataTScope;
-        //String mmdJson;
-        String mmdDomHelperJSString;
+        private static readonly string appPath = System.AppDomain.CurrentDomain.BaseDirectory;
+        private static readonly string workspace = appPath + @"..\..\..\";
+        private static readonly string jsPath = workspace + @"DomExtraction\javascript\";
+        private static readonly string mmdDomHelperJSString;
+        private static readonly Dictionary<MetaMetadata, String> mmdJSONCache = new Dictionary<MetaMetadata, String>();
+        private static readonly Dictionary<ParsedUri, Metadata> metadataCache = new Dictionary<ParsedUri, Metadata>();
 
-        static readonly string appPath = System.AppDomain.CurrentDomain.BaseDirectory;
-
-        static readonly String workspace = appPath + @"..\..\..\";
-        private String jsPath = workspace + @"DomExtraction\javascript\";
-
-        private static readonly string wikiCacheLocation = appPath;
-        private const String wikiPuriPrefix = "http://en.wikipedia.org/wiki/";
-        MetaMetadataRepository repo;
-
-        readonly Dictionary<MetaMetadata, String> mmdJSONCache = new Dictionary<MetaMetadata, String>();
-        readonly Dictionary<ParsedUri, Metadata> metadataCache = new Dictionary<ParsedUri, Metadata>();
-
-        private List<String> articleTitlesCached = new List<string>();
-
-        const String BLANK_PAGE = "about:blank";
-
-        private WebView webView;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public MMDExtractionBrowser()
+        static XPathParser2()
         {
             //Init Awesomium Webview correctly.
             //Note: Do we need special settings for WebCoreConfig?
@@ -67,70 +48,25 @@ namespace DomExtraction
                 // have its own cache and cookies. So, there's no better place
                 // than the Application User Data Path.
                 EnablePlugins = true,
-                HomeURL = @"http:\\www.google.com",
-                // ...Se comments for UserDataPath.
+                // ...See comments for UserDataPath.
                 // Let's gather some extra info for this sample.
                 LogLevel = LogLevel.Verbose
             };
-
             WebCore.Initialize(config, false);
 
-            InitRepo();
-        }
-
-        /// <summary>
-        /// Does the actual Initialization of the Repository
-        /// </summary>
-        public void InitRepo()
-        {
-            MetadataScalarType.init();
-            SimplTypesScope mmdTScope = MetaMetadataTranslationScope.Get();
-            metadataTScope = RepositoryMetadataTranslationScope.Get();
-
-
-            const string testFile = @"MetaMetadataRepository\";
-            Console.WriteLine("Initting repository");
-            MetaMetadataRepository.stopTheConsoleDumping = true;
-
-            var initter = new MetaMetadataRepositoryInit(metadataTScope, workspace + testFile);
-            repo = initter.GetMetaMetadataRepository();
-            //repo = MetaMetadataRepositoryLoader.ReadDirectoryRecursively(workspace + testFile, mmdTScope, metadataTScope);
-
             mmdDomHelperJSString = File.ReadAllText(jsPath + "mmdDomHelper.js");
-
-            //            DirectoryInfo di = new DirectoryInfo(wikiCacheLocation);
-            //            FileInfo[] files = di.GetFiles("*.xml");
-            //            foreach(var file in files)
-            //            {
-            //                string title = file.Name.Substring(0, file.Name.IndexOf("."));
-            //
-            //                ParsedUri pur = GetPuriForWikiArticleTitle(title);
-            //
-            //                Document elementState = (Document) metadataTScope.Deserialize(file.FullName, StringFormat.Xml);
-            //                metadataCache.Add(pur, elementState);
-            //            }
         }
 
-        public async Task<WikipediaPage> GetWikipediaPageForTitle(string title)
+        public static string GetJsonMMD(MetaMetadata mmd)
         {
-            WikipediaPage result = (WikipediaPage)await ExtractMetadata(GetPuriForWikiArticleTitle(title));
-            return result;
-        }
+            if (mmd == null)
+                return null;
 
-        public ParsedUri GetPuriForWikiArticleTitle(string title)
-        {
-            return new ParsedUri(wikiPuriPrefix + title.Replace(' ', '_'));
-        }
-
-        public String GetJsonMMD(MetaMetadata mmd)
-        {
-            
-            String result = null;
-            if (mmd == null)        //Should bring up the browser !
-                return result;
-
-            mmdJSONCache.TryGetValue(mmd, out result);
-
+            string result = null;
+            lock (mmdJSONCache)
+            {
+                mmdJSONCache.TryGetValue(mmd, out result);
+            }
             if (result == null)
             {
                 StringBuilder mmdJSON = new StringBuilder();
@@ -138,9 +74,22 @@ namespace DomExtraction
                 mmdJSON.Append(SimplTypesScope.Serialize(mmd, StringFormat.Json));
                 mmdJSON.Append(";");
                 result = mmdJSON.ToString();
-                mmdJSONCache.Add(mmd, result);
+                lock (mmdJSONCache)
+                {
+                    mmdJSONCache.Add(mmd, result);
+                }
             }
             return result;
+        }
+
+        private WebView webView;
+
+        public override async void Parse(SemanticsSessionScope semanticsSessionScope, ParsedUri puri, MetaMetadata metaMetadata)
+        {
+            Document parsedDoc = await ExtractMetadata(puri, semanticsSessionScope.MetaMetadataRepository, semanticsSessionScope.MetadataTranslationScope) as Document;
+            DocumentParsingDoneHandler(parsedDoc);
+
+            // post parse: regex filtering + field parser
         }
 
         /// <summary>
@@ -151,13 +100,12 @@ namespace DomExtraction
         /// </summary>
         /// <param name="puri"></param>
         /// <returns></returns>
-        public async Task<Document> ExtractMetadata(ParsedUri puri)
+        public async Task<Document> ExtractMetadata(ParsedUri puri, MetaMetadataRepository repository, SimplTypesScope metadataTScope)
         {
             if (puri == null)
                 return null;
-
             string uri = puri.AbsoluteUri;
-            Metadata result;
+            Metadata result = null;
 
             TaskCompletionSource<Document> tcs = new TaskCompletionSource<Document>();
             if (metadataCache.TryGetValue(puri, out result))
@@ -166,15 +114,15 @@ namespace DomExtraction
             }
             else
             {
-                Console.WriteLine("Cache Miss. Parsing webpage: " + uri);
+                Console.WriteLine("Cache Miss. Parsing Webpage: " + uri);
                 webView = WebCore.CreateWebView(1024, 768);
                 //We need webView to be instantiated correctly.
                 webView.ClearAllURLFilters();
                 //Only accept requests for this particular uri
-
                 webView.AddURLFilter(uri);
                 //TODO: At a later date, when we want to allow javascript requests, this must change.
                 //webView.AddURLFilter("*.js");
+
                 Console.WriteLine("Setting Source");
                 webView.Source = uri;
                 webView.LoadCompleted += delegate
@@ -183,13 +131,18 @@ namespace DomExtraction
                     //   return;
                     webView.Stop(); // Stopping further requests.
                     Console.WriteLine("Finished loading. Executing javascript. -- " + System.DateTime.Now);
-                    MetaMetadata mmd = repo.GetDocumentMM(puri);
+                    MetaMetadata mmd = repository.GetDocumentMM(puri);
 
                     // this manipulation of metadata class descriptors is just a workaround.
                     // the correct way of doing this might be to use some hook strategy.
                     var mmdCD = mmd.MetadataClassDescriptor;
-                    if(metadataTScope.GetClassDescriptorByTag(mmd.Name) == null)
-                        metadataTScope.EntriesByTag.Add(mmd.Name, mmdCD);
+                    if (metadataTScope.GetClassDescriptorByTag(mmd.Name) == null)
+                    {
+                        lock (metadataTScope)
+                        {
+                            metadataTScope.EntriesByTag.Add(mmd.Name, mmdCD);
+                        }
+                    }
 
                     String jsonMMD = GetJsonMMD(mmd);
                     //Console.WriteLine("json:\n" + jsonMMD + "\n");

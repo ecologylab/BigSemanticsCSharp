@@ -10,13 +10,19 @@ using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.documentparsers
 {
-    class XPathParser : DocumentParser
+    public class XPathParser : DocumentParser
     {
-        private static readonly BrowserPool _browserPool = new BrowserPool(4);
-
-        public override Document Parse(SemanticsSessionScope semanticsSessionScope, ParsedUri puri, MetaMetadata metaMetadata)
+        public override void Parse(SemanticsSessionScope semanticsSessionScope, ParsedUri puri, MetaMetadata metaMetadata)
         {
-            throw new NotImplementedException();
+            // TODO how to introduce dependency on MMDExtractionBrowser and use it here?
+            // TODO pool MMDExtractionBrowser objects for performance.
+            Document parsedDoc = null;
+
+            // callback
+            DocumentParsingDoneHandler(parsedDoc);
+
+            // post parse: regex filtering + field parser
         }
     }
+
 }
