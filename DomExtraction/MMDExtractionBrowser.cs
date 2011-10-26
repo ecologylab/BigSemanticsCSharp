@@ -135,10 +135,8 @@ namespace DomExtraction
             if (result == null)
             {
                 StringBuilder mmdJSON = new StringBuilder();
-                StringWriter writer = new StringWriter(mmdJSON);
                 mmdJSON.Append("mmd = ");
-                SimplTypesScope.Serialize(mmd, StringFormat.Json, writer);
-                //mmd.serialize(mmdJSON, null);
+                mmdJSON.Append(SimplTypesScope.Serialize(mmd, StringFormat.Json));
                 mmdJSON.Append(";");
                 result = mmdJSON.ToString();
                 mmdJSONCache.Add(mmd, result);
