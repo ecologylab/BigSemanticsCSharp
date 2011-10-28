@@ -53,30 +53,30 @@ namespace ecologylab.semantics.collecting
         {
             if (puri == null)
             {
-                Console.Error.WriteLine("Error: empty URL provided.");
+                Console.WriteLine("Error: empty URL provided.");
                 return;
             }
 
             string mimeType = null;
             MetaMetadata mmd = Connect(puri, out mimeType);
-            if (mmd == null)
+            string parserName = null;
+            if (IsXml(mimeType))
+                parserName = "direct";
+            else
+                parserName = mmd.Parser;
+            if (mmd == null && parserName == "xpath")
             {
-                Console.Error.WriteLine("No meta-metadata found for URL: " + puri.ToString() + " .");
+                Console.WriteLine("No meta-metadata found for URL: " + puri.ToString() + " .");
                 return;
             }
             else
             {
-                string parserName = null;
-                if (IsXml(mimeType))
-                    parserName = "direct";
-                else
-                    parserName = mmd.Parser;
                 if (parserName != null)
                 {
                     DocumentParser parser = DocumentParser.GetDocumentParser(parserName);
                     if (parser == null)
                     {
-                        Console.Error.WriteLine("Parser not defined: " + parserName);
+                        Console.WriteLine("Parser not defined: " + parserName);
                         return;
                     }
                     else
@@ -84,6 +84,10 @@ namespace ecologylab.semantics.collecting
                         parser.DocumentParsingDoneHandler = callback;
                         parser.Parse(this, puri, mmd);
                     }
+                }
+                else
+                {
+                    Console.WriteLine("No parser defined for meta-metadata: " + mmd.Name);
                 }
             }
         }
