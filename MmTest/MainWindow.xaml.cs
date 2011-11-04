@@ -18,6 +18,7 @@ using Simpl.Serialization;
 using ecologylab.semantics.collecting;
 using ecologylab.semantics.generated.library;
 using ecologylab.semantics.metadata.builtins;
+using ecologylab.semantics.metametadata;
 
 namespace MmTest
 {
@@ -33,7 +34,7 @@ namespace MmTest
             InitializeComponent();
             _semanticsSessionScope = new SemanticsSessionScope(
                 RepositoryMetadataTranslationScope.Get(),
-                @"..\..\..\MetaMetadataRepository\"
+                MetaMetadataRepositoryInit.DEFAULT_REPOSITORY_LOCATION
                 );
         }
 

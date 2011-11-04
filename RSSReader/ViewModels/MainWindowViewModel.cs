@@ -12,6 +12,7 @@ using ecologylab.semantics.generated.library.rss;
 using ecologylab.semantics.metadata.builtins;
 using ecologylab.semantics.metadata.scalar;
 using ecologylab.semantics.collecting;
+using ecologylab.semantics.metametadata;
 
 namespace RSSReader.ViewModels
 {
@@ -31,7 +32,7 @@ namespace RSSReader.ViewModels
         {
             _sessionScope = new SemanticsSessionScope(
                 RepositoryMetadataTranslationScope.Get(),
-                @"..\..\..\MetaMetadataRepository\"
+                MetaMetadataRepositoryInit.DEFAULT_REPOSITORY_LOCATION
                 );
             this._feeds = new ObservableCollection<FeedViewModel>();
         }
