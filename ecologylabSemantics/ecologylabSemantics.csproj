@@ -91,12 +91,15 @@
     <Compile Include="ecologylab\semantics\actions\SemanticActionTranslationScope.cs" />
     <Compile Include="ecologylab\semantics\actions\SetFieldSemanticAction.cs" />
     <Compile Include="ecologylab\semantics\actions\SetMetadataSemanticAction.cs" />
+    <Compile Include="ecologylab\semantics\collecting\DownloadStatus.cs" />
+    <Compile Include="ecologylab\semantics\collecting\SemanticsGlobalCollection.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\DirectBindingParser.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\DocumentParser.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\FieldParserBase.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\XPathParser.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\RegexPostParser.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Annotation.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\DocumentClosure.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\DocumentMetadataWrap.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\ImageClipping.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\MediaClipping.cs" />
@@ -123,6 +126,7 @@
     <Compile Include="ecologylab\semantics\metadata\builtins\MetadataBuiltinsTranslationScope.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Surrogate.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Text.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\MMSelectorType.cs" />
     <Compile Include="ecologylab\semantics\namesandnums\DocumentParserTagNames.cs" />
     <Compile Include="ecologylab\semantics\metadata\Metadata.cs" />
     <Compile Include="ecologylab\semantics\metadata\MetadataClassDescriptor.cs" />

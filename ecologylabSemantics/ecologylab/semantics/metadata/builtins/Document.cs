@@ -8,9 +8,12 @@
 
 using System;
 using System.Collections.Generic;
+using Simpl.Fundamental.Net;
 using Simpl.Serialization.Attributes;
+using ecologylab.semantics.collecting;
 using ecologylab.semantics.metadata.scalar;
 using ecologylab.semantics.metadata;
+using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
@@ -68,16 +71,26 @@ namespace ecologylab.semantics.metadata.builtins
         [SimplScalar]
         private MetadataParsedURL favicon;
 
-
+	    [MmName("additional_location")]
+        [SimplCollection("location")]
+        private List<MetadataParsedURL> additionalLocations;
 
 		public Document()
 		{ }
 
-		public MetadataParsedURL Location
-		{
-			get{return location;}
-			set{location = value;}
-		}
+        public Document(MetaMetadataCompositeField metaMetadata) : base(metaMetadata) { }
+
+	    public override MetadataParsedURL Location
+	    {
+	        get { return location; }
+	        set { location = value; }
+	    }
+
+	    public List<MetadataParsedURL> AdditionalLocations
+	    {
+            get { return additionalLocations; }
+            set { additionalLocations = value; }
+	    }
 
 		public MetadataString Title
 		{
@@ -115,9 +128,54 @@ namespace ecologylab.semantics.metadata.builtins
             set { favicon = value; }
         }
 
+        #region Runtime Properties
+
+        public SemanticsSessionScope SemanticsSessionScope { get; set; }
+
+        #endregion
+
         public override String ToString()
         {
             return (title != null) ? title.Value : base.ToString();
         }
+
+        public void AddAdditionalLocation(MetadataParsedURL additionalLocation)
+        {
+            if (AdditionalLocations == null)
+                AdditionalLocations = new List<MetadataParsedURL>();
+            AdditionalLocations.Add(additionalLocation);
+        }
+
+        public void InheritValues(Document oldDocument)
+        {
+            oldDocument.SemanticsSessionScope.GlobalDocumentCollection.Remap(oldDocument, this);
+
+            if (location == null)
+            {
+                location = oldDocument.location;
+                oldDocument.location = null;
+            }
+
+            this.SemanticsSessionScope = oldDocument.SemanticsSessionScope;
+
+            // TODO semantic inlinks
+
+            List<Metadata> oldMixins = oldDocument.Mixins;
+            if (oldMixins != null)
+                foreach (Metadata oldMixin in oldMixins)
+                    AddMixin(oldMixin);
+
+            List<MetadataParsedURL> oldAdditionalLocations = oldDocument.additionalLocations;
+            if (oldAdditionalLocations != null)
+                foreach (MetadataParsedURL otherLocation in oldAdditionalLocations)
+                    AddAdditionalLocation(otherLocation);
+        }
+
+	    public void DownloadAndParseDone()
+	    {
+            // hook for subclasses to perform actions after parsing done.
+            // currently, for CompoundDocument to create and visualize clippings.
+            // as clipping creation and visualization goes to semantic actions, do we still need this ??
+	    }
 	}   
 }

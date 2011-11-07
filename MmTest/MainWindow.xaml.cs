@@ -40,6 +40,7 @@ namespace MmTest
 
         private void BtnGetMetadata_Click(object sender, RoutedEventArgs e)
         {
+            MetadataArea.Text = null;
             ParsedUri puri = new ParsedUri(UrlBox.Text);
             _semanticsSessionScope.GetDocument(puri, (parsedDoc) =>
             {

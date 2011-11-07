@@ -22,7 +22,6 @@ namespace ecologylab.semantics.metametadata
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	[SimplInherit]
-    [SimplDescriptorClasses(new[] { typeof(MetaMetadataClassDescriptor), typeof(MetaMetadataFieldDescriptor) })]
 	public abstract class MetaMetadataNestedField : MetaMetadataField
 	{
 	    private const string AsemblyQualifiedNameForGeneratedSemantics = ", ecologylabGeneratedSemantics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
@@ -192,7 +191,7 @@ namespace ecologylab.semantics.metametadata
 
         protected MetadataClassDescriptor BindMetadataClassDescriptor(SimplTypesScope metadataTScope)
 	    {
-            MetadataClassDescriptor metadataCd = this.metadataClassDescriptor;
+            MetadataClassDescriptor metadataCd = this.MetadataClassDescriptor;
             if (metadataCd == null)
             {
                 this.InheritMetaMetadata();
@@ -212,10 +211,10 @@ namespace ecologylab.semantics.metametadata
                         {
                             Type metadataType = Type.GetType(metadataClassName) ?? Type.GetType(metadataClassName + AsemblyQualifiedNameForGeneratedSemantics);
                             this.metadataClass = metadataType;
-                            if(metadataClass != null)
+                            if(MetadataClass != null)
                             {
-                                metadataCd = (MetadataClassDescriptor)ClassDescriptor.GetClassDescriptor(metadataClass);
-                                metadataTScope.AddTranslation(metadataClass);
+                                metadataCd = (MetadataClassDescriptor)ClassDescriptor.GetClassDescriptor(MetadataClass);
+                                metadataTScope.AddTranslation(MetadataClass);
                             }
                             else
                             {
@@ -234,7 +233,7 @@ namespace ecologylab.semantics.metametadata
 
                 if (metadataCd != null)
                 {
-                    this.metadataClassDescriptor = metadataCd; // early assignment to prevent infinite loop
+                    this.MetadataClassDescriptor = metadataCd; // early assignment to prevent infinite loop
                     this.BindMetadataFieldDescriptors(metadataTScope, metadataCd);
                 }
             }

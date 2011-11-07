@@ -13,10 +13,10 @@ namespace ecologylab.semantics.documentparsers
 {
     class DirectBindingParser : DocumentParser
     {
-        public override void Parse(SemanticsSessionScope semanticsSessionScope, ParsedUri puri, MetaMetadata metaMetadata)
+        public override void Parse()
         {
-            SimplTypesScope metadataTScope = semanticsSessionScope.MetadataTranslationScope;
-            Document parsedDoc = metadataTScope.Deserialize(OpenStreamForParsedUri(puri), Format.Xml) as Document;
+            SimplTypesScope metadataTScope = SemanticsSessionScope.MetadataTranslationScope;
+            Document parsedDoc = metadataTScope.Deserialize(PURLConnection.Stream, Format.Xml) as Document;
             DocumentParsingDoneHandler(parsedDoc);
 
             // post parse: regex filtering + field parser

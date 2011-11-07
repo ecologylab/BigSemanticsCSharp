@@ -55,6 +55,17 @@ namespace ecologylab.semantics.metadata
 		public Metadata()
 		{ }
 
+        public Metadata(MetaMetadataCompositeField metaMetadata) : this()
+        {
+            if (metaMetadata != null)
+            {
+                this.metaMetadata = metaMetadata;
+                string metaMetadataName = metaMetadata.Name;
+                if (ClassDescriptor.TagName != metaMetadataName)
+                    this.metaMetadataName = new MetadataString(metaMetadataName);
+            }
+        }
+
 		public MetadataString MetaMetadataName
 		{
 			get { return metaMetadataName; }
@@ -69,27 +80,23 @@ namespace ecologylab.semantics.metadata
 
         public MetaMetadataCompositeField MetaMetadata
         {
-            get { return metaMetadata ?? getMetaMetadata(); }
+            get { return metaMetadata ?? GetMetaMetadata(); }
             set { metaMetadata = value; }
         }
 
-        /*protected override void DeserializationPreHook()
+        public virtual MetadataParsedURL Location
+        {
+            get { return null; }
+            set { }
+        }
+
+	    public virtual bool IsImage
 	    {
-		    getMetaMetadata();
-	    }*/
+	        get { return false; }
+	        set { }
+	    }
 
-        public ParsedUri getLocation()
-        {
-            return null;
-        }
-
-        // FIXME -- get rid of these hacks when Image extends Document
-        public bool isImage()
-        {
-            return false;
-        }
-
-        private MetaMetadataCompositeField getMetaMetadata()
+	    private MetaMetadataCompositeField GetMetaMetadata()
         {
             // return getMetadataClassDescriptor().getMetaMetadata();
             MetaMetadataCompositeField mm = metaMetadata;
@@ -100,26 +107,22 @@ namespace ecologylab.semantics.metadata
 
                 if (mm == null)
                 {
-                    ParsedUri location = getLocation();
+                    ParsedUri location = Location == null ? null : Location.Value;
                     if (location != null)
                     {
-                        //if (isImage())
-                        //    mm = repository.GetImageMM(location);
-                        //else
-                            mm = repository.GetDocumentMM(location);
+                        mm = IsImage ? repository.GetImageMM(location) : repository.GetDocumentMM(location);
 
                         // TODO -- also try to resolve by mime type ???
                     }
                     if (mm == null)
                         mm = repository.GetByClass(this.GetType());
-//                    if (mm == null && this.ClassDescriptor != null)
-//                    {
-//                        mm = repository.GetByTagName(this.ClassDescriptor.TagName);
-//                    }
+                    if (mm == null && ClassDescriptor != null)
+                    {
+                        mm = repository.GetMMByName(ClassDescriptor.TagName);
+                    }
                 }
                 if (mm != null)
-                    this.MetaMetadata = mm;
-                // metaMetadata = mm;
+                    MetaMetadata = mm;
             }
             return mm;
         }
@@ -127,15 +130,16 @@ namespace ecologylab.semantics.metadata
         public MetaMetadataOneLevelNestingEnumerator MetaMetadataIterator(MetaMetadataField metaMetadataField)
         {
             MetaMetadataField firstMetaMetadataField = metaMetadataField ?? metaMetadata;
-
             return new MetaMetadataOneLevelNestingEnumerator(firstMetaMetadataField, this, mixins);
         }
 
-        public static MetaMetadataRepository MetaMetadataRepository
+        public void AddMixin(Metadata mixin)
         {
-            set { repository = value; }
+            if (Mixins == null)
+            {
+                Mixins = new List<Metadata>();
+            }
+            Mixins.Add(mixin);
         }
-
-        
 	}
 }

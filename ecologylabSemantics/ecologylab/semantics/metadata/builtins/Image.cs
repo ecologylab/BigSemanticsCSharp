@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Simpl.Serialization.Attributes;
 using ecologylab.semantics.metadata.scalar;
 using ecologylab.semantics.metadata;
+using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
@@ -31,7 +32,9 @@ namespace ecologylab.semantics.metadata.builtins
 		public Image()
 		{ }
 
-		public MetadataFile LocalLocation
+        public Image(MetaMetadataCompositeField metaMetadata) : base(metaMetadata) { }
+
+	    public MetadataFile LocalLocation
 		{
 			get{return localLocation;}
 			set{localLocation = value;}

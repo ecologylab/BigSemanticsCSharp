@@ -84,9 +84,11 @@ namespace ecologylab.semantics.documentparsers
 
         private WebView webView;
 
-        public override async void Parse(SemanticsSessionScope semanticsSessionScope, ParsedUri puri, MetaMetadata metaMetadata)
+        public override async void Parse()
         {
-            Document parsedDoc = await ExtractMetadata(puri, semanticsSessionScope.MetaMetadataRepository, semanticsSessionScope.MetadataTranslationScope) as Document;
+            ParsedUri puri = PURLConnection.ResponsePURL;
+            MetaMetadata mmd = MetaMetadata as MetaMetadata;
+            Document parsedDoc = await ExtractMetadata(puri, SemanticsSessionScope.MetaMetadataRepository, SemanticsSessionScope.MetadataTranslationScope) as Document;
             DocumentParsingDoneHandler(parsedDoc);
 
             // post parse: regex filtering + field parser
@@ -124,7 +126,6 @@ namespace ecologylab.semantics.documentparsers
                 //webView.AddURLFilter("*.js");
 
                 Console.WriteLine("Setting Source");
-                webView.Source = uri;
                 webView.LoadCompleted += delegate
                 {
                     //if (Source == null || BLANK_PAGE.Equals(Source))// || loadingComplete)
@@ -193,6 +194,7 @@ namespace ecologylab.semantics.documentparsers
                     tcs.TrySetResult(myShinyNewMetadata);
                     webView.Close();
                 };
+                webView.Source = uri;
             }
             return await tcs.Task;
         }

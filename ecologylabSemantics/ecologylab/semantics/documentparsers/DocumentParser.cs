@@ -36,27 +36,28 @@ namespace ecologylab.semantics.documentparsers
             RegisterDocumentParser("direct", () => new DirectBindingParser());
         }
 
+        public SemanticsSessionScope SemanticsSessionScope { get; private set; }
+
+        public PURLConnection PURLConnection { get; private set; }
+
+        public MetaMetadataCompositeField MetaMetadata { get; private set; }
+
+        public DocumentClosure DocumentClosure { get; private set; }
+
+        public void FillValues(SemanticsSessionScope semanticsSessionScope, PURLConnection purlConnection, MetaMetadataCompositeField metaMetadata, DocumentClosure documentClosure)
+        {
+            SemanticsSessionScope = semanticsSessionScope;
+            PURLConnection = purlConnection;
+            MetaMetadata = metaMetadata;
+            DocumentClosure = documentClosure;
+        }
+
         /// <summary>
         /// The main parsing happens here.
         /// </summary>
-        public abstract void Parse(SemanticsSessionScope semanticsSessionScope, ParsedUri puri, MetaMetadata metaMetadata);
+        public abstract void Parse();
 
         public DocumentParsingDone DocumentParsingDoneHandler { get; set; }
-
-        protected Stream OpenStreamForParsedUri(ParsedUri puri)
-        {
-            if (puri.IsFile)
-            {
-                // TODO
-            }
-            else
-            {
-                var response = WebRequest.Create(puri).GetResponse();
-                var stream = response.GetResponseStream();
-                return stream;
-            }
-            return null;
-        }
     }
 
     public delegate DocumentParser DocumentParserFactoryMethod();

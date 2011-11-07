@@ -15,6 +15,7 @@ using Simpl.Serialization;
 using Simpl.Serialization.Types.Element;
 using ecologylab.semantics.actions;
 using ecologylab.semantics.metadata;
+using ecologylab.semantics.metadata.builtins;
 
 namespace ecologylab.semantics.metametadata 
 {
@@ -31,10 +32,6 @@ namespace ecologylab.semantics.metametadata
         [SimplNoWrap]
         [SimplCollection("selector")]
 		private List<MetaMetadataSelector> selectors;
-
-		[SimplTag("package")]
-		[SimplScalar]
-		private String packageName;
 
 		[SimplScalar]
 		private Boolean dontGenerateClass;
@@ -93,12 +90,6 @@ namespace ecologylab.semantics.metametadata
         #region Properties
 
 
-        public String PackageName
-        {
-            get { return packageName; }
-            set { packageName = value; }
-        }
-
         public Boolean DontGenerateClass
         {
             get { return dontGenerateClass; }
@@ -117,9 +108,6 @@ namespace ecologylab.semantics.metametadata
             set { collectionOf = value; }
         }
 
-	    /// <summary>
-	    /// missing java doc comments or could not find the source file.
-	    /// </summary>
 	    public List<MetaMetadataSelector> Selectors
 	    {
 	        get { return selectors; }
@@ -140,10 +128,15 @@ namespace ecologylab.semantics.metametadata
 	        set { naturalIds = value; }
 	    }
 
-	    public bool IsBuiltIn
+	    public override bool IsBuiltIn
 	    {
 	        get { return builtIn; }
-	        set { builtIn = value; }
+	    }
+
+	    public RedirectHandling RedirectHandling
+	    {
+            get { return redirectHandling; }
+            set { redirectHandling = value; }
 	    }
 
 	    #endregion
@@ -296,6 +289,23 @@ namespace ecologylab.semantics.metametadata
 	    public override bool IsNewMetadataClass()
 	    {
 	        return base.IsNewMetadataClass() && !IsBuiltIn;
+	    }
+
+	    public Metadata ConstructMetadata(SimplTypesScope metadataTScope = null)
+	    {
+            if (metadataTScope == null)
+                metadataTScope = Repository.MetadataTScope;
+
+	        Metadata result = null;
+	        Type metadataClass = GetMetadataClass(metadataTScope);
+	        if (metadataClass != null)
+	        {
+	            Type[] argClasses = new Type[] { typeof(MetaMetadataCompositeField) };
+	            object[] argObjects = new object[] { this };
+	            result = metadataClass.GetConstructor(argClasses).Invoke(argObjects) as Metadata;
+                // TODO handle mixins.
+	        }
+	        return result;
 	    }
 	}
 

@@ -139,7 +139,7 @@ namespace ecologylab.semantics.metametadata
 
         private bool fieldsSortedForDisplay = false;
 
-        protected Type metadataClass;
+	    protected Type metadataClass;
 
 	    protected MetadataFieldDescriptor metadataFieldDescriptor;
 
@@ -148,7 +148,6 @@ namespace ecologylab.semantics.metametadata
         private String _displayedLabel = null;
 
         private bool _bindFieldDescriptorsFinished;
-
        
         /**
 	    * from which field this one inherits. could be null if this field is declared for the first time.
@@ -323,8 +322,6 @@ namespace ecologylab.semantics.metametadata
         internal Type GetMetadataClass(SimplTypesScope metadataTScope)
         {
             Type result = metadataClass;
-
-		
 		    if (result == null)
 		    {
 			    MetadataClassDescriptor descriptor = this.MetadataClassDescriptor;
@@ -465,6 +462,11 @@ namespace ecologylab.semantics.metametadata
         public MetadataClassDescriptor MetadataClassDescriptor
         {
             get { return metadataClassDescriptor; }
+            set
+            {
+                metadataClassDescriptor = value;
+                metadataClass = value.DescribedClass;
+            }
         }
 
         #endregion
@@ -501,6 +503,16 @@ namespace ecologylab.semantics.metametadata
 	    {
 	        get { return asNaturalId; }
 	        set { asNaturalId = value; }
+	    }
+
+	    public Type MetadataClass
+	    {
+	        get
+	        {
+	            if (metadataClass == null && MetadataClassDescriptor != null)
+	                metadataClass = MetadataClassDescriptor.DescribedClass;
+                return metadataClass;
+	        }
 	    }
 
 	    public MetaMetadataField LookupChild(String name)
@@ -579,52 +591,54 @@ namespace ecologylab.semantics.metametadata
         }
 
 
-	    public MetadataFieldDescriptor BindMetadataFieldDescriptor(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
-	    {
-	        MetadataFieldDescriptor metadataFieldDescriptor = this.metadataFieldDescriptor;
-		    if (metadataFieldDescriptor == null)
-		    {
-				metadataFieldDescriptor = this.metadataFieldDescriptor;
-				String fieldName = this.GetFieldName(false);
-				if (metadataFieldDescriptor == null)
-				{
-          FieldDescriptor fd = metadataClassDescriptor.GetFieldDescriptorByFieldName(fieldName);
-				  metadataFieldDescriptor = (MetadataFieldDescriptor) fd;
-					if (metadataFieldDescriptor != null)
-					{
-						// FIXME is the following "if" statement still useful? I never see the condition is
-						// true. can we remove it? -- yin 7/26/2011
-						// if we don't have a field, then this is a wrapped collection, so we need to get the
-						// wrapped field descriptor
-						if (metadataFieldDescriptor.Field == null)
-						{
-						  FieldDescriptor wfd = metadataFieldDescriptor.WrappedFd;
-						  metadataFieldDescriptor = (MetadataFieldDescriptor) wfd;
-						}
+        public MetadataFieldDescriptor BindMetadataFieldDescriptor(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
+        {
+            MetadataFieldDescriptor metadataFieldDescriptor = this.metadataFieldDescriptor;
+            if (metadataFieldDescriptor == null)
+            {
+                metadataFieldDescriptor = this.metadataFieldDescriptor;
+                String fieldName = this.GetFieldName(false);
+                if (metadataFieldDescriptor == null)
+                {
+                    FieldDescriptor fd = metadataClassDescriptor.GetFieldDescriptorByFieldName(fieldName);
+                    metadataFieldDescriptor = (MetadataFieldDescriptor) fd;
+                    if (metadataFieldDescriptor != null)
+                    {
+                        // FIXME is the following "if" statement still useful? I never see the condition is
+                        // true. can we remove it? -- yin 7/26/2011
+                        // if we don't have a field, then this is a wrapped collection, so we need to get the
+                        // wrapped field descriptor
+                        if (metadataFieldDescriptor.Field == null)
+                        {
+                            FieldDescriptor wfd = metadataFieldDescriptor.WrappedFd;
+                            metadataFieldDescriptor = (MetadataFieldDescriptor) wfd;
+                        }
 
-						this.metadataFieldDescriptor = metadataFieldDescriptor;
-						
-						// this method handles polymorphic type / changing tags
-                        //Note FIXME !! Proxies and cloning not yet implemented
-//						if (this.metadataFieldDescriptor != null)
-//							CustomizeFieldDescriptor(metadataTScope, fieldDescriptorProxy);
-						if (this.metadataFieldDescriptor != metadataFieldDescriptor)
-						{
-							String tagName = this.metadataFieldDescriptor.TagName;
-							int fieldType = this.metadataFieldDescriptor.FdType;
-							if (fieldType == FieldTypes.CollectionElement || fieldType == FieldTypes.MapElement)
-								tagName = this.metadataFieldDescriptor.CollectionOrMapTagName;
-							metadataClassDescriptor.AllFieldDescriptorsByTagNames.Put(tagName, this.metadataFieldDescriptor);
-						}
-					}
-				}
-				else
-				{
-					Debug.WriteLine("Ignoring <" + fieldName + "> because no corresponding MetadataFieldDescriptor can be found.");
-				}
-		    }
-		    return metadataFieldDescriptor;
-	    }
+                        this.metadataFieldDescriptor = metadataFieldDescriptor;
+
+                        // this method handles polymorphic type / changing tags
+                        // Note FIXME !! Proxies and cloning not yet implemented
+                        //						if (this.metadataFieldDescriptor != null)
+                        //							CustomizeFieldDescriptor(metadataTScope, fieldDescriptorProxy);
+                        if (this.metadataFieldDescriptor != metadataFieldDescriptor)
+                        {
+                            String tagName = this.metadataFieldDescriptor.TagName;
+                            int fieldType = this.metadataFieldDescriptor.FdType;
+                            if (fieldType == FieldTypes.CollectionElement || fieldType == FieldTypes.MapElement)
+                                tagName = this.metadataFieldDescriptor.CollectionOrMapTagName;
+                            metadataClassDescriptor.AllFieldDescriptorsByTagNames.Put(tagName,
+                                                                                      this.metadataFieldDescriptor);
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine("Ignoring <" + fieldName +
+                                    "> because no corresponding MetadataFieldDescriptor can be found.");
+                }
+            }
+            return metadataFieldDescriptor;
+        }
 
 //        private MetadataFieldDescriptorProxy fieldDescriptorProxy = new MetadataFieldDescriptorProxy();
 //

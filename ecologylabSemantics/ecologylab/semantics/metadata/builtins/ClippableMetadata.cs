@@ -9,6 +9,7 @@
 using System;
 using Simpl.Serialization.Attributes;
 using ecologylab.semantics.metadata;
+using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
@@ -28,7 +29,9 @@ namespace ecologylab.semantics.metadata.builtins
 		public ClippableMetadata()
 		{ }
 
-		public Clipping Clipping
+	    protected ClippableMetadata(MetaMetadataCompositeField metaMetadata) : base(metaMetadata) { } 
+
+	    public Clipping Clipping
 		{
 			get{return clipping;}
 			set{clipping = value;}

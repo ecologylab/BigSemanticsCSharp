@@ -9,9 +9,9 @@ using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.documentparsers
 {
-  class FieldParserBase : DocumentParser
+  public class FieldParserBase : DocumentParser
   {
-      public override void Parse(SemanticsSessionScope semanticsSessionScope, ParsedUri puri, MetaMetadata metaMetadata)
+      public override void Parse()
       {
           throw new NotImplementedException();
       }
