@@ -61,19 +61,21 @@ function recursivelyExtractMetadata(mmd, contextNode, metadata) {
 function extractScalar(mmdScalarField, contextNode, metadata)
 {
     var stringValue = getScalarWithXPath(contextNode, mmdScalarField.xpath);
-    var regex = "\n";
-    var replace = "";
+		stringValue = stringValue.replace(new RegExp('\n', 'g'), "");
+		stringValue = stringValue.trim();
     if (mmdScalarField.filter != null)
     {
-        regex = mmdScalarField.filter.regex;
-        replace = mmdScalarField.filter.replace;
-        if (replace != "") //We must replace all newlines if the replacement is not a empty character
-            stringValue = stringValue.replace(new RegExp('\n', 'g'), "");
+        var regex = mmdScalarField.filter.regex;
+        var replace = mmdScalarField.filter.replace;
+        if (replace != undefined && replace != "") // We must replace all newlines if the replacement is not a empty character
+				{
+						stringValue = stringValue.replace(new RegExp(regex, 'g'), replace);
+				}
         else
-            regex += "|\n";
+				{
+						stringValue = stringValue.match(new RegExp(regex));
+				}
     }
-
-    stringValue = stringValue.trim().replace(new RegExp(regex, 'g'), replace);
 
     if (mmdScalarField.tag != null && mmdScalarField.tag != mmdScalarField.name)
         metadata[mmdScalarField.tag] = stringValue;
