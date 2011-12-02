@@ -73,7 +73,7 @@ function extractScalar(mmdScalarField, contextNode, metadata)
 				}
         else
 				{
-						stringValue = stringValue.match(new RegExp(regex));
+						stringValue = stringValue.match(new RegExp(regex))[0];
 				}
     }
 
