@@ -67,7 +67,7 @@ function extractScalar(mmdScalarField, contextNode, metadata)
     {
         var regex = mmdScalarField.filter.regex;
         var replace = mmdScalarField.filter.replace;
-        if (replace != undefined && replace != "") // We must replace all newlines if the replacement is not a empty character
+        if (replace != undefined) // We must replace all newlines if the replacement is not a empty character
 				{
 						stringValue = stringValue.replace(new RegExp(regex, 'g'), replace);
 				}
