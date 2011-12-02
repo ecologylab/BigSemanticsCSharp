@@ -73,7 +73,9 @@ function extractScalar(mmdScalarField, contextNode, metadata)
 				}
         else
 				{
-						stringValue = stringValue.match(new RegExp(regex))[0];
+						grps = stringValue.match(new RegExp(regex));
+						if (grps != null && grps.length > 0)
+							stringValue = grps[grps.length - 1];
 				}
     }
 
