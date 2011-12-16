@@ -119,16 +119,6 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ecologylabGeneratedSemantics\ecologylabGeneratedSemantics.csproj">
-      <Project>{3121E696-14DE-4987-BCED-588E4AB9259F}</Project>
-      <Name>ecologylabGeneratedSemantics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ecologylabSemantics\ecologylabSemantics.csproj">
-      <Project>{3A67F507-1E77-4ED6-BD46-981E66D15F92}</Project>
-      <Name>ecologylabSemantics</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

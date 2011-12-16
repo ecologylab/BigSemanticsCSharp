@@ -31,11 +31,14 @@ namespace ecologylabInteractiveSemantics.ecologylab.interactive.Behaviours
                 parent = parent?? VisualTreeHelper.GetParent(AssociatedObject) as Canvas;
                 if (touchDragging)
                 {
+
+                    UIElement canvasElement = canvasChild ?? AssociatedObject;
+
                     AssociatedObject.TouchDown += (sender, e) =>
                     {
                         if (((List<TouchDevice>)AssociatedObject.TouchesCaptured).Count == 0)
                         {
-                            elementStartPosition = AssociatedObject.TranslatePoint(new Point(), parent);
+                            elementStartPosition = canvasElement.TranslatePoint(new Point(), parent);
                             dragStartPosition = e.GetTouchPoint(parent).Position;
 
                         }
@@ -48,7 +51,7 @@ namespace ecologylabInteractiveSemantics.ecologylab.interactive.Behaviours
                         var touchesCaptured = (List<TouchDevice>)AssociatedObject.TouchesCaptured;
                         if (touchesCaptured.Count == 1)
                         {
-                            elementStartPosition = AssociatedObject.TranslatePoint(new Point(), parent);
+                            elementStartPosition = canvasElement.TranslatePoint(new Point(), parent);
                             dragStartPosition = touchesCaptured[0].GetTouchPoint(parent).Position;
                         }
 
@@ -59,8 +62,8 @@ namespace ecologylabInteractiveSemantics.ecologylab.interactive.Behaviours
                         Vector diff = e.GetTouchPoint(parent).Position - dragStartPosition;
                         if (((List<TouchDevice>)AssociatedObject.TouchesCaptured).Count == 1)
                         {
-                            AssociatedObject.SetValue(Canvas.LeftProperty, elementStartPosition.X + diff.X);
-                            AssociatedObject.SetValue(Canvas.TopProperty, elementStartPosition.Y + diff.Y);
+                            canvasElement.SetValue(Canvas.LeftProperty, elementStartPosition.X + diff.X);
+                            canvasElement.SetValue(Canvas.TopProperty, elementStartPosition.Y + diff.Y);
                         }
                     };
                 }
