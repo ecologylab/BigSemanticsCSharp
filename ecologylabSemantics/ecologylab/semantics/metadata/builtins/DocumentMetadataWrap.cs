@@ -33,7 +33,7 @@ namespace ecologylab.semantics.metadata.builtins
 		public Document Document
 		{
 			get{return document;}
-			set{document = value;}
+			set{if (this.document != value) { this.document = value; this.RaisePropertyChanged(() => this.Document); }}
 		}
 	}
 }

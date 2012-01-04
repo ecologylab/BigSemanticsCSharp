@@ -50,25 +50,25 @@ namespace ecologylab.semantics.metadata.builtins
 		public Metadata Clipping
 		{
 			get{return clipping;}
-			set{clipping = value;}
+			set{if (this.clipping != value) { this.clipping = value; this.RaisePropertyChanged(() => this.Clipping); }}
 		}
 
 		public MetadataString Context
 		{
 			get{return context;}
-			set{context = value;}
+			set{if (this.context != value) { this.context = value; this.RaisePropertyChanged(() => this.Context); }}
 		}
 
 		public Document Source
 		{
 			get{return source;}
-			set{source = value;}
+			set{if (this.source != value) { this.source = value; this.RaisePropertyChanged(() => this.Source); }}
 		}
 
 		public Document OutLink
 		{
 			get{return outLink;}
-			set{outLink = value;}
+			set{if (this.outLink != value) { this.outLink = value; this.RaisePropertyChanged(() => this.OutLink); }}
 		}
 	}
 }

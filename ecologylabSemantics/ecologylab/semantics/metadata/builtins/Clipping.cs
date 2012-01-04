@@ -57,31 +57,31 @@ namespace ecologylab.semantics.metadata.builtins
 		public MetadataString Caption
 		{
 			get{return caption;}
-			set{caption = value;}
+			set{if (this.caption != value) { this.caption = value; this.RaisePropertyChanged(() => this.Caption); }}
 		}
 
 		public MetadataString Context
 		{
 			get{return context;}
-			set{context = value;}
+			set{if (this.context != value) { this.context = value; this.RaisePropertyChanged(() => this.Context); }}
 		}
 
 		public MetadataString Xpath
 		{
 			get{return xpath;}
-			set{xpath = value;}
+			set{if (this.xpath != value) { this.xpath = value; this.RaisePropertyChanged(() => this.Xpath); }}
 		}
 
 		public Document Source
 		{
 			get{return source;}
-			set{source = value;}
+			set{if (this.source != value) { this.source = value; this.RaisePropertyChanged(() => this.Source); }}
 		}
 
 		public Document Outlink
 		{
 			get{return outlink;}
-			set{outlink = value;}
+			set{if (this.outlink != value) { this.outlink = value; this.RaisePropertyChanged(() => this.Outlink); }}
 		}
 	}
 }

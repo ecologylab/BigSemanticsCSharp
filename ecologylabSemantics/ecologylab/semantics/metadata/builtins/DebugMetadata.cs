@@ -34,7 +34,7 @@ namespace ecologylab.semantics.metadata.builtins
 		public MetadataStringBuilder NewTermVector
 		{
 			get{return newTermVector;}
-			set{newTermVector = value;}
+			set{if (this.newTermVector != value) { this.newTermVector = value; this.RaisePropertyChanged(() => this.NewTermVector); }}
 		}
 	}
 }

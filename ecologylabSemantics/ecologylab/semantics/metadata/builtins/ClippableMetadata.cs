@@ -34,7 +34,14 @@ namespace ecologylab.semantics.metadata.builtins
 	    public Clipping Clipping
 		{
 			get{return clipping;}
-			set{clipping = value;}
+			set
+			{
+			    if (this.clipping != value)
+			    {
+			        this.clipping = value;
+                    this.RaisePropertyChanged( () => this.Clipping );
+			    }
+			}
 		}
 	}
 }

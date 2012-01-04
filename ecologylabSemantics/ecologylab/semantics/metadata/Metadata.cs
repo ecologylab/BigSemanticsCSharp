@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Practices.Prism.ViewModel;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization.Attributes;
 using Simpl.Serialization;
@@ -26,7 +27,7 @@ namespace ecologylab.semantics.metadata
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	[SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
-	public class Metadata
+	public class Metadata : NotificationObject
     {
 		/// <summary>
 		/// missing java doc comments or could not find the source file.

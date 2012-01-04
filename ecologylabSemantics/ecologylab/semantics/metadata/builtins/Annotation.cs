@@ -41,19 +41,40 @@ namespace ecologylab.semantics.metadata.builtins
 		public MetadataString Text
 		{
 			get{return text;}
-			set{text = value;}
+			set
+			{
+			    if (this.text != value)
+			    {
+			        this.text = value;
+                    this.RaisePropertyChanged( () => this.Text );
+			    }
+			}
 		}
 
 		public MetadataString Author
 		{
 			get{return author;}
-			set{author = value;}
+			set
+			{
+			    if (this.author != value)
+			    {
+			        this.author = value;
+                    this.RaisePropertyChanged( () => this.Author );
+			    }
+			}
 		}
 
 		public MetadataDate CreationTime
 		{
 			get{return creationTime;}
-			set{creationTime = value;}
+			set
+			{
+			    if (this.creationTime != value)
+			    {
+			        this.creationTime = value;
+                    this.RaisePropertyChanged( () => this.CreationTime );
+			    }
+			}
 		}
 	}
 }

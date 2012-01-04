@@ -43,13 +43,13 @@ namespace ecologylab.semantics.metadata.builtins
 		public MetadataString Gist
 		{
 			get{return gist;}
-			set{gist = value;}
+			set{if (this.gist != value) { this.gist = value; this.RaisePropertyChanged(() => this.Gist); }}
 		}
 
-		public MetadataParsedURL Location
+		public override MetadataParsedURL Location
 		{
 			get{return location;}
-			set{location = value;}
+			set{if (this.location != value) { this.location = value; this.RaisePropertyChanged(() => this.Location); }}
 		}
 
 		public object Key()

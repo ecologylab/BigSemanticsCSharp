@@ -37,7 +37,7 @@ namespace ecologylab.semantics.metadata.builtins
 	    public MetadataFile LocalLocation
 		{
 			get{return localLocation;}
-			set{localLocation = value;}
+			set{if (this.localLocation != value) { this.localLocation = value; this.RaisePropertyChanged(() => this.LocalLocation); }}
 		}
 	}
 }

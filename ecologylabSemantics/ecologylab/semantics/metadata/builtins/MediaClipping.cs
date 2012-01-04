@@ -39,13 +39,13 @@ namespace ecologylab.semantics.metadata.builtins
 		public MetadataString Caption
 		{
 			get{return caption;}
-			set{caption = value;}
+			set{if (this.caption != value) { this.caption = value; this.RaisePropertyChanged(() => this.Caption); }}
 		}
 
 		public ClippableDocument Media
 		{
 			get{return media;}
-			set{media = value;}
+			set{if (this.media != value) { this.media = value; this.RaisePropertyChanged(() => this.Media); }}
 		}
 	}
 }

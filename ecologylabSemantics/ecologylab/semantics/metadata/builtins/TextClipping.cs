@@ -33,7 +33,7 @@ namespace ecologylab.semantics.metadata.builtins
 		public MetadataString Text
 		{
 			get{return text;}
-			set{text = value;}
+			set{if (this.text != value) { this.text = value; this.RaisePropertyChanged(() => this.Text); }}
 		}
 	}
 }

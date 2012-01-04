@@ -17,115 +17,115 @@ using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
-	[SimplInherit]
-	public class Document : ClippableMetadata
-	{
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[MmName("location")]
-		[SimplScalar]
-		private MetadataParsedURL location;
+    /// <summary>
+    /// missing java doc comments or could not find the source file.
+    /// </summary>
+    [SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
+    [SimplInherit]
+    public class Document : ClippableMetadata
+    {
+        /// <summary>
+        /// missing java doc comments or could not find the source file.
+        /// </summary>
+        [MmName("location")]
+        [SimplScalar]
+        private MetadataParsedURL location;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[MmName("title")]
-		[SimplScalar]
+        /// <summary>
+        /// missing java doc comments or could not find the source file.
+        /// </summary>
+        [MmName("title")]
+        [SimplScalar]
         [SimplCompositeAsScalar]
-		private MetadataString title;
+        private MetadataString title;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[MmName("description")]
-		[SimplScalar]
-		private MetadataString description;
+        /// <summary>
+        /// missing java doc comments or could not find the source file.
+        /// </summary>
+        [MmName("description")]
+        [SimplScalar]
+        private MetadataString description;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		[SimplHints(new Hint[] { Hint.XmlLeaf })]
-		private MetadataString query;
+        /// <summary>
+        /// missing java doc comments or could not find the source file.
+        /// </summary>
+        [SimplScalar]
+        [SimplHints(new Hint[] { Hint.XmlLeaf })]
+        private MetadataString query;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[MmName("generation")]
-		[SimplScalar]
-		private MetadataInteger generation;
+        /// <summary>
+        /// missing java doc comments or could not find the source file.
+        /// </summary>
+        [MmName("generation")]
+        [SimplScalar]
+        private MetadataInteger generation;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[MmName("page_structure")]
-		[SimplScalar]
-		private MetadataString pageStructure;
+        /// <summary>
+        /// missing java doc comments or could not find the source file.
+        /// </summary>
+        [MmName("page_structure")]
+        [SimplScalar]
+        private MetadataString pageStructure;
 
         [MmName("favicon")]
         [SimplScalar]
         private MetadataParsedURL favicon;
 
-	    [MmName("additional_location")]
+        [MmName("additional_location")]
         [SimplCollection("location")]
         private List<MetadataParsedURL> additionalLocations;
 
-		public Document()
-		{ }
+        public Document()
+        { }
 
         public Document(MetaMetadataCompositeField metaMetadata) : base(metaMetadata) { }
 
-	    public override MetadataParsedURL Location
-	    {
-	        get { return location; }
-	        set { location = value; }
-	    }
+        public override MetadataParsedURL Location
+        {
+            get{return location;}
+            set{if (this.location != value) { this.location = value; this.RaisePropertyChanged(() => this.Location); }}
+        }
 
-	    public List<MetadataParsedURL> AdditionalLocations
-	    {
-            get { return additionalLocations; }
-            set { additionalLocations = value; }
-	    }
+        public List<MetadataParsedURL> AdditionalLocations
+        {
+            get{return additionalLocations;}
+            set{if (this.additionalLocations != value) { this.additionalLocations = value; this.RaisePropertyChanged(() => this.AdditionalLocations); }}
+        }
 
-		public MetadataString Title
-		{
-			get{return title;}
-			set{title = value;}
-		}
+        public MetadataString Title
+        {
+            get{return title;}
+            set{if (this.title != value) { this.title = value; this.RaisePropertyChanged(() => this.Title); }}
+        }
 
-		public MetadataString Description
-		{
-			get{return description;}
-			set{description = value;}
-		}
+        public MetadataString Description
+        {
+            get{return description;}
+            set{if (this.description != value) { this.description = value; this.RaisePropertyChanged(() => this.Description); }}
+        }
 
-		public MetadataString Query
-		{
-			get{return query;}
-			set{query = value;}
-		}
+        public MetadataString Query
+        {
+            get{return query;}
+            set{if (this.query != value) { this.query = value; this.RaisePropertyChanged(() => this.Query); }}
+        }
 
-		public MetadataInteger Generation
-		{
-			get{return generation;}
-			set{generation = value;}
-		}
+        public MetadataInteger Generation
+        {
+            get{return generation;}
+            set{if (this.generation != value) { this.generation = value; this.RaisePropertyChanged(() => this.Generation); }}
+        }
 
-		public MetadataString PageStructure
-		{
-			get{return pageStructure;}
-			set{pageStructure = value;}
-		}
+        public MetadataString PageStructure
+        {
+            get{return pageStructure;}
+            set{if (this.pageStructure != value) { this.pageStructure = value; this.RaisePropertyChanged(() => this.PageStructure); }}
+        }
 
         public MetadataParsedURL Favicon
         {
-            get { return favicon; }
-            set { favicon = value; }
+            get{return favicon;}
+            set{if (this.favicon != value) { this.favicon = value; this.RaisePropertyChanged(() => this.Favicon); }}
         }
 
         #region Runtime Properties
@@ -171,11 +171,11 @@ namespace ecologylab.semantics.metadata.builtins
                     AddAdditionalLocation(otherLocation);
         }
 
-	    public void DownloadAndParseDone()
-	    {
+        public void DownloadAndParseDone()
+        {
             // hook for subclasses to perform actions after parsing done.
             // currently, for CompoundDocument to create and visualize clippings.
             // as clipping creation and visualization goes to semantic actions, do we still need this ??
-	    }
-	}   
+        }
+    }   
 }
