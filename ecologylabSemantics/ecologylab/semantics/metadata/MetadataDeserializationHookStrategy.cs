@@ -21,11 +21,11 @@ namespace ecologylab.semantics.metadata
          * For the root, compare the meta-metadata from the binding with the one we started with. Down the
          * hierarchy, try to perform similar bindings.
          */
-        public void deserializationPreHook(ElementState es, FieldDescriptor fd)
+        public void DeserializationPreHook(object o, FieldDescriptor fd)
         {
-            if ( es is Metadata)
+            if (o is Metadata)
             {
-                Metadata deserializedMetadata = (Metadata)es;
+                Metadata deserializedMetadata = (Metadata)o;
                 if (_currentMMstack.Count == 0)
                 {
                     MetaMetadataCompositeField deserializationMM = deserializedMetadata.MetaMetadata;
@@ -40,7 +40,7 @@ namespace ecologylab.semantics.metadata
                         mmName = mfd.MmName;
                     }
                     else
-                        mmName = "";//TODO FIXME XMLTools.GetXmlTagName(fd.FieldName, null);
+                        mmName = ""; //TODO FIXME XMLTools.GetXmlTagName(fd.FieldName, null);
 
                     MetaMetadataNestedField currentMM = _currentMMstack.Peek();
                     MetaMetadataNestedField childMMNested = (MetaMetadataNestedField)currentMM.LookupChild(mmName);
@@ -51,12 +51,12 @@ namespace ecologylab.semantics.metadata
             }
         }
 
-        public void deserializationPostHook(ElementState es, FieldDescriptor fd)
+        public void DeserializationPostHook(object o, FieldDescriptor fd)
         {
-            if (es is Metadata)
+            if (o is Metadata)
                 _currentMMstack.Pop();
         }
-//
+
 //        private bool bindMetaMetadataToMetadata(MetaMetadataField deserializationMM, MetaMetadataField originalMM)
 //        {
 //            if (deserializationMM != null) // should be always
@@ -87,14 +87,5 @@ namespace ecologylab.semantics.metadata
 //            }
 //        }
 
-        public void DeserializationPreHook(object o, FieldDescriptor fd)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeserializationPostHook(object o, FieldDescriptor fd)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -26,7 +26,7 @@ namespace ecologylab.semantics.metadata
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	[SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
-	public class Metadata : ElementState
+	public class Metadata
     {
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -64,6 +64,18 @@ namespace ecologylab.semantics.metadata
                 if (ClassDescriptor.TagName != metaMetadataName)
                     this.metaMetadataName = new MetadataString(metaMetadataName);
             }
+        }
+
+        private ClassDescriptor classDescriptor;
+        public ClassDescriptor ClassDescriptor
+        {
+            get
+            {
+                if (classDescriptor == null)
+                    classDescriptor = ClassDescriptor.GetClassDescriptor(this);
+                return classDescriptor;
+            }
+            private set { classDescriptor = value; }
         }
 
 		public MetadataString MetaMetadataName
