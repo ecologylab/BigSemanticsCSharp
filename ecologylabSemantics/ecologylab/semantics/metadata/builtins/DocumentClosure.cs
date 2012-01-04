@@ -126,7 +126,7 @@ namespace ecologylab.semantics.metadata.builtins
                             // see if we can find more specifc meta-metadata using mimeType
                             MetaMetadataRepository repository = SemanticsSessionScope.MetaMetadataRepository;
                             string mimeType = PURLConnection.MimeType;
-                            MetaMetadata mimeMmd = repository.GetMMByMime(mimeType);
+                            MetaMetadata mimeMmd = mimeType == null ? null : repository.GetMMByMime(mimeType);
                             if (mimeMmd != null && !mimeMmd.Equals(metaMetadata))
                             {
                                 // new meta-metadata!
