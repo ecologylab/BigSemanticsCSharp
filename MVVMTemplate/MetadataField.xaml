@@ -1,0 +1,18 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="MVVMTemplate.MetadataField"
+	x:Name="UserControl" Height="30" Margin="0,4,0,0">
+
+	<Grid x:Name="LayoutRoot">
+		<Rectangle Fill="#FFD4D4D4" RadiusY="10" RadiusX="10" Stroke="Black"/>
+		<StackPanel Orientation="Horizontal" Margin="10,3">
+			<TextBlock x:Name="fieldName" Margin="0" TextWrapping="Wrap" Text="name" FontSize="16" d:LayoutOverrides="VerticalAlignment"/>
+			<TextBlock Margin="10,0" TextWrapping="Wrap" Text=":" FontSize="16"/>
+			<TextBlock x:Name="fieldValue" Margin="0" TextWrapping="Wrap" Text="value" FontSize="16" d:LayoutOverrides="VerticalAlignment"/>
+		</StackPanel>
+	</Grid>
+</UserControl>
