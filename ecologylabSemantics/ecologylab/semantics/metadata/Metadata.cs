@@ -113,6 +113,9 @@ namespace ecologylab.semantics.metadata
         {
             // return getMetadataClassDescriptor().getMetaMetadata();
             MetaMetadataCompositeField mm = metaMetadata;
+            if (repository == null)
+                repository = MetaMetadataRepositoryInit.getRepository();
+
             if (mm == null && repository != null)
             {
                 if (metaMetadataName != null) // get from saved composition
@@ -140,9 +143,9 @@ namespace ecologylab.semantics.metadata
             return mm;
         }
 
-        public MetaMetadataOneLevelNestingEnumerator MetaMetadataIterator(MetaMetadataField metaMetadataField)
+        public MetaMetadataOneLevelNestingEnumerator MetaMetadataIterator(MetaMetadataField metaMetadataField = null)
         {
-            MetaMetadataField firstMetaMetadataField = metaMetadataField ?? metaMetadata;
+            MetaMetadataField firstMetaMetadataField = metaMetadataField ?? MetaMetadata;
             return new MetaMetadataOneLevelNestingEnumerator(firstMetaMetadataField, this, mixins);
         }
 
