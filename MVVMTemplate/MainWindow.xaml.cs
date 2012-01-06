@@ -42,15 +42,18 @@ namespace MVVMTemplate
             _semanticsSessionScope.GetDocument(puri, (parsedDoc) =>
             {
                 // Create ViewModel document container
-                DocumentViewModel docViewModel = new DocumentViewModel(parsedDoc);
-
-
+                MetadataViewModel docViewModel = new MetadataViewModel(parsedDoc);
+                
                // Create Document metadata UI object
 
 
-                DocumentMetadata docMetadataView = new DocumentMetadata(parsedDoc);
-                docMetadataView.DataContext = docViewModel;
-                canvas.Children.Add(docMetadataView);
+                MetadataBrowserEditorView docMetadataBrowserEditorView = new MetadataBrowserEditorView(parsedDoc);
+
+                docMetadataBrowserEditorView.MyItemsControl.ItemsSource = docViewModel;
+                // = docViewModel;
+                
+                
+                canvas.Children.Add(docMetadataBrowserEditorView);
             });
         }
     }
