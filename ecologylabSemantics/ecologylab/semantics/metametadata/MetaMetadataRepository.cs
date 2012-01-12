@@ -176,14 +176,35 @@ namespace ecologylab.semantics.metametadata
             // other initialization stuffs
             foreach (MetaMetadata mmd in RepositoryByName.Values)
             {
-                MetadataClassDescriptor mcd = mmd.MetadataClassDescriptor;
-                if (mcd != null)
-                    RepositoryByClassName.Put(mcd.DescribedClass.Name, mmd);
-
+                AddToRepositoryByClassName(mmd);
                 //mmd.setUpLinkWith(this); //Note Implement linking.
+            }
+            foreach (MultiAncestorScope<MetaMetadata> scope in this.PackageMmdScopes.Values)
+            {
+                foreach (MetaMetadata mmd in scope.Values)
+                {
+                    AddToRepositoryByClassName(mmd);
+                    //mmd.setUpLinkWith(this); //Note Implement linking.
+                }
             }
 
             InitializeLocationBasedMaps();
+        }
+
+        private void AddToRepositoryByClassName(MetaMetadata mmd)
+        {
+            if (mmd.ExtendsAttribute != null)
+            {
+                MetadataClassDescriptor mcd = mmd.MetadataClassDescriptor;
+			    if (mcd != null)
+				    RepositoryByClassName.Put(mcd.DescribedClass.Name, mmd);
+			
+			    foreach (MetaMetadata localMmd in mmd.MmdScope.Values)
+			    {
+				    AddToRepositoryByClassName(localMmd);
+			    }
+		    }
+               
         }
 
 

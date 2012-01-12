@@ -64,8 +64,6 @@ namespace ecologylab.semantics.metametadata
 
         private bool mmdScopeTraversed;
 
-        private MultiAncestorScope<MetaMetadata> mmdScope;
-
 	    protected MetaMetadataNestedField()
 		{ }
 
@@ -122,11 +120,7 @@ namespace ecologylab.semantics.metametadata
             set { schemaOrgItemtype = value; }
         }
 
-	    public MultiAncestorScope<MetaMetadata> MmdScope
-	    {
-	        get { return mmdScope; }
-	        set { mmdScope = value; }
-	    }
+	    public MultiAncestorScope<MetaMetadata> MmdScope { get; set; }
 
 	    public MetaMetadata InheritedMmd
 	    {

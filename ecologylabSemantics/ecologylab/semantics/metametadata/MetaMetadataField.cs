@@ -667,7 +667,7 @@ namespace ecologylab.semantics.metametadata
         private String _fieldNameInCSharp = null;
         private String _capFieldNameInCSharp = null;
 
-        private String GetCapFieldName()
+        public String GetCapFieldName()
         {
             String rst = _capFieldNameInCSharp;
             if (rst == null)
@@ -683,7 +683,7 @@ namespace ecologylab.semantics.metametadata
             return "MetaMetadata [" + Name + "]";
         }
 
-        /**
+	    /**
 	     * this class encapsulate the clone-on-write behavior of metadata field descriptor associated
 	     * with this field.
 	     * 
