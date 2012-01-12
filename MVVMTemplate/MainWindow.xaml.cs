@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -12,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ecologylab.semantics.generated.library.products;
+using ecologylab.semantics.metadata;
 using MVVMTemplate.View;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
@@ -36,24 +38,35 @@ namespace MVVMTemplate
                 RepositoryMetadataTranslationScope.Get(),
                 MetaMetadataRepositoryInit.DEFAULT_REPOSITORY_LOCATION
                 );
+
+            
         }
 
         private void LoadButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-        	ParsedUri puri = new ParsedUri(UrlBox.Text);
-            _semanticsSessionScope.GetDocument(puri, (parsedDoc) =>
+        	
+            ParsedUri puri = new ParsedUri(UrlBox.Text);
+            if (!puri.IsFile)
             {
-                // Create ViewModel document container
-                MetadataViewModel docViewModel = new MetadataViewModel(parsedDoc);
-                
-               // Create Document metadata UI object
+                _semanticsSessionScope.GetDocument(puri, (parsedDoc) =>
+                                                             {
+
+                                                                 MetadataBrowserEditorView
+                                                                     docTemplatedMetadataBrowserEditorView =
+                                                                         new MetadataBrowserEditorView(parsedDoc);
 
 
-                AmazonProductView docTemplatedMetadataBrowserEditorView = new AmazonProductView((AmazonProduct)parsedDoc);
+                                                                 canvas.Children.Add(
+                                                                     docTemplatedMetadataBrowserEditorView);
+                                                             });
+            }
+            else
+            {
+                 MetadataBrowserEditorView docTemplatedMetadataBrowserEditorView = 
+                     new MetadataBrowserEditorView((Metadata) _semanticsSessionScope.MetadataTranslationScope.Deserialize(new FileInfo(puri.LocalPath), Format.Xml));
 
-               
                 canvas.Children.Add(docTemplatedMetadataBrowserEditorView);
-            });
+            }
         }
     }
 }

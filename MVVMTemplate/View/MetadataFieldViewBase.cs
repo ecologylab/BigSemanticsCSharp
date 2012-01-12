@@ -26,10 +26,14 @@ namespace MVVMTemplate.View
         private void MetadataFieldView_Loaded(object sender, RoutedEventArgs e)
         {
             //use inherited parent's DataContext (ViewModel) to get Metadata and MetaMetadata
-            Metadata metadata                           = ((MetadataViewModelBase) this.DataContext).Metadata;
-            MetaMetadataField metaMetadataField   = (MetaMetadataScalarField) metadata.MetaMetadata.LookupChild(this.MetaMetadataFieldName);
+            if (this.DataContext == null && this.MetaMetadataFieldName != null)
+            {
+                Metadata metadata = ((MetadataViewModelBase) this.DataContext).Metadata;
+                MetaMetadataField metaMetadataField =
+                    (MetaMetadataScalarField) metadata.MetaMetadata.LookupChild(this.MetaMetadataFieldName);
 
-            this.DataContext = CreateViewModel(metaMetadataField, metadata);
+                this.DataContext = CreateViewModel(metaMetadataField, metadata);
+            }
         }
         
         public String MetaMetadataFieldName { get; set; }

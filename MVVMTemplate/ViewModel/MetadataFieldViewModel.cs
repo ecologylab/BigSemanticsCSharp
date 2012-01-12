@@ -10,7 +10,7 @@ using ecologylab.semantics.metametadata;
 
 namespace MVVMTemplate.ViewModel
 {
-    public class MetadataFieldViewModel<M> : MetadataViewModelBase where M : MetaMetadataField
+    public abstract class MetadataFieldViewModel<M> : MetadataViewModelBase where M : MetaMetadataField
     {
        
         private readonly M          _metaMetadataField;
@@ -23,14 +23,12 @@ namespace MVVMTemplate.ViewModel
 
             string mmdFieldName = metaMetadataField.GetCapFieldName();
             Console.WriteLine("Binding: " + mmdFieldName);
-            Binding binding = new Binding
-            {
-                Source = metadata,
-                Path = new PropertyPath(mmdFieldName + ".Value"),
-            };
+            Binding binding = CreateBinding(metadata, mmdFieldName);
 
             BindingOperations.SetBinding(this, FieldValueProperty, binding);
         }
+
+        protected abstract Binding CreateBinding(Metadata metadata, string mmdFieldName);
 
         public M MetaMetadataField
         {
@@ -49,6 +47,10 @@ namespace MVVMTemplate.ViewModel
 
         public static readonly DependencyProperty FieldValueProperty = DependencyProperty.Register("FieldValue", typeof(object), typeof(MetadataFieldViewModel<M>));
 
-        public object FieldValue { get; set; }
+        public object FieldValue
+        {
+            get { return GetValue(FieldValueProperty); }
+            set { SetValue(FieldValueProperty, value); }
+        }
     }
 }

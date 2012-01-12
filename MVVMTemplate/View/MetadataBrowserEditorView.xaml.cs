@@ -27,38 +27,12 @@ namespace MVVMTemplate.View
         {
             InitializeComponent();
 
-            this.DataContext = new MetadataBrowserEditorViewModel(metadata);
+            MetadataBrowserEditorViewModel viewModel            = new MetadataBrowserEditorViewModel(metadata);
+            this.DataContext                                    = viewModel;
 
-            this.BuildFields();
+//            MetaMetadataOneLevelNestingEnumerator enumerator    = viewModel.DisplayedFields;
+//            this.FieldsView.BuildFields(enumerator);
         }
 
-        private void BuildFields()
-        {
-            MetadataBrowserEditorViewModel viewModel            = (MetadataBrowserEditorViewModel) this.DataContext;
-            MetaMetadataOneLevelNestingEnumerator enumerator    = viewModel.DisplayedFields;
-
-             while( enumerator.MoveNext())
-             {  
-                 MetaMetadataField mmdField     = enumerator.Current;
-                 MetaMetadata currentMM         = (MetaMetadata) enumerator.CurrentMetadata.MetaMetadata;
-                 
-                 if (currentMM.IsChildFieldDisplayed(mmdField.Name))
-                 {
-                     switch (mmdField.GetFieldType())
-                     {
-                         case FieldTypes.Scalar:
-                             this.FieldsRoot.Children.Add(new MetadataScalarFieldTextView(
-                                                              (MetaMetadataScalarField) mmdField,
-                                                              enumerator.CurrentMetadata));
-                             break;
-                         case FieldTypes.CompositeElement:
-                             break;
-                         case FieldTypes.CollectionElement:
-                         case FieldTypes.CollectionScalar:
-                             break;
-                     }
-                 }
-             }
-        }
     }
 }

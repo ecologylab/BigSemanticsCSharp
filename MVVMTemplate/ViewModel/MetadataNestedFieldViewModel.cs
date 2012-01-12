@@ -9,11 +9,10 @@ using ecologylab.semantics.metametadata;
 
 namespace MVVMTemplate.ViewModel
 {
-    class MetadataScalarFieldViewModel : MetadataFieldViewModel<MetaMetadataScalarField>
+    public class MetadataNestedFieldViewModel<M> : MetadataFieldViewModel<M> where M : MetaMetadataNestedField
     {
-        public MetadataScalarFieldViewModel(MetaMetadataScalarField metaMetadataField, Metadata metadata ) : base(metaMetadataField, metadata)
+        public MetadataNestedFieldViewModel(M metaMetadataField, Metadata metadata) : base(metaMetadataField, metadata)
         {
-
         }
 
         protected override Binding CreateBinding(Metadata metadata, string mmdFieldName)
@@ -21,7 +20,7 @@ namespace MVVMTemplate.ViewModel
             return new Binding
                 {
                     Source = metadata,
-                    Path = new PropertyPath(mmdFieldName + ".Value"),
+                    Path = new PropertyPath(mmdFieldName),
                 };
         }
     }
