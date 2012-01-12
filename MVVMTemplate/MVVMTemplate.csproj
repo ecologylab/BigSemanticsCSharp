@@ -37,10 +37,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Practices.Prism, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -58,7 +63,36 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MetadataBrowserEditorView.xaml">
+    <Compile Include="ViewModel\MetadataBrowserEditorViewModel.cs" />
+    <Compile Include="ViewModel\MetadataCollectionFieldViewModel.cs" />
+    <Compile Include="ViewModel\MetadataCompositeFieldViewModel.cs" />
+    <Compile Include="ViewModel\MetadataFieldViewModel.cs" />
+    <Compile Include="ViewModel\MetadataNestedFieldViewModel.cs" />
+    <Compile Include="ViewModel\MetadataScalarFieldViewModel.cs" />
+    <Compile Include="ViewModel\MetadataViewModelBase.cs" />
+    <Compile Include="View\AmazonProductView.xaml.cs">
+      <DependentUpon>AmazonProductView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MetadataBrowserEditorView.xaml.cs">
+      <DependentUpon>MetadataBrowserEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MetadataCollectionFieldView.xaml.cs">
+      <DependentUpon>MetadataCollectionFieldView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MetadataCompositeFieldView.xaml.cs">
+      <DependentUpon>MetadataCompositeFieldView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MetadataFieldsGroupView.xaml.cs">
+      <DependentUpon>MetadataFieldsGroupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MetadataFieldViewBase.cs" />
+    <Compile Include="View\MetadataScalarFieldTextValueView.xaml.cs">
+      <DependentUpon>MetadataScalarFieldTextValueView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MetadataScalarFieldTextView.xaml.cs">
+      <DependentUpon>MetadataScalarFieldTextView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="TemplatedMetadataBrowserEditorView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -70,8 +104,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MetadataBrowserEditorView.xaml.cs">
-      <DependentUpon>MetadataBrowserEditorView.xaml</DependentUpon>
+    <Compile Include="TemplatedMetadataBrowserEditorView.xaml.cs">
+      <DependentUpon>TemplatedMetadataBrowserEditorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -80,6 +114,34 @@
     <Page Include="MetadataField.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\AmazonProductView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MetadataBrowserEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MetadataCollectionFieldView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MetadataCompositeFieldView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MetadataFieldsGroupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MetadataScalarFieldTextValueView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MetadataScalarFieldTextView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +202,7 @@
       <Name>Simpl.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo "ProjectDir:"
