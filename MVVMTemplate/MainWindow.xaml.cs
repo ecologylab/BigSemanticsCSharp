@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ecologylab.semantics.generated.library.products;
+using MVVMTemplate.View;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
 using ecologylab.semantics.collecting;
@@ -47,13 +49,10 @@ namespace MVVMTemplate
                // Create Document metadata UI object
 
 
-                MetadataBrowserEditorView docMetadataBrowserEditorView = new MetadataBrowserEditorView(parsedDoc);
+                AmazonProductView docTemplatedMetadataBrowserEditorView = new AmazonProductView((AmazonProduct)parsedDoc);
 
-                docMetadataBrowserEditorView.MyItemsControl.ItemsSource = docViewModel;
-                // = docViewModel;
-                
-                
-                canvas.Children.Add(docMetadataBrowserEditorView);
+               
+                canvas.Children.Add(docTemplatedMetadataBrowserEditorView);
             });
         }
     }
