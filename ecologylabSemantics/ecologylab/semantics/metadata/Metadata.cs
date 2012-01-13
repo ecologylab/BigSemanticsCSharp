@@ -67,16 +67,11 @@ namespace ecologylab.semantics.metadata
             }
         }
 
-        private ClassDescriptor classDescriptor;
+        private ClassDescriptor _classDescriptor;
         public ClassDescriptor ClassDescriptor
         {
-            get
-            {
-                if (classDescriptor == null)
-                    classDescriptor = ClassDescriptor.GetClassDescriptor(this);
-                return classDescriptor;
-            }
-            private set { classDescriptor = value; }
+            get { return _classDescriptor ?? (_classDescriptor = ClassDescriptor.GetClassDescriptor(this)); }
+            private set { _classDescriptor = value; }
         }
 
 		public MetadataString MetaMetadataName

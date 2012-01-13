@@ -29,6 +29,11 @@ namespace ecologylab.semantics.documentparsers
         private static readonly Dictionary<MetaMetadata, String> mmdJSONCache = new Dictionary<MetaMetadata, String>();
         private static readonly Dictionary<ParsedUri, Metadata> metadataCache = new Dictionary<ParsedUri, Metadata>();
 
+        public XPathParser()
+        {
+            
+        }
+
         static XPathParser()
         {
             //Init Awesomium Webview correctly.

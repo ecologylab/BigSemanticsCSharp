@@ -188,117 +188,11 @@ namespace ecologylab.semantics.metametadata
             return this.kids;
         }
 
-        #region binders
 
         internal virtual bool GetClassAndBindDescriptors(SimplTypesScope metadataTScope)
         {
             return true;
         }
-
-        /**
-	     * Obtain a map of FieldDescriptors for this class, with the field names as key, but with the
-	     * mixins field removed. Use lazy evaluation, caching the result by class name.
-	     * 
-	     * @param metadataTScope
-	     *          TODO
-	     * 
-	     * @return A map of FieldDescriptors, with the field names as key, but with the mixins field
-	     *         removed.
-	     */
-//	    protected bool BindClassDescriptor(Type metadataClass, SimplTypesScope metadataTScope)
-//	    {
-//		    MetadataClassDescriptor metadataClassDescriptor = this.metadataClassDescriptor;
-//		    if (metadataClassDescriptor == null)
-//		    {
-//                lock (this)
-//                {
-//				    metadataClassDescriptor = this.metadataClassDescriptor;
-//				    if (metadataClassDescriptor == null)
-//				    {
-//                        metadataClassDescriptor = (MetadataClassDescriptor)ClassDescriptor.GetClassDescriptor(metadataClass);
-//
-//                        if (metadataClassDescriptor != null)
-//                        {
-//                            BindMetadataFieldDescriptors(metadataTScope, metadataClassDescriptor);
-//                            this.metadataClassDescriptor = metadataClassDescriptor;
-//                        }
-//                        else
-//                            return false;
-//				    }
-//                }
-//		    }
-//            return true;
-//	    }
-
-//	    protected void BindMetadataFieldDescriptors(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
-//        {
-//            if (Kids == null && _bindFieldDescriptorsFinished)
-//                return;
-//
-//            List<MetaMetadataField> nonBindingFields = new List<MetaMetadataField>();
-//
-//            foreach (MetaMetadataField thatChild in Kids.Values)
-//		    {
-//			    bool binded = thatChild.bindMetadataFieldDescriptor(metadataTScope, metadataClassDescriptor);
-//
-//                if (binded)
-//                {
-//                    if (thatChild is MetaMetadataScalarField)
-//                    {
-//                        MetaMetadataScalarField scalar = (MetaMetadataScalarField)thatChild;
-//                        if (scalar.Filter != null)
-//                        {
-//                            MetadataFieldDescriptor fd = scalar.MetadataFieldDescriptor;
-//                            //fd.RegexPattern = scalar.Filter.RegexPattern;
-//                            //fd.RegexReplacement = scalar.Filter.Replace;
-//                        }
-//                    }
-//
-//                    if (thatChild.hide)
-//                        nonDisplayedFieldNames.Add(thatChild.name);
-//                    if (thatChild.shadows != null)
-//                        nonDisplayedFieldNames.Add(thatChild.shadows);
-//
-//                    // recursive descent
-//                    if (thatChild.HasChildren() && !thatChild.GetClassAndBindDescriptors(metadataTScope))
-//                        nonBindingFields.Add(thatChild);
-//                }
-//                else
-//                    nonBindingFields.Add(thatChild);
-//
-//                _bindFieldDescriptorsFinished = true;
-//		    }
-//
-//            foreach (MetaMetadataField field in nonBindingFields)
-//                Kids.Remove(field.Name);
-//        }
-
-        public Boolean HasChildren()
-        {
-            return kids != null && kids.Count > 0;
-        }
-
-//        protected virtual bool bindMetadataFieldDescriptor(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
-//        {
-//            String fieldName = this.GetFieldNameInCamelCase(false);// TODO -- is this the correct tag?
-//            MetadataFieldDescriptor = (MetadataFieldDescriptor)metadataClassDescriptor.GetFieldDescriptorByFieldName(fieldName);
-//
-//            if (MetadataFieldDescriptor != null)
-//            {
-//                return true;
-//            }
-//            else
-//            {
-//                if(!MetaMetadataRepository.stopTheConsoleDumping)
-//                    Console.WriteLine("Ignoring <" + fieldName + "> because no corresponding MetadataFieldDescriptor can be found.");
-//                return false;
-//            }
-//
-//        }
-
-        
-
-        #endregion
 
         public int GetFieldType()
         {
@@ -357,10 +251,10 @@ namespace ecologylab.semantics.metametadata
 //
 //        }
 
-//        private String GetTagForTranslationScope()
-//        {
-//            return Tag ?? Name;
-//        }
+        public String GetTagForTranslationScope()
+        {
+            return Tag ?? Name;
+        }
 
         #region Properties
         
@@ -453,6 +347,11 @@ namespace ecologylab.semantics.metametadata
 			get{return ignoreInTermVector;}
 			set{ignoreInTermVector = value;}
 		}
+
+        public Boolean HasChildren()
+        {
+            return kids != null && kids.Count > 0;
+        }
 
 //        public String Type
 //        {

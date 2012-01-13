@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Simpl.Serialization.Context;
 using ecologylab.semantics.generated.library.products;
 using ecologylab.semantics.metadata;
 using MVVMTemplate.View;
@@ -62,8 +63,13 @@ namespace MVVMTemplate
             }
             else
             {
-                 MetadataBrowserEditorView docTemplatedMetadataBrowserEditorView = 
-                     new MetadataBrowserEditorView((Metadata) _semanticsSessionScope.MetadataTranslationScope.Deserialize(new FileInfo(puri.LocalPath), Format.Xml));
+                var metadata = (Metadata) _semanticsSessionScope.MetadataTranslationScope.Deserialize(
+                    new FileInfo(puri.LocalPath),
+                    new TranslationContext(),
+                    new MetadataDeserializationHookStrategy(_semanticsSessionScope),
+                    Format.Xml);
+                MetadataBrowserEditorView docTemplatedMetadataBrowserEditorView = 
+                     new MetadataBrowserEditorView(metadata);
 
                 canvas.Children.Add(docTemplatedMetadataBrowserEditorView);
             }
