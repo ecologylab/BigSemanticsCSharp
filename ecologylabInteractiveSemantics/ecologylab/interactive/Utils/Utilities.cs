@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 /// Forgive the mess. This will get organized when there are well defined places they need to be in.
 
@@ -21,6 +22,7 @@ namespace ecologylab.interactive.Utils
         }
     }
 
+
     public class Logger
     {
         String _logPrefix;
@@ -39,6 +41,7 @@ namespace ecologylab.interactive.Utils
                                 "]: ";
         }
 
+        [Conditional("DEBUG")]
         public void Log(String val)
         {
             Console.WriteLine( _logPrefix + val);
@@ -63,5 +66,17 @@ namespace ecologylab.interactive.Utils
         DependencyObject AcceptableObject(DependencyObject obj);
     }
 
-    
+    public static class DispatcherHelper
+    {
+        public static void DelayInvoke(this Dispatcher dispatcher, TimeSpan ts, Action action)
+        {
+            DispatcherTimer delayTimer = new DispatcherTimer(DispatcherPriority.Send, dispatcher) {Interval = ts};
+            delayTimer.Tick += (s, e) =>
+            {
+                delayTimer.Stop();
+                action();
+            };
+            delayTimer.Start();
+        }
+    }
 }
