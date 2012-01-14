@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Reflection;
 using Simpl.Fundamental.Generic;
 using Simpl.Serialization.Attributes;
+using Simpl.Serialization.Context;
 using Simpl.Serialization.Types;
 using ecologylab.semantics.metadata;
 
@@ -51,7 +52,7 @@ namespace ecologylab.semantics.metametadata
     [MmDontInherit]
     private String childExtends;
 
-
+    [SimplScalar]
     private MetadataScalarType childScalarType;
 
     /// <summary>
@@ -177,7 +178,7 @@ namespace ecologylab.semantics.metametadata
       return (!childEntity) ? childType : DocumentParserTagNames.ENTITY;
     }
 
-    public void DeserializationPostHook(object o, FieldDescriptor fd)
+    public override void DeserializationPostHook(TranslationContext translationContext)
     {
       int typeCode = this.GetFieldType();
       if (typeCode == FieldTypes.CollectionScalar)
@@ -186,9 +187,11 @@ namespace ecologylab.semantics.metametadata
       String childCompositeName = ChildType ?? UNRESOLVED_NAME;
       MetaMetadataCollectionField thisField = this;
       var composite = new MetaMetadataCompositeField(childCompositeName, kids);
-      composite.TypeChangeListener += (newType) => this.childType = newType;
+      
+        composite.TypeChangeListener += (newType) => this.childType = newType;
       composite.ExtendsChangeListener += (newExtends) => this.childExtends = newExtends;
       composite.TagChangeListener += (newTag) => this.childTag = newTag;
+
       composite.Parent = this;
       composite.Type = childType;
       composite.ExtendsAttribute = this.childExtends;

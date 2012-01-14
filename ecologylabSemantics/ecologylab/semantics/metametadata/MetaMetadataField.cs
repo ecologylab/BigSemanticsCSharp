@@ -132,6 +132,14 @@ namespace ecologylab.semantics.metametadata
         [SimplScalar]
         private String asNaturalId;
 
+        /// <summary>
+        /// 
+        ///  schema.org microdata item_prop name.
+        /// </summary>
+	
+        [SimplScalar]
+	    private String schemaOrgItemprop;
+
         protected MetadataClassDescriptor metadataClassDescriptor;
 
         protected bool inheritMetaMetadataFinished = false;

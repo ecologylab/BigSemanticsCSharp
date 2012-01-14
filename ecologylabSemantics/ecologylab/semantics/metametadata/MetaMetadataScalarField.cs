@@ -37,6 +37,9 @@ namespace ecologylab.semantics.metametadata
 		[SimplComposite]
 		private RegexFilter filter;
 
+        [SimplScalar]
+	    private Hint hint;
+
 		public MetaMetadataScalarField()
 		{ }
 

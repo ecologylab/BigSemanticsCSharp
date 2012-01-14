@@ -27,7 +27,6 @@ namespace ecologylab.semantics.metametadata
         private const string AsemblyQualifiedNameForGeneratedSemantics = ", ecologylabGeneratedSemantics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
 
         [SimplScalar]
-        [SimplHints(new Hint[] {Hint.XmlAttribute})]
         [SimplTag("package")] 
         private String packageName;
 
@@ -36,19 +35,15 @@ namespace ecologylab.semantics.metametadata
         private FieldParserElement fieldParserElement;
 
         [SimplScalar]
-        [SimplHints(new Hint[] {Hint.XmlAttribute})]
         private Boolean promoteChildren;
 
         [SimplScalar]
-        [SimplHints(new Hint[] {Hint.XmlAttribute})]
         private String polymorphicScope;
 
         [SimplScalar]
-        [SimplHints(new Hint[] {Hint.XmlAttribute})]
         private String polymorphicClasses;
 
         [SimplScalar]
-        [SimplHints(new Hint[] {Hint.XmlAttribute})]
         private String schemaOrgItemtype;
 
         /**

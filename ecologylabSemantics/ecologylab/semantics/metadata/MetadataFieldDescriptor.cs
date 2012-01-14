@@ -51,9 +51,10 @@ namespace ecologylab.semantics.metadata
             FieldInfo thatField = this.Field;
             foreach (CustomAttributeData cad in thatField.GetCustomAttributesData())
             {
-                if (cad.Constructor.DeclaringType.Name.Equals("mm_name"))
+                if (cad.Constructor.DeclaringType == typeof(ecologylab.semantics.metadata.MmName))
                 {
                     result = (String) cad.ConstructorArguments[0].Value;
+                    break;
                 }
             }
 
