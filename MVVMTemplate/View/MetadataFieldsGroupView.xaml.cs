@@ -42,7 +42,7 @@ namespace MVVMTemplate.View
              while( enumerator.MoveNext())
              {  
                  MetaMetadataField mmdField     = enumerator.Current;
-                 MetaMetadata currentMM         = (MetaMetadata) enumerator.CurrentMetadata.MetaMetadata;
+                 MetaMetadataCompositeField currentMM         = enumerator.CurrentMetadata.MetaMetadata;
                  
                  if (currentMM.IsChildFieldDisplayed(mmdField.Name))
                  {
@@ -60,9 +60,9 @@ namespace MVVMTemplate.View
                              break;
                          case FieldTypes.CollectionElement:
                          case FieldTypes.CollectionScalar:
-//                            this.FieldsRoot.Children.Add(new MetadataCollectionFieldView(
-//                                                              (MetaMetadataCollectionField) mmdField,
-//                                                              enumerator.CurrentMetadata));
+                            this.FieldsRoot.Children.Add(new MetadataCollectionFieldView(
+                                                              (MetaMetadataCollectionField) mmdField,
+                                                              enumerator.CurrentMetadata));
                             break;
                      }
                  }
