@@ -116,7 +116,8 @@ namespace ecologylab.semantics.metametadata
             set { schemaOrgItemtype = value; }
         }
 
-	    public MultiAncestorScope<MetaMetadata> MmdScope { get; set; }
+	    public MultiAncestorScope<MetaMetadata> MmdScope
+        { get; set; }
         public MetaMetadata InheritedMmd
         {
             get { return inheritedMmd; }

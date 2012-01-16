@@ -108,21 +108,21 @@ namespace ecologylab.semantics.metametadata
                             packageMmdScopes.Put(mmdName, mmd);
                             break;
                     }
-
-                    foreach (MetaMetadata metaMetadata in repo.RepositoryByName.Values)
-                    {
-                        if (metaMetadata.PackageName == null)
-                        {
-                            Debug.WriteLine("No Package name defined for: " + metaMetadata.Name);
-                            continue;
-                        }
-                        MultiAncestorScope<MetaMetadata> packageMmdScope;
-                        mainRepo.PackageMmdScopes.TryGetValue(metaMetadata.PackageName, out packageMmdScope);
-                        metaMetadata.MmdScope = packageMmdScope;
-                    }
-
-                    mainRepo.IntegrateRepository(repo);
                 }
+
+                foreach (MetaMetadata metaMetadata in repo.RepositoryByName.Values)
+                {
+                    if (metaMetadata.PackageName == null)
+                    {
+                        Debug.WriteLine("No Package name defined for: " + metaMetadata.Name);
+                        continue;
+                    }
+                    MultiAncestorScope<MetaMetadata> packageMmdScope;
+                    mainRepo.PackageMmdScopes.TryGetValue(metaMetadata.PackageName, out packageMmdScope);
+                    metaMetadata.MmdScope = packageMmdScope;
+                }
+
+                mainRepo.IntegrateRepository(repo);
             }
             catch (Exception e)
             {

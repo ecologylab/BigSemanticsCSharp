@@ -105,7 +105,7 @@ namespace ecologylab.semantics.metametadata
             // init nested fields inside this
             var subfields = Kids.Values;
             foreach (MetaMetadataField f in subfields)
-                if (f.GetType() == typeof (MetaMetadataNestedField))
+                if (f is MetaMetadataNestedField)
                 {
                     f.Repository = (repository);
                     MetaMetadataNestedField nested = (MetaMetadataNestedField) f;
@@ -121,7 +121,7 @@ namespace ecologylab.semantics.metametadata
                 var inheritedStructSubfields = inheritedStructure.Kids.Values;
                 foreach (MetaMetadataField field in inheritedStructSubfields)
                 {
-                    if (field.GetType() == typeof (MetaMetadataNestedField))
+                    if (field is MetaMetadataNestedField)
                     {
                         ((MetaMetadataNestedField) field).InheritMetaMetadata();
                     }
@@ -140,7 +140,7 @@ namespace ecologylab.semantics.metametadata
                         fieldLocal.InheritedField = field;
                     fieldLocal.DeclaringMmd = field.DeclaringMmd;
                     fieldLocal.InheritAttributes(field);
-                    if (fieldLocal.GetType() == typeof (MetaMetadataNestedField))
+                    if (fieldLocal is MetaMetadataNestedField)
                         ((MetaMetadataNestedField) fieldLocal).PackageName =
                             ((MetaMetadataNestedField) field).PackageName;
                 }
@@ -155,7 +155,7 @@ namespace ecologylab.semantics.metametadata
 
                 // recursively call this method on nested fields
                 f.Repository = repository;
-                if (f.GetType() == typeof (MetaMetadataNestedField))
+                if (f is MetaMetadataNestedField)
                 {
                     MetaMetadataNestedField f1 = (MetaMetadataNestedField) f;
                     f1.InheritMetaMetadata();

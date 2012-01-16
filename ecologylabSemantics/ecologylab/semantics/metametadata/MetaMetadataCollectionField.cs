@@ -186,7 +186,7 @@ namespace ecologylab.semantics.metametadata
 
       String childCompositeName = ChildType ?? UNRESOLVED_NAME;
       MetaMetadataCollectionField thisField = this;
-      var composite = new MetaMetadataCompositeField(childCompositeName, kids);
+      var composite = new MetaMetadataCompositeField(childCompositeName, Kids);
       
         composite.TypeChangeListener += (newType) => this.childType = newType;
       composite.ExtendsChangeListener += (newExtends) => this.childExtends = newExtends;
@@ -198,11 +198,6 @@ namespace ecologylab.semantics.metametadata
       kids.Clear();
       kids.Add(composite.Name, composite);
       composite.PromoteChildren = this.PromoteChildren;
-    }
-
-    public override string GetTypeName()
-    {
-      throw new NotImplementedException();
     }
 
     internal override bool GetClassAndBindDescriptors(SimplTypesScope metadataTScope)
