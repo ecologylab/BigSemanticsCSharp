@@ -24,7 +24,7 @@ namespace ecologylab.semantics.documentparsers
 
         private static readonly string appPath = System.AppDomain.CurrentDomain.BaseDirectory;
         private static readonly string workspace = appPath + @"..\..\..\";
-        private static readonly string jsPath = workspace + @"DomExtraction\javascript\";
+        private static readonly string jsPath = workspace + @"ecologylabSemantics\javascript\";
         private static readonly string mmdDomHelperJSString;
         private static readonly Dictionary<MetaMetadata, String> mmdJSONCache = new Dictionary<MetaMetadata, String>();
         private static readonly Dictionary<ParsedUri, Metadata> metadataCache = new Dictionary<ParsedUri, Metadata>();
@@ -151,7 +151,7 @@ namespace ecologylab.semantics.documentparsers
                     }
 
                     String jsonMMD = GetJsonMMD(mmd);
-                    //Console.WriteLine("json:\n" + jsonMMD + "\n");
+                    Console.WriteLine("json:\n" + jsonMMD + "\n");
                     //jsonMMD = jsonMMD.Replace("\\", "\\\\");
 
                     webView.ExecuteJavascript(jsonMMD);

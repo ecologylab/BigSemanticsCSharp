@@ -67,10 +67,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DomExtraction\DomExtraction.csproj">
-      <Project>{02F10B1D-CA26-4B23-988E-A96DDEB4F44A}</Project>
-      <Name>DomExtraction</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ecologylabGeneratedSemantics\ecologylabGeneratedSemantics.csproj">
       <Project>{3121E696-14DE-4987-BCED-588E4AB9259F}</Project>
       <Name>ecologylabGeneratedSemantics</Name>

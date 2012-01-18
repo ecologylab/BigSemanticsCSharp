@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ecologylabGeneratedSemantic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ecologylabInteractiveSemantics", "ecologylabInteractiveSemantics\ecologylabInteractiveSemantics.csproj", "{E66E57E8-D3E3-42AE-9035-C829B2E8DADB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomExtraction", "DomExtraction\DomExtraction.csproj", "{02F10B1D-CA26-4B23-988E-A96DDEB4F44A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomiumSharp", "AwesomiumSharp\AwesomiumSharp.csproj", "{1614289C-5F21-4934-9143-A47755D7C0A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simpl.Fundamental", "Simpl.Fundamental\Simpl.Fundamental.csproj", "{9A755A5E-88AA-4000-A9A7-ABDED3193855}"
@@ -77,14 +75,6 @@ Global
 		{E66E57E8-D3E3-42AE-9035-C829B2E8DADB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E66E57E8-D3E3-42AE-9035-C829B2E8DADB}.Release|x86.ActiveCfg = Release|x86
 		{E66E57E8-D3E3-42AE-9035-C829B2E8DADB}.Release|x86.Build.0 = Release|x86
-		{02F10B1D-CA26-4B23-988E-A96DDEB4F44A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02F10B1D-CA26-4B23-988E-A96DDEB4F44A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{02F10B1D-CA26-4B23-988E-A96DDEB4F44A}.Debug|x86.ActiveCfg = Debug|x86
-		{02F10B1D-CA26-4B23-988E-A96DDEB4F44A}.Debug|x86.Build.0 = Debug|x86
-		{02F10B1D-CA26-4B23-988E-A96DDEB4F44A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{02F10B1D-CA26-4B23-988E-A96DDEB4F44A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{02F10B1D-CA26-4B23-988E-A96DDEB4F44A}.Release|x86.ActiveCfg = Release|x86
-		{02F10B1D-CA26-4B23-988E-A96DDEB4F44A}.Release|x86.Build.0 = Release|x86
 		{1614289C-5F21-4934-9143-A47755D7C0A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1614289C-5F21-4934-9143-A47755D7C0A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1614289C-5F21-4934-9143-A47755D7C0A6}.Debug|x86.ActiveCfg = Debug|x86

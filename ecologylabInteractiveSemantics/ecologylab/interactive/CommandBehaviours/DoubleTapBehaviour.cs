@@ -60,10 +60,10 @@ namespace MetadataUISandbox.ActivationBehaviours
 
         #endregion
 
-        private EventHandler<TouchEventArgs> _touchEnterHandler;
+//        private EventHandler<TouchEventArgs> _touchEnterHandler;
         private EventHandler<TouchEventArgs> _touchDownHandler;
         private EventHandler<TouchEventArgs> _touchUpHandler;
-        private EventHandler<TouchEventArgs> _touchLeaveHandler;
+//        private EventHandler<TouchEventArgs> _touchLeaveHandler;
 
         Window _parent;
         
@@ -83,8 +83,7 @@ namespace MetadataUISandbox.ActivationBehaviours
         private Point? _firstUp;
         private Point? _firstDown;
         private DateTime? _firstUpTime;
-        private InputDevice _touchDownInputDevice;
-
+        private bool _touchDownCaught = false;
 
         /// <summary>
         /// Supports two behaviours, triggering the command on lifting the finger, or on touchDown of the second tap. 
@@ -103,24 +102,24 @@ namespace MetadataUISandbox.ActivationBehaviours
 
         protected override void OnDetaching()
         {
-            if (_touchDownHandler == null || _touchUpHandler == null || _touchLeaveHandler == null || _touchEnterHandler == null)
+            if (_touchDownHandler == null || _touchUpHandler == null)// || _touchLeaveHandler == null || _touchEnterHandler == null)
                 return;
             logger.Log("Detaching DoubleTapBehaviour from: " + AssociatedObject);
             AssociatedObject.TouchUp    -= _touchUpHandler;
             AssociatedObject.TouchDown  -= _touchDownHandler;
-            AssociatedObject.TouchLeave -= _touchLeaveHandler;
-            AssociatedObject.TouchEnter -= _touchEnterHandler;
+//            AssociatedObject.TouchLeave -= _touchLeaveHandler;
+//            AssociatedObject.TouchEnter -= _touchEnterHandler;
 
-            _touchEnterHandler  = null;
+//            _touchEnterHandler  = null;
             _touchDownHandler   = null;
             _touchUpHandler     = null;
-            _touchLeaveHandler  = null;
+//            _touchLeaveHandler  = null;
         }
 
         protected override void OnAttached()
         {
-            _touchEnterHandler = AssociatedObjectOnTouchEnter;
-            AssociatedObject.AddHandler(UIElement.TouchEnterEvent, _touchEnterHandler, true);
+//            _touchEnterHandler = AssociatedObjectOnTouchEnter;
+//            AssociatedObject.AddHandler(UIElement.TouchEnterEvent, _touchEnterHandler, true);
 
             _touchDownHandler = AssociatedObjectOnTouchDown;
             AssociatedObject.AddHandler(UIElement.TouchDownEvent, _touchDownHandler, true);
@@ -128,33 +127,39 @@ namespace MetadataUISandbox.ActivationBehaviours
             _touchUpHandler = AssociatedObjectOnTouchUp;
             AssociatedObject.AddHandler(UIElement.TouchUpEvent, _touchUpHandler, true);
 
-            _touchLeaveHandler = AssociatedObjectOnTouchLeave;
-            AssociatedObject.AddHandler(UIElement.TouchLeaveEvent, _touchLeaveHandler, true);
+//            _touchLeaveHandler = AssociatedObjectOnTouchLeave;
+//            AssociatedObject.AddHandler(UIElement.TouchLeaveEvent, _touchLeaveHandler, true);
         }
 
-        private void AssociatedObjectOnTouchEnter(object sender, TouchEventArgs e)
-        {
-            logger.Log("Entered");
-        }
-
-        private void AssociatedObjectOnTouchLeave(object sender, TouchEventArgs e)
-        {
-            if (e.Device == _touchDownInputDevice)
-            {
-                logger.Log("Touch left the AssociatedObject: " + _touchDownInputDevice);
-                ClearDblTapVals();
-            }
-            else
-            {
-                logger.Log("Event from touchUp");
-                _touchDownInputDevice = null;    
-            }
-            
-        }
+//        private void AssociatedObjectOnTouchEnter(object sender, TouchEventArgs e)
+//        {
+//            logger.Log("Entered");
+//        }
+//
+//        private void AssociatedObjectOnTouchLeave(object sender, TouchEventArgs e)
+//        {
+//            if (e.Device == _touchDownInputDevice)
+//            {
+//                logger.Log("Touch left the AssociatedObject: " + _touchDownInputDevice);
+//                ClearDblTapVals();
+//            }
+//            else
+//            {
+//                logger.Log("Event from touchUp");
+//                _touchDownInputDevice = null;    
+//            }
+//        }
 
         private void AssociatedObjectOnTouchUp(object sender, TouchEventArgs e)
         {
-            _touchDownInputDevice = null;
+            if (!_touchDownCaught)
+            {
+                logger.Log("TouchUp without a TouchDown, resetting state.");
+                ClearDblTapVals();
+                return;
+            }
+
+            _touchDownCaught = false; //Reset for the next touchDown
             logger.Log("TouchUp : firstUp " + _firstUp + ", firstDown " + _firstDown + ", firstUpTime " + _firstUpTime + ", Now:  " + DateTime.Now);
             if (!_firstUp.HasValue && _firstDown.HasValue)
             {
@@ -171,14 +176,15 @@ namespace MetadataUISandbox.ActivationBehaviours
                 ClearDblTapVals();
             }
 
-            if (((List<TouchDevice>)AssociatedObject.TouchesOver).Count == 1)
+            //After a touch up, state must reset within the timeout
+            if (HasOnlyOneTouchOver())
             {
                 //TODO: Possible move could happen between touchdown and touch up
                 Dispatcher.DelayInvoke(TimeSpan.FromMilliseconds(_doubleTapTimeout), () =>
                 {
                     if (!_isReset)
                     {
-                        logger.Log("Timeout, resetting state");
+                        logger.Log("Timeout after touchUp, resetting state");
                         ClearDblTapVals();    
                     }
                     
@@ -186,18 +192,19 @@ namespace MetadataUISandbox.ActivationBehaviours
             }
         }
 
+        private bool HasOnlyOneTouchOver()
+        {
+            return ((List<TouchDevice>)AssociatedObject.TouchesOver).Count == 1;
+        }
+
         private void AssociatedObjectOnTouchDown(object sender, TouchEventArgs e)
         {
-            _touchDownInputDevice = e.Device;
+            _touchDownCaught = true;
             Point pos = e.GetTouchPoint(_parent).Position;
             _isReset = false;
             logger.Log("TouchDown : firstUp " + _firstUp + ", firstDown " + _firstDown + ", firstUpTime " + _firstUpTime + ", Now:  " + DateTime.Now);
 
-            if (!_firstDown.HasValue)
-            {
-                _firstDown = pos;
-            }
-            else //Could be tap
+            if (_firstDown.HasValue)
             {
                 bool resetState = true;
                 if (Utilities.Distance(pos, _firstUp) < _maxDistanceBetweenTaps)
@@ -217,7 +224,7 @@ namespace MetadataUISandbox.ActivationBehaviours
                                 logger.Log("DoubleTap on: " + AssociatedObject);
                                 logger.Log("\tAcceptable HitTest on : " + acceptableResult);
                                 e.Handled = true;
-                                
+
                                 _commandParameters = new CommandParameters
                                                         {
                                                             touchEventArgs = e,
@@ -239,12 +246,12 @@ namespace MetadataUISandbox.ActivationBehaviours
                                 {
                                     logger.Log("No command has been bound to this behaviour.");
                                 }
-                                //new RightHandedControlMenu(_commandParameters);
                                 return HitTestResultBehavior.Stop;
                             }
                             return HitTestResultBehavior.Continue;
                         };
-                        VisualTreeHelper.HitTest(AssociatedObject, null, new HitTestResultCallback(hitResultDelegate), new PointHitTestParameters(e.GetTouchPoint(AssociatedObject).Position));
+                        VisualTreeHelper.HitTest(AssociatedObject, null, new HitTestResultCallback(hitResultDelegate),
+                                                 new PointHitTestParameters(e.GetTouchPoint(AssociatedObject).Position));
 
                         //HitTestResult hitResult = VisualTreeHelper.HitTest(AssociatedObject, e.GetTouchPoint(AssociatedObject).Position);
 
@@ -260,20 +267,34 @@ namespace MetadataUISandbox.ActivationBehaviours
                 {
                     logger.Log("Too Far");
                 }
-                if(resetState)
+                if (resetState) //Only avoid resetting the state if we're expecting and waiting for a liftoff
                     ClearDblTapVals();
+
+            }
+            else
+            {
+                _firstDown = pos;
             }
 
+            //If the finger is on here for more than a second, disregard possibility of a double tap.
+            Dispatcher.DelayInvoke(TimeSpan.FromMilliseconds(_doubleTapTimeout), () =>
+            {
+                //If !triggerCommandOnLift, we expect the finger to stay on the UIElement
+                if (_isReset || !_touchDownCaught || !_triggerCommandOnLift) return;
+
+                logger.Log("Finger is on UIElement for too long, resetting state");
+                ClearDblTapVals();
+            });
         }
 
         private void ClearDblTapVals()
         {
             logger.Log("Clearing vals");
+            _touchDownCaught        = false;
             _firstUpTime            = null;
             _firstUp                = null;
             _firstDown              = null;
             _commandParameters      = null;
-            _touchDownInputDevice   = null;
             _isReset                = true;
         }
 

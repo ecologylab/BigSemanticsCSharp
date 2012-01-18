@@ -176,6 +176,18 @@
       <Name>Simpl.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="javascript\mmdDomHelper.js">
+      <SubType>UserControl</SubType>
+    </Content>
+    <Content Include="javascript\tempJSON\imdbMMDJSON.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="javascript\tempJSON\acmPortal.json" />
+    <None Include="javascript\tempJSON\parsedIMDB.json" />
+    <None Include="javascript\tempJSON\simpleHypertext.json" />
+    <None Include="javascript\tempJSON\wikipedia-parsed-hypertext.json" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
