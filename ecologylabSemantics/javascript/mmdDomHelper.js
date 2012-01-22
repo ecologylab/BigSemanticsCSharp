@@ -8,10 +8,10 @@ var currentMMDField;
 // http://www.w3.org/TR/2004/NOTE-DOM-Level-3-XPath-20040226/DOM3-XPath.html
 
 
-function extractMetadata(mmd) 
+function extractMetadata(mmd)
 {
     mmd = mmd.meta_metadata;
-    var metadata = recursivelyExtractMetadata(mmd, document, metadata);
+    var metadata = recursivelyExtractMetadata(mmd, document, null);
     metadata['location'] = window.location.href;
     if (mmd.hasOwnProperty('mm_name'))
         metadata['mm_name'] = mmd.mm_name;
@@ -26,11 +26,11 @@ function extractMetadata(mmd)
 
 function recursivelyExtractMetadata(mmd, contextNode, metadata) {
     if (metadata == null || metadata == undefined)
-        metadata = {}; //Output
+        metadata = {}; //Output, should happen only the first time.
 
     if (mmd.kids == null || mmd.kids.length == 0) {
         console.log("\t\tMMD has no kids: " + mmd.name);
-        return; //Nothing to do here.
+        return null; //Nothing to do here.
     }
     if (contextNode == null || contextNode == undefined)
         contextNode = document;

@@ -52,6 +52,8 @@
     <Reference Include="AsyncCtpLibrary">
       <HintPath>..\Simpl.Serialization\Lib\AsyncCtpLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="Awesomium.Core, Version=1.6.3.0, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86" />
+    <Reference Include="Awesomium.Windows.Controls, Version=1.6.3.0, Culture=neutral, PublicKeyToken=7a34e179b8b61c39, processorArchitecture=x86" />
     <Reference Include="Microsoft.Practices.Prism, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -94,6 +96,7 @@
     <Compile Include="ecologylab\semantics\actions\SetMetadataSemanticAction.cs" />
     <Compile Include="ecologylab\semantics\collecting\DownloadStatus.cs" />
     <Compile Include="ecologylab\semantics\collecting\SemanticsGlobalCollection.cs" />
+    <Compile Include="ecologylab\semantics\collecting\WebBrowserPool.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\DirectBindingParser.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\DocumentParser.cs" />
     <Compile Include="ecologylab\semantics\documentparsers\FieldParserBase.cs" />
@@ -163,10 +166,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AwesomiumSharp\AwesomiumSharp.csproj">
-      <Project>{1614289C-5F21-4934-9143-A47755D7C0A6}</Project>
-      <Name>AwesomiumSharp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Simpl.Fundamental\Simpl.Fundamental.csproj">
       <Project>{9A755A5E-88AA-4000-A9A7-ABDED3193855}</Project>
       <Name>Simpl.Fundamental</Name>
@@ -182,13 +181,27 @@
     </Content>
     <Content Include="javascript\simplDeserializer.js" />
     <Content Include="javascript\tempJSON\imdbMMDJSON.js" />
+    <Content Include="lib\Awesomium\Awesomium.Core.dll" />
+    <Content Include="lib\Awesomium\Awesomium.Core.XML" />
+    <Content Include="lib\Awesomium\Awesomium.dll" />
+    <Content Include="lib\Awesomium\Awesomium.Mono.dll" />
+    <Content Include="lib\Awesomium\Awesomium.Windows.Controls.dll" />
+    <Content Include="lib\Awesomium\Awesomium.Windows.Controls.XML" />
+    <Content Include="lib\Awesomium\Awesomium.Windows.Forms.dll" />
+    <Content Include="lib\Awesomium\Awesomium.Windows.Forms.XML" />
+    <Content Include="lib\Awesomium\en-US.dll" />
+    <Content Include="lib\Awesomium\icudt42.dll" />
   </ItemGroup>
   <ItemGroup>
     <None Include="javascript\tempJSON\acmPortal.json" />
     <None Include="javascript\tempJSON\parsedIMDB.json" />
     <None Include="javascript\tempJSON\simpleHypertext.json" />
     <None Include="javascript\tempJSON\wikipedia-parsed-hypertext.json" />
+    <None Include="lib\Awesomium\Awesomium.Mono.dll.config" />
+    <None Include="lib\Awesomium\AwesomiumProcess" />
+    <None Include="lib\Awesomium\README" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

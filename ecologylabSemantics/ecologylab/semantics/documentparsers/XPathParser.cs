@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using AwesomiumSharp;
+using Awesomium.Core;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
 using ecologylab.semantics.metadata;
@@ -22,10 +22,10 @@ namespace ecologylab.semantics.documentparsers
     public class XPathParser : DocumentParser
     {
 
-        private static readonly string appPath = System.AppDomain.CurrentDomain.BaseDirectory;
+        private static readonly string appPath = AppDomain.CurrentDomain.BaseDirectory;
         private static readonly string workspace = appPath + @"..\..\..\";
         private static readonly string jsPath = workspace + @"ecologylabSemantics\javascript\";
-        private static readonly string mmdDomHelperJSString;
+        private static readonly string _mmdDomHelperJSString;
         private static readonly Dictionary<MetaMetadata, String> mmdJSONCache = new Dictionary<MetaMetadata, String>();
         private static readonly Dictionary<ParsedUri, Metadata> metadataCache = new Dictionary<ParsedUri, Metadata>();
 
@@ -36,30 +36,7 @@ namespace ecologylab.semantics.documentparsers
 
         static XPathParser()
         {
-            //Init Awesomium Webview correctly.
-            //Note: Do we need special settings for WebCoreConfig?
-            //var webCoreConfig = new WebCoreConfig();
-            WebCoreConfig config = new WebCoreConfig
-            {
-                // !THERE CAN ONLY BE A SINGLE WebCore RUNNING PER PROCESS!
-                // We have ensured that our application is single instance,
-                // with the use of the WPFSingleInstance utility.
-                // We can now safely enable cache and cookies.
-                SaveCacheAndCookies = true,
-                // In case our application is installed in ProgramFiles,
-                // we wouldn't want the WebCore to attempt to create folders
-                // and files in there. We do not have the required privileges.
-                // Furthermore, it is important to allow each user account
-                // have its own cache and cookies. So, there's no better place
-                // than the Application User Data Path.
-                EnablePlugins = true,
-                // ...See comments for UserDataPath.
-                // Let's gather some extra info for this sample.
-                LogLevel = LogLevel.Verbose
-            };
-            WebCore.Initialize(config, false);
-
-            mmdDomHelperJSString = File.ReadAllText(jsPath + "mmdDomHelper.js");
+            _mmdDomHelperJSString = File.ReadAllText(jsPath + "mmdDomHelper.js");
         }
 
         public static string GetJsonMMD(MetaMetadata mmd)
@@ -136,7 +113,7 @@ namespace ecologylab.semantics.documentparsers
                     //if (Source == null || BLANK_PAGE.Equals(Source))// || loadingComplete)
                     //   return;
                     webView.Stop(); // Stopping further requests.
-                    Console.WriteLine("Finished loading. Executing javascript. -- " + System.DateTime.Now);
+                    Console.WriteLine("Finished loading. Executing javascript. -- " + DateTime.Now);
                     MetaMetadata mmd = repository.GetDocumentMM(puri);
 
                     // this manipulation of metadata class descriptors is just a workaround.
@@ -156,50 +133,20 @@ namespace ecologylab.semantics.documentparsers
 
                     webView.ExecuteJavascript(jsonMMD);
                     webView.ExecuteJavascript(mmdDomHelperJSString);
-                    Console.WriteLine("Done js code execution, calling function. --" + System.DateTime.Now);
+                    Console.WriteLine("Done js code execution, calling function. --" + DateTime.Now);
                     //TODO: Currently executes asynchronously. Can we make this asynchronous?
                     JSValue value = webView.ExecuteJavascriptWithResult("extractMetadata(mmd);");
                     String metadataJSON = value.ToString();
                     Console.WriteLine(metadataJSON);
-                    Console.WriteLine("Done getting value. Serializing JSON string to ElementState. --" + System.DateTime.Now);
-                    //.
-                    //metadataTScope.Deserialize()
+                    Console.WriteLine("Done getting value. Serializing JSON string to ElementState. --" + DateTime.Now);
                     TranslationContext c = new TranslationContext();
                     c.SetUriContext(puri);
-
                     Document myShinyNewMetadata = (Document)metadataTScope.Deserialize(metadataJSON, c, null, StringFormat.Json);
-                    Console.WriteLine("Metadata ElementState object created. " + System.DateTime.Now);
-
-                    //Clean metadata
-//                    WikipediaPage wikiPage = myShinyNewMetadata as WikipediaPage;
-//                    Debug.Assert(wikiPage != null, "wikiPage is null");
-//
-//                    wikiPage.HypertextParas = wikiPage.HypertextParas.Where(p => p.Runs != null).ToList();
-//                    wikiPage.Thumbinners = wikiPage.Thumbinners.Where(thumb => thumb.ThumbImgSrc != null).ToList();
-//
-                    //DEBUGGING only, save the last translated Metadata object as json.
-//                    String XMLFilePath = wikiCacheLocation + wikiPage.Title.Value.Replace(' ', '_') + ".xml";
-//                    Console.WriteLine("Writing out the elementstate into " + XMLFilePath);
-//                    StringBuilder buffy = new StringBuilder();
-                    //TODO FIXME Use class descriptor for serialization
-                    //wikiPage.serializeToXML(buffy, null);
-//                    TextWriter tw = new StreamWriter(XMLFilePath);
-//                    tw.Write(buffy);
-//                    tw.Close();
-
-                    /*String JSONFilePath = wikiCacheLocation + wikiPage.Title.Value.Replace(' ', '_') + ".json";
-                    Console.WriteLine("Writing out the elementstate into " + JSONFilePath);
-                    buffy = new StringBuilder();
-                    myShinyNewMetadata.serializeToJSON(buffy);
-                    tw = new StreamWriter(JSONFilePath);
-                    tw.Write(buffy);
-                    tw.Close();*/
-
-
+                    Console.WriteLine("Metadata ElementState object created. " + DateTime.Now);
                     tcs.TrySetResult(myShinyNewMetadata);
                     webView.Close();
                 };
-                webView.Source = uri;
+                webView.Source = puri;
             }
             return await tcs.Task;
         }

@@ -10,12 +10,12 @@ var refCount = 0;
 	{
 		var skipRecursion = false;
 
-		//console.info("recursing[" + level + "] Parent and currentObj:");
-		//console.log(parentObj);
-		//console.log(currentObj);
+		////console.info("recursing[" + level + "] Parent and currentObj:"); //Too detailed prints.
+		////console.log(parentObj);
+		////console.log(currentObj);
 		if(simplId in currentObj)
 		{
-			console.info(parentFieldName + " ------------ Adding ref: " + currentObj[simplId] + " [" + ++idCount +"]");
+			//console.info(parentFieldName + " ------------ Adding ref: " + currentObj[simplId] + " [" + ++idCount +"]");
 			simplReferences[currentObj[simplId]] = currentObj;
 			delete currentObj[simplId];
 		}
@@ -24,31 +24,31 @@ var refCount = 0;
 			var ref = currentObj[simplRef];
 			if(ref in simplReferences)
 			{
-				console.info(parentFieldName + "---------- Resolving Ref: " + ref + " [" + ++refCount +"]");
+				//console.info(parentFieldName + "---------- Resolving Ref: " + ref + " [" + ++refCount +"]");
 				//Replace field in the parent with the simplRef
 				if(parentObj instanceof Array) //Never happens?
 				{
-					console.info("parentObj is an Array!");
+					//console.info("parentObj is an Array!");
 					var index = parentObj.indexOf(currentObj)
 					if(index == -1)
 					{
-						console.info("Item not found in parent!");
+						//console.info("Item not found in parent!");
 					}
 					else
 					{
-						console.info("Replacing item at index: " + index);
+						//console.info("Replacing item at index: " + index);
 						parentObj[index] = simplReferences[ref];
 					}
 					
 				}
 				else
 				{
-					console.info("Replacing item with name: " + parentFieldName + " with reference" + ref);
+					//console.info("Replacing item with name: " + parentFieldName + " with reference" + ref);
 					parentObj[parentFieldName] = simplReferences[ref];
 				}
 			}
 			else 
-				console.info("No Such Reference: " + ref);
+				//console.info("No Such Reference: " + ref);
 			skipRecursion = true;
 		}
 
@@ -58,7 +58,7 @@ var refCount = 0;
 			{
 				if(!currentObj.hasOwnProperty(fieldName))
 				{
-					console.info("Found shitty props");
+					//console.info("Found shitty props");
 					continue;
 				}
 				var field = currentObj[fieldName];

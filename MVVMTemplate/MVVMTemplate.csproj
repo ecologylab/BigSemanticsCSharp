@@ -173,10 +173,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AwesomiumSharp\AwesomiumSharp.csproj">
-      <Project>{1614289C-5F21-4934-9143-A47755D7C0A6}</Project>
-      <Name>AwesomiumSharp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ecologylabGeneratedSemantics\ecologylabGeneratedSemantics.csproj">
       <Project>{3121E696-14DE-4987-BCED-588E4AB9259F}</Project>
       <Name>ecologylabGeneratedSemantics</Name>
@@ -201,20 +197,8 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>echo "ProjectDir:"
-echo "\t$(TargetDir)"
-
-XCOPY "$(ProjectDir)..\AwesomiumSharp\awesomium\bin\release\icudt42.dll" "$(TargetDir)" /i /y
-XCOPY "$(ProjectDir)..\AwesomiumSharp\awesomium\bin\release\avcodec-52.dll" "$(TargetDir)" /i /y
-XCOPY "$(ProjectDir)..\AwesomiumSharp\awesomium\bin\release\avformat-52.dll" "$(TargetDir)" /i /y
-XCOPY "$(ProjectDir)..\AwesomiumSharp\awesomium\bin\release\avutil-50.dll" "$(TargetDir)" /i /y
-XCOPY "$(ProjectDir)..\AwesomiumSharp\awesomium\bin\release\Awesomium.dll" "$(TargetDir)" /i /y
-XCOPY "$(ProjectDir)..\AwesomiumSharp\awesomium\bin\release\AwesomiumSharp.dll" "$(TargetDir)" /i /y
-XCOPY "$(ProjectDir)..\AwesomiumSharp\awesomium\bin\release\AwesomiumProcess.exe" "$(TargetDir)" /i /y
-XCOPY "$(ProjectDir)..\AwesomiumSharp\awesomium\bin\Release\locales\en-US.dll" "$(TargetDir)locales\" /i /y
-XCOPY "$(ProjectDir)..\AwesomiumSharp\awesomium\bin\debug\Awesomium_d.dll" "$(TargetDir)" /i /y
-XCOPY "$(ProjectDir)..\AwesomiumSharp\awesomium\bin\debug\AwesomiumProcess_d.exe" "$(TargetDir)" /i /y
-</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
