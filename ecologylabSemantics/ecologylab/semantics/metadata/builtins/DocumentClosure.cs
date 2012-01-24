@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Simpl.Fundamental.Net;
 using ecologylab.semantics.actions;
 using ecologylab.semantics.collecting;
@@ -29,19 +30,21 @@ namespace ecologylab.semantics.metadata.builtins
 
         public DocumentParsingDone DocumentParsingDoneHandler { get; set; }
 
+        public TaskCompletionSource<Document> TaskCompletionSource { get; set; }
+
         internal DocumentClosure(SemanticsSessionScope semanticsSessionScope, Document document)
         {
             SemanticsSessionScope = semanticsSessionScope;
             Document = document;
         }
 
-        public void PerformDownload()
+        public async Task<Document> PerformDownload()
         {
             // change status
             lock (downloadStatusLock)
             {
                 if (!(DownloadStatus == DownloadStatus.QUEUED || DownloadStatus == DownloadStatus.UNPROCESSED))
-                    return; // if not queued or unprocessed, it must either hasn't enter the queue or has already been processed.
+                    return null; // if not queued or unprocessed, it must either hasn't enter the queue or has already been processed.
                 DownloadStatus = DownloadStatus.CONNECTING;
             }
 
@@ -59,8 +62,9 @@ namespace ecologylab.semantics.metadata.builtins
                 // TODO display message from DocumentParser
                 MetaMetadata mmd = Document.MetaMetadata as MetaMetadata;
                 // TODO before semantic actions
-                DocumentParser.DocumentParsingDoneHandler = DocumentParsingDoneHandler;
-                DocumentParser.Parse();
+                //Make the entire call to Document.Parse() be asynchronous, allowing GetDocument to be awaited.
+                //DocumentParser.DocumentParsingDoneHandler = DocumentParsingDoneHandler;
+                Document = await DocumentParser.Parse();
                 // TODO after semantic actions
 
                 lock (downloadStatusLock)
@@ -77,6 +81,8 @@ namespace ecologylab.semantics.metadata.builtins
 
             PURLConnection.Recycle();
             PURLConnection = null;
+
+            return Document;
         }
 
         public void Connect()

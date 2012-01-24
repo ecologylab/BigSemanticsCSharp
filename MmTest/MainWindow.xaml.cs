@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
 using ecologylab.semantics.collecting;
@@ -35,16 +36,20 @@ namespace MmTest
                 RepositoryMetadataTranslationScope.Get(),
                 MetaMetadataRepositoryInit.DEFAULT_REPOSITORY_LOCATION
                 );
+
         }
 
-        private void BtnGetMetadata_Click(object sender, RoutedEventArgs e)
+        private async void BtnGetMetadata_Click(object sender, RoutedEventArgs e)
         {
             MetadataArea.Text = null;
             ParsedUri puri = new ParsedUri(UrlBox.Text);
-            _semanticsSessionScope.GetDocument(puri, (parsedDoc) =>
-            {
-                MetadataArea.Text = SimplTypesScope.Serialize(parsedDoc, StringFormat.Xml);
-            });
+            var parsedDoc = await _semanticsSessionScope.GetDocument(puri);
+            
+            MetadataArea.Text = SimplTypesScope.Serialize(parsedDoc, StringFormat.Xml);
+            
         }
+
+
+
     }
 }

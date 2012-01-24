@@ -80,3 +80,4 @@ var refCount = 0;
     recurse(simplObj, null, null, 0);
 }
 
+//End of SimplDeserialize

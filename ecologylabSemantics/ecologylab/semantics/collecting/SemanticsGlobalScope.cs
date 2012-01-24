@@ -23,11 +23,17 @@ namespace ecologylab.semantics.collecting
         {
             if (location == null)
                 return null;
-            if (GlobalDocumentCollection.Collection.ContainsKey(location))
-                return GlobalDocumentCollection.Collection[location];
-            Document doc = GetMetaMetadataRepository().ConstructDocument(location, false);
-            if (doc != null)
-                GlobalDocumentCollection.Collection[location] = doc;
+            
+            Document doc;
+
+            GlobalDocumentCollection.TryGetDocument(location, out doc);
+            if(doc == null)
+            {
+                doc = MetaMetadataRepository.ConstructDocument(location, false);
+                if (doc != null)
+                    GlobalDocumentCollection.AddDocument(doc, location);
+            }
+            
             return doc;
         }
 

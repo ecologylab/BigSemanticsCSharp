@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
 using ecologylab.semantics.collecting;
@@ -56,10 +57,14 @@ namespace ecologylab.semantics.documentparsers
 
         /// <summary>
         /// The main parsing happens here.
+        /// Make parsing Asynchronous everywhere, cause it's invariably IO/Processing bound
         /// </summary>
-        public abstract void Parse();
+        public virtual async Task<Document> Parse()
+        {
+            throw new NotImplementedException();
+        }
 
-        public DocumentParsingDone DocumentParsingDoneHandler { get; set; }
+        //public DocumentParsingDone DocumentParsingDoneHandler { get; set; }
 
 
         /**

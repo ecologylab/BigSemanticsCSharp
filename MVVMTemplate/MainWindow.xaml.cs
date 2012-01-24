@@ -43,23 +43,19 @@ namespace MVVMTemplate
             
         }
 
-        private void LoadButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private async void LoadButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
         	
             ParsedUri puri = new ParsedUri(UrlBox.Text);
             if (!puri.IsFile)
             {
-                _semanticsSessionScope.GetDocument(puri, (parsedDoc) =>
-                                                             {
+                Document parsedDoc = await _semanticsSessionScope.GetDocument(puri);
 
-                                                                 MetadataBrowserEditorView
-                                                                     docTemplatedMetadataBrowserEditorView =
-                                                                         new MetadataBrowserEditorView(parsedDoc);
+                MetadataBrowserEditorView docTemplatedMetadataBrowserEditorView = new MetadataBrowserEditorView(parsedDoc);
 
 
-                                                                 canvas.Children.Add(
-                                                                     docTemplatedMetadataBrowserEditorView);
-                                                             });
+                canvas.Children.Add(docTemplatedMetadataBrowserEditorView);
+                                                             
             }
             else
             {

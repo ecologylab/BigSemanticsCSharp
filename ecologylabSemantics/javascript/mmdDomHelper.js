@@ -10,6 +10,8 @@ var currentMMDField;
 
 function extractMetadata(mmd)
 {
+
+    simplDeserialize(mmd);
     mmd = mmd.meta_metadata;
     var metadata = recursivelyExtractMetadata(mmd, document, null);
     metadata['location'] = window.location.href;
@@ -20,7 +22,9 @@ function extractMetadata(mmd)
     returnVal[metadataTag] = metadata;
 
     //return returnVal;
-    return JSON.stringify(returnVal);
+    var returnValueString = JSON.stringify(returnVal);
+    //Special use for callbacks into the C# application
+    CallBack.MetadataExtracted(returnValueString);
 
 }
 
@@ -73,15 +77,15 @@ function extractScalar(mmdScalarField, contextNode, metadata)
         var regex = mmdScalarField.filter.regex;
         var replace = mmdScalarField.filter.replace;
         if (replace != undefined) // We must replace all newlines if the replacement is not a empty character
-				{
-						stringValue = stringValue.replace(new RegExp(regex, 'g'), replace);
-				}
+		{
+			stringValue = stringValue.replace(new RegExp(regex, 'g'), replace);
+		}
         else
-				{
-						grps = stringValue.match(new RegExp(regex));
-						if (grps != null && grps.length > 0)
-							stringValue = grps[grps.length - 1];
-				}
+		{
+			grps = stringValue.match(new RegExp(regex));
+			if (grps != null && grps.length > 0)
+				stringValue = grps[grps.length - 1];
+		}
     }
 
     if (mmdScalarField.tag != null && mmdScalarField.tag != mmdScalarField.name)

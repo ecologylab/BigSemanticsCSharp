@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Simpl.Fundamental.Generic;
 using Simpl.Fundamental.Net;
 using ecologylab.semantics.metadata;
 using ecologylab.semantics.metadata.builtins;
@@ -13,7 +14,7 @@ namespace ecologylab.semantics.collecting
     {
         private Dictionary<ParsedUri, D> _collection = new Dictionary<ParsedUri, D>();
 
-        public Dictionary<ParsedUri, D> Collection
+        private Dictionary<ParsedUri, D> Collection
         {
             get { return _collection; }
         }
@@ -30,6 +31,21 @@ namespace ecologylab.semantics.collecting
             {
                 Collection[newLocation.Value] = newDoc; // to make sure
             }
+        }
+
+        public void TryGetDocument(ParsedUri puri, out D result)
+        {
+            _collection.TryGetValue(puri, out result);
+        }
+
+        public void AddDocument(D doc, ParsedUri location)
+        {
+            if (doc == null || location == null)
+            {
+                throw new InvalidOperationException("Cannot add to SemanticsGlobalCollection");
+
+            }
+            Collection.Put(location, doc);
         }
     }
 }

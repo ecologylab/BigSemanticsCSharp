@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
 using ecologylab.semantics.documentparsers;
@@ -15,25 +16,13 @@ namespace ecologylab.semantics.collecting
 {
     public class SemanticsSessionScope : SemanticsGlobalScope
     {
-
         public SemanticsSessionScope(SimplTypesScope metadataTranslationScope, string repoLocation)
             : base(metadataTranslationScope, repoLocation)
         {
+            DownloadMonitor = new DownloadMonitor(this);
         }
 
-        #region Properties
-
-        public SimplTypesScope MetadataTranslationScope
-        {
-            get { return GetMetadataTranslationScope(); }
-        }
-
-        public MetaMetadataRepository MetaMetadataRepository
-        {
-            get { return GetMetaMetadataRepository(); }
-        }
-
-        #endregion
+        public DownloadMonitor DownloadMonitor { get; private set; }
 
         public override Document GetOrConstructDocument(ParsedUri location)
         {
@@ -42,17 +31,17 @@ namespace ecologylab.semantics.collecting
             return doc;
         }
 
-        public void GetDocument(ParsedUri puri, DocumentParsingDone callback)
+        public async Task<Document> GetDocument(ParsedUri puri)
         {
             if (puri == null)
             {
                 Console.WriteLine("Error: empty URL provided.");
-                return;
+                return null;
             }
 
             Document doc = GetOrConstructDocument(puri);
-            DocumentClosure closure = new DocumentClosure(this, doc) {DocumentParsingDoneHandler = callback};
-            closure.PerformDownload();
+            DocumentClosure closure = new DocumentClosure(this, doc);
+            return await closure.PerformDownload();
         }
 
     }

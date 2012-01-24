@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Simpl.Fundamental.Net;
 using ecologylab.semantics.collecting;
 using ecologylab.semantics.metadata.builtins;
@@ -11,7 +12,7 @@ namespace ecologylab.semantics.documentparsers
 {
   public class FieldParserBase : DocumentParser
   {
-      public override void Parse()
+      public override async Task<Document> Parse()
       {
           throw new NotImplementedException();
       }

@@ -112,42 +112,18 @@ namespace ecologylab.semantics.metametadata
                 typeof (Clipping));
         }
 
-        public MetaMetadataRepository GetMetaMetadataRepository()
+        #region Properties
+
+        public SimplTypesScope MetadataTranslationScope
         {
-            return metaMetadataRepository;
+            get { return metadataTranslationScope; }
         }
 
-        public SimplTypesScope GetMetadataTranslationScope()
+        public MetaMetadataRepository MetaMetadataRepository
         {
-            return metadataTranslationScope;
+            get { return metaMetadataRepository; }
         }
 
-        /**
-         * @return the generatedDocumentTranslations
-         */
-
-        public SimplTypesScope getGeneratedDocumentTranslations()
-        {
-            return generatedDocumentTranslations;
-        }
-
-
-        /**
-         * @return the generatedMediaTranslations
-         */
-
-        public SimplTypesScope getGeneratedMediaTranslations()
-        {
-            return generatedMediaTranslations;
-        }
-
-        /**
-         * @return the repositoryClippingTranslations
-         */
-
-        public SimplTypesScope getRepositoryClippingTranslations()
-        {
-            return repositoryClippingTranslations;
-        }
+        #endregion
     }
 }

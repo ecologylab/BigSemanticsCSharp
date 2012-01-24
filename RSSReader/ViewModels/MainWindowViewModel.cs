@@ -85,7 +85,7 @@ namespace RSSReader.ViewModels
             }
         }
 
-        private void ShowFeeds()
+        private async void ShowFeeds()
         {
             Feeds.Clear();
             if (FeedURLs != null)
@@ -93,15 +93,15 @@ namespace RSSReader.ViewModels
                 foreach (string url in FeedURLs.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     var puri = new ParsedUri(url);
-                    _sessionScope.GetDocument(puri, (parsedDoc) =>
+                    var parsedDoc = await _sessionScope.GetDocument(puri);
+
+                    var feedViewModels = FeedViewModelFactory.GetFeedViewModels(parsedDoc);
+                    foreach (var viewModel in feedViewModels)
                     {
-                        var feedViewModels = FeedViewModelFactory.GetFeedViewModels(parsedDoc);
-                        foreach (var viewModel in feedViewModels)
-                        {
-                            Feeds.Add(viewModel);
-                        }
-                        this.NotifyPropertyChanged("Feeds");
-                    });
+                        Feeds.Add(viewModel);
+                    }
+                    this.NotifyPropertyChanged("Feeds");
+
                 }
             }
         }
