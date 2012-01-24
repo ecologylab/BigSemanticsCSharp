@@ -68,9 +68,9 @@ namespace ecologylab.semantics.documentparsers
             {
                 Console.WriteLine("Cache Miss. Parsing Webpage: " + uri);
 //                //We need webView to be instantiated correctly.
-//                _webView.ClearAllURLFilters();
+                _webView.ClearAllURLFilters();
 //                //Only accept requests for this particular uri
-//                _webView.AddURLFilter(uri);
+                _webView.AddURLFilter(uri);
                 //TODO: At a later date, when we want to allow javascript requests, this must change.
                 //webView.AddURLFilter("*.js");
 
@@ -135,6 +135,7 @@ namespace ecologylab.semantics.documentparsers
             SemanticsSessionScope.GlobalDocumentCollection.AddDocument(myShinyNewMetadata, _puri);
 
             SemanticsSessionScope.DownloadMonitor.WebBrowserPool.Release(_webView);
+            _requestTimedOut.Stop();
             _tcs.TrySetResult(myShinyNewMetadata);
         }
     }

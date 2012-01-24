@@ -27,6 +27,8 @@ namespace ecologylab.semantics.collecting
             get { return _mmdDomHelperJSString; }
         }
 
+        private static bool IsWebCoreInitialized = false;
+
         private SemanticsSessionScope SemanticsSessionScope { get; set; }
 
         private static readonly string appPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -57,6 +59,11 @@ namespace ecologylab.semantics.collecting
 
         public void InitializeWebCore()
         {
+            if (IsWebCoreInitialized)
+            {
+                throw new InvalidOperationException("Cannot initialize WebBrowserPool more than once.");
+            }
+
             _webViews = new Stack<WebView>();
             Console.WriteLine("-- Initializing WebBrowserPool thread: " + Thread.CurrentThread.ManagedThreadId + " : " +
                               Thread.CurrentThread.Name);
@@ -99,7 +106,8 @@ namespace ecologylab.semantics.collecting
                                               {Interval = TimeSpan.FromMilliseconds(20)};
             updateTimer.Tick += (sender, args) => WebCore.Update();
             updateTimer.Start();
-            
+
+            IsWebCoreInitialized = true;            
             Dispatcher.Run();
         }
 
@@ -166,7 +174,7 @@ namespace ecologylab.semantics.collecting
             return result;
         }
 
-        public delegate void DispatcherDelegate(DocumentClosure closure);
+
 
         /// <summary>
         /// Called by the _downloaderThread dispatched to the _awesomiumThread. 
@@ -182,6 +190,9 @@ namespace ecologylab.semantics.collecting
             TaskCompletionSource<Document> tcs = closure.TaskCompletionSource;
             WebView webView = Acquire();
             WebViewExtractor extractor = new WebViewExtractor(webView, SemanticsSessionScope, puri);
+
+            //Technically this doesn't need to be awaited on. 
+            //The extraction handling is happening on the same thread 
             Document result = await extractor.ExtractMetadata();
             Console.WriteLine(Thread.CurrentThread.Name + ": Setting document result");
             tcs.TrySetResult(result);

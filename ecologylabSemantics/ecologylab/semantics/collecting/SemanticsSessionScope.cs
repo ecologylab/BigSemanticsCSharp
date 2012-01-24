@@ -44,5 +44,9 @@ namespace ecologylab.semantics.collecting
             return await closure.PerformDownload();
         }
 
+        public async static Task<SemanticsSessionScope> InitAsync(SimplTypesScope metadataTranslationScope, string repoLocation)
+        {
+            return await TaskEx.Run(() => new SemanticsSessionScope(metadataTranslationScope, repoLocation));
+        }
     }
 }

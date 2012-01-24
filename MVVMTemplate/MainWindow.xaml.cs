@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -35,37 +36,40 @@ namespace MVVMTemplate
         public MainWindow()
         {
             InitializeComponent();
-            _semanticsSessionScope = new SemanticsSessionScope(
-                RepositoryMetadataTranslationScope.Get(),
-                MetaMetadataRepositoryInit.DEFAULT_REPOSITORY_LOCATION
-                );
+
+            LoadButton.IsEnabled = false;
+            Loaded += MainWindow_Loaded;
 
             
         }
 
-        private async void LoadButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            _semanticsSessionScope = await SemanticsSessionScope.InitAsync(
+                                            RepositoryMetadataTranslationScope.Get(),
+                                            MetaMetadataRepositoryInit.DEFAULT_REPOSITORY_LOCATION);
+            LoadButton.IsEnabled = true;
+        }
+
+
+        private async void LoadButton_Click(object sender, RoutedEventArgs e)
         {
         	
             ParsedUri puri = new ParsedUri(UrlBox.Text);
             if (!puri.IsFile)
             {
                 Document parsedDoc = await _semanticsSessionScope.GetDocument(puri);
-
                 MetadataBrowserEditorView docTemplatedMetadataBrowserEditorView = new MetadataBrowserEditorView(parsedDoc);
-
-
                 canvas.Children.Add(docTemplatedMetadataBrowserEditorView);
-                                                             
             }
             else
             {
                 var metadata = (Metadata) _semanticsSessionScope.MetadataTranslationScope.Deserialize(
-                    new FileInfo(puri.LocalPath),
-                    new TranslationContext(),
-                    new MetadataDeserializationHookStrategy(_semanticsSessionScope),
-                    Format.Xml);
-                MetadataBrowserEditorView docTemplatedMetadataBrowserEditorView = 
-                     new MetadataBrowserEditorView(metadata);
+                                            new FileInfo(puri.LocalPath),
+                                            new TranslationContext(),
+                                            new MetadataDeserializationHookStrategy(_semanticsSessionScope),
+                                            Format.Xml);
+                MetadataBrowserEditorView docTemplatedMetadataBrowserEditorView = new MetadataBrowserEditorView(metadata);
 
                 canvas.Children.Add(docTemplatedMetadataBrowserEditorView);
             }

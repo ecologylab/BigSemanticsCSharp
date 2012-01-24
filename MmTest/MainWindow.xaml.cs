@@ -32,12 +32,21 @@ namespace MmTest
         public MainWindow()
         {
             InitializeComponent();
-            _semanticsSessionScope = new SemanticsSessionScope(
-                RepositoryMetadataTranslationScope.Get(),
-                MetaMetadataRepositoryInit.DEFAULT_REPOSITORY_LOCATION
-                );
+
+            BtnGetMetadata.IsEnabled = false;
+            Loaded += MainWindow_Loaded;
+
 
         }
+
+        async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            _semanticsSessionScope = await SemanticsSessionScope.InitAsync(
+                                            RepositoryMetadataTranslationScope.Get(),
+                                            MetaMetadataRepositoryInit.DEFAULT_REPOSITORY_LOCATION);
+            BtnGetMetadata.IsEnabled = true;
+        }
+
 
         private async void BtnGetMetadata_Click(object sender, RoutedEventArgs e)
         {

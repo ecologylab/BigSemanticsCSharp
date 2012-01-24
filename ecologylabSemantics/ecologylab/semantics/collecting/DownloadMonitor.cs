@@ -13,14 +13,21 @@ namespace ecologylab.semantics.collecting
 {
     public class DownloadMonitor
     {
-        private Thread _downloaderThread;
+        private readonly Thread _downloaderThread;
+        
+        public delegate void DispatcherDelegate(DocumentClosure closure);
 
-        private BlockingCollection<DocumentClosure> _toDownload = new BlockingCollection<DocumentClosure>();
+        private readonly BlockingCollection<DocumentClosure> _toDownload;
         public WebBrowserPool WebBrowserPool { get; set; }
-        private Thread _awesomiumThread;
-        private WebBrowserPool.DispatcherDelegate extractionDelegate;
+        private readonly Thread _awesomiumThread;
+        
+        private readonly DispatcherDelegate _extractionDelegate;
+
+        
+        
         public DownloadMonitor(SemanticsSessionScope semanticsSessionScope)
         {
+            _toDownload = new BlockingCollection<DocumentClosure>();
 
             WebBrowserPool = new WebBrowserPool(semanticsSessionScope);
 
@@ -28,35 +35,27 @@ namespace ecologylab.semantics.collecting
             _downloaderThread.Start();
             _awesomiumThread = new Thread(WebBrowserPool.InitializeWebCore) { Name = "Singleton Awesomium Thread", IsBackground = true };
             _awesomiumThread.Start();
-            extractionDelegate = WebBrowserPool.ExtractMetadata;
+            _extractionDelegate = WebBrowserPool.ExtractMetadata;
         }
 
         public void RunDownloadLoop()
         {
             foreach (DocumentClosure closure in _toDownload.GetConsumingEnumerable())
             {
-                if (closure == null) continue;
-
                 Console.WriteLine("Performing ExtractionRequest on: " + closure.PURLConnection.ResponsePURL);
 
                 var dispatcher = Dispatcher.FromThread(_awesomiumThread);
                 if (dispatcher != null)
-                {
-                    DispatcherOperation op = dispatcher.BeginInvoke(DispatcherPriority.Send, extractionDelegate, closure);
-                    DispatcherOperationStatus status = op.Status;
-                    while (status != DispatcherOperationStatus.Completed)
-                    {
-                        Console.WriteLine("Op Status: " + op.Status);
-                        status = op.Wait(TimeSpan.FromMilliseconds(500));    
-                    }
-                    
-                }
-
-                Console.WriteLine("Dispatch Complete");
+                    dispatcher.BeginInvoke(DispatcherPriority.Send, _extractionDelegate, closure);
             }
         }
 
         /// <summary>
+        /// Passes the DocumentClosure through to the RunDownloadLoop, which in turn dispatches it to the awesomium thread.
+        /// 
+        /// This stores a TaskCompletionSource object in the document closure.
+        /// 
+        /// Once the resulting extraction is completed, the call site is notified through the await mechanism.
         /// </summary>
         /// <param name="documentClosure"> </param>
         /// <returns></returns>

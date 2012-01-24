@@ -41,7 +41,7 @@ namespace ecologylab.semantics.metametadata
 
         static MetaMetadataRepositoryInit()
         {
-            SimplTypesScope.graphSwitch = Simpl.Serialization.SimplTypesScope.GRAPH_SWITCH.ON;
+            SimplTypesScope.graphSwitch = SimplTypesScope.GRAPH_SWITCH.ON;
             MetaMetadataRepository.InitializeTypes();
         }
 
@@ -50,20 +50,20 @@ namespace ecologylab.semantics.metametadata
             return META_METADATA_REPOSITORY;
         }
 
-        private readonly MetaMetadataRepository metaMetadataRepository;
+        private readonly MetaMetadataRepository _metaMetadataRepository;
 
-        private readonly SimplTypesScope metadataTranslationScope;
+        private readonly SimplTypesScope _metadataTranslationScope;
 
-        private readonly SimplTypesScope generatedDocumentTranslations;
+        private readonly SimplTypesScope _generatedDocumentTranslations;
 
-        private readonly SimplTypesScope generatedMediaTranslations;
+        private readonly SimplTypesScope _generatedMediaTranslations;
 
-        private readonly SimplTypesScope repositoryClippingTranslations;
+        private readonly SimplTypesScope _repositoryClippingTranslations;
 
         /**
          * This constructor should only be called from SemanticsScope's constructor!
          * 
-         * @param metadataTranslationScope
+         * @param _metadataTranslationScope
          */
         public MetaMetadataRepositoryInit(SimplTypesScope metadataTranslationScope, string repoLocation)
         {
@@ -81,7 +81,7 @@ namespace ecologylab.semantics.metametadata
                 METAMETADATA_REPOSITORY_DIR_FILE = new FileInfo(repoLocation);
             }
 
-            this.metadataTranslationScope = metadataTranslationScope;
+            this._metadataTranslationScope = metadataTranslationScope;
             Debug.WriteLine("\t\t-- Reading meta_metadata from " + METAMETADATA_REPOSITORY_DIR_FILE);
 
             META_METADATA_REPOSITORY = MetaMetadataRepositoryLoader.ReadDirectoryRecursively(
@@ -90,38 +90,38 @@ namespace ecologylab.semantics.metametadata
                 metadataTranslationScope
                 );
 
-            DOCUMENT_META_METADATA = META_METADATA_REPOSITORY.GetMMByName(DOCUMENT_TAG);
-            PDF_META_METADATA = META_METADATA_REPOSITORY.GetMMByName(PDF_TAG);
-            SEARCH_META_METADATA = META_METADATA_REPOSITORY.GetMMByName(SEARCH_TAG);
-            IMAGE_META_METADATA = META_METADATA_REPOSITORY.GetMMByName(IMAGE_TAG);
-            DEBUG_META_METADATA = META_METADATA_REPOSITORY.GetMMByName(DEBUG_TAG);
-            IMAGE_CLIPPING_META_METADATA = META_METADATA_REPOSITORY.GetMMByName(IMAGE_CLIPPING_TAG);
+            DOCUMENT_META_METADATA          = META_METADATA_REPOSITORY.GetMMByName(DOCUMENT_TAG);
+            PDF_META_METADATA               = META_METADATA_REPOSITORY.GetMMByName(PDF_TAG);
+            SEARCH_META_METADATA            = META_METADATA_REPOSITORY.GetMMByName(SEARCH_TAG);
+            IMAGE_META_METADATA             = META_METADATA_REPOSITORY.GetMMByName(IMAGE_TAG);
+            DEBUG_META_METADATA             = META_METADATA_REPOSITORY.GetMMByName(DEBUG_TAG);
+            IMAGE_CLIPPING_META_METADATA    = META_METADATA_REPOSITORY.GetMMByName(IMAGE_CLIPPING_TAG);
 
             META_METADATA_REPOSITORY.BindMetadataClassDescriptorsToMetaMetadata(metadataTranslationScope);
 
-            metaMetadataRepository = META_METADATA_REPOSITORY;
+            _metaMetadataRepository          = META_METADATA_REPOSITORY;
 
-            generatedDocumentTranslations = metadataTranslationScope.GetAssignableSubset(
-                SemanticNames.REPOSITORY_DOCUMENT_TRANSLATIONS,
-                typeof (Document));
-            generatedMediaTranslations = metadataTranslationScope.GetAssignableSubset(
-                SemanticNames.REPOSITORY_MEDIA_TRANSLATIONS,
-                typeof (ClippableDocument));
-            repositoryClippingTranslations = metadataTranslationScope.GetAssignableSubset(
-                SemanticNames.REPOSITORY_CLIPPING_TRANSLATIONS,
-                typeof (Clipping));
+            _generatedDocumentTranslations   = metadataTranslationScope.GetAssignableSubset(
+                                                SemanticNames.REPOSITORY_DOCUMENT_TRANSLATIONS,
+                                                typeof (Document));
+            _generatedMediaTranslations      = metadataTranslationScope.GetAssignableSubset(
+                                                SemanticNames.REPOSITORY_MEDIA_TRANSLATIONS,
+                                                typeof (ClippableDocument));
+            _repositoryClippingTranslations  = metadataTranslationScope.GetAssignableSubset(
+                                                SemanticNames.REPOSITORY_CLIPPING_TRANSLATIONS,
+                                                typeof (Clipping));
         }
 
         #region Properties
 
         public SimplTypesScope MetadataTranslationScope
         {
-            get { return metadataTranslationScope; }
+            get { return _metadataTranslationScope; }
         }
 
         public MetaMetadataRepository MetaMetadataRepository
         {
-            get { return metaMetadataRepository; }
+            get { return _metaMetadataRepository; }
         }
 
         #endregion
