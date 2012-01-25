@@ -189,11 +189,11 @@ namespace ecologylab.semantics.collecting
             ParsedUri puri = closure.PURLConnection.ResponsePURL;
             TaskCompletionSource<Document> tcs = closure.TaskCompletionSource;
             WebView webView = Acquire();
-            WebViewExtractor extractor = new WebViewExtractor(webView, SemanticsSessionScope, puri);
+            WebViewParser parser = new WebViewParser(webView, SemanticsSessionScope, puri);
 
             //Technically this doesn't need to be awaited on. 
             //The extraction handling is happening on the same thread 
-            Document result = await extractor.ExtractMetadata();
+            Document result = await parser.ExtractMetadata();
             Console.WriteLine(Thread.CurrentThread.Name + ": Setting document result");
             tcs.TrySetResult(result);
         }

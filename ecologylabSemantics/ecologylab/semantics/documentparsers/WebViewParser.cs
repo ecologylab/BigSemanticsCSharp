@@ -16,7 +16,7 @@ using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.documentparsers
 {
-    public class WebViewExtractor
+    public class WebViewParser
     {
         private readonly WebView _webView;
         private readonly ParsedUri _puri;
@@ -24,7 +24,7 @@ namespace ecologylab.semantics.documentparsers
         private TaskCompletionSource<Document> _tcs;
         private TimeSpan EXTRACTION_TIMEOUT = TimeSpan.FromSeconds(200);
         private DispatcherTimer _requestTimedOut;
-        public WebViewExtractor(WebView webView, SemanticsSessionScope scope, ParsedUri puri)
+        public WebViewParser(WebView webView, SemanticsSessionScope scope, ParsedUri puri)
         {
             _webView = webView;
             _puri = puri;
@@ -74,7 +74,7 @@ namespace ecologylab.semantics.documentparsers
                 //TODO: At a later date, when we want to allow javascript requests, this must change.
                 //webView.AddURLFilter("*.js");
 
-                Console.WriteLine("Setting Source");
+                Console.WriteLine("Setting Source : " + DateTime.Now + " : " + DateTime.Now.Millisecond);
                 _webView.LoadCompleted += webView_LoadCompleted;
                 _webView.Source = _puri;
 
@@ -90,16 +90,17 @@ namespace ecologylab.semantics.documentparsers
             if (webView == null)
                 return;
             webView.Stop(); // Stopping further requests.
-            Console.WriteLine("Finished loading. Executing javascript. -- " + DateTime.Now);
+            Console.WriteLine("Finished loading. Executing javascript. -- " + DateTime.Now + " : " + DateTime.Now.Millisecond);
             MetaMetadataRepository repository = SemanticsSessionScope.MetaMetadataRepository;
             MetaMetadata mmd = repository.GetDocumentMM(_puri);
+            Console.WriteLine("Got MMD: " + mmd.Name);
             String jsonMMD = WebBrowserPool.GetJsonMMD(mmd);
             //Console.WriteLine("json:\n" + jsonMMD + "\n");
             //jsonMMD = jsonMMD.Replace("\\", "\\\\");
 
             webView.ExecuteJavascript(jsonMMD);
             webView.ExecuteJavascript(WebBrowserPool.MmdDomHelperJsString);
-            Console.WriteLine("Done js code execution, calling function. --" + DateTime.Now);
+            Console.WriteLine("Done js code execution, calling function. --" + DateTime.Now + " : " + DateTime.Now.Millisecond);
             //TODO: Currently executes asynchronously. Can we make this asynchronous?
 
             webView.CreateObject("CallBack");
@@ -110,7 +111,6 @@ namespace ecologylab.semantics.documentparsers
             webView.ExecuteJavascript("extractMetadata(mmd);");
 
             _requestTimedOut.Start();
-
         }
 
         public void OnMetadataExtracted(object sender, JSCallbackEventArgs args)
@@ -124,12 +124,12 @@ namespace ecologylab.semantics.documentparsers
 
             String metadataJSON = value.ToString();
             Console.WriteLine(metadataJSON);
-            Console.WriteLine("Done getting value. Serializing JSON string to ElementState. --" + DateTime.Now);
+            Console.WriteLine("Done getting value. Serializing JSON string to ElementState. --" + DateTime.Now + " : " + DateTime.Now.Millisecond);
             TranslationContext context = new TranslationContext();
             context.SetUriContext(_puri);
             SimplTypesScope metadataTScope = SemanticsSessionScope.MetadataTranslationScope;
             Document myShinyNewMetadata = (Document)metadataTScope.Deserialize(metadataJSON, context, null, StringFormat.Json);
-            Console.WriteLine("Metadata ElementState object created. " + DateTime.Now);
+            Console.WriteLine("Metadata ElementState object created. " + DateTime.Now + " : " + DateTime.Now.Millisecond);
             _webView.LoadCompleted -= webView_LoadCompleted;
 
             SemanticsSessionScope.GlobalDocumentCollection.AddDocument(myShinyNewMetadata, _puri);

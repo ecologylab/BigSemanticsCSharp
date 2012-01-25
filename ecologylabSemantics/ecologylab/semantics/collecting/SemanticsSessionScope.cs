@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Awesomium.Core;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
 using ecologylab.semantics.documentparsers;
@@ -19,6 +20,8 @@ namespace ecologylab.semantics.collecting
         public SemanticsSessionScope(SimplTypesScope metadataTranslationScope, string repoLocation)
             : base(metadataTranslationScope, repoLocation)
         {
+            //This has an asynchronous call to WebCore.Initialize
+            //We might be able to pass in a TCS here, and set completion
             DownloadMonitor = new DownloadMonitor(this);
         }
 
@@ -46,7 +49,18 @@ namespace ecologylab.semantics.collecting
 
         public async static Task<SemanticsSessionScope> InitAsync(SimplTypesScope metadataTranslationScope, string repoLocation)
         {
-            return await TaskEx.Run(() => new SemanticsSessionScope(metadataTranslationScope, repoLocation));
+            var scope = await TaskEx.Run(() => new SemanticsSessionScope(metadataTranslationScope, repoLocation));
+
+            //This can be improved to pass the TaskCompletionSource, but a little synchronization logic is required.
+            while (!WebCore.IsRunning)
+            {
+                Console.WriteLine("Waiting for WebCore to Initialize");
+                //NOTE: This isn't a Thread.sleep. TaskEx.delay notifies the CPU to return after the timespan,
+                // It doesn't block the thread.
+                await TaskEx.Delay(TimeSpan.FromMilliseconds(300));
+            }
+
+            return scope;
         }
     }
 }

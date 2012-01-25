@@ -321,3 +321,4 @@ function getNodeListWithXPath(contextNode, xpath) {
     return document.evaluate(xpath, contextNode, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
 }
+

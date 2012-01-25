@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -13,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Awesomium.Core;
+using Awesomium.Windows.Controls;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
 using ecologylab.semantics.collecting;
@@ -44,6 +48,7 @@ namespace MmTest
             _semanticsSessionScope = await SemanticsSessionScope.InitAsync(
                                             RepositoryMetadataTranslationScope.Get(),
                                             MetaMetadataRepositoryInit.DEFAULT_REPOSITORY_LOCATION);
+            
             BtnGetMetadata.IsEnabled = true;
         }
 
@@ -54,11 +59,7 @@ namespace MmTest
             ParsedUri puri = new ParsedUri(UrlBox.Text);
             var parsedDoc = await _semanticsSessionScope.GetDocument(puri);
             
-            MetadataArea.Text = SimplTypesScope.Serialize(parsedDoc, StringFormat.Xml);
-            
+            MetadataArea.Text = await TaskEx.Run(() => SimplTypesScope.Serialize(parsedDoc, StringFormat.Xml));
         }
-
-
-
     }
 }
