@@ -7,12 +7,30 @@ var currentMMDField;
 //Not to worry, we're working with standards here. Both browsers implement the XPath defined in
 // http://www.w3.org/TR/2004/NOTE-DOM-Level-3-XPath-20040226/DOM3-XPath.html
 
+var defVars = {};
 
-function extractMetadata(mmd)
-{
+function extractMetadata(mmd){
 
     simplDeserialize(mmd);
     mmd = mmd.meta_metadata;
+
+    if (mmd.hasOwnProperty('def_var')) {
+        for (var i = mmd.def_var.length - 1; i >= 0; i--) {
+            var thisvar = mmd.def_var[i];
+            console.log("Setting def_var: " + thisvar.name);
+            if (thisvar.hasOwnProperty('type')){
+                if(thisvar.type == "node") {
+                    var result = getNodeWithXPath(document, thisvar.xpath);
+                    if(result) {
+                        defVars[thisvar.name] = result;
+                        console.log("def_var Value: ");
+                        console.info(result);
+                    }   
+                }
+            }
+        }
+    }
+    
     var metadata = recursivelyExtractMetadata(mmd, document, null);
     metadata['location'] = window.location.href;
     if (mmd.hasOwnProperty('mm_name'))
@@ -44,19 +62,34 @@ function recursivelyExtractMetadata(mmd, contextNode, metadata) {
         currentMMDField = mmdField;
         console.log("Iterating to Next mmdField");
         console.log(mmdField);
-
+        var defVarNode;
         if (mmdField.scalar != null && mmdField.scalar.xpath != null) {
             console.log("Setting scalar: " + mmdField.scalar.name);
+            if (mmdField.scalar.hasOwnProperty('context_node')) {
+                defVarNode = defVars[mmdField.scalar.context_node];
+                if (defVarNode)
+                    contextNode = defVarNode;
+            }
             extractScalar(mmdField.scalar, contextNode, metadata);
         }
 
         if (mmdField.collection != null) {
             console.log("Setting Collection: " + mmdField.collection.name);
+            if (mmdField.collection.hasOwnProperty('context_node')) {
+                defVarNode = defVars[mmdField.collection.context_node];
+                if (defVarNode)
+                    contextNode = defVarNode;
+            }
             extractCollection(mmdField.collection, contextNode, metadata);
         }
 
         if (mmdField.composite != null) {
             console.log("Setting Composite: " + mmdField.composite.name);
+            if (mmdField.composite.hasOwnProperty('context_node')) {
+                defVarNode = defVars[mmdField.composite.context_node];
+                if (defVarNode)
+                    contextNode = defVarNode;
+            }
             extractComposite(mmdField.composite, contextNode, metadata);
         }
         console.log("Recursive extraction result: ");
@@ -67,8 +100,9 @@ function recursivelyExtractMetadata(mmd, contextNode, metadata) {
     return metadata;
 }
 
-function extractScalar(mmdScalarField, contextNode, metadata)
-{
+function extractScalar(mmdScalarField, contextNode, metadata) {
+
+
     var stringValue = getScalarWithXPath(contextNode, mmdScalarField.xpath);
 		stringValue = stringValue.replace(new RegExp('\n', 'g'), "");
 		stringValue = stringValue.trim();
