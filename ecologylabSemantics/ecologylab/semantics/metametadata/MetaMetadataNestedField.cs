@@ -179,7 +179,7 @@ namespace ecologylab.semantics.metametadata
             return result ?? (Name);
         }
 
-        protected MetadataClassDescriptor BindMetadataClassDescriptor(SimplTypesScope metadataTScope)
+        protected internal virtual MetadataClassDescriptor BindMetadataClassDescriptor(SimplTypesScope metadataTScope)
         {
             MetadataClassDescriptor metadataCd = this.MetadataClassDescriptor;
             if (metadataCd == null)
@@ -290,7 +290,7 @@ namespace ecologylab.semantics.metametadata
                             Debug.WriteLine("Encountered null fd for scalar: " + scalar);
                     }
                 }
-                else if (thatChild.GetType() == typeof (MetaMetadataNestedField) && thatChild.HasChildren())
+                else if (thatChild is MetaMetadataNestedField && thatChild.HasChildren())
                 {
                     // bind class descriptor for nested sub-fields
                     MetaMetadataNestedField nested = (MetaMetadataNestedField) thatChild;
@@ -318,7 +318,7 @@ namespace ecologylab.semantics.metametadata
                     }
                 }
 
-                if (GetType() == typeof (MetaMetadata))
+                if (this is MetaMetadata)
                 {
                     MetaMetadata mmd = (MetaMetadata) this;
                     String naturalId = thatChild.AsNaturalId;

@@ -200,6 +200,14 @@ namespace ecologylab.semantics.metametadata
       composite.PromoteChildren = this.PromoteChildren;
     }
 
+    protected internal override MetadataClassDescriptor BindMetadataClassDescriptor(SimplTypesScope metadataTScope)
+	{
+		MetaMetadataCompositeField childComposite = GetChildComposite();
+		if (childComposite != null)
+			return childComposite.BindMetadataClassDescriptor(metadataTScope);
+		return null;
+	}
+
     internal override bool GetClassAndBindDescriptors(SimplTypesScope metadataTScope)
     {
       return GetChildComposite().GetClassAndBindDescriptors(metadataTScope);
