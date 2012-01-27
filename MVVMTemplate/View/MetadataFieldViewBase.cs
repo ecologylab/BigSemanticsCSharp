@@ -12,8 +12,8 @@ namespace MVVMTemplate.View
 {
     public abstract class MetadataFieldViewBase : UserControl
     {
-        
-        public MetadataFieldViewBase()
+
+        public MetadataFieldViewBase() : base()
         {
             this.Loaded += new RoutedEventHandler(MetadataFieldView_Loaded);
         }
@@ -26,7 +26,7 @@ namespace MVVMTemplate.View
         private void MetadataFieldView_Loaded(object sender, RoutedEventArgs e)
         {
             //use inherited parent's DataContext (ViewModel) to get Metadata and MetaMetadata
-            if (this.DataContext == null && this.MetaMetadataFieldName != null)
+            if (this.DataContext != null && this.MetaMetadataFieldName != null)
             {
                 Metadata metadata = ((MetadataViewModelBase) this.DataContext).Metadata;
                 MetaMetadataField metaMetadataField =

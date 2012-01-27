@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ecologylab.semantics.metadata;
 using ecologylab.semantics.metametadata;
 using MVVMTemplate.ViewModel;
@@ -24,6 +25,11 @@ namespace MVVMTemplate.View
         protected override MetadataViewModelBase CreateViewModel(MetaMetadataField metaMetadataField, Metadata metadata)
         {
             return new MetadataCompositeFieldViewModel((MetaMetadataCompositeField) metaMetadataField, metadata);
+        }
+
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+           ((MetadataView) sender).ToggleExpand();
         }
     }
 }

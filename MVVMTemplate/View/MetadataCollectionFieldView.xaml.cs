@@ -36,5 +36,10 @@ namespace MVVMTemplate.View
         {
             return new MetadataCollectionFieldViewModel((MetaMetadataCollectionField) metaMetadataField, metadata);
         }
+
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            ((MetadataCollectionView) sender).ToggleExpand();
+        }
     }
 }

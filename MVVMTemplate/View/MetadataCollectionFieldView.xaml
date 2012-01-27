@@ -5,13 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:View="clr-namespace:MVVMTemplate.View" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel Orientation="Horizontal">
-        <TextBlock x:Name="FieldLabel" Text="{Binding Path=FieldName}" d:DesignWidth="100" Padding="10 10 10 10"/>
-        <ItemsControl x:Name="FieldValue" ItemsSource="{Binding Path=FieldValue}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <View:MetadataFieldsGroupView Metadata="{Binding Path=.}"  />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <StackPanel Orientation="Horizontal">
+            <View:ExpandCollapseButton VerticalAlignment="Top" CommandTarget="{Binding ElementName=FieldValue}"/>
+            <TextBlock x:Name="FieldLabel" VerticalAlignment="Top" Text="{Binding Path=FieldName}" TextAlignment="Right" Height="30" Padding="10 10 10 10"/>
+        </StackPanel>
+        <View:MetadataCollectionView x:Name="FieldValue" Height="Auto" Collection="{Binding Path=FieldValue}" Background="Lavender">
+            <View:MetadataCollectionView.CommandBindings>
+                <CommandBinding Command="View:Commands.ExpandCollapse"
+                                Executed="CommandBinding_Executed"/>
+            </View:MetadataCollectionView.CommandBindings>
+        </View:MetadataCollectionView>
     </StackPanel>
 </View:MetadataFieldViewBase>

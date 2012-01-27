@@ -6,6 +6,6 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid x:Name="LayoutRoot">
         <Rectangle Fill="LightGray" Stroke="Black" RadiusX="10" RadiusY="10"/>
-        <View:MetadataFieldsGroupView x:Name="FieldsView" Metadata="{Binding Path=Metadata}" />
+        <View:MetadataView x:Name="FieldsView" Metadata="{Binding Path=Metadata}" IsExpanded="True" />
     </Grid>
 </UserControl>
