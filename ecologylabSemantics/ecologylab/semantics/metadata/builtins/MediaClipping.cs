@@ -7,45 +7,24 @@
 //
 
 
-using Simpl.Fundamental.Generic;
-using Simpl.Serialization;
-using Simpl.Serialization.Attributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using ecologylab.collections;
-using ecologylab.semantics.metadata;
-using ecologylab.semantics.metadata.scalar;
+using Simpl.Fundamental.Generic;
+using Simpl.Serialization;
+using Simpl.Serialization.Attributes;
+using ecologylab.semantics.metadata.builtins.declarations;
+using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
 	[SimplInherit]
-    [SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
-	public class MediaClipping : Clipping
+	public class MediaClipping<ME> : MediaClippingDeclaration<ME> where ME : ClippableDocument<ME>
 	{
 
-		[SimplScalar]
-		[SimplHints(new Hint[] {Hint.XmlAttribute})]
-		private MetadataString caption;
+		public MediaClipping() { }
 
-		[SimplComposite]
-		[SimplWrap]
-		[SimplScope("repository_media")]
-		private ClippableDocument media;
+        public MediaClipping(MetaMetadataCompositeField mmd) : base(mmd) { }
 
-		public MediaClipping()
-		{ }
-
-		public MetadataString Caption
-		{
-			get{return caption;}
-			set{if (this.caption != value) { this.caption = value; this.RaisePropertyChanged(() => this.Caption); }}
-		}
-
-		public ClippableDocument Media
-		{
-			get{return media;}
-			set{if (this.media != value) { this.media = value; this.RaisePropertyChanged(() => this.Media); }}
-		}
 	}
 }

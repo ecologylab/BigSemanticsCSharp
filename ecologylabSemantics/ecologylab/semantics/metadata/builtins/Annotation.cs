@@ -6,75 +6,23 @@
 // Copyright 2011 Interface Ecology Lab. 
 //
 
-
-using Simpl.Fundamental.Generic;
-using Simpl.Serialization;
-using Simpl.Serialization.Attributes;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using ecologylab.collections;
-using ecologylab.semantics.metadata;
-using ecologylab.semantics.metadata.scalar;
+using System.Linq;
+using System.Text;
+using Simpl.Serialization.Attributes;
+using ecologylab.semantics.metadata.builtins.declarations;
+using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
 	[SimplInherit]
-    [SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
-	public class Annotation : Metadata
+	public class Annotation : AnnotationDeclaration
 	{
-		[SimplScalar]
-		[SimplHints(new Hint[] {Hint.XmlAttribute})]
-		private MetadataString text;
 
-		[SimplScalar]
-		[SimplHints(new Hint[] {Hint.XmlAttribute})]
-		private MetadataString author;
+		public Annotation() { } 
 
-		[SimplScalar]
-		[SimplHints(new Hint[] {Hint.XmlAttribute})]
-		private MetadataDate creationTime;
+        public Annotation(MetaMetadataCompositeField mmd) : base(mmd) { }
 
-		public Annotation()
-		{ }
-
-		public MetadataString Text
-		{
-			get{return text;}
-			set
-			{
-			    if (this.text != value)
-			    {
-			        this.text = value;
-                    this.RaisePropertyChanged( () => this.Text );
-			    }
-			}
-		}
-
-		public MetadataString Author
-		{
-			get{return author;}
-			set
-			{
-			    if (this.author != value)
-			    {
-			        this.author = value;
-                    this.RaisePropertyChanged( () => this.Author );
-			    }
-			}
-		}
-
-		public MetadataDate CreationTime
-		{
-			get{return creationTime;}
-			set
-			{
-			    if (this.creationTime != value)
-			    {
-			        this.creationTime = value;
-                    this.RaisePropertyChanged( () => this.CreationTime );
-			    }
-			}
-		}
 	}
 }

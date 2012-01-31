@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ecologylab.semantics.metadata;
 using Simpl.Serialization;
+using ecologylab.semantics.metadata.builtins.declarations;
 using ecologylab.semantics.metadata.scalar.types;
 
 namespace ecologylab.semantics.metadata.builtins 
@@ -13,17 +14,20 @@ namespace ecologylab.semantics.metadata.builtins
         public static string NAME = "metadata_builtin_translations";
 
         protected static Type[] Translations =
-            {
-                typeof (Metadata),
-                typeof (Document),
-                typeof (CompoundDocument),
-                typeof (ClippableDocument),
-                typeof (ClippableMetadata),
-                typeof (Clipping),
-                typeof (DebugMetadata),
-                typeof (Image),
-                typeof (Text),
-            };
+        {
+            typeof (Metadata),
+            typeof (Annotation),
+            typeof (ClippableDocument<>),
+            typeof (Clipping),
+            typeof (CompoundDocument),
+            typeof (DebugMetadata),
+            typeof (Document),
+            typeof (DocumentMetadataWrap),
+            typeof (Image),
+            typeof (ImageClipping),
+            typeof (MediaClipping<>),
+            typeof (TextClipping),
+        };
 
         static MetadataBuiltinsTranslationScope()
         {
@@ -32,7 +36,7 @@ namespace ecologylab.semantics.metadata.builtins
 
         public static SimplTypesScope Get()
         {
-            return SimplTypesScope.Get(NAME, Translations);
+            return SimplTypesScope.Get(NAME, MetadataBuiltinDeclarationsTranslationScope.Get(), Translations);
         }
     }
 }

@@ -8,80 +8,21 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Simpl.Serialization.Attributes;
-using ecologylab.semantics.metadata.scalar;
-using ecologylab.semantics.metadata;
+using ecologylab.semantics.metadata.builtins.declarations;
+using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
-	public class Clipping : Metadata
+    [SimplInherit]
+	public class Clipping : ClippingDeclaration
 	{
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[MmName("caption")]
-		[SimplScalar]
-		private MetadataString caption;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		private MetadataString context;
+		public Clipping() { }
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		private MetadataString xpath;
+		public Clipping(MetaMetadataCompositeField mmd) : base(mmd) { }
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplComposite]
-		private Document source;
-
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplComposite]
-		private Document outlink;
-
-		public Clipping()
-		{ }
-
-		public MetadataString Caption
-		{
-			get{return caption;}
-			set{if (this.caption != value) { this.caption = value; this.RaisePropertyChanged(() => this.Caption); }}
-		}
-
-		public MetadataString Context
-		{
-			get{return context;}
-			set{if (this.context != value) { this.context = value; this.RaisePropertyChanged(() => this.Context); }}
-		}
-
-		public MetadataString Xpath
-		{
-			get{return xpath;}
-			set{if (this.xpath != value) { this.xpath = value; this.RaisePropertyChanged(() => this.Xpath); }}
-		}
-
-		public Document Source
-		{
-			get{return source;}
-			set{if (this.source != value) { this.source = value; this.RaisePropertyChanged(() => this.Source); }}
-		}
-
-		public Document Outlink
-		{
-			get{return outlink;}
-			set{if (this.outlink != value) { this.outlink = value; this.RaisePropertyChanged(() => this.Outlink); }}
-		}
 	}
 }

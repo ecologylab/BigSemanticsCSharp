@@ -18,9 +18,6 @@ using ecologylab.semantics.metadata;
 
 namespace ecologylab.semantics.metametadata 
 {
-    /// <summary>
-    /// missing java doc comments or could not find the source file.
-    /// </summary>
     [SimplInherit]
     public abstract class MetaMetadataNestedField : MetaMetadataField
     {
@@ -45,6 +42,10 @@ namespace ecologylab.semantics.metametadata
 
         [SimplScalar]
         private String schemaOrgItemtype;
+
+        [SimplCollection("generic_type_var")]
+        [SimplNoWrap]
+        private List<MetaMetadataGenericTypeVar> genericTypeVars;
 
         /**
          * the mmd used by this nested field. corresponding attributes: (child_)type/extends. could be a

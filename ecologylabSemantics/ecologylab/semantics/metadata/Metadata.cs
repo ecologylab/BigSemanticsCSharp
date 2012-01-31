@@ -6,52 +6,35 @@
 //  Copyright 2010 Interface Ecology Lab. 
 //
 
+
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Practices.Prism.ViewModel;
+using System.Windows;
+using System.Windows.Controls;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization.Attributes;
 using Simpl.Serialization;
-using ecologylab.semantics.metadata;
+using ecologylab.semantics.metadata.builtins.declarations;
 using ecologylab.semantics.metadata.scalar;
-using System.Collections;
-using System.Windows.Controls;
-using System.Windows;
 using ecologylab.semantics.metametadata;
-using ecologylab.net;
 
 
 namespace ecologylab.semantics.metadata
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
-	public class Metadata : NotificationObject
+	[SimplInherit]
+	public class Metadata : MetadataDeclaration
     {
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		[SimplOtherTags(new String[]{"meta_metadata_name", })]
-		[SimplTag("mm_name")]
-		private MetadataString metaMetadataName;
-
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[semantics_mixin]
-		[SimplCollection("mixins")]
-		[MmName("mixins")]
-		private List<Metadata> mixins;
-
-        private MetaMetadataCompositeField metaMetadata;
 
         /**
 	    * Hidden reference to the MetaMetadataRepository. DO NOT access this field directly. DO NOT
 	    * create a static public accessor. -- andruid 10/7/09.
 	    */
         private static MetaMetadataRepository repository;
+
+        private MetaMetadataCompositeField metaMetadata;
+
+        private ClassDescriptor classDescriptor;
 
 		public Metadata()
 		{ }
@@ -63,28 +46,9 @@ namespace ecologylab.semantics.metadata
                 this.metaMetadata = metaMetadata;
                 string metaMetadataName = metaMetadata.Name;
                 if (ClassDescriptor.TagName != metaMetadataName)
-                    this.metaMetadataName = new MetadataString(metaMetadataName);
+                    this.MetaMetadataName = new MetadataString(metaMetadataName);
             }
         }
-
-        private ClassDescriptor _classDescriptor;
-        public ClassDescriptor ClassDescriptor
-        {
-            get { return _classDescriptor ?? (_classDescriptor = ClassDescriptor.GetClassDescriptor(this)); }
-            private set { _classDescriptor = value; }
-        }
-
-		public MetadataString MetaMetadataName
-		{
-			get { return metaMetadataName; }
-			set { metaMetadataName = value; }
-		}
-
-		public List<Metadata> Mixins
-		{
-			get { return mixins; }
-			set { mixins = value; }
-		}
 
         public MetaMetadataCompositeField MetaMetadata
         {
@@ -92,29 +56,33 @@ namespace ecologylab.semantics.metadata
             set { metaMetadata = value; }
         }
 
+        public ClassDescriptor ClassDescriptor
+        {
+            get { return classDescriptor ?? (classDescriptor = ClassDescriptor.GetClassDescriptor(this)); }
+            private set { classDescriptor = value; }
+        }
+
         public virtual MetadataParsedURL Location
         {
             get { return null; }
-            set { }
         }
 
 	    public virtual bool IsImage
 	    {
 	        get { return false; }
-	        set { }
 	    }
 
 	    private MetaMetadataCompositeField GetMetaMetadata()
         {
-            // return getMetadataClassDescriptor().getMetaMetadata();
             MetaMetadataCompositeField mm = metaMetadata;
+
             if (repository == null)
                 repository = MetaMetadataRepositoryInit.getRepository();
 
             if (mm == null && repository != null)
             {
-                if (metaMetadataName != null) // get from saved composition
-                    mm = repository.GetMMByName(metaMetadataName.Value);
+                if (MetaMetadataName != null) // get from saved composition
+                    mm = repository.GetMMByName(MetaMetadataName.Value);
 
                 if (mm == null)
                 {
@@ -132,6 +100,7 @@ namespace ecologylab.semantics.metadata
                         mm = repository.GetMMByName(ClassDescriptor.TagName);
                     }
                 }
+
                 if (mm != null)
                     MetaMetadata = mm;
             }
@@ -141,7 +110,7 @@ namespace ecologylab.semantics.metadata
         public MetaMetadataOneLevelNestingEnumerator MetaMetadataIterator(MetaMetadataField metaMetadataField = null)
         {
             MetaMetadataField firstMetaMetadataField = metaMetadataField ?? this.MetaMetadata;
-            return new MetaMetadataOneLevelNestingEnumerator(firstMetaMetadataField, this, mixins);
+            return new MetaMetadataOneLevelNestingEnumerator(firstMetaMetadataField, this, Mixins);
         }
 
         public void AddMixin(Metadata mixin)
@@ -152,5 +121,6 @@ namespace ecologylab.semantics.metadata
             }
             Mixins.Add(mixin);
         }
+
 	}
 }

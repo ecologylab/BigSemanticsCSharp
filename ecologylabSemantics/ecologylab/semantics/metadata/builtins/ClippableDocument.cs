@@ -7,24 +7,19 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Simpl.Serialization.Attributes;
+using ecologylab.semantics.metadata.builtins.declarations;
 using ecologylab.semantics.metadata.scalar;
-using ecologylab.semantics.metadata;
+using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata.builtins
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
 	[SimplInherit]
-	public class ClippableDocument : Document
+	public class ClippableDocument<ME> : ClippableDocumentDeclaration<ME> where ME : ClippableDocument<ME>
 	{
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		private MetadataString context;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -33,33 +28,9 @@ namespace ecologylab.semantics.metadata.builtins
 		[SimplScalar]
 		private MetadataString caption;
 
-		public ClippableDocument()
-		{ }
+		public ClippableDocument() { }
 
-		public MetadataString Context
-		{
-			get{return context;}
-			set
-			{
-			    if (this.context != value)
-			    {
-			        this.context = value;
-                    this.RaisePropertyChanged( () => this.Context );
-			    }
-			}
-		}
+        public ClippableDocument(MetaMetadataCompositeField mmd) : base(mmd) { }
 
-		public MetadataString Caption
-		{
-			get{return caption;}
-			set
-			{
-			    if (this.caption != value)
-			    {
-			        this.caption = value;
-                    this.RaisePropertyChanged( () => this.Caption );
-			    }
-			}
-		}
 	}
 }

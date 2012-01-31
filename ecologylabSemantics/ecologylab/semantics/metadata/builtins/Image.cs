@@ -9,35 +9,21 @@
 using System;
 using System.Collections.Generic;
 using Simpl.Serialization.Attributes;
+using ecologylab.semantics.metadata.builtins.declarations;
 using ecologylab.semantics.metadata.scalar;
 using ecologylab.semantics.metadata;
 using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
 	[SimplInherit]
-	public class Image : Document
+	public class Image : ImageDeclaration
 	{
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[MmName("local_location")]
-		[SimplScalar]
-		private MetadataFile localLocation;
 
 		public Image()
 		{ }
 
         public Image(MetaMetadataCompositeField metaMetadata) : base(metaMetadata) { }
 
-	    public MetadataFile LocalLocation
-		{
-			get{return localLocation;}
-			set{if (this.localLocation != value) { this.localLocation = value; this.RaisePropertyChanged(() => this.LocalLocation); }}
-		}
 	}
 }

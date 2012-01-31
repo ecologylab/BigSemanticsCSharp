@@ -97,8 +97,6 @@ namespace ecologylab.semantics.metametadata
             DEBUG_META_METADATA             = META_METADATA_REPOSITORY.GetMMByName(DEBUG_TAG);
             IMAGE_CLIPPING_META_METADATA    = META_METADATA_REPOSITORY.GetMMByName(IMAGE_CLIPPING_TAG);
 
-            META_METADATA_REPOSITORY.BindMetadataClassDescriptorsToMetaMetadata(metadataTranslationScope);
-
             _metaMetadataRepository          = META_METADATA_REPOSITORY;
 
             _generatedDocumentTranslations   = metadataTranslationScope.GetAssignableSubset(
@@ -106,10 +104,15 @@ namespace ecologylab.semantics.metametadata
                                                 typeof (Document));
             _generatedMediaTranslations      = metadataTranslationScope.GetAssignableSubset(
                                                 SemanticNames.REPOSITORY_MEDIA_TRANSLATIONS,
-                                                typeof (ClippableDocument));
+                                                typeof (ClippableDocument<>));
             _repositoryClippingTranslations  = metadataTranslationScope.GetAssignableSubset(
                                                 SemanticNames.REPOSITORY_CLIPPING_TRANSLATIONS,
                                                 typeof (Clipping));
+
+            _generatedMediaTranslations.AddTranslation(typeof(Clipping));
+            _generatedMediaTranslations.AddTranslation(typeof(Annotation));
+
+            META_METADATA_REPOSITORY.BindMetadataClassDescriptorsToMetaMetadata(metadataTranslationScope);
         }
 
         #region Properties

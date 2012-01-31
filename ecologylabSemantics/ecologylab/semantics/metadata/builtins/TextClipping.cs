@@ -15,25 +15,19 @@ using System.Collections;
 using System.Collections.Generic;
 using ecologylab.collections;
 using ecologylab.semantics.metadata;
+using ecologylab.semantics.metadata.builtins.declarations;
 using ecologylab.semantics.metadata.scalar;
+using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
 	[SimplInherit]
-    [SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
-	public class TextClipping : Clipping
+	public class TextClipping : TextClippingDeclaration
 	{
-		[SimplScalar]
-		[SimplHints(new Hint[] {Hint.XmlAttribute})]
-		private MetadataString text;
 
-		public TextClipping()
-		{ }
+		public TextClipping() { } 
 
-		public MetadataString Text
-		{
-			get{return text;}
-			set{if (this.text != value) { this.text = value; this.RaisePropertyChanged(() => this.Text); }}
-		}
+		public TextClipping(MetaMetadataCompositeField mmd) : base(mmd) { }
+
 	}
 }

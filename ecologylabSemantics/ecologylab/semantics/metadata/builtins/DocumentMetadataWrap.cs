@@ -7,33 +7,24 @@
 //
 
 
-using Simpl.Fundamental.Generic;
-using Simpl.Serialization;
-using Simpl.Serialization.Attributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using ecologylab.collections;
-using ecologylab.semantics.metadata;
-using ecologylab.semantics.metadata.scalar;
+using Simpl.Fundamental.Generic;
+using Simpl.Serialization;
+using Simpl.Serialization.Attributes;
+using ecologylab.semantics.metadata.builtins.declarations;
+using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
 	[SimplInherit]
-    [SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
-	public class DocumentMetadataWrap : Metadata
+	public class DocumentMetadataWrap : DocumentMetadataWrapDeclaration
 	{
-		[SimplComposite]
-		[SimplScope("repository_documents")]
-		private Document document;
 
-		public DocumentMetadataWrap()
-		{ }
+		public DocumentMetadataWrap() { }
 
-		public Document Document
-		{
-			get{return document;}
-			set{if (this.document != value) { this.document = value; this.RaisePropertyChanged(() => this.Document); }}
-		}
+		public DocumentMetadataWrap(MetaMetadataCompositeField mmd) : base(mmd) { }
+
 	}
 }

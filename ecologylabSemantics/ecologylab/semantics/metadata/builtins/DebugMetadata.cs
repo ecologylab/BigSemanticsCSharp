@@ -9,32 +9,18 @@
 using System;
 using System.Collections.Generic;
 using Simpl.Serialization.Attributes;
-using ecologylab.semantics.metadata.scalar;
-using ecologylab.semantics.metadata;
+using ecologylab.semantics.metadata.builtins.declarations;
+using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata.builtins  
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
 	[SimplInherit]
-	public class DebugMetadata : Metadata
+	public class DebugMetadata : DebugMetadataDeclaration
 	{
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		[MmName("new_term_vector")]
-		private MetadataStringBuilder newTermVector;
 
-		public DebugMetadata()
-		{ }
+		public DebugMetadata() { }
 
-		public MetadataStringBuilder NewTermVector
-		{
-			get{return newTermVector;}
-			set{if (this.newTermVector != value) { this.newTermVector = value; this.RaisePropertyChanged(() => this.NewTermVector); }}
-		}
+		public DebugMetadata(MetaMetadataCompositeField mmd) : base(mmd) { }
+
 	}
 }

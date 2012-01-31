@@ -11,115 +11,34 @@ using System.Collections.Generic;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization.Attributes;
 using ecologylab.semantics.collecting;
+using ecologylab.semantics.metadata.builtins.declarations;
 using ecologylab.semantics.metadata.scalar;
 using ecologylab.semantics.metadata;
 using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
-    /// <summary>
-    /// missing java doc comments or could not find the source file.
-    /// </summary>
-    [SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
     [SimplInherit]
-    public class Document : ClippableMetadata
+    public class Document : DocumentDeclaration
     {
-        /// <summary>
-        /// missing java doc comments or could not find the source file.
-        /// </summary>
-        [MmName("location")]
-        [SimplScalar]
-        private MetadataParsedURL location;
 
-        /// <summary>
-        /// missing java doc comments or could not find the source file.
-        /// </summary>
-        [MmName("title")]
-        [SimplScalar]
-        [SimplCompositeAsScalar]
-        private MetadataString title;
-
-        /// <summary>
-        /// missing java doc comments or could not find the source file.
-        /// </summary>
-        [MmName("description")]
-        [SimplScalar]
-        private MetadataString description;
-
-        /// <summary>
-        /// missing java doc comments or could not find the source file.
-        /// </summary>
-        [SimplScalar]
-        [SimplHints(new Hint[] { Hint.XmlLeaf })]
-        private MetadataString query;
-
-        /// <summary>
-        /// missing java doc comments or could not find the source file.
-        /// </summary>
         [MmName("generation")]
         [SimplScalar]
         private MetadataInteger generation;
 
-        /// <summary>
-        /// missing java doc comments or could not find the source file.
-        /// </summary>
-        [MmName("page_structure")]
-        [SimplScalar]
-        private MetadataString pageStructure;
-
         [MmName("favicon")]
         [SimplScalar]
         private MetadataParsedURL favicon;
-
-        [MmName("additional_location")]
-        [SimplCollection("location")]
-        private List<MetadataParsedURL> additionalLocations;
 
         public Document()
         { }
 
         public Document(MetaMetadataCompositeField metaMetadata) : base(metaMetadata) { }
 
-        public override MetadataParsedURL Location
-        {
-            get{return location;}
-            set{if (this.location != value) { this.location = value; this.RaisePropertyChanged(() => this.Location); }}
-        }
-
-        public List<MetadataParsedURL> AdditionalLocations
-        {
-            get{return additionalLocations;}
-            set{if (this.additionalLocations != value) { this.additionalLocations = value; this.RaisePropertyChanged(() => this.AdditionalLocations); }}
-        }
-
-        public MetadataString Title
-        {
-            get{return title;}
-            set{if (this.title != value) { this.title = value; this.RaisePropertyChanged(() => this.Title); }}
-        }
-
-        public MetadataString Description
-        {
-            get{return description;}
-            set{if (this.description != value) { this.description = value; this.RaisePropertyChanged(() => this.Description); }}
-        }
-
-        public MetadataString Query
-        {
-            get{return query;}
-            set{if (this.query != value) { this.query = value; this.RaisePropertyChanged(() => this.Query); }}
-        }
-
         public MetadataInteger Generation
         {
             get{return generation;}
             set{if (this.generation != value) { this.generation = value; this.RaisePropertyChanged(() => this.Generation); }}
-        }
-
-        public MetadataString PageStructure
-        {
-            get{return pageStructure;}
-            set{if (this.pageStructure != value) { this.pageStructure = value; this.RaisePropertyChanged(() => this.PageStructure); }}
         }
 
         public MetadataParsedURL Favicon
@@ -136,7 +55,7 @@ namespace ecologylab.semantics.metadata.builtins
 
         public override String ToString()
         {
-            return (title != null) ? title.Value : base.ToString();
+            return (Title != null) ? Title.Value : base.ToString();
         }
 
         public void AddAdditionalLocation(MetadataParsedURL additionalLocation)
@@ -150,10 +69,10 @@ namespace ecologylab.semantics.metadata.builtins
         {
             oldDocument.SemanticsSessionScope.GlobalDocumentCollection.Remap(oldDocument, this);
 
-            if (location == null)
+            if (Location == null)
             {
-                location = oldDocument.location;
-                oldDocument.location = null;
+                Location = oldDocument.Location;
+                oldDocument.Location = null;
             }
 
             this.SemanticsSessionScope = oldDocument.SemanticsSessionScope;
@@ -165,7 +84,7 @@ namespace ecologylab.semantics.metadata.builtins
                 foreach (Metadata oldMixin in oldMixins)
                     AddMixin(oldMixin);
 
-            List<MetadataParsedURL> oldAdditionalLocations = oldDocument.additionalLocations;
+            List<MetadataParsedURL> oldAdditionalLocations = oldDocument.AdditionalLocations;
             if (oldAdditionalLocations != null)
                 foreach (MetadataParsedURL otherLocation in oldAdditionalLocations)
                     AddAdditionalLocation(otherLocation);
@@ -177,5 +96,6 @@ namespace ecologylab.semantics.metadata.builtins
             // currently, for CompoundDocument to create and visualize clippings.
             // as clipping creation and visualization goes to semantic actions, do we still need this ??
         }
+
     }   
 }

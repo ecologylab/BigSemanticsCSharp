@@ -35,6 +35,8 @@ namespace ecologylab.semantics.metametadata
 
         [SimplScalar] private String parser;
 
+        [SimplScalar] private Boolean wrap;
+
         [SimplCollection] [SimplScope("semantic_action_translation_scope")] private List<SemanticAction> semanticActions;
 
         [SimplCollection("def_var")] [SimplNoWrap] private List<DefVar> defVars;

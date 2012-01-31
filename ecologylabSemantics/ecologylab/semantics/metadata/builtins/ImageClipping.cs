@@ -15,15 +15,19 @@ using System.Collections;
 using System.Collections.Generic;
 using ecologylab.collections;
 using ecologylab.semantics.metadata;
+using ecologylab.semantics.metadata.builtins.declarations;
 using ecologylab.semantics.metadata.scalar;
+using ecologylab.semantics.metametadata;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
 	[SimplInherit]
-    [SimplDescriptorClasses(new Type[] { typeof(MetadataClassDescriptor), typeof(MetadataFieldDescriptor) })]
-	public class ImageClipping : MediaClipping
+	public class ImageClipping : ImageClippingDeclaration
 	{
-		public ImageClipping()
-		{ }
+
+		public ImageClipping() { }
+
+		public ImageClipping(MetaMetadataCompositeField mmd) : base(mmd) { }
+
 	}
 }
