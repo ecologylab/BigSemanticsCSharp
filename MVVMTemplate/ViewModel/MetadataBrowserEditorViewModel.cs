@@ -9,7 +9,7 @@ using ecologylab.semantics.metametadata;
 
 namespace MVVMTemplate.ViewModel
 {
-    class MetadataBrowserEditorViewModel : INotifyPropertyChanged
+    public class MetadataBrowserEditorViewModel : INotifyPropertyChanged
     {
         private Metadata _metadata;
 
