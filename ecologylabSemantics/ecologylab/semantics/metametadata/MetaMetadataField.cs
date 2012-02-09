@@ -136,9 +136,11 @@ namespace ecologylab.semantics.metametadata
         /// 
         ///  schema.org microdata item_prop name.
         /// </summary>
-	
         [SimplScalar]
 	    private String schemaOrgItemprop;
+
+        [SimplScalar]
+	    private String fieldParserKey;
 
         protected MetadataClassDescriptor metadataClassDescriptor;
 
@@ -355,6 +357,12 @@ namespace ecologylab.semantics.metametadata
 			get{return ignoreInTermVector;}
 			set{ignoreInTermVector = value;}
 		}
+
+	    public String FieldParserKey
+	    {
+            get { return fieldParserKey; }
+            set { fieldParserKey = value; }
+	    }
 
         public Boolean HasChildren()
         {
