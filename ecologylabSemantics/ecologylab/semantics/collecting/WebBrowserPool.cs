@@ -45,7 +45,9 @@ namespace ecologylab.semantics.collecting
         static WebBrowserPool()
         {
             _mmdDomHelperJSString = File.ReadAllText(jsPath + "simplDeserializer.js");
+            _mmdDomHelperJSString += File.ReadAllText(jsPath + "fieldParsers.js");
             _mmdDomHelperJSString += File.ReadAllText(jsPath + "mmdDomHelper.js");
+
 
         }
 
