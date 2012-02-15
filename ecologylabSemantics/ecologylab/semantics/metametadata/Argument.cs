@@ -19,7 +19,7 @@ namespace ecologylab.semantics.metametadata
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	[SimplTag("arg")]
-	public class Argument : ElementState, IMappable
+	public class Argument : ElementState, IMappable<String>
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -84,7 +84,7 @@ namespace ecologylab.semantics.metametadata
 			set{isNested = value;}
 		}
 
-		public object Key()
+		public String Key()
 		{
             return name;
 		}

@@ -77,12 +77,12 @@ namespace ecologylab.semantics.metametadata
         return null;
     }
 
-    protected override void InheritMetaMetadataHelper()
+    protected override bool InheritMetaMetadataHelper()
     {
       /*
-   * the childComposite should hide all complexity between collection fields and composite fields,
-   * through hooks when necessary.
-   */
+       * the childComposite should hide all complexity between collection fields and composite fields,
+       * through hooks when necessary.
+       */
       int typeCode = this.GetFieldType();
       switch (typeCode)
       {
@@ -116,7 +116,9 @@ namespace ecologylab.semantics.metametadata
               InheritAttributes(inheritedField);
             break;
           }
-      }
+        }
+
+        return true;
     }
 
 
@@ -188,7 +190,7 @@ namespace ecologylab.semantics.metametadata
       MetaMetadataCollectionField thisField = this;
       var composite = new MetaMetadataCompositeField(childCompositeName, Kids);
       
-        composite.TypeChangeListener += (newType) => this.childType = newType;
+      composite.TypeChangeListener += (newType) => this.childType = newType;
       composite.ExtendsChangeListener += (newExtends) => this.childExtends = newExtends;
       composite.TagChangeListener += (newTag) => this.childTag = newTag;
 

@@ -22,7 +22,7 @@ namespace ecologylab.semantics.metametadata
 	
 	[SimplInherit]
     [SimplDescriptorClasses(new[] { typeof(MetaMetadataClassDescriptor), typeof(MetaMetadataFieldDescriptor) })]
-	public class MetaMetadata : MetaMetadataCompositeField, IMappable
+	public class MetaMetadata : MetaMetadataCompositeField, IMappable<String>
 	{
 	    private const string ROOT_MMD_NAME = "metadata";
 
@@ -67,6 +67,7 @@ namespace ecologylab.semantics.metametadata
         private List<UrlGenerator> urlGenerators;
 
         [SimplMap("link_with")]
+        [SimplNoWrap]
         private Dictionary<String, LinkWith> linkWiths;
 
         [SimplScalar]
@@ -141,7 +142,7 @@ namespace ecologylab.semantics.metametadata
 
 	    #endregion
 
-	    object IMappable.Key()
+	    String IMappable<String>.Key()
         {
             return Name;
         }
@@ -158,28 +159,26 @@ namespace ecologylab.semantics.metametadata
 		    return false;
 	    }
 
-        protected override void InheritMetaMetadataHelper()
+        protected override bool InheritMetaMetadataHelper()
         {
-//		debug("processing mmd: " + this);
-		
-		    // init each field's declaringMmd to this (some of them may change during inheritance)
+            // init each field's declaringMmd to this (some of them may change during inheritance)
 		    foreach (MetaMetadataField field in Kids.Values)
 			    field.DeclaringMmd = this;
             
-            base.InheritMetaMetadataHelper();
+            return base.InheritMetaMetadataHelper();
         }
 
-        protected override void InheritFromInheritedMmd(MetaMetadata inheritedMmd)
+        protected override void InheritNonFieldElements(MetaMetadata inheritedMmd)
         {
-            base.InheritFromInheritedMmd(inheritedMmd);
+            base.InheritNonFieldElements(inheritedMmd);
             InheritAttributes(inheritedMmd);
             
             //InheritSemanticActions(inheritedMmd);
         }
 
-        protected override void InheritMetaMetadataFrom(MetaMetadataRepository repository, MetaMetadataCompositeField inheritedStructure)
+        protected override void InheritFrom(MetaMetadataRepository repository, MetaMetadataCompositeField inheritedStructure)
 	    {
-		    base.InheritMetaMetadataFrom(repository, inheritedStructure);
+		    base.InheritFrom(repository, inheritedStructure);
 		
 		    // for fields referring to this meta-metadata type
 		    // need to do inheritMetaMetadata() again after copying fields from this.getInheritedMmd()

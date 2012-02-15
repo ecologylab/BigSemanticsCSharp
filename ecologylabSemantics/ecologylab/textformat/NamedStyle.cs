@@ -19,7 +19,7 @@ namespace ecologylab.textformat
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	public class NamedStyle : ElementState, IMappable
+	public class NamedStyle : ElementState, IMappable<String>
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -108,7 +108,7 @@ namespace ecologylab.textformat
 			set{strokeStyle = value;}
 		}
 
-		public object Key()
+		public String Key()
 		{
             return name;
 		}

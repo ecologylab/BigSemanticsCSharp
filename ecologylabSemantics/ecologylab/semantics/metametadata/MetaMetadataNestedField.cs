@@ -58,7 +58,20 @@ namespace ecologylab.semantics.metametadata
          */
         private bool _isNewMetadataClass;
 
-        private bool mmdScopeTraversed;
+        private bool    mmdScopeTraversed;
+        
+        protected bool  inheritMetaMetadataFinished = false;
+        private bool    _inheritInProcess;
+
+        /*
+         * Delegate called when inheritance is finished. Used when we have cycles, and must wait for until inheritance is finished.
+         * e.g. References in ScholaryArticle.
+         */
+        public delegate void InheritFinishedEventHandler(MetaMetadataNestedField sender, EventArgs e);
+
+        public event InheritFinishedEventHandler InheritFinished;
+
+        protected Stack<MetaMetadataNestedField> _waitingToInheritFrom;
 
         protected MetaMetadataNestedField()
         {
@@ -68,18 +81,36 @@ namespace ecologylab.semantics.metametadata
 
         public void InheritMetaMetadata()
         {
-            if (inheritFinished || inheritInProcess) return;
+            if (inheritFinished || _inheritInProcess) return;
 
             //Debug.WriteLine("inheriting " + this);
-            inheritInProcess = true;
-            InheritMetaMetadataHelper();
-            this.SortForDisplay();
-            inheritInProcess = false;
-            inheritFinished = true;
-            //inheritMetaMetadataFinished = true;
+            _inheritInProcess = true;
+            if(InheritMetaMetadataHelper())
+                FinishInheritance();
         }
 
-        protected abstract void InheritMetaMetadataHelper();
+        protected void FinishInheritance()
+        {
+            this.SortForDisplay();
+
+            _inheritInProcess = false;
+            inheritFinished = true;
+
+            if (InheritFinished != null)
+                InheritFinished(this, EventArgs.Empty);
+        }
+
+        public void AddInheritanceFinishHandler(MetaMetadataNestedField inheritingField, InheritFinishedEventHandler eventHandler)
+        {
+            if (_waitingToInheritFrom == null)
+                _waitingToInheritFrom = new Stack<MetaMetadataNestedField>();
+
+            _waitingToInheritFrom.Push(inheritingField);
+
+            inheritingField.InheritFinished += eventHandler;
+        }
+
+        protected abstract bool InheritMetaMetadataHelper();
 
         public String PackageName
         {
@@ -344,7 +375,7 @@ namespace ecologylab.semantics.metametadata
         public void ClearInheritFinishedOrInProgressFlag()
         {
             inheritFinished = false;
-            inheritInProcess = false;
+            _inheritInProcess = false;
         }
 
         /// <summary>
@@ -362,6 +393,12 @@ namespace ecologylab.semantics.metametadata
             {
                 return !string.IsNullOrEmpty(polymorphicScope) || !string.IsNullOrEmpty(polymorphicClasses); 
             }
+        }
+
+        public Boolean InheritInProcess
+        {
+            get { return this._inheritInProcess; }
+            set { this._inheritInProcess = value; }
         }
 
 }

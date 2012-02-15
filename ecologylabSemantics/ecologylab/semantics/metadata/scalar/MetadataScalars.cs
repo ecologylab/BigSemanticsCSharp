@@ -59,6 +59,21 @@ namespace ecologylab.semantics.metadata.scalar
         public MetadataString(object value):base(value)
         {}
 
+        /**
+	     * Check if a string is not null and not equal to {@code MetadataFieldAccessor.NULL}
+	     * @param valueString - string to check
+	     * @return True if not null and not equal to MetadataFieldAccessor.NULL, false otherwise.
+	     */
+	    public static bool IsNotNullValue(String valueString)
+	    {
+		    return (valueString != null && !valueString.Equals(MetadataFieldDescriptor.Null) );
+	    }
+	
+	    public static bool IsNotNullAndEmptyValue(String valueString)
+	    {
+		    return IsNotNullValue(valueString) && !"".Equals(valueString.Trim());
+	    }
+
     }
     public class MetadataInteger : MetadataScalarBase<int>
     {

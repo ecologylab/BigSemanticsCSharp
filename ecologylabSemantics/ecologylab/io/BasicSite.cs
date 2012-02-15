@@ -19,7 +19,7 @@ namespace ecologylab.io
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	[SimplTag("site")]
-	public class BasicSite : ElementState, IMappable
+	public class BasicSite : ElementState, IMappable<String>
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -60,7 +60,7 @@ namespace ecologylab.io
 			set{ignoreSemanticBoost = value;}
 		}
 
-		public object Key()
+		public String Key()
 		{
             return domain;
 		}

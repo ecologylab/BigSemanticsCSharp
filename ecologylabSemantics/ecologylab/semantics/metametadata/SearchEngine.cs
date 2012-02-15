@@ -18,7 +18,7 @@ namespace ecologylab.semantics.metametadata
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	public class SearchEngine : ElementState, IMappable
+	public class SearchEngine : ElementState, IMappable<String>
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -83,7 +83,7 @@ namespace ecologylab.semantics.metametadata
 			set{startString = value;}
 		}
 
-		public object Key()
+		public String Key()
 		{
             return name;
 		}

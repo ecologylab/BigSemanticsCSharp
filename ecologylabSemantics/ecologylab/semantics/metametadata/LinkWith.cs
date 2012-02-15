@@ -10,6 +10,7 @@
 using Simpl.Fundamental.Generic;
 using Simpl.Serialization;
 using Simpl.Serialization.Attributes;
+using Simpl.Serialization.Types.Element;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ using ecologylab.serialization;
 namespace ecologylab.semantics.metametadata 
 {
 	[SimplInherit]
-	public class LinkWith : ElementState
+	public class LinkWith : ElementState, IMappable<String>
 	{
 		[SimplScalar]
 		[SimplHints(new Hint[] {Hint.XmlAttribute})]
@@ -43,5 +44,14 @@ namespace ecologylab.semantics.metametadata
 			get{return byId;}
 			set{byId = value;}
 		}
+
+	    #region Implementation of IMappable
+
+	    public String Key()
+	    {
+	        return Name;
+	    }
+
+	    #endregion
 	}
 }

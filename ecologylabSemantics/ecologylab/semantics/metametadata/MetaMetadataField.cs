@@ -24,7 +24,7 @@ namespace ecologylab.semantics.metametadata
 {
 	[SimplInherit]
     [SimplDescriptorClasses(new[] { typeof(MetaMetadataClassDescriptor), typeof(MetaMetadataFieldDescriptor)})]
-	public abstract class MetaMetadataField : ElementState, IMappable, IEnumerable<MetaMetadataField>
+	public abstract class MetaMetadataField : ElementState, IMappable<String>, IEnumerable<MetaMetadataField>
     {
         #region Variables
 
@@ -144,10 +144,7 @@ namespace ecologylab.semantics.metametadata
 
         protected MetadataClassDescriptor metadataClassDescriptor;
 
-        protected bool inheritMetaMetadataFinished = false;
-	    protected bool inheritInProcess;
-
-        private bool fieldsSortedForDisplay = false;
+	    private bool fieldsSortedForDisplay = false;
 
 	    protected Type metadataClass;
 
@@ -385,7 +382,7 @@ namespace ecologylab.semantics.metametadata
         }
 
         #endregion
-        public object Key()
+        public String Key()
 		{
             return name;
 		}

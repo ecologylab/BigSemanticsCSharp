@@ -18,7 +18,7 @@ namespace ecologylab.net
 	/// <summary>
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
-	public class UserAgent : ElementState, IMappable
+	public class UserAgent : ElementState, IMappable<String>
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -61,7 +61,7 @@ namespace ecologylab.net
 			set{defaultAgent = value;}
 		}
 
-		public object Key()
+		public String Key()
 		{
             return Name;
 		}

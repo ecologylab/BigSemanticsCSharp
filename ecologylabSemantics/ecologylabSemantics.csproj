@@ -124,6 +124,7 @@
     <Compile Include="ecologylab\semantics\metadata\builtins\ImageClipping.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\MediaClipping.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\TextClipping.cs" />
+    <Compile Include="ecologylab\semantics\metadata\IMetadata.cs" />
     <Compile Include="ecologylab\semantics\metadata\MmDontInherit.cs" />
     <Compile Include="ecologylab\semantics\metadata\scalar\types\MetadataDoubleScalarType.cs" />
     <Compile Include="ecologylab\semantics\metadata\scalar\types\MetadataScalarTypeType.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="ecologylab\semantics\metadata\builtins\Image.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\MetadataBuiltinsTranslationScope.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MMSelectorType.cs" />
+    <Compile Include="ecologylab\semantics\model\text\ITermVector.cs" />
     <Compile Include="ecologylab\semantics\namesandnums\DocumentParserTagNames.cs" />
     <Compile Include="ecologylab\semantics\metadata\Metadata.cs" />
     <Compile Include="ecologylab\semantics\metadata\MetadataClassDescriptor.cs" />

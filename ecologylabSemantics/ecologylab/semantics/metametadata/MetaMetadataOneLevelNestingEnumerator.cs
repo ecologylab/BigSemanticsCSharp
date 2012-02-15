@@ -9,18 +9,18 @@ namespace ecologylab.semantics.metametadata
 {
     public class MetaMetadataOneLevelNestingEnumerator : OneLevelNestingEnumerator<MetaMetadataField, MetaMetadataField>
     {
-        private IEnumerator<Metadata> _nextMetadatas 	= null;
+        private readonly IEnumerator<Metadata> _nextMetadatas 	= null;
 	
-	    private Metadata _currentMetadata 				= null;
+	    private Metadata _currentMetadata 				        = null;
 	
-	    public MetaMetadataOneLevelNestingEnumerator(MetaMetadataField firstObject, Metadata firstMetadata, List<Metadata> mixinMetadatas) : base(firstObject, createMixinCollectionIterator(mixinMetadatas))
+	    public MetaMetadataOneLevelNestingEnumerator(MetaMetadataField firstObject, Metadata firstMetadata) : base(firstObject, CreateMixinCollectionIterator(firstMetadata.Mixins))
         {
-		    _currentMetadata = firstMetadata;
-		    if (mixinMetadatas != null)
-			    _nextMetadatas = mixinMetadatas.GetEnumerator();
+            _currentMetadata = firstMetadata;
+            if (firstMetadata.Mixins != null)
+		        _nextMetadatas = firstMetadata.Mixins.GetEnumerator();
 	    }
 
-	    public bool MoveNext() 
+	    public override bool MoveNext() 
 	    {
             if (base.MoveNext())
                 return true;
@@ -42,7 +42,7 @@ namespace ecologylab.semantics.metametadata
             get { return _currentMetadata; }
 	    }
 	
-	    private static IEnumerator<MetaMetadataField> createMixinCollectionIterator(List<Metadata> mixinMetadatas)
+	    private static IEnumerator<MetaMetadataField> CreateMixinCollectionIterator(IEnumerable<Metadata> mixinMetadatas)
 	    {
 		    List<MetaMetadataCompositeField> mixinMetaMetadatas = null;
 		    if (mixinMetadatas != null)

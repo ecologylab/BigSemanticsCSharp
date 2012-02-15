@@ -20,7 +20,7 @@ namespace ecologylab.semantics.metametadata
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	[SimplInherit]
-	public class MetaMetadataSelector : ElementState, IMappable
+	public class MetaMetadataSelector : ElementState, IMappable<String>
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -140,7 +140,7 @@ namespace ecologylab.semantics.metametadata
 		}
         #endregion
         
-        public object Key()
+        public String Key()
 		{
             return name;
 		}

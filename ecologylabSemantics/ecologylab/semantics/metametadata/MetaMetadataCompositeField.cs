@@ -75,8 +75,9 @@ namespace ecologylab.semantics.metametadata
                 return null;
         }
 
-        protected override void InheritMetaMetadataHelper()
+        protected override bool InheritMetaMetadataHelper()
         {
+            bool inhertedIsInheriting = false;
             // init
             MetaMetadataRepository repository = Repository;
 
@@ -84,26 +85,77 @@ namespace ecologylab.semantics.metametadata
             MetaMetadata inheritedMmd = FindOrGenerateInheritedMetaMetadata(repository);
             if (inheritedMmd != null)
             {
-                inheritedMmd.InheritMetaMetadata();
-                InheritFromInheritedMmd(inheritedMmd);
-                InheritMetaMetadataFrom(repository, inheritedMmd);
+                if (inheritedMmd.InheritInProcess)
+                {
+                    inhertedIsInheriting = true;
+                    //inheritedMmd.InheritFinished += (sender, e) => InheritFromTopLevelMetaMetadata(inheritedMmd, repository);
+                    this.AddInheritanceFinishHandler(inheritedMmd, InheritMetaMetadataFinished);
+                }
+                else
+                {
+                    inheritedMmd.InheritMetaMetadata();
+                    InheritFromTopLevelMetaMetadata(inheritedMmd, repository);
+                }
             }
             MetaMetadataCompositeField inheritedField = (MetaMetadataCompositeField) InheritedField;
             if (inheritedField != null)
             {
                 inheritedField.Repository = repository;
-                inheritedField.InheritMetaMetadata();
-                InheritMetaMetadataFrom(repository, inheritedField);
+                if (inheritedField.InheritInProcess)
+                {
+                    inhertedIsInheriting = true;
+                    //inheritedField.InheritFinished += (sender, e) => InheritFrom(repository, inheritedField);
+                    this.AddInheritanceFinishHandler(inheritedField, InheritFieldFinished);
+                }
+                else
+                {
+                    inheritedField.InheritMetaMetadata();
+                    InheritFromCompositeField(inheritedField, repository);
+                }
             }
 
             // for the root meta-metadata, this may happend
             if (inheritedMmd == null && inheritedField == null)
-                InheritMetaMetadataFrom(repository, null);
+                InheritFrom(repository, null);
+
+            return !inhertedIsInheriting;
+
         }
 
-        protected virtual void InheritMetaMetadataFrom(MetaMetadataRepository repository,
+        private void InheritFieldFinished(MetaMetadataNestedField sender, EventArgs e)
+        {
+            MetaMetadataCompositeField inheritedField = (MetaMetadataCompositeField) _waitingToInheritFrom.Pop();
+            InheritFromCompositeField(inheritedField, Repository);
+
+            if (_waitingToInheritFrom.Count == 0)
+                FinishInheritance();
+        }
+
+        private void InheritMetaMetadataFinished(MetaMetadataNestedField sender, EventArgs e)
+        {
+            MetaMetadata inheritedMmd = (MetaMetadata) _waitingToInheritFrom.Pop();
+            InheritFromTopLevelMetaMetadata(inheritedMmd, Repository);
+
+            if (_waitingToInheritFrom.Count == 0)
+                FinishInheritance();
+        }
+
+        private void InheritFromCompositeField(MetaMetadataCompositeField inheritedField, MetaMetadataRepository repository)
+        {
+            
+            InheritFrom(repository, inheritedField);
+        }
+
+        private void InheritFromTopLevelMetaMetadata(MetaMetadata inheritedMmd, MetaMetadataRepository repository)
+        {
+            InheritNonFieldElements(inheritedMmd);
+            InheritFrom(repository, inheritedMmd);
+        }
+
+        protected virtual void InheritFrom(MetaMetadataRepository repository,
                                                        MetaMetadataCompositeField inheritedStructure)
         {
+            
             // init nested fields inside this
             var subfields = Kids.Values;
             foreach (MetaMetadataField f in subfields)
@@ -200,9 +252,11 @@ namespace ecologylab.semantics.metametadata
                     }
                 }
             }
+
+            
         }
 
-        protected virtual void InheritFromInheritedMmd(MetaMetadata inheritedMmd)
+        protected virtual void InheritNonFieldElements(MetaMetadata inheritedMmd)
         {
             MmdScope = new MultiAncestorScope<MetaMetadata>(MmdScope, inheritedMmd.MmdScope);
         }
