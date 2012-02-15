@@ -66,7 +66,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ViewModel\MetadataBrowserEditorViewModel.cs" />
+    <Compile Include="ViewModel\MetadataCollectionCompositeItemViewModel.cs" />
+    <Compile Include="ViewModel\MetadataViewModel.cs" />
     <Compile Include="ViewModel\MetadataCollectionFieldViewModel.cs" />
     <Compile Include="ViewModel\MetadataCompositeFieldViewModel.cs" />
     <Compile Include="ViewModel\MetadataFieldViewModel.cs" />
@@ -76,9 +77,19 @@
     <Compile Include="View\AmazonProductView.xaml.cs">
       <DependentUpon>AmazonProductView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\CollectionCompositeItemView.xaml.cs">
+      <DependentUpon>CollectionCompositeItemView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Commands.cs" />
+    <Compile Include="View\ExpandableViewBase.xaml.cs">
+      <DependentUpon>ExpandableViewBase.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ExpandCollapseButton.xaml.cs">
       <DependentUpon>ExpandCollapseButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MetadataCollectionView.cs" />
+    <Compile Include="View\MetadataFieldLabelView.xaml.cs">
+      <DependentUpon>MetadataFieldLabelView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\IExpandable.cs" />
     <Compile Include="View\MetadataBrowserEditorView.xaml.cs">
@@ -87,15 +98,10 @@
     <Compile Include="View\MetadataCollectionFieldView.xaml.cs">
       <DependentUpon>MetadataCollectionFieldView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MetadataCollectionView.xaml.cs">
-      <DependentUpon>MetadataCollectionView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\MetadataCompositeFieldView.xaml.cs">
       <DependentUpon>MetadataCompositeFieldView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MetadataView.xaml.cs">
-      <DependentUpon>MetadataView.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="View\MetadataView.cs" />
     <Compile Include="View\MetadataFieldViewBase.cs" />
     <Compile Include="View\MetadataScalarFieldTextValueView.xaml.cs">
       <DependentUpon>MetadataScalarFieldTextValueView.xaml</DependentUpon>
@@ -103,10 +109,8 @@
     <Compile Include="View\MetadataScalarFieldTextView.xaml.cs">
       <DependentUpon>MetadataScalarFieldTextView.xaml</DependentUpon>
     </Compile>
-    <Page Include="TemplatedMetadataBrowserEditorView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+    <Compile Include="View\MetadataViewBase.cs" />
+    <Compile Include="View\RectangleConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -115,22 +119,27 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TemplatedMetadataBrowserEditorView.xaml.cs">
-      <DependentUpon>TemplatedMetadataBrowserEditorView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MetadataField.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="View\AmazonProductView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\CollectionCompositeItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ExpandableViewBase.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ExpandCollapseButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MetadataFieldLabelView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -142,17 +151,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MetadataCollectionView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\MetadataCompositeFieldView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\MetadataView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MetadataScalarFieldTextValueView.xaml">
       <SubType>Designer</SubType>
@@ -164,10 +165,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MetadataField.xaml.cs">
-      <DependentUpon>MetadataField.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MetadataViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
