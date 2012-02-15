@@ -10,7 +10,7 @@ using MVVMTemplate.ViewModel;
 
 namespace MVVMTemplate.View
 {
-    public abstract class MetadataFieldViewBase : UserControl
+    public abstract class MetadataFieldViewBase : MetadataViewBase
     {
 
         public MetadataFieldViewBase() : base()
@@ -18,9 +18,9 @@ namespace MVVMTemplate.View
             this.Loaded += new RoutedEventHandler(MetadataFieldView_Loaded);
         }
 
-         public MetadataFieldViewBase(MetaMetadataField metaMetadataField, Metadata metadata)
+         public MetadataFieldViewBase(MetaMetadataField metaMetadataField, Metadata metadata, int nestedLevel)
         {
-           this.DataContext = CreateViewModel(metaMetadataField, metadata);
+           this.DataContext = CreateViewModel(metaMetadataField, metadata, nestedLevel);
         }
 
         private void MetadataFieldView_Loaded(object sender, RoutedEventArgs e)
@@ -38,6 +38,6 @@ namespace MVVMTemplate.View
         
         public String MetaMetadataFieldName { get; set; }
 
-        protected abstract MetadataViewModelBase CreateViewModel(MetaMetadataField metaMetadataField, Metadata metadata);
+        protected abstract MetadataViewModelBase CreateViewModel(MetaMetadataField metaMetadataField, Metadata metadata, int nestedLevel = 0);
     }
 }

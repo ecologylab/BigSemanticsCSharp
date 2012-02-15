@@ -4,16 +4,23 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:View="clr-namespace:MVVMTemplate.View" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <StackPanel Orientation="Horizontal">
-        <StackPanel Orientation="Horizontal">
-            <View:ExpandCollapseButton VerticalAlignment="Top" CommandTarget="{Binding ElementName=FieldValue}"/>
-            <TextBlock x:Name="FieldLabel" VerticalAlignment="Top" Text="{Binding Path=FieldName}" TextAlignment="Right" Height="30" Padding="10 10 10 10"/>
-        </StackPanel>
-        <View:MetadataCollectionView x:Name="FieldValue" Height="Auto" Collection="{Binding Path=FieldValue}" Background="Lavender">
+    <Grid x:Name="LayoutRoot">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition  />
+        </Grid.ColumnDefinitions>
+        <View:MetadataFieldLabelView x:Name="FieldLabel" 
+                                     Grid.Column="0"
+                                     Style="{DynamicResource ResourceKey=MetadataFieldLabel}"/>
+        <View:MetadataCollectionView x:Name="FieldValue" 
+                                     Height="Auto" 
+                                     Collection="{Binding Path=FieldValue}" 
+                                     Grid.Column="1"
+                                     Style="{DynamicResource ResourceKey=MetadataNestedFieldValue}">
             <View:MetadataCollectionView.CommandBindings>
                 <CommandBinding Command="View:Commands.ExpandCollapse"
                                 Executed="CommandBinding_Executed"/>
             </View:MetadataCollectionView.CommandBindings>
         </View:MetadataCollectionView>
-    </StackPanel>
+    </Grid>
 </View:MetadataFieldViewBase>

@@ -27,14 +27,19 @@ namespace MVVMTemplate.View
             InitializeComponent();
         }
 
-        public MetadataScalarFieldTextView(MetaMetadataScalarField metaMetadataField, Metadata metadata) : base(metaMetadataField, metadata)
+        public MetadataScalarFieldTextView(MetaMetadataScalarField metaMetadataField, Metadata metadata) : base(metaMetadataField, metadata, 0)
         {
             InitializeComponent();
         }
 
-        protected override MetadataViewModelBase CreateViewModel(MetaMetadataField metaMetadataField, Metadata metadata)
+        protected override MetadataViewModelBase CreateViewModel(MetaMetadataField metaMetadataField, Metadata metadata, int nestedLevel = 0)
         {
            return new MetadataScalarFieldViewModel((MetaMetadataScalarField) metaMetadataField, metadata);
+        }
+
+        public override Grid LayoutGrid
+        {
+            get { return LayoutRoot; }
         }
     }
 }

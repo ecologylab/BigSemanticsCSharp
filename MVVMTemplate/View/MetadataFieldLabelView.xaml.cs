@@ -11,20 +11,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ecologylab.semantics.generated.library.products;
-using MVVMTemplate.ViewModel;
 
 namespace MVVMTemplate.View
 {
     /// <summary>
-    /// Interaction logic for AmazonProductView.xaml
+    /// Interaction logic for MetadataFieldLabelView.xaml
     /// </summary>
-    public partial class AmazonProductView : UserControl
+    public partial class MetadataFieldLabelView : UserControl
     {
-        public AmazonProductView(AmazonProduct amazonProduct)
+        public MetadataFieldLabelView()
         {
-            this.DataContext = new MetadataViewModel(amazonProduct);
             InitializeComponent();
-        }
+        } 
     }
 }

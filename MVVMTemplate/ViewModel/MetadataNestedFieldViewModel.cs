@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,11 @@ using ecologylab.semantics.metametadata;
 
 namespace MVVMTemplate.ViewModel
 {
-    public class MetadataNestedFieldViewModel<M> : MetadataFieldViewModel<M> where M : MetaMetadataNestedField
+    public abstract class MetadataNestedFieldViewModel<TM> : MetadataFieldViewModel<TM> where TM : MetaMetadataNestedField
     {
-        public MetadataNestedFieldViewModel(M metaMetadataField, Metadata metadata) : base(metaMetadataField, metadata)
+        public MetadataNestedFieldViewModel(TM metaMetadataField, Metadata metadata, int nestedLevel) : base(metaMetadataField, metadata)
         {
+            NestedLevel = nestedLevel;
         }
 
         protected override Binding CreateBinding(Metadata metadata, string mmdFieldName)
@@ -22,6 +24,14 @@ namespace MVVMTemplate.ViewModel
                     Source = metadata,
                     Path = new PropertyPath(mmdFieldName),
                 };
+        }
+
+        public static readonly DependencyProperty NestedLevelProperty = DependencyProperty.Register("NestedLevel", typeof(int), typeof(MetadataFieldViewModel<TM>));
+
+        public int NestedLevel
+        {
+            get { return (int) GetValue(NestedLevelProperty); }
+            set { SetValue(NestedLevelProperty, value); }
         }
     }
 }

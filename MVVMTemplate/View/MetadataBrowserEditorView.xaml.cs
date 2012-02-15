@@ -27,11 +27,13 @@ namespace MVVMTemplate.View
         {
             InitializeComponent();
 
-            MetadataBrowserEditorViewModel viewModel            = new MetadataBrowserEditorViewModel(metadata);
+            MetadataViewModelBase viewModel            = new MetadataViewModel(metadata);
             this.DataContext                                    = viewModel;
 
 //            MetaMetadataOneLevelNestingEnumerator enumerator    = viewModel.DisplayedFields;
 //            this.FieldsView.BuildFields(enumerator);
+
+           
         }
 
     }

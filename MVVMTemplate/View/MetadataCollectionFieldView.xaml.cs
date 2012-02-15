@@ -25,16 +25,23 @@ namespace MVVMTemplate.View
         public MetadataCollectionFieldView() : base()
         {
             InitializeComponent();
+            FieldLabel.ExpandButton.CommandTarget = FieldValue;
         }
 
-        public MetadataCollectionFieldView(MetaMetadataCollectionField metaMetadataCompositeField, Metadata metadata) : base(metaMetadataCompositeField, metadata)
+        public MetadataCollectionFieldView(MetaMetadataCollectionField metaMetadataCompositeField, Metadata metadata, int nestedLevel) : base(metaMetadataCompositeField, metadata, nestedLevel)
         {
             InitializeComponent();
+            FieldLabel.ExpandButton.CommandTarget = FieldValue;
         }
 
-        protected override MetadataViewModelBase CreateViewModel(MetaMetadataField metaMetadataField, Metadata metadata)
+        protected override MetadataViewModelBase CreateViewModel(MetaMetadataField metaMetadataField, Metadata metadata, int nestedLevel = 0)
         {
-            return new MetadataCollectionFieldViewModel((MetaMetadataCollectionField) metaMetadataField, metadata);
+            return new MetadataCollectionFieldViewModel((MetaMetadataCollectionField) metaMetadataField, metadata, nestedLevel);
+        }
+
+        public override Grid LayoutGrid
+        {
+            get { return LayoutRoot; }
         }
 
         private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)

@@ -15,21 +15,34 @@ namespace MVVMTemplate.View
         public MetadataCompositeFieldView() : base()
         {
             InitializeComponent();
+            this.FieldLabel.ExpandButton.CommandTarget = this.FieldValue;
         }
 
-        public MetadataCompositeFieldView(MetaMetadataCompositeField metaMetadataCompositeField, Metadata metadata) : base(metaMetadataCompositeField, metadata)
+        public MetadataCompositeFieldView(MetaMetadataCompositeField metaMetadataCompositeField, Metadata metadata, int nestedLevel) : base(metaMetadataCompositeField, metadata, nestedLevel)
         {
             InitializeComponent();
+            this.FieldLabel.ExpandButton.CommandTarget = this.FieldValue;
         }
 
-        protected override MetadataViewModelBase CreateViewModel(MetaMetadataField metaMetadataField, Metadata metadata)
+        protected override MetadataViewModelBase CreateViewModel(MetaMetadataField metaMetadataField, Metadata metadata, int nestedLevel = 0)
         {
-            return new MetadataCompositeFieldViewModel((MetaMetadataCompositeField) metaMetadataField, metadata);
+            return new MetadataCompositeFieldViewModel((MetaMetadataCompositeField) metaMetadataField, metadata, nestedLevel);
+        }
+
+        public override Grid LayoutGrid
+        {
+            get { return LayoutRoot; }
         }
 
         private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
            ((MetadataView) sender).ToggleExpand();
+        }
+
+        private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            MetadataView metadataView = ((MetadataView) sender);
+            e.CanExecute = true;
         }
     }
 }

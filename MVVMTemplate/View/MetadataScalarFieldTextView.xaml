@@ -4,8 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:View="clr-namespace:MVVMTemplate.View" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <StackPanel Orientation="Horizontal">
-        <TextBlock x:Name="FieldLabel" Text="{Binding Path=FieldName}" TextAlignment="Right" Width="100" Padding="10 10 10 10"/>
-        <View:MetadataScalarFieldTextValueView x:Name="FieldValue" Width="600" Padding="10 10 10 10" />   
-    </StackPanel>
+    <Grid x:Name="LayoutRoot">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <View:MetadataFieldLabelView x:Name="FieldLabel" 
+                                     Grid.Column="0" 
+                                     Style="{DynamicResource ResourceKey=MetadataFieldLabel}"/>
+        <View:MetadataScalarFieldTextValueView x:Name="FieldValue" 
+                                               Grid.Column="1"
+                                               Style="{DynamicResource ResourceKey=MetadtaScalarFieldValue}"/>   
+    </Grid>
 </View:MetadataFieldViewBase>

@@ -18,23 +18,29 @@ using MVVMTemplate.ViewModel;
 namespace MVVMTemplate.View
 {
     /// <summary>
-    /// Interaction logic for MetadataScalarFieldTextValueView.xaml
+    /// Interaction logic for CollectionCompositeItemView.xaml
     /// </summary>
-    public partial class MetadataScalarFieldTextValueView : MetadataFieldViewBase
+    public partial class CollectionCompositeItemView : MetadataViewBase
     {
-        public MetadataScalarFieldTextValueView()
+       
+        public CollectionCompositeItemView(MetaMetadataCompositeField metaMetadataCompositeField, Metadata metadata, int nestedLevel)
         {
+            // is the right meta-metadata stored in metadata, or do we need to pass it in here?
+            this.DataContext = new MetadataViewModel(metadata);
+            
             InitializeComponent();
+            this.FieldLabel.ExpandButton.CommandTarget = this.FieldValue;
         }
 
-        protected override MetadataViewModelBase CreateViewModel(MetaMetadataField metaMetadataField, Metadata metadata, int nestedLevel)
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            return new MetadataScalarFieldViewModel((MetaMetadataScalarField) metaMetadataField, metadata);
+           ((MetadataView) sender).ToggleExpand();
         }
 
         public override Grid LayoutGrid
         {
-            get { return null; }
+            get { return LayoutRoot; }
         }
+
     }
 }

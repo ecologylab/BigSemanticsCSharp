@@ -9,10 +9,17 @@ using ecologylab.semantics.metametadata;
 
 namespace MVVMTemplate.ViewModel
 {
-    class MetadataCompositeFieldViewModel : MetadataNestedFieldViewModel<MetaMetadataCompositeField>
+    public class MetadataCompositeFieldViewModel : MetadataNestedFieldViewModel<MetaMetadataCompositeField>
     {
-        public MetadataCompositeFieldViewModel(MetaMetadataCompositeField metaMetadataField, Metadata metadata) : base(metaMetadataField, metadata)
+        public MetadataCompositeFieldViewModel(MetaMetadataCompositeField metaMetadataField, Metadata metadata, int nestedLevel) : base(metaMetadataField, metadata, nestedLevel)
         {
         }
+
+        public override bool MultipleVisibleFields
+        {
+            get { return Metadata.NumberOfVisibleFields() > 1; }
+        }
+
+        
     }
 }

@@ -9,7 +9,7 @@ using ecologylab.semantics.metametadata;
 
 namespace MVVMTemplate.ViewModel
 {
-    class MetadataScalarFieldViewModel : MetadataFieldViewModel<MetaMetadataScalarField>
+    public class MetadataScalarFieldViewModel : MetadataFieldViewModel<MetaMetadataScalarField>
     {
         public MetadataScalarFieldViewModel(MetaMetadataScalarField metaMetadataField, Metadata metadata ) : base(metaMetadataField, metadata)
         {
@@ -24,5 +24,14 @@ namespace MVVMTemplate.ViewModel
                     Path = new PropertyPath(mmdFieldName + ".Value"),
                 };
         }
+
+        #region Overrides of MetadataViewModelBase
+
+        public override bool MultipleVisibleFields
+        {
+            get { return false; }
+        }
+
+        #endregion
     }
 }

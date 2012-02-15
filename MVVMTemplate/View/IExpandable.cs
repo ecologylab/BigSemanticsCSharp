@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace MVVMTemplate.View
 {
@@ -12,7 +14,8 @@ namespace MVVMTemplate.View
         void Collapse();
         void ToggleExpand();
 
-        UIElement ExpandAffordance { get; set; }
-        bool IsExpanded { get; set; }
+        bool        IsExpanded { get; set; }
+        IEnumerator Enumerator { get; set; }
+
     }
 }
