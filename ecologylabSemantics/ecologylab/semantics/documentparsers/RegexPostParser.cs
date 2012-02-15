@@ -12,7 +12,7 @@ namespace ecologylab.semantics.documentparsers
 {
   public class RegexPostParser : DocumentParser
   {
-      public override async Task<Document> Parse()
+      public override void Parse()
       {
           throw new NotImplementedException();
       }

@@ -113,9 +113,8 @@ namespace ecologylab.semantics.collecting
             Dispatcher.Run();
         }
 
-        
 
-        private WebView Acquire()
+        public WebView Acquire()
         {
             lock (_poolLock)
             {
@@ -184,20 +183,13 @@ namespace ecologylab.semantics.collecting
         /// 
         /// </summary>
         /// <param name="closure"></param>
-        public async void ExtractMetadata(DocumentClosure closure)
+        public void ExtractMetadata(DocumentClosure closure)
         {
             Console.WriteLine("Extractor running on thread: " + Thread.CurrentThread.ManagedThreadId);
 
-            ParsedUri puri = closure.PURLConnection.ResponsePURL;
-            TaskCompletionSource<Document> tcs = closure.TaskCompletionSource;
-            WebView webView = Acquire();
-            WebViewParser parser = new WebViewParser(webView, SemanticsSessionScope, puri);
+            WebViewParser parser = new WebViewParser(closure);
 
-            //Technically this doesn't need to be awaited on. 
-            //The extraction handling is happening on the same thread 
-            Document result = await parser.ExtractMetadata();
-            Console.WriteLine(Thread.CurrentThread.Name + ": Setting document result");
-            tcs.TrySetResult(result);
+            parser.Parse();
         }
     }
 }

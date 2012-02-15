@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Threading;
 using Awesomium.Core;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization;
 using Simpl.Serialization.Context;
 using ecologylab.semantics.collecting;
+using ecologylab.semantics.metadata;
 using ecologylab.semantics.metadata.builtins;
 using ecologylab.semantics.metametadata;
 
@@ -21,17 +18,20 @@ namespace ecologylab.semantics.documentparsers
         private readonly WebView _webView;
         private readonly ParsedUri _puri;
         private SemanticsSessionScope SemanticsSessionScope { get; set; }
-        private TaskCompletionSource<Document> _tcs;
-        private TimeSpan EXTRACTION_TIMEOUT = TimeSpan.FromSeconds(200);
+        private readonly DocumentClosure _closure;
+        
+        private TimeSpan EXTRACTION_TIMEOUT = TimeSpan.FromSeconds(20);
         private DispatcherTimer _requestTimedOut;
-        public WebViewParser(WebView webView, SemanticsSessionScope scope, ParsedUri puri)
+        
+        private DateTime timeStart;
+        private DateTime parseStart;
+
+        public WebViewParser(DocumentClosure closure)
         {
-            _webView = webView;
-            _puri = puri;
-            SemanticsSessionScope = scope;
-
-            _tcs = new TaskCompletionSource<Document>();
-
+            _closure = closure;
+            SemanticsSessionScope = closure.SemanticsSessionScope;
+            _webView = SemanticsSessionScope.WebBrowserPool.Acquire();
+            _puri = closure.PURLConnection.ResponsePURL;
             _requestTimedOut = new DispatcherTimer() { Interval = EXTRACTION_TIMEOUT };
             _requestTimedOut.Tick += ExtractionRequestTimedOut;
         }
@@ -40,49 +40,37 @@ namespace ecologylab.semantics.documentparsers
         {
             Console.WriteLine("##### Aborting extraction for: " + _puri);
             Console.WriteLine("##### Waited : " + EXTRACTION_TIMEOUT + " for extraction to complete.");
-            _tcs.SetException(new TimeoutException("Extraction took too long, symptom of something going wrong. Please fix !!!"));
+            SemanticsSessionScope.WebBrowserPool.Release(_webView);
+
+            _closure.TaskCompletionSource.SetException(new TimeoutException("Extraction took too long, symptom of something going wrong. Please fix !!!"));
         }
 
         /// <summary>
-        /// An asynchronous method that returns the metadata of the Uri if available.
-        /// Using C# Async CTP from http://msdn.microsoft.com/en-us/vstudio/async.aspx
-        /// We would like to not have the caller create delegates for OnCompletion of this metadata extraction,
-        /// but instead just use an await and continue control flow.
         /// </summary>
         /// <returns></returns>
-        public async Task<Document> ExtractMetadata()
+        public void Parse()
         {
             Console.WriteLine("Extraction In Thread Name: " + Thread.CurrentThread.ManagedThreadId);
             //ParsedUri puri, MetaMetadataRepository repository, SimplTypesScope metadataTScope
-
+            
             string uri = _puri.AbsoluteUri;
-            Document result = null;
 
-            //Document gets added as a dummy by now.
-            //SemanticsSessionScope.GlobalDocumentCollection.TryGetDocument(_puri, out result);
-            if (result != null)
-            {
-                _tcs.TrySetResult(result);
-            }
-            else
-            {
-                Console.WriteLine("Cache Miss. Parsing Webpage: " + uri);
-//                //We need webView to be instantiated correctly.
-                _webView.ClearAllURLFilters();
-//                //Only accept requests for this particular uri
-                _webView.AddURLFilter(uri);
-                //TODO: At a later date, when we want to allow javascript requests, this must change.
-                //webView.AddURLFilter("*.js");
+            Console.WriteLine("Parsing Webpage: " + uri);
+            //We need webView to be instantiated correctly.
+            _webView.ClearAllURLFilters();
 
-                Console.WriteLine("Setting Source : " + DateTime.Now + " : " + DateTime.Now.Millisecond);
-                _webView.LoadCompleted += webView_LoadCompleted;
-                _webView.Source = _puri;
+            //Only accept requests for this particular uri
+            _webView.SetURLFilteringMode(URLFilteringMode.Whitelist);
+            _webView.AddURLFilter(uri);
+            //TODO: At a later date, when we want to allow javascript requests, this must change.
+            //webView.AddURLFilter("*.js");
 
-            }
-            return await _tcs.Task;
+            timeStart = DateTime.Now;
+            _webView.LoadCompleted += WebView_LoadCompleted;
+            _webView.Source = _puri;
         }
 
-        private void webView_LoadCompleted(object sender, EventArgs e)
+        private void WebView_LoadCompleted(object sender, EventArgs e)
         {
             //if (Source == null || BLANK_PAGE.Equals(Source))// || loadingComplete)
             //   return;
@@ -90,7 +78,9 @@ namespace ecologylab.semantics.documentparsers
             if (webView == null)
                 return;
             webView.Stop(); // Stopping further requests.
-            Console.WriteLine("Finished loading. Executing javascript. -- " + DateTime.Now + " : " + DateTime.Now.Millisecond);
+            Console.WriteLine("Finished loading in " + DateTime.Now.Subtract(timeStart).TotalMilliseconds + "ms. Executing javascript. -- ");
+            Console.WriteLine("======================================= Time To Load : " + DateTime.Now.Subtract(timeStart).TotalMilliseconds );
+            parseStart = DateTime.Now;
             MetaMetadataRepository repository = SemanticsSessionScope.MetaMetadataRepository;
             MetaMetadata mmd = repository.GetDocumentMM(_puri);
             Console.WriteLine("Got MMD: " + mmd.Name);
@@ -123,20 +113,23 @@ namespace ecologylab.semantics.documentparsers
             JSValue value = args.Arguments[0];
 
             String metadataJSON = value.ToString();
-            Console.WriteLine(metadataJSON);
-            Console.WriteLine("Done getting value. Serializing JSON string to ElementState. --" + DateTime.Now + " : " + DateTime.Now.Millisecond);
+            //Console.WriteLine(metadataJSON);
+            Console.WriteLine("Extraction time : " + DateTime.Now.Subtract(parseStart).TotalMilliseconds);
+            
+            Console.WriteLine("Done getting value. Serializing JSON string to ElementState.");
             TranslationContext context = new TranslationContext();
             context.SetUriContext(_puri);
             SimplTypesScope metadataTScope = SemanticsSessionScope.MetadataTranslationScope;
-            Document myShinyNewMetadata = (Document)metadataTScope.Deserialize(metadataJSON, context, null, StringFormat.Json);
-            Console.WriteLine("Metadata ElementState object created. " + DateTime.Now + " : " + DateTime.Now.Millisecond);
-            _webView.LoadCompleted -= webView_LoadCompleted;
+            Document myShinyNewMetadata = (Document)metadataTScope.Deserialize(metadataJSON, context,  new MetadataDeserializationHookStrategy(SemanticsSessionScope), StringFormat.Json);
+            Console.WriteLine("Extraction time including page load and deserialization: " + DateTime.Now.Subtract(timeStart).TotalMilliseconds);
+            _webView.LoadCompleted -= WebView_LoadCompleted;
 
             SemanticsSessionScope.GlobalDocumentCollection.AddDocument(myShinyNewMetadata, _puri);
 
-            SemanticsSessionScope.DownloadMonitor.WebBrowserPool.Release(_webView);
+            SemanticsSessionScope.WebBrowserPool.Release(_webView);
             _requestTimedOut.Stop();
-            _tcs.TrySetResult(myShinyNewMetadata);
+
+            _closure.TaskCompletionSource.TrySetResult(myShinyNewMetadata);
         }
     }
 }

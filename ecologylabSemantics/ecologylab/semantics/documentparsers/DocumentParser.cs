@@ -29,7 +29,8 @@ namespace ecologylab.semantics.documentparsers
         {
             if (parserName == null)
                 return null;
-            DocumentParserFactoryMethod factoryMethod = _registeredDocumentParserFactoryMethods[parserName];
+            DocumentParserFactoryMethod factoryMethod;
+            _registeredDocumentParserFactoryMethods.TryGetValue(parserName, out factoryMethod);
             return factoryMethod != null ? factoryMethod() : null;
         }
 
@@ -58,8 +59,9 @@ namespace ecologylab.semantics.documentparsers
         /// <summary>
         /// The main parsing happens here.
         /// Make parsing Asynchronous everywhere, cause it's invariably IO/Processing bound
+        /// It's the parsers responsilibity to set the Document to the closure's TaskCompletionSource's result 
         /// </summary>
-        public virtual async Task<Document> Parse()
+        public virtual void Parse()
         {
             throw new NotImplementedException();
         }

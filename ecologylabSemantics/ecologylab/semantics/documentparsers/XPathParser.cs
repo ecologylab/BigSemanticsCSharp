@@ -23,27 +23,14 @@ namespace ecologylab.semantics.documentparsers
     public class XPathParser : DocumentParser
     {
 
-        public XPathParser()
+        public override void Parse()
         {
+            SemanticsSessionScope.DispatchClosureToWebViewParser(DocumentClosure);
             
-        }
-
-        public override async Task<Document> Parse()
-        {
-            Console.WriteLine("Parse Called In Thread Name: " + Thread.CurrentThread.ManagedThreadId);
-            Document parsedDoc = await SemanticsSessionScope.DownloadMonitor.QueueExtractionRequest(DocumentClosure);
-
-            return parsedDoc;
+            //DownloadMonitor.QueueExtractionRequest(DocumentClosure);
             //DocumentParsingDoneHandler(parsedDoc);
 
             // post parse: regex filtering + field parser
-        }
-
-       
-
-        private void webView_LoadCompleted(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ecologylab.semantics.documentparsers
 {
   public class FieldParserBase : DocumentParser
   {
-      public override async Task<Document> Parse()
+      public override void Parse()
       {
           throw new NotImplementedException();
       }

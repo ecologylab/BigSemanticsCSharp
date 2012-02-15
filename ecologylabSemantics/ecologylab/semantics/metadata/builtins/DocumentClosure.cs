@@ -39,23 +39,24 @@ namespace ecologylab.semantics.metadata.builtins
             Document = document;
         }
 
-        public async Task<Document> PerformDownload()
+        public void PerformDownload()
         {
             // change status
             lock (downloadStatusLock)
             {
                 if (!(DownloadStatus == DownloadStatus.QUEUED || DownloadStatus == DownloadStatus.UNPROCESSED))
-                    return null; // if not queued or unprocessed, it must either hasn't enter the queue or has already been processed.
+                    return ; // if not queued or unprocessed, it must either hasn't enter the queue or has already been processed.
                 DownloadStatus = DownloadStatus.CONNECTING;
             }
 
             Document.SemanticsSessionScope = SemanticsSessionScope;
 
             ParsedUri location = Document == null ? null : Document.Location == null ? null : Document.Location.Value;
+
             Console.WriteLine("Calling connect from thread: " + Thread.CurrentThread.ManagedThreadId);
-            Console.WriteLine("Entering connect: " + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
-            await TaskEx.Run(Connect);
-            Console.WriteLine("Completed connect: " + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
+            DateTime time = DateTime.Now;
+            Connect();
+            Console.WriteLine("Completed connect: " + DateTime.Now.Subtract(time).TotalMilliseconds);
             if (PURLConnection != null && PURLConnection.Good && DocumentParser != null)
             {
                 // parsing
@@ -67,9 +68,10 @@ namespace ecologylab.semantics.metadata.builtins
                 MetaMetadata mmd = Document.MetaMetadata as MetaMetadata;
                 // TODO before semantic actions
 
-                //Make the entire call to Document.Parse() be asynchronous, allowing GetDocument to be awaited.
-                //DocumentParser.DocumentParsingDoneHandler = DocumentParsingDoneHandler;
-                Document = await DocumentParser.Parse();
+                //This call returns void
+                //Parser is responsible for setting result in the documentClosure.TaskCompletionSource
+                DocumentParser.Parse();
+
                 // TODO after semantic actions
 
                 lock (downloadStatusLock)
@@ -86,8 +88,6 @@ namespace ecologylab.semantics.metadata.builtins
 
             if (PURLConnection != null) PURLConnection.Recycle();
             PURLConnection = null;
-
-            return Document;
         }
 
         public void Connect()

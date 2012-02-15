@@ -12,8 +12,13 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <TextBox Name="UrlBox" Margin="4" />
+        <TextBox Name="UrlBox" Margin="4" Height="150" AcceptsReturn="True"/>
         <Button Name="BtnGetMetadata" Grid.Column="1" Padding="4" Click="BtnGetMetadata_Click">Get Metadata</Button>
-        <TextBox Name="MetadataArea" Grid.Row="1" Grid.ColumnSpan="2" Margin="4,4,4,0" ScrollViewer.VerticalScrollBarVisibility="Auto" AcceptsReturn="False" IsReadOnly="True" TextWrapping="Wrap" MinHeight="100" />
+        <ScrollViewer Name="MetadataLister" Grid.Row="1">
+            <StackPanel Name="MetadataTitleXMLContainer">
+                
+            </StackPanel>    
+        </ScrollViewer>
+        
     </Grid>
 </Window>
