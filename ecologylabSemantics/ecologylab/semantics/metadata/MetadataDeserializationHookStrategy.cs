@@ -50,7 +50,7 @@ namespace ecologylab.semantics.metadata
                 MetaMetadataCompositeField childMMComposite = null;
                 if (childMMNested.IsPolymorphicInherently)
                 {
-                    String tagName = deserializedMetadata.ClassDescriptor.TagName;
+                    String tagName = deserializedMetadata.MetadataClassDescriptor.TagName;
                     childMMComposite	= _semanticsSessionScope.MetaMetadataRepository.GetMMByName(tagName);
                 }
                 else

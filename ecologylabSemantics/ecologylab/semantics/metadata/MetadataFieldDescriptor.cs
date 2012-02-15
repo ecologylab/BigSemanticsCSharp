@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using ecologylabSemantics.ecologylab.semantics.metadata;
 using Simpl.Serialization.Attributes;
 using Simpl.Serialization;
 using System.Reflection;
@@ -68,5 +69,10 @@ namespace ecologylab.semantics.metadata
             
             return result;
         }
+
+        public IMetadata GetNestedMetadata(IMetadata context)
+	    {
+		    return IsScalar ? null : (IMetadata) GetNested(context);
+	    }
 	}
 }
