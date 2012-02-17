@@ -152,7 +152,7 @@ namespace ecologylab.interactive.CommandBehaviours
 
             if (Utilities.Distance(pos, _firstDown) < 30)
             {
-                //logger.Log("Within distance");
+                ////logger.Log("Within distance");
                 if (DateTime.Now - _firstDownTime.Value < TimeSpan.FromMilliseconds(300))
                 {
                     HitTestResultDelegate hitResultDelegate = (result) =>
@@ -164,8 +164,8 @@ namespace ecologylab.interactive.CommandBehaviours
                                                                 : result.VisualHit;
                         if (acceptableResult != null)
                         {
-                            logger.Log("SingleTap on: " + AssociatedObject);
-                            logger.Log("\tAcceptable HitTest on : " + acceptableResult);
+                            //logger.Log("SingleTap on: " + AssociatedObject);
+                            //logger.Log("\tAcceptable HitTest on : " + acceptableResult);
                             e.Handled = true;
                             CommandParameters commandParameters = new CommandParameters
                             {
@@ -173,11 +173,11 @@ namespace ecologylab.interactive.CommandBehaviours
                                 visualContainer = sender as DependencyObject,
                                 visualHit = acceptableResult
                             };
-                            if (command != null)
+                            if (command != null && command.CanExecute(null))
                                 command.Execute(commandParameters);
                             else
                             {
-                                logger.Log("No command has been bound to this behaviour.");
+                                //logger.Log("No command has been bound to this behaviour.");
                             }
                             ClearVals();
 
@@ -187,11 +187,7 @@ namespace ecologylab.interactive.CommandBehaviours
                         return HitTestResultBehavior.Continue;
                     };
                     var mouseArgs = e as MouseEventArgs;
-                    Point p;
-                    if (mouseArgs != null)
-                        p = mouseArgs.GetPosition(AssociatedObject);
-                    else
-                        p = (e as TouchEventArgs).GetTouchPoint(AssociatedObject).Position;
+                    Point p = mouseArgs != null ? mouseArgs.GetPosition(AssociatedObject) : (e as TouchEventArgs).GetTouchPoint(AssociatedObject).Position;
                     VisualTreeHelper.HitTest(AssociatedObject, null, new HitTestResultCallback(hitResultDelegate), new PointHitTestParameters(p));
 
                     //HitTestResult hitResult = VisualTreeHelper.HitTest(AssociatedObject, e.GetTouchPoint(AssociatedObject).Position);
@@ -201,13 +197,13 @@ namespace ecologylab.interactive.CommandBehaviours
                 }
                 else
                 {
-                    logger.Log("Too Slow");
+                    //logger.Log("Too Slow");
                     ClearVals();
                 }
             }
             else
             {
-                logger.Log("Too Far");
+                //logger.Log("Too Far");
                 ClearVals();
             }
         }

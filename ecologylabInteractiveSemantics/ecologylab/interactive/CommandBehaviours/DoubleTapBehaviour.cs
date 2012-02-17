@@ -63,12 +63,14 @@ namespace MetadataUISandbox.ActivationBehaviours
 //        private EventHandler<TouchEventArgs> _touchEnterHandler;
         private EventHandler<TouchEventArgs> _touchDownHandler;
         private EventHandler<TouchEventArgs> _touchUpHandler;
+        private EventHandler<TouchEventArgs> _touchMoveHandler;
 //        private EventHandler<TouchEventArgs> _touchLeaveHandler;
 
         Window _parent;
         
         private const int DefaultDoubleTapTimeout = 1000;
         private const int DefaultMaxDistanceBetweenTaps = 30;
+        private const int DefaultMaxDraggableDistancePerTap = 10;
 
         private readonly bool _triggerCommandOnLift;
         private readonly int _doubleTapTimeout;
@@ -82,6 +84,8 @@ namespace MetadataUISandbox.ActivationBehaviours
         private bool _isReset = true;
         private Point? _firstUp;
         private Point? _firstDown;
+        private Point? _secondDown;
+
         private DateTime? _firstUpTime;
         private bool _touchDownCaught = false;
 
@@ -104,9 +108,10 @@ namespace MetadataUISandbox.ActivationBehaviours
         {
             if (_touchDownHandler == null || _touchUpHandler == null)// || _touchLeaveHandler == null || _touchEnterHandler == null)
                 return;
-            logger.Log("Detaching DoubleTapBehaviour from: " + AssociatedObject);
+            //logger.Log("Detaching DoubleTapBehaviour from: " + AssociatedObject);
             AssociatedObject.TouchUp    -= _touchUpHandler;
             AssociatedObject.TouchDown  -= _touchDownHandler;
+            AssociatedObject.TouchMove -= _touchMoveHandler;
 //            AssociatedObject.TouchLeave -= _touchLeaveHandler;
 //            AssociatedObject.TouchEnter -= _touchEnterHandler;
 
@@ -127,40 +132,59 @@ namespace MetadataUISandbox.ActivationBehaviours
             _touchUpHandler = AssociatedObjectOnTouchUp;
             AssociatedObject.AddHandler(UIElement.TouchUpEvent, _touchUpHandler, true);
 
+            _touchMoveHandler = AssociatedObjectOnTouchMove;
+            AssociatedObject.AddHandler(UIElement.TouchMoveEvent, _touchMoveHandler, true);
+
+
 //            _touchLeaveHandler = AssociatedObjectOnTouchLeave;
 //            AssociatedObject.AddHandler(UIElement.TouchLeaveEvent, _touchLeaveHandler, true);
         }
 
+        private void AssociatedObjectOnTouchMove(object sender, TouchEventArgs e)
+        {
+            if (!_firstDown.HasValue) return;
+
+            
+
+            var p = e.GetTouchPoint(_parent).Position;
+            double dist = Utilities.Distance(p, _firstDown);
+            if (dist > DefaultMaxDraggableDistancePerTap)
+            {
+                //logger.Log("Dragged beyond tappable distance, reseting");
+                ClearDblTapVals();
+            }
+        }
+
 //        private void AssociatedObjectOnTouchEnter(object sender, TouchEventArgs e)
 //        {
-//            logger.Log("Entered");
+//            //logger.Log("Entered");
 //        }
 //
 //        private void AssociatedObjectOnTouchLeave(object sender, TouchEventArgs e)
 //        {
 //            if (e.Device == _touchDownInputDevice)
 //            {
-//                logger.Log("Touch left the AssociatedObject: " + _touchDownInputDevice);
+//                //logger.Log("Touch left the AssociatedObject: " + _touchDownInputDevice);
 //                ClearDblTapVals();
 //            }
 //            else
 //            {
-//                logger.Log("Event from touchUp");
+//                //logger.Log("Event from touchUp");
 //                _touchDownInputDevice = null;    
 //            }
 //        }
 
         private void AssociatedObjectOnTouchUp(object sender, TouchEventArgs e)
         {
-            if (!_touchDownCaught)
+            if (!_touchDownCaught || !command.CanExecute(null))
             {
-                logger.Log("TouchUp without a TouchDown, resetting state.");
+                //logger.Log("TouchUp without a TouchDown, resetting state.");
                 ClearDblTapVals();
                 return;
             }
 
             _touchDownCaught = false; //Reset for the next touchDown
-            logger.Log("TouchUp : firstUp " + _firstUp + ", firstDown " + _firstDown + ", firstUpTime " + _firstUpTime + ", Now:  " + DateTime.Now);
+            //logger.Log("TouchUp : firstUp " + _firstUp + ", firstDown " + _firstDown + ", firstUpTime " + _firstUpTime + ", Now:  " + DateTime.Now);
             if (!_firstUp.HasValue && _firstDown.HasValue)
             {
                 _firstUpTime = DateTime.Now;
@@ -168,8 +192,8 @@ namespace MetadataUISandbox.ActivationBehaviours
             }
             else
             {
-                logger.Log("Double Tap and Lift ?");
-                if (_triggerCommandOnLift && command != null && _commandParameters.HasValue)
+                //logger.Log("Double Tap and Lift ?");
+                if (_triggerCommandOnLift && command != null && _commandParameters.HasValue && command.CanExecute(null))
                 {
                     command.Execute(_commandParameters.Value);
                 }
@@ -184,7 +208,7 @@ namespace MetadataUISandbox.ActivationBehaviours
                 {
                     if (!_isReset)
                     {
-                        logger.Log("Timeout after touchUp, resetting state");
+                        //logger.Log("Timeout after touchUp, resetting state");
                         ClearDblTapVals();    
                     }
                     
@@ -202,14 +226,19 @@ namespace MetadataUISandbox.ActivationBehaviours
             _touchDownCaught = true;
             Point pos = e.GetTouchPoint(_parent).Position;
             _isReset = false;
-            logger.Log("TouchDown : firstUp " + _firstUp + ", firstDown " + _firstDown + ", firstUpTime " + _firstUpTime + ", Now:  " + DateTime.Now);
-
+            //logger.Log("TouchDown : firstUp " + _firstUp + ", firstDown " + _firstDown + ", firstUpTime " + _firstUpTime + ", Now:  " + DateTime.Now);
+            if (!command.CanExecute(null))
+            {
+                ClearDblTapVals();
+                //Shouldn't do anything more if the command isn't available.
+                return;
+            }
             if (_firstDown.HasValue)
             {
                 bool resetState = true;
                 if (Utilities.Distance(pos, _firstUp) < _maxDistanceBetweenTaps)
                 {
-                    //logger.Log("Within distance");
+                    ////logger.Log("Within distance");
                     if (DateTime.Now - _firstUpTime.Value < TimeSpan.FromMilliseconds(_doubleTapTimeout))
                     {
                         HitTestResultDelegate hitResultDelegate = (result) =>
@@ -221,8 +250,8 @@ namespace MetadataUISandbox.ActivationBehaviours
                                                                 : result.VisualHit;
                             if (acceptableResult != null)
                             {
-                                logger.Log("DoubleTap on: " + AssociatedObject);
-                                logger.Log("\tAcceptable HitTest on : " + acceptableResult);
+                                //logger.Log("DoubleTap on: " + AssociatedObject);
+                                //logger.Log("\tAcceptable HitTest on : " + acceptableResult);
                                 e.Handled = true;
 
                                 _commandParameters = new CommandParameters
@@ -231,20 +260,21 @@ namespace MetadataUISandbox.ActivationBehaviours
                                                             visualContainer = sender as DependencyObject,
                                                             visualHit = acceptableResult
                                                         };
-                                if (command != null)
+                                if (command != null && command.CanExecute(null))
                                 {
                                     if (!_triggerCommandOnLift)
                                         command.Execute(_commandParameters.Value);
                                     else
                                     {
                                         //Should we reset the state after a while?
-                                        logger.Log("Waiting for lift-off");
+                                        //logger.Log("Waiting for lift-off");
                                         resetState = false;
                                     }
                                 }
                                 else
                                 {
-                                    logger.Log("No command has been bound to this behaviour.");
+                                    //logger.Log("No command has been bound to this behaviour.");
+                                    resetState = true;
                                 }
                                 return HitTestResultBehavior.Stop;
                             }
@@ -260,12 +290,12 @@ namespace MetadataUISandbox.ActivationBehaviours
                     }
                     else
                     {
-                        logger.Log("Too Slow");
+                        //logger.Log("Too Slow");
                     }
                 }
                 else
                 {
-                    logger.Log("Too Far");
+                    //logger.Log("Too Far");
                 }
                 if (resetState) //Only avoid resetting the state if we're expecting and waiting for a liftoff
                     ClearDblTapVals();
@@ -282,14 +312,14 @@ namespace MetadataUISandbox.ActivationBehaviours
                 //If !triggerCommandOnLift, we expect the finger to stay on the UIElement
                 if (_isReset || !_touchDownCaught || !_triggerCommandOnLift) return;
 
-                logger.Log("Finger is on UIElement for too long, resetting state");
+                //logger.Log("Finger is on UIElement for too long, resetting state");
                 ClearDblTapVals();
             });
         }
 
         private void ClearDblTapVals()
         {
-            logger.Log("Clearing vals");
+            //logger.Log("Clearing vals");
             _touchDownCaught        = false;
             _firstUpTime            = null;
             _firstUp                = null;
