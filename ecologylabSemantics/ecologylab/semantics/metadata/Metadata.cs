@@ -179,7 +179,7 @@ namespace ecologylab.semantics.metadata
 
         public MetaMetadataOneLevelNestingEnumerator FullNonRecursiveMetaMetadataIterator(MetaMetadataField metaMetadataField = null)
 	    {
-		    MetaMetadataField firstMetaMetadataField = metaMetadataField ?? _metaMetadata;
+		    MetaMetadataField firstMetaMetadataField = metaMetadataField ?? MetaMetadata;
 		    return new MetaMetadataOneLevelNestingEnumerator(firstMetaMetadataField, this);
 	    }
 
