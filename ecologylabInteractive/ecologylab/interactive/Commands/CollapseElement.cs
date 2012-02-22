@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using ecologylab.interactive.Utils;
 
-namespace ecologylab.semantics.interactive.Commands
+namespace ecologylab.interactive.Commands
 {
     public class CollapseElement : ICommand, ILabelledCommand
     {

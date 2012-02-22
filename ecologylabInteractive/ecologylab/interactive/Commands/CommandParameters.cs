@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
-namespace ecologylab.interactive
+namespace ecologylab.interactive.Commands
 {
     /// <summary>
     /// Interaction logic for RightHandedControlMenu.xaml

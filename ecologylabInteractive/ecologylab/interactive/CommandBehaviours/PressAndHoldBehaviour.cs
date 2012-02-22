@@ -5,11 +5,12 @@ using System.Windows.Interactivity;
 using System.Windows.Media;
 using System.Windows.Threading;
 using ecologylab.interactive;
+using ecologylab.interactive.Commands;
 using ecologylab.interactive.Utils;
 using ecologylabInteractiveSemantics.ecologylab.interactive.Utils;
 using Microsoft.Surface.Presentation.Controls;
 
-namespace MetadataUISandbox
+namespace ecologylab.interactive.Behaviours
 {
 
     public class PressAndHoldBehaviour : Behavior<UIElement>

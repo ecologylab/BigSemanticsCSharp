@@ -2,10 +2,11 @@
 using System.Windows;
 using System.Windows.Input;
 using ecologylab.interactive;
+using ecologylab.interactive.Commands;
+using ecologylab.interactive.Controls;
 using ecologylab.interactive.Utils;
-using ecologylab.semantics.interactive.Controls;
 
-namespace ecologylab.semantics.interactive.Commands
+namespace ecologylab.interactive.Commands
 {
     public class NavigateElementCommand : ICommand, ILabelledCommand
     {
@@ -34,8 +35,6 @@ namespace ecologylab.semantics.interactive.Commands
             var parameters = (CommandParameters) parameter ;
             var hit = parameters.visualHit as UIElement;
             TextMagnifier magnifier = new TextMagnifier(hit, parameters.touchEventArgs);
-            
-
         }
     }
 }

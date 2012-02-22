@@ -4,9 +4,10 @@ using System.Windows.Input;
 using System.Windows.Interactivity;
 using System.Windows.Media;
 using ecologylab.interactive;
+using ecologylab.interactive.Commands;
 using ecologylab.interactive.Utils;
 
-namespace MetadataUISandbox
+namespace ecologylab.interactive.Behaviours
 {
     public class TapWithSecondFingerBehaviour : Behavior<UIElement>
     {

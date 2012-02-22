@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interactivity;
 using System.Windows.Media;
+using ecologylab.interactive.Commands;
 using ecologylab.interactive.Utils;
 using ecologylabInteractiveSemantics.ecologylab.interactive.Utils;
 

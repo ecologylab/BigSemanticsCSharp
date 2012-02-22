@@ -5,7 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ecologylabInteractiveSemantics.ecologylab.interactive.Utils;
 
-namespace ecologylab.semantics.interactive.Controls
+namespace ecologylab.interactive.Controls
 {
 	/// <summary>
 	/// Interaction logic for TextMagnifier.xaml

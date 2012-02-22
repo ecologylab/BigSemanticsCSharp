@@ -11,7 +11,7 @@ using ecologylab.interactive.Behaviours;
 using ecologylab.interactive.Utils;
 
 
-namespace ecologylab.semantics.interactive.Commands
+namespace ecologylab.interactive.Commands
 {
     public class CopyElementCommand : ICommand, ILabelledCommand
     {

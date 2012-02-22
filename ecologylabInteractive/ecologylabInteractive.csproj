@@ -82,7 +82,7 @@
     <Compile Include="ecologylab\interactive\LoadingControl\LoadingAnimation.xaml.cs">
       <DependentUpon>LoadingAnimation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ecologylab\interactive\LoadingControl\RightHandedControlMenu.xaml.cs">
+    <Compile Include="ecologylab\interactive\Controls\RightHandedControlMenu.xaml.cs">
       <DependentUpon>RightHandedControlMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="ecologylab\interactive\Commands\SimpleCommand.cs" />
@@ -114,7 +114,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ecologylab\interactive\LoadingControl\RightHandedControlMenu.xaml">
+    <Page Include="ecologylab\interactive\Controls\RightHandedControlMenu.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

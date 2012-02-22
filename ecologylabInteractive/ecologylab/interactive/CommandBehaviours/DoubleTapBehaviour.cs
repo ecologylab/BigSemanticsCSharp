@@ -5,10 +5,10 @@ using System.Windows.Input;
 using System.Windows.Interactivity;
 using System.Windows.Media;
 using ecologylab.interactive;
+using ecologylab.interactive.Commands;
 using ecologylab.interactive.Utils;
-using ecologylabInteractiveSemantics.ecologylab.interactive.Utils;
 
-namespace MetadataUISandbox.ActivationBehaviours
+namespace ecologylab.interactive.Behaviours
 {
     
     public class DoubleTapBehaviour : Behavior<UIElement>

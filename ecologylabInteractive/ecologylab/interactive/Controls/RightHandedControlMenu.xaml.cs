@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using ecologylab.interactive.Commands;
 using ecologylab.interactive.Utils;
 //using ecologylab.semantics.metadata.builtins;
 
