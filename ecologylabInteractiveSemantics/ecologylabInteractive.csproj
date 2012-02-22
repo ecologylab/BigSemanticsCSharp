@@ -75,28 +75,32 @@
     <Compile Include="ecologylab\interactive\CommandBehaviours\SingleTapBehaviour.cs" />
     <Compile Include="ecologylab\interactive\CommandBehaviours\TapWithSecondFingerBehaviour.cs" />
     <Compile Include="ecologylab\interactive\Behaviours\DragBehaviour.cs" />
-    <Compile Include="ecologylab\interactive\CommandParameters.cs" />
+    <Compile Include="ecologylab\interactive\Commands\CommandParameters.cs" />
     <Compile Include="ecologylab\interactive\LoadingControl\Block.xaml.cs">
       <DependentUpon>Block.xaml</DependentUpon>
     </Compile>
     <Compile Include="ecologylab\interactive\LoadingControl\LoadingAnimation.xaml.cs">
       <DependentUpon>LoadingAnimation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ecologylab\interactive\RightHandedControlMenu.xaml.cs">
+    <Compile Include="ecologylab\interactive\LoadingControl\RightHandedControlMenu.xaml.cs">
       <DependentUpon>RightHandedControlMenu.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ecologylab\interactive\SimpleCommand.cs" />
+    <Compile Include="ecologylab\interactive\Commands\SimpleCommand.cs" />
+    <Compile Include="ecologylab\interactive\Utils\AnimationHelperExtensions.cs" />
+    <Compile Include="ecologylab\interactive\Utils\DisableTouchConversionToMouse.cs" />
     <Compile Include="ecologylab\interactive\Utils\Documents.cs" />
     <Compile Include="ecologylab\interactive\Utils\TouchDelegates.cs" />
     <Compile Include="ecologylab\interactive\Utils\Utilities.cs" />
-    <Compile Include="ecologylab\semantics\interactive\Commands\BubbleCursorContainerCommand.cs" />
-    <Compile Include="ecologylab\semantics\interactive\Commands\CollapseElement.cs" />
-    <Compile Include="ecologylab\semantics\interactive\Commands\CopyElementCommand.cs" />
-    <Compile Include="ecologylab\semantics\interactive\Commands\ExpandElement.cs" />
-    <Compile Include="ecologylab\semantics\interactive\Commands\MagnifyElementCommand.cs" />
-    <Compile Include="ecologylab\semantics\interactive\Commands\NavigateElementCommand.cs" />
-    <Compile Include="ecologylab\semantics\interactive\Commands\RaiseMenuCommand.cs" />
-    <Compile Include="ecologylab\semantics\interactive\Controls\TextMagnifier.xaml.cs">
+    <Compile Include="ecologylab\interactive\Utils\ValueConvertors.cs" />
+    <Compile Include="ecologylab\interactive\Utils\Win32Constants.cs" />
+    <Compile Include="ecologylab\interactive\Commands\BubbleCursorContainerCommand.cs" />
+    <Compile Include="ecologylab\interactive\Commands\CollapseElement.cs" />
+    <Compile Include="ecologylab\interactive\Commands\CopyElementCommand.cs" />
+    <Compile Include="ecologylab\interactive\Commands\ExpandElement.cs" />
+    <Compile Include="ecologylab\interactive\Commands\MagnifyElementCommand.cs" />
+    <Compile Include="ecologylab\interactive\Commands\NavigateElementCommand.cs" />
+    <Compile Include="ecologylab\interactive\Commands\RaiseMenuCommand.cs" />
+    <Compile Include="ecologylab\interactive\Controls\TextMagnifier.xaml.cs">
       <DependentUpon>TextMagnifier.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -110,11 +114,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ecologylab\interactive\RightHandedControlMenu.xaml">
+    <Page Include="ecologylab\interactive\LoadingControl\RightHandedControlMenu.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ecologylab\semantics\interactive\Controls\TextMagnifier.xaml">
+    <Page Include="ecologylab\interactive\Controls\TextMagnifier.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

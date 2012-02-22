@@ -7,8 +7,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ecologylab.interactive;
+using ecologylab.interactive.Behaviours;
 using ecologylab.interactive.Utils;
-using ecologylabInteractiveSemantics.ecologylab.interactive.Behaviours;
+
 
 namespace ecologylab.semantics.interactive.Commands
 {

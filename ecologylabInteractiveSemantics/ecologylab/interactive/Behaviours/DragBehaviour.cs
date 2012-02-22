@@ -8,7 +8,7 @@ using System.Windows.Input;
 using System.Windows.Interactivity;
 using System.Windows.Media;
 
-namespace ecologylabInteractiveSemantics.ecologylab.interactive.Behaviours
+namespace ecologylab.interactive.Behaviours
 {
         public class DragBehavior : Behavior<UIElement>
         {
