@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C8D494A8-238D-4C4E-83CA-C3A867C0457E}</ProjectGuid>
+    <ProjectGuid>{E66E57E8-D3E3-42AE-9035-C829B2E8DADB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MVVMTemplate</RootNamespace>
