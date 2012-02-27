@@ -57,7 +57,7 @@ namespace ecologylab.semantics.metametadata
 
             try
             {
-                repo = (MetaMetadataRepository)mmdTScope.DeserializeFile(filename, StringFormat.Xml);
+                repo = (MetaMetadataRepository)mmdTScope.DeserializeFile(filename, Format.Xml);
                 repo.MetadataTScope = metadataTScope;
                 repo.File = filename;
                 repo.InitializeSuffixAndMimeDicts();
