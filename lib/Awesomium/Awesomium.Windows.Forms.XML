@@ -4,6 +4,161 @@
         <name>Awesomium.Windows.Forms</name>
     </assembly>
     <members>
+        <member name="T:Awesomium.Windows.Forms.AddressBox">
+            <summary>
+            Represents a Windows Forms TextBox that behaves as an address-box
+            and shows an auto-completion list with contents from the core's History.
+            </summary>
+            <remarks>
+            By assigning a <see cref="T:Awesomium.Windows.Forms.WebControl"/>
+            to the <see cref="P:Awesomium.Windows.Forms.AddressBox.WebControl"/> property,
+            you allow the two controls to interact. The <see cref="T:Awesomium.Windows.Forms.AddressBox"/> will
+            transfer navigation requests to the <see cref="T:Awesomium.Windows.Forms.WebControl"/>
+            and update the <see cref="P:Awesomium.Windows.Forms.AddressBox.URL"/> property based on the URL
+            currently loaded to the assigned <see cref="T:Awesomium.Windows.Forms.WebControl"/>.
+            </remarks>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.AddressBox.OnNavigate(Awesomium.Core.UrlEventArgs)">
+            <summary>
+            Triggers the <see cref="E:Awesomium.Windows.Forms.AddressBox.Navigate"/> event.
+            </summary>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.AddressBox.RefreshAutoComplete">
+            <summary>
+            Updates the contents of the <see cref="T:System.Windows.Forms.AutoCompleteStringCollection"/>.
+            </summary>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.AddressBox.OnKeyDown(System.Windows.Forms.KeyEventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:Awesomium.Windows.Forms.AddressBox.OnGotFocus(System.EventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:Awesomium.Windows.Forms.AddressBox.OnLostFocus(System.EventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:Awesomium.Windows.Forms.AddressBox.OnMouseEnter(System.EventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:Awesomium.Windows.Forms.AddressBox.OnMouseLeave(System.EventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:Awesomium.Windows.Forms.AddressBox.OnEnter(System.EventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:Awesomium.Windows.Forms.AddressBox.OnLeave(System.EventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:Awesomium.Windows.Forms.AddressBox.OnMouseUp(System.Windows.Forms.MouseEventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:Awesomium.Windows.Forms.AddressBox.OnVisibleChanged(System.EventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:Awesomium.Windows.Forms.AddressBox.Dispose(System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:Awesomium.Windows.Forms.AddressBox.WndProc(System.Windows.Forms.Message@)">
+            <inheritdoc />
+        </member>
+        <member name="E:Awesomium.Windows.Forms.AddressBox.Navigate">
+            <summary>
+            Occurs when the user presses ENTER, after typing
+            a valid URL in the <see cref="!:AddresBox"/>.
+            </summary>
+            <remarks>
+            By assigning a <see cref="T:Awesomium.Windows.Forms.WebControl"/>
+            to the <see cref="P:Awesomium.Windows.Forms.AddressBox.WebControl"/> property,
+            you allow the two controls to interact. The <see cref="T:Awesomium.Windows.Forms.AddressBox"/> will
+            transfer navigation requests to the <see cref="T:Awesomium.Windows.Forms.WebControl"/>
+            and update its <see cref="P:Awesomium.Windows.Forms.AddressBox.Text"/> based on the URL
+            currently loaded to the assigned <see cref="T:Awesomium.Windows.Forms.WebControl"/>.
+            <p/>
+            <note>
+            You do not need to handle this event, if you assign
+            a <see cref="T:Awesomium.Windows.Forms.WebControl"/>
+            to the <see cref="P:Awesomium.Windows.Forms.AddressBox.WebControl"/> property.
+            </note>
+            </remarks>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.AddressBox.WebControl">
+            <summary>
+            Gets or sets the <see cref="T:Awesomium.Windows.Forms.WebControl"/> currently
+            assigned to this <see cref="T:Awesomium.Windows.Forms.AddressBox"/>.
+            </summary>
+            <remarks>
+            When a <see cref="T:Awesomium.Windows.Forms.WebControl"/> has been assigned
+            to this property, the value of <see cref="P:Awesomium.Windows.Forms.AddressBox.URL"/> is bound to the
+            <see cref="P:Awesomium.Windows.Forms.WebControl.Source"/> property:
+            <list type="bullet">
+            <item>
+            <description>
+            Manually setting the <see cref="P:Awesomium.Windows.Forms.AddressBox.URL"/> property, will transfer
+            a navigation request to the to the assigned <see cref="T:Awesomium.Windows.Forms.WebControl"/>.
+            </description>
+            </item>
+            <item>
+            <description>
+            The value of <see cref="P:Awesomium.Windows.Forms.AddressBox.URL"/> is automatically updated based on the URL
+            currently loaded to the assigned <see cref="T:Awesomium.Windows.Forms.WebControl"/>.
+            </description>
+            </item>
+            </list>
+            </remarks>
+            <seealso cref="P:Awesomium.Windows.Forms.AddressBox.URL"/>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.AddressBox.URL">
+            <summary>
+            Gets or sets the URL currently displayed by the <see cref="T:Awesomium.Windows.Forms.AddressBox"/>.
+            </summary>
+            <remarks>
+            When a <see cref="T:Awesomium.Windows.Forms.WebControl"/> has been assigned
+            to the <see cref="P:Awesomium.Windows.Forms.AddressBox.WebControl"/> property,
+            the value of this property is bound to the <see cref="P:Awesomium.Windows.Forms.WebControl.Source"/>
+            property:
+            <list type="bullet">
+            <item>
+            <description>
+            Manually setting this property will transfer a navigation request to the
+            to the assigned <see cref="T:Awesomium.Windows.Forms.WebControl"/>.
+            </description>
+            </item>
+            <item>
+            <description>
+            The value of this property is automatically updated based on the URL
+            currently loaded to the assigned <see cref="T:Awesomium.Windows.Forms.WebControl"/>.
+            </description>
+            </item>
+            </list>
+            </remarks>
+            <seealso cref="P:Awesomium.Windows.Forms.AddressBox.WebControl"/>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.AddressBox.Multiline">
+            <exclude />
+        </member>
+        <member name="P:Awesomium.Windows.Forms.AddressBox.Text">
+            <exclude />
+        </member>
+        <member name="P:Awesomium.Windows.Forms.AddressBox.Font">
+            <inheritdoc />
+        </member>
+        <member name="F:Awesomium.Windows.Forms.LoginForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.LoginForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.LoginForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
         <member name="M:Awesomium.Windows.Forms.GdiAPI.CreateCompatibleDC(System.IntPtr)">
             <summary>
             CreateCompatibleDC
@@ -19,7 +174,7 @@
             SelectObject
             </summary>
         </member>
-        <member name="M:Awesomium.Windows.Forms.GdiAPI.DeleteObject(System.IntPtr)">
+        <member name="M:Awesomium.Windows.Forms.GdiAPI.DeleteObject(System.Runtime.InteropServices.HandleRef)">
             <summary>
             DeleteObject
             </summary>
@@ -39,6 +194,249 @@
             Enumeration for the raster operations used in BitBlt.
             In C++ these are actually #define. But to use these
             constants with C#, a new enumeration type is defined.
+            </summary>
+        </member>
+        <member name="T:Awesomium.Windows.Forms.ToolStripAddressBox">
+            <summary>
+            Represents a text box in a <see cref="T:System.Windows.Forms.ToolStrip"/> that behaves as an address-box
+            and shows an auto-completion list with contents from the core's History.
+            </summary>
+            <remarks>
+            By assigning a <see cref="T:Awesomium.Windows.Forms.WebControl"/>
+            to the <see cref="P:Awesomium.Windows.Forms.ToolStripAddressBox.WebControl"/> property,
+            you allow the two controls to interact. The <see cref="T:Awesomium.Windows.Forms.ToolStripAddressBox"/> will
+            transfer navigation requests to the <see cref="T:Awesomium.Windows.Forms.WebControl"/>
+            and update the <see cref="P:Awesomium.Windows.Forms.ToolStripAddressBox.URL"/> property based on the URL
+            currently loaded to the assigned <see cref="T:Awesomium.Windows.Forms.WebControl"/>.
+            </remarks>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.OnBorderStyleChanged(System.EventArgs)">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.OnBorderStyleChanged&quot;]/*"/>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.OnHideSelectionChanged(System.EventArgs)">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.OnHideSelectionChanged&quot;]/*"/>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.OnModifiedChanged(System.EventArgs)">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.OnModifiedChanged&quot;]/*"/> 
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.OnReadOnlyChanged(System.EventArgs)">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.OnReadOnlyChanged&quot;]/*"/>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.OnNavigate(Awesomium.Core.UrlEventArgs)">
+            <summary>
+            Triggers the <see cref="E:Awesomium.Windows.Forms.ToolStripAddressBox.Navigate"/> event.
+            </summary>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.AppendText(System.String)">
+            <inheritdoc cref="M:System.Windows.Forms.TextBox.AppendText" />
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.Clear">
+            <inheritdoc select='docs/doc[@for="ToolStripTextBox.Clear"]/*' />
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.ClearUndo">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.ClearUndo&quot;]/*"/> 
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.Copy">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.Copy&quot;]/*"/>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.Cut">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.Cut&quot;]/*"/> 
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.DeselectAll">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.DeselectAll&quot;]/*"/> 
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.GetCharFromPosition(System.Drawing.Point)">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.GetCharFromPosition&quot;]/*"/>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.GetCharIndexFromPosition(System.Drawing.Point)">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.GetCharIndexFromPosition&quot;]/*"/>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.GetFirstCharIndexFromLine(System.Int32)">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.GetFirstCharIndexFromLine&quot;]/*"/>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.GetFirstCharIndexOfCurrentLine">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.GetFirstCharIndexOfCurrentLine&quot;]/*"/>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.GetLineFromCharIndex(System.Int32)">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.GetLineFromCharIndex&quot;]/*"/> 
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.GetPositionFromCharIndex(System.Int32)">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.GetPositionFromCharIndex&quot;]/*"/> 
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.Paste">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.Paste&quot;]/*"/>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.ScrollToCaret">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.ScrollToCaret&quot;]/*"/> 
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.Select(System.Int32,System.Int32)">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.Select&quot;]/*"/> 
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.SelectAll">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.SelectAll&quot;]/*"/>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.Undo">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.Undo&quot;]/*"/>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.OnSubscribeControlEvents(System.Windows.Forms.Control)">
+            <inheritdoc />
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.OnUnsubscribeControlEvents(System.Windows.Forms.Control)">
+            <inheritdoc />
+        </member>
+        <member name="M:Awesomium.Windows.Forms.ToolStripAddressBox.GetPreferredSize(System.Drawing.Size)">
+            <inheritdoc />
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.WebControl">
+            <summary>
+            Gets or sets the <see cref="T:Awesomium.Windows.Forms.WebControl"/> currently
+            assigned to this <see cref="T:Awesomium.Windows.Forms.ToolStripAddressBox"/>.
+            </summary>
+            <remarks>
+            When a <see cref="T:Awesomium.Windows.Forms.WebControl"/> has been assigned
+            to this property, the value of <see cref="P:Awesomium.Windows.Forms.ToolStripAddressBox.URL"/> is bound to the
+            <see cref="P:Awesomium.Windows.Forms.WebControl.Source"/> property:
+            <list type="bullet">
+            <item>
+            <description>
+            Manually setting the <see cref="P:Awesomium.Windows.Forms.ToolStripAddressBox.URL"/> property, will transfer
+            a navigation request to the to the assigned <see cref="T:Awesomium.Windows.Forms.WebControl"/>.
+            </description>
+            </item>
+            <item>
+            <description>
+            The value of <see cref="P:Awesomium.Windows.Forms.ToolStripAddressBox.URL"/> is automatically updated based on the URL
+            currently loaded to the assigned <see cref="T:Awesomium.Windows.Forms.WebControl"/>.
+            </description>
+            </item>
+            </list>
+            </remarks>
+            <seealso cref="P:Awesomium.Windows.Forms.ToolStripAddressBox.URL"/>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.URL">
+            <summary>
+            Gets or sets the URL currently displayed by the <see cref="T:Awesomium.Windows.Forms.ToolStripAddressBox"/>.
+            </summary>
+            <remarks>
+            When a <see cref="T:Awesomium.Windows.Forms.WebControl"/> has been assigned
+            to the <see cref="P:Awesomium.Windows.Forms.ToolStripAddressBox.WebControl"/> property,
+            the value of this property is bound to the <see cref="P:Awesomium.Windows.Forms.WebControl.Source"/>
+            property:
+            <list type="bullet">
+            <item>
+            <description>
+            Manually setting this property will transfer a navigation request to the
+            to the assigned <see cref="T:Awesomium.Windows.Forms.WebControl"/>.
+            </description>
+            </item>
+            <item>
+            <description>
+            The value of this property is automatically updated based on the URL
+            currently loaded to the assigned <see cref="T:Awesomium.Windows.Forms.WebControl"/>.
+            </description>
+            </item>
+            </list>
+            </remarks>
+            <seealso cref="P:Awesomium.Windows.Forms.ToolStripAddressBox.WebControl"/>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.BorderStyle">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.BorderStyle&quot;]/*"/>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.CanUndo">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.CanUndo&quot;]/*"/>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.CharacterCasing">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.CharacterCasing&quot;]/*"/> 
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.HideSelection">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.HideSelection&quot;]/*"/> 
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.Modified">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.Modified&quot;]/*"/> 
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.ReadOnly">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.ReadOnly&quot;]/*"/>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.SelectedText">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.SelectedText&quot;]/*"/> 
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.SelectionLength">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.SelectionLength&quot;]/*"/> 
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.SelectionStart">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.SelectionStart&quot;]/*"/>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.ShortcutsEnabled">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.ShortcutsEnabled&quot;]/*"/> 
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.TextLength">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.TextLength&quot;]/*"/>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.WordWrap">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.WordWrap&quot;]/*"/> 
+        </member>
+        <member name="E:Awesomium.Windows.Forms.ToolStripAddressBox.BorderStyleChanged">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.BorderStyleChanged&quot;]/*"/>
+        </member>
+        <member name="E:Awesomium.Windows.Forms.ToolStripAddressBox.HideSelectionChanged">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.HideSelectionChanged&quot;]/*"/>
+        </member>
+        <member name="E:Awesomium.Windows.Forms.ToolStripAddressBox.ModifiedChanged">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.ModifiedChanged&quot;]/*"/>
+        </member>
+        <member name="E:Awesomium.Windows.Forms.ToolStripAddressBox.ReadOnlyChanged">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.ReadOnlyChanged&quot;]/*"/> 
+        </member>
+        <member name="E:Awesomium.Windows.Forms.ToolStripAddressBox.TextBoxTextAlignChanged">
+            <!-- Failed to insert some or all of included XML --><include file="doc\WinBarTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.TextAlignChanged&quot;]/*"/>
+        </member>
+        <member name="E:Awesomium.Windows.Forms.ToolStripAddressBox.Navigate">
+            <summary>
+            Occurs when the user presses ENTER, after typing
+            a valid URL in the <see cref="T:Awesomium.Windows.Forms.ToolStripAddressBox"/>.
+            </summary>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.TextBox">
+            <summary>
+            Gets the hosted <see cref="T:Awesomium.Windows.Forms.AddressBox"/> control.
+            </summary>
+            <returns>
+            The hosted <see cref="T:Awesomium.Windows.Forms.AddressBox"/> control.
+            </returns>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.Text">
+            <exclude />
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.BackgroundImage">
+            <exclude />
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.BackgroundImageLayout">
+            <exclude />
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.DefaultMargin">
+            <!-- Failed to insert some or all of included XML --><include file="doc\ToolStripTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.DefaultMargin&quot;]/*"/> 
+            <devdoc>
+            Deriving classes can override this to configure a default size for their control. 
+            This is more efficient than setting the size in the control's constructor. 
+            </devdoc>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.ToolStripAddressBox.DefaultSize">
+            <!-- Failed to insert some or all of included XML --><include file="doc\ToolStripTextBox.uex" path="docs/doc[@for=&quot;ToolStripTextBox.DefaultSize&quot;]/*"/>
+        </member>
+        <member name="T:Awesomium.Windows.Forms.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
             </summary>
         </member>
         <member name="T:Awesomium.Windows.Forms.Utilities">
@@ -96,6 +494,31 @@
             An instance of a <see cref="T:Awesomium.Core.WebKeyboardEvent"/> representing the Awesomium equivalent of a
             Windows Forms key-press event.
             </returns>
+        </member>
+        <member name="M:Awesomium.Windows.Forms.Utilities.DrawBuffer(Awesomium.Core.RenderBuffer,System.Drawing.Bitmap@,Awesomium.Windows.RenderOperations)">
+            <summary>
+            Draws the contents of a <see cref="T:Awesomium.Core.RenderBuffer"/> to a <see cref="T:System.Drawing.Bitmap"/>.
+            </summary>
+            <param name="rBuffer">
+            The pixel buffer of a view. You can get this by calling <see cref="M:Awesomium.Core.WebView.Render"/>,
+            when a view is dirty.
+            </param>
+            <param name="b">
+            A reference to the <see cref="T:System.Drawing.Bitmap"/> that is filled with the contents of the specified
+            pixel buffer. This can be a null reference in which case a new bitmap will be created.
+            Keep a reference to this bitmap for subsequent calls to this method. This prevents useless
+            overhead when the size of the pixel buffer has not changed and a creation of a new bitmap
+            is not required.
+            </param>
+            <param name="rop">
+            Defines the operation that will be used for creating the new bitmap.
+            For details, see the <see cref="T:Awesomium.Windows.RenderOperations"/> enumeration.
+            </param>
+            <remarks>
+            You do not need to check for changes to the size of the pixel buffer before calling this method.
+            </remarks>
+            <seealso cref="P:Awesomium.Core.WebView.IsDirty"/>
+            <seealso cref="M:Awesomium.Core.WebView.Render"/>
         </member>
         <member name="M:Awesomium.Windows.Forms.Utilities.DrawBuffer(Awesomium.Core.RenderBuffer,System.Drawing.Bitmap@)">
             <summary>
@@ -423,39 +846,6 @@
             This value may change between renders and may return null if the <see cref="T:Awesomium.Windows.Forms.WebControl"/> has crashed
             (see <see cref="P:Awesomium.Windows.Forms.WebControl.IsCrashed"/>).
             </returns>
-        </member>
-        <member name="M:Awesomium.Windows.Forms.WebControl.PauseRendering">
-            <summary>
-            Temporarily pauses internal asynchronous rendering.
-            </summary>
-            <remarks>
-            All rendering is actually done asynchronously in a separate process
-            and so the page is usually continuously rendering even if you never call
-            <see cref="M:Awesomium.Windows.Forms.WebControl.Render"/>. Call this to temporarily pause rendering.
-            <note type="inherit">
-            <see cref="T:Awesomium.Windows.Forms.WebControl"/> handles this internally. Inheritors do not need to call this method unless
-            they implement custom logic.
-            </note>
-            <note type="caution">
-            For performance reasons, no validity check is performed when calling protected members.
-            Inheritors should perform any such checks (see <see cref="P:Awesomium.Windows.Forms.WebControl.IsLive"/>), before calling these members.
-            </note>
-            </remarks>
-        </member>
-        <member name="M:Awesomium.Windows.Forms.WebControl.ResumeRendering">
-            <summary>
-            Resume rendering after a call to <see cref="M:Awesomium.Windows.Forms.WebControl.PauseRendering"/>.
-            </summary>
-            <remarks>
-            <note type="inherit">
-            <see cref="T:Awesomium.Windows.Forms.WebControl"/> handles this internally. Inheritors do not need to call this method unless
-            they implement custom logic.
-            </note>
-            <note type="caution">
-            For performance reasons, no validity check is performed when calling protected members.
-            Inheritors should perform any such checks (see <see cref="P:Awesomium.Windows.Forms.WebControl.IsLive"/>), before calling these members.
-            </note>
-            </remarks>
         </member>
         <member name="M:Awesomium.Windows.Forms.WebControl.InjectMouseMove(System.Int32,System.Int32)">
             <summary>
@@ -1806,37 +2196,37 @@
             <inheritdoc />
         </member>
         <member name="P:Awesomium.Windows.Forms.WebControl.ForeColor">
-            <ignore/>
+            <exclude />
         </member>
         <member name="E:Awesomium.Windows.Forms.WebControl.ForeColorChanged">
-            <ignore/>
+            <exclude />
         </member>
         <member name="P:Awesomium.Windows.Forms.WebControl.Font">
-            <ignore/>
+            <exclude />
         </member>
         <member name="E:Awesomium.Windows.Forms.WebControl.FontChanged">
-            <ignore/>
+            <exclude />
         </member>
         <member name="P:Awesomium.Windows.Forms.WebControl.RightToLeft">
-            <ignore/>
+            <exclude />
         </member>
         <member name="E:Awesomium.Windows.Forms.WebControl.RightToLeftChanged">
-            <ignore/>
+            <exclude />
         </member>
         <member name="P:Awesomium.Windows.Forms.WebControl.Text">
-            <ignore/>
+            <exclude />
         </member>
         <member name="E:Awesomium.Windows.Forms.WebControl.TextChanged">
-            <ignore/>
+            <exclude />
         </member>
         <member name="P:Awesomium.Windows.Forms.WebControl.AllowDrop">
-            <ignore/>
+            <exclude />
         </member>
         <member name="P:Awesomium.Windows.Forms.WebControl.CausesValidation">
-            <ignore/>
+            <exclude />
         </member>
         <member name="E:Awesomium.Windows.Forms.WebControl.CausesValidationChanged">
-            <ignore/>
+            <exclude />
         </member>
         <member name="P:Awesomium.Windows.Forms.WebControl.IsLive">
             <summary>
@@ -1856,7 +2246,7 @@
             view that can be recreated.
             </summary>
         </member>
-        <member name="P:Awesomium.Windows.Forms.WebControl.IsSourceControl">
+        <member name="P:Awesomium.Windows.Forms.WebControl.IsSourceView">
             <summary>
             Gets if this control displays the HTML source of any web-page loaded.
             </summary>
@@ -1887,6 +2277,16 @@
             Gets if a page is currently loading in the <see cref="T:Awesomium.Core.WebView"/>.
             </summary>
         </member>
+        <member name="P:Awesomium.Windows.Forms.WebControl.IsNavigating">
+            <summary>
+            Gets if the <see cref="T:Awesomium.Windows.Forms.WebControl"/> is currently navigating to a Url.
+            </summary>
+            <remarks>
+            Unlike <see cref="P:Awesomium.Windows.Forms.WebControl.IsLoadingPage"/> that updates when the actual contents
+            of a page are being downloaded, this property is updated when navigation
+            starts and updates again when loading completes.
+            </remarks>
+        </member>
         <member name="P:Awesomium.Windows.Forms.WebControl.Title">
             <summary>
             Gets the title of the page currently loaded in this <see cref="T:Awesomium.Core.WebView"/>.
@@ -1896,6 +2296,12 @@
             For details, see <see cref="P:Awesomium.Windows.Forms.WebControl.NavigationInfo"/>.
             </remarks>
             <seealso cref="P:Awesomium.Windows.Forms.WebControl.NavigationInfo"/>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.WebControl.HasTitle">
+            <summary>
+            Gets if the currently loaded web-page has a title.
+            </summary>
+            <seealso cref="P:Awesomium.Windows.Forms.WebControl.Title"/>
         </member>
         <member name="P:Awesomium.Windows.Forms.WebControl.DirtyBounds">
             <summary>
@@ -1988,6 +2394,51 @@
             <seealso cref="T:Awesomium.Core.WebViewContext"/>
             <seealso cref="E:Awesomium.Windows.Forms.WebControl.ShowContextMenu"/>
         </member>
+        <member name="P:Awesomium.Windows.Forms.WebControl.SelfUpdate">
+            <summary>
+            Gets or sets if this view should use an independent rendering timer. 
+            </summary>
+            <remarks>
+            <note type="caution">
+            Setting this property to <c>true</c> will fail if <see cref="P:Awesomium.Core.WebCore.IsAutoUpdateEnabled"/> is <c>false</c>.
+            It is suggested that you check the value of <see cref="P:Awesomium.Core.WebCore.IsAutoUpdateEnabled"/> before attempting
+            to activate <see cref="P:Awesomium.Windows.Forms.WebControl.SelfUpdate"/>.
+            </note>
+            <p/>
+            When auto-update is enabled (see <see cref="P:Awesomium.Core.WebCore.IsAutoUpdateEnabled"/>), updating
+            <see cref="P:Awesomium.Windows.Forms.WebControl.IsDirty"/> and refreshing views, is controlled by the <see cref="T:Awesomium.Core.WebCore"/>
+            using an internal timer, common for all views. The same timer is used to update the <see cref="T:Awesomium.Core.WebCore"/>
+            (see <see cref="M:Awesomium.Core.WebCore.Update"/>) and fire events. While this is a light and effective technique, it is
+            not ideal when you require high performance quality, such as when video content is displayed in views.
+            In these scenarios, setting <see cref="P:Awesomium.Windows.Forms.WebControl.SelfUpdate"/> to <c>true</c> will tell the view to use an
+            independent timer for rendering only, that will significantly improve the rendering quality, to the expense
+            of CPU resources.
+            <p/>
+            <note type="caution">
+            You should always combine the use of <see cref="P:Awesomium.Windows.Forms.WebControl.SelfUpdate"/> with the use of <see cref="P:Awesomium.Windows.Forms.WebControl.IsRendering"/>.
+            When more than one views are using <see cref="P:Awesomium.Windows.Forms.WebControl.SelfUpdate"/> and they all display content that updates too fast (such as videos), 
+            controls that are currently not visible to the user (such as controls that are currently covered by other UI or used in a tab 
+            of a tab-control that is currently not visible), should have rendering paused (see <see cref="P:Awesomium.Windows.Forms.WebControl.IsRendering"/>),
+            to avoid draining out your CPU resources.
+            </note>
+            <p/>
+            <note>
+            The default setting for the Windows Forms <see cref="T:Awesomium.Windows.Forms.WebControl"/>, is <c>false</c>.
+            </note>
+            </remarks>
+            <seealso cref="P:Awesomium.Windows.Forms.WebControl.IsRendering"/>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.WebControl.IsRendering">
+            <summary>
+            Gets or sets if internal asynchronous rendering is currently active.
+            </summary>
+            <remarks>
+            All rendering is actually done asynchronously in a separate process
+            and so the page is usually continuously rendering internally.
+            Set this to <c>false</c> to temporarily pause rendering.
+            </remarks>
+            <seealso cref="P:Awesomium.Windows.Forms.WebControl.SelfUpdate"/>
+        </member>
         <member name="P:Awesomium.Windows.Forms.WebControl.IsTransparent">
             <summary>
             Gets or sets if pages should be rendered with transparency
@@ -2024,7 +2475,15 @@
             This operation is asynchronous: 
             the value may not change for several milliseconds after
             you set this property.
+            <note>
+            Note that this setting is applied to the current hostname and
+            not the control in general. Is it dynamically updated when
+            you navigate to another domain with different, or no setting.
+            <p/>
+            To get the Zoom setting of a given hostname, use <see cref="M:Awesomium.Windows.Forms.WebControl.GetZoomForHost(System.String)"/>.
+            </note>
             </remarks>
+            <seealso cref="M:Awesomium.Windows.Forms.WebControl.GetZoomForHost(System.String)"/>
         </member>
         <member name="P:Awesomium.Windows.Forms.WebControl.Source">
             <summary>
@@ -2076,10 +2535,37 @@
             </note>
             </remarks>
         </member>
+        <member name="P:Awesomium.Windows.Forms.WebControl.RenderOperation">
+            <summary>
+            Gets or sets the method that will be used when
+            creating a <see cref="T:System.Drawing.Bitmap"/> for a <see cref="T:Awesomium.Core.RenderBuffer"/>,
+            that will be used to paint the web-view's pixel buffer.
+            </summary>
+            <returns>
+            A member of the <see cref="T:Awesomium.Windows.RenderOperations"/> enumeration, 
+            indicating the method that will be used when
+            creating a <see cref="T:System.Drawing.Bitmap"/> for a <see cref="T:Awesomium.Core.RenderBuffer"/>,
+            that will be used to paint the web-view's pixel buffer.
+            The default is <see cref="F:Awesomium.Windows.RenderOperations.PaintAtResize"/>.
+            </returns>
+            <remarks>
+            Changing this property's value, may affect the control's rendering
+            performance, in certain scenarios.
+            </remarks>
+        </member>
         <member name="E:Awesomium.Windows.Forms.WebControl.PropertyChanged">
             <summary>
             Raised when the value of a property of this class, has changed.
             </summary>
+        </member>
+        <member name="T:Awesomium.Windows.Forms.WebSourceControl">
+            <summary>
+            Represents a Windows Forms control that displays the HTML source 
+            of any web-page loaded using <see cref="!:WebSourceControl.LoadURL"/>.
+            </summary>
+        </member>
+        <member name="P:Awesomium.Windows.Forms.WebSourceControl.IsSourceView">
+            <inheritdoc />
         </member>
     </members>
 </doc>

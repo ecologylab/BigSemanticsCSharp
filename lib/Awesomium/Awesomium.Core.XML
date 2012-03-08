@@ -16,6 +16,14 @@
         <member name="M:Awesomium.Core.AweRect.Equals(System.Object)">
             <inheritdoc />
         </member>
+        <member name="M:Awesomium.Core.Common.IsDotNetAssembly(System.String)">
+            <summary>
+            Attempts to find out if a specified child process executable, is a .NET assembly.
+            </summary>
+            <param name="asmFile">
+            The path to the executable file.
+            </param>
+        </member>
         <member name="T:Awesomium.Core.EnableThemingInScope">
             <summary>
             This class is intended to be used with the 'using' statement,
@@ -116,6 +124,68 @@
             Provides data for the <see cref="E:Awesomium.Core.IWebView.HistoryChanged"/> event.
             </summary>
         </member>
+        <member name="T:Awesomium.Core.CoreStartEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Awesomium.Core.WebCore.Started"/> event.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">An <see cref="T:Awesomium.Core.CoreStartEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="T:Awesomium.Core.CoreStartEventArgs">
+            <summary>
+            Provides data for the <see cref="E:Awesomium.Core.WebCore.Started"/> event.
+            </summary>
+        </member>
+        <member name="P:Awesomium.Core.CoreStartEventArgs.Conf">
+            <summary>
+            Gets a <see cref="T:Awesomium.Core.WebCoreConfig"/> instance specifying 
+            the settings used to start the <see cref="T:Awesomium.Core.WebCore"/>.
+            </summary>
+        </member>
+        <member name="T:Awesomium.Core.CreatedViewEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Awesomium.Core.WebCore.CreatedView"/> event.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">An <see cref="T:Awesomium.Core.CreatedViewEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="T:Awesomium.Core.CreatedViewEventArgs">
+            <summary>
+            Provides data for the <see cref="E:Awesomium.Core.WebCore.CreatedView"/> event.
+            </summary>
+        </member>
+        <member name="P:Awesomium.Core.CreatedViewEventArgs.NewView">
+            <summary>
+            Gets the new view created by the <see cref="T:Awesomium.Core.WebCore"/>.
+            </summary>
+        </member>
+        <member name="T:Awesomium.Core.CoreShutdownEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Awesomium.Core.WebCore.ShuttingDown"/> event.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">An <see cref="T:Awesomium.Core.CoreShutdownEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="T:Awesomium.Core.CoreShutdownEventArgs">
+            <summary>
+            Provides data for the <see cref="E:Awesomium.Core.WebCore.ShuttingDown"/> event.
+            </summary>
+        </member>
+        <member name="T:Awesomium.Core.CoreStartingEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Awesomium.Core.WebCore.Starting"/> event.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">
+            An <see cref="T:System.ComponentModel.CancelEventArgs"/> that contains the event data.
+            <p/>
+            <note type="caution">
+            Setting <see cref="P:System.ComponentModel.CancelEventArgs.Cancel"/> to <c>true</c>,
+            will prevent the <see cref="T:Awesomium.Core.WebCore"/> from starting. 
+            Use with caution.
+            </note>
+            </param>
+        </member>
         <member name="T:Awesomium.Core.ShowJavascriptDialogEventHandler">
             <summary>
             Represents the method that will handle the <see cref="E:Awesomium.Core.IWebView.ShowJavascriptDialog"/> event.
@@ -136,12 +206,17 @@
         </member>
         <member name="P:Awesomium.Core.JavascriptDialogEventArgs.Message">
             <summary>
-            The message, if any, to displayed by the dialog.
+            The message, if any, to be displayed by the dialog.
             </summary>
         </member>
         <member name="P:Awesomium.Core.JavascriptDialogEventArgs.DefaultPrompt">
             <summary>
             The default prompt provided by JS, for the dialog's prompt.
+            </summary>
+        </member>
+        <member name="P:Awesomium.Core.JavascriptDialogEventArgs.FrameURL">
+            <summary>
+            Gets the address of the page that launches the dialog.
             </summary>
         </member>
         <member name="P:Awesomium.Core.JavascriptDialogEventArgs.Prompt">
@@ -153,9 +228,12 @@
         <member name="P:Awesomium.Core.JavascriptDialogEventArgs.Handled">
             <summary>
             Gets or sets if this event is handled by an application.
-            If set to false (default), a WebControl
-            will display its predefined user interface.
+            The default is <c>false</c>.
             </summary>
+            <remarks>
+            When set to <c>false</c> (default), a technology specific
+            WebControls may display their predefined dialog (if any).
+            </remarks>
         </member>
         <member name="T:Awesomium.Core.ResizeCompleteEventHandler">
             <summary>
@@ -421,6 +499,11 @@
             Provides data for the <see cref="E:Awesomium.Core.WebView.SelectionChanged"/> and <see cref="E:Awesomium.Windows.Controls.WebControl.SelectionChanged"/> events.
             </summary>
         </member>
+        <member name="T:Awesomium.Core.HistoryEntry">
+            <summary>
+            Represents a single entry in a <see cref="T:Awesomium.Core.HistoryQueryResult"/>.
+            </summary>
+        </member>
         <member name="F:Awesomium.Core.HistoryEntry.Empty">
             <summary>
             Represents an empty History Entry.
@@ -436,9 +519,38 @@
             Gets the title of the page.
             </summary>
         </member>
+        <member name="P:Awesomium.Core.HistoryEntry.VisitTime">
+            <summary>
+            Gets the date and time the <see cref="P:Awesomium.Core.HistoryEntry.Url"/>
+            was last visited.
+            </summary>
+        </member>
+        <member name="P:Awesomium.Core.HistoryEntry.VisitCount">
+            <summary>
+            Gets the number of visits to the <see cref="P:Awesomium.Core.HistoryEntry.Url"/>.
+            </summary>
+        </member>
+        <member name="T:Awesomium.Core.HistoryQueryResult">
+            <summary>
+            Represents a collection of entries in History.
+            </summary>
+            <remarks>
+            You get a collection of History entries by calling <see cref="M:Awesomium.Core.WebCore.QueryHistory"/>.
+            <p/>
+            <note>
+            To avoid memory leaks, you should always dispose instances of 
+            <see cref="T:Awesomium.Core.HistoryQueryResult"/> that are no longer used.
+            </note>
+            </remarks>
+        </member>
         <member name="M:Awesomium.Core.HistoryQueryResult.Dispose">
             <summary>
             Disposes and destroys this <see cref="T:Awesomium.Core.HistoryEntry"/>.
+            </summary>
+        </member>
+        <member name="P:Awesomium.Core.HistoryQueryResult.Count">
+            <summary>
+            Gets the number of entries in this collection.
             </summary>
         </member>
         <member name="T:Awesomium.Core.ViewInput">
@@ -1422,6 +1534,72 @@
             and resource tracking purposes.
             </summary>
         </member>
+        <member name="P:Awesomium.Core.IWebView.SelfUpdate">
+            <summary>
+            Gets or sets if this view should use an independent rendering timer. 
+            </summary>
+            <remarks>
+            <note type="caution">
+            Setting this property to <c>true</c> will fail if <see cref="P:Awesomium.Core.WebCore.IsAutoUpdateEnabled"/> is <c>false</c>.
+            It is suggested that you check the value of <see cref="P:Awesomium.Core.WebCore.IsAutoUpdateEnabled"/> before attempting
+            to activate <see cref="P:Awesomium.Core.IWebView.SelfUpdate"/>.
+            </note>
+            <p/>
+            When auto-update is enabled (see <see cref="P:Awesomium.Core.WebCore.IsAutoUpdateEnabled"/>), updating
+            <see cref="P:Awesomium.Core.IWebView.IsDirty"/> and refreshing WebControls, is controlled by the <see cref="T:Awesomium.Core.WebCore"/>
+            using an internal timer, common for all views. The same timer is used to update the <see cref="T:Awesomium.Core.WebCore"/>
+            (see <see cref="M:Awesomium.Core.WebCore.Update"/>) and fire events. While this is a light and effective technique, it is
+            not ideal when you require high performance quality, such as when video content is displayed in views.
+            In these scenarios, setting <see cref="P:Awesomium.Core.IWebView.SelfUpdate"/> to <c>true</c> will tell the view to use an
+            independent timer for rendering only, that will significantly improve the rendering quality, to the expense
+            of CPU resources.
+            <p/>
+            <note type="caution">
+            You should always combine the use of <see cref="P:Awesomium.Core.IWebView.SelfUpdate"/> with the use of <see cref="P:Awesomium.Core.IWebView.IsRendering"/>.
+            When more than one views are using <see cref="P:Awesomium.Core.IWebView.SelfUpdate"/> and they all display content that updates too fast (such as videos), 
+            controls that are currently not visible to the user (such as controls that are currently covered by other UI or used in a tab 
+            of a tab-control that is currently not visible), should have rendering paused (see <see cref="P:Awesomium.Core.IWebView.IsRendering"/>),
+            to avoid draining out your CPU resources.
+            </note>
+            <p/>
+            <note>
+            The default setting for all views is <c>false</c>, except WPF WebControl where the default setting is <c>true</c>.
+            This is because in WPF only, we get more detailed notifications of when a control is loaded for presentation and thus
+            we can update <see cref="P:Awesomium.Core.IWebView.IsRendering"/> internally.
+            </note>
+            </remarks>
+            <seealso cref="P:Awesomium.Core.IWebView.IsRendering"/>
+        </member>
+        <member name="P:Awesomium.Core.IWebView.IsSourceView">
+            <summary>
+            Gets if this is a source view that displays the source of
+            web-pages loaded to it.
+            </summary>
+            <remarks>
+            You can create a view that displays the source of each web-page
+            loaded to it, by using the <see cref="M:Awesomium.Core.WebCore.CreateSourceWebView(System.Int32,System.Int32)"/>
+            function.
+            <p/>
+            <note>
+            Most technology specific assemblies provided by Awesomium.NET,
+            provide a pre-defined source view web-control.
+            </note>
+            </remarks>
+        </member>
+        <member name="P:Awesomium.Core.IWebView.IsRendering">
+            <summary>
+            Gets or sets if internal asynchronous rendering is currently active.
+            </summary>
+            <remarks>
+            All rendering is actually done asynchronously in a separate process
+            and so the page is usually continuously rendering internally.
+            Set this to <c>false</c> to temporarily pause rendering.
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">
+            The member is accessed on an invalid view.
+            </exception>
+            <seealso cref="P:Awesomium.Core.IWebView.SelfUpdate"/>
+        </member>
         <member name="P:Awesomium.Core.IWebView.IsDirty">
             <summary>
             Gets whether or not this view needs to be rendered again.
@@ -1498,6 +1676,12 @@
             <summary>
             Gets the title of the page currently loaded in this view.
             </summary>
+        </member>
+        <member name="P:Awesomium.Core.IWebView.HasTitle">
+            <summary>
+            Gets if the currently loaded web-page has a title.
+            </summary>
+            <seealso cref="P:Awesomium.Core.IWebView.Title"/>
         </member>
         <member name="P:Awesomium.Core.IWebView.HasKeyboardFocus">
             <summary>
@@ -2011,6 +2195,16 @@
             TODO: Instructions tutorial.
             </remarks>
         </member>
+        <member name="F:Awesomium.Core.ReleaseInfo.LIBRARY_VERSION">
+            <summary>
+            Specifies the native Awesomium library version.
+            </summary>
+            <remarks>
+            <note type="caution">
+            Always keep this synchronized with the current version of Awesomium.
+            </note>
+            </remarks>
+        </member>
         <member name="F:Awesomium.Core.ReleaseInfo.ASSEMBLY_VERSION">
             <summary>
             Specifies the Awesomium.Core assembly version.
@@ -2041,8 +2235,20 @@
             Specifies the full Public Key of the Awesomium.Windows.Controls assembly's Strong Name.
             </summary>
             <remarks>
-            This is used with the InternalsVisibleToAttrinute to allow the internals of this
+            This is used with the InternalsVisibleToAttribute to allow the internals of this
             assembly, be visible from the Awesomium.Windows.Controls assembly.
+            
+            TODO: Instructions tutorial.
+            </remarks>
+        </member>
+        <member name="F:Awesomium.Core.ReleaseInfo.WPF_DESIGN_PUBLIC_KEY">
+            <summary>
+            Specifies the full Public Key of the Awesomium.Windows.Controls.Design
+            assembly's Strong Name.
+            </summary>
+            <remarks>
+            This is used with the InternalsVisibleToAttribute to allow the internals of this
+            assembly, be visible from the Awesomium.Windows.Controls.Design assembly.
             
             TODO: Instructions tutorial.
             </remarks>
@@ -2052,8 +2258,19 @@
             Specifies the full Public Key of the Awesomium.Windows.Forms assembly's Strong Name.
             </summary>
             <remarks>
-            This is used with the InternalsVisibleToAttrinute to allow the internals of this
+            This is used with the InternalsVisibleToAttribute to allow the internals of this
             assembly, be visible from the Awesomium.Windows.Forms assembly.
+            
+            TODO: Instructions tutorial.
+            </remarks>
+        </member>
+        <member name="F:Awesomium.Core.ReleaseInfo.UNITY_PUBLIC_KEY">
+            <summary>
+            Specifies the full Public Key of the Awesomium.Unity assembly's Strong Name.
+            </summary>
+            <remarks>
+            This is used with the InternalsVisibleToAttribute to allow the internals of this
+            assembly, be visible from the Awesomium.Unity assembly.
             
             TODO: Instructions tutorial.
             </remarks>
@@ -2275,6 +2492,16 @@
               resource lookups using this strongly typed resource class.
             </summary>
         </member>
+        <member name="P:Awesomium.Core.CoreResources.AwesomiumChildProcessTest">
+            <summary>
+              Looks up a localized string similar to AwesomiumChildProcessTest.
+            </summary>
+        </member>
+        <member name="P:Awesomium.Core.CoreResources.ChildProcessTestDomainName">
+            <summary>
+              Looks up a localized string similar to Awesomium.ChildProcess.TestDomain.
+            </summary>
+        </member>
         <member name="P:Awesomium.Core.CoreResources.ERR_InvalidJpegQuality">
             <summary>
               Looks up a localized string similar to Valid range is 0 to 100..
@@ -2293,6 +2520,11 @@
         <member name="P:Awesomium.Core.CoreResources.ERR_WebControlDisabled">
             <summary>
               Looks up a localized string similar to The control is disabled either manually or it has been destroyed..
+            </summary>
+        </member>
+        <member name="P:Awesomium.Core.CoreResources.TempCache">
+            <summary>
+              Looks up a localized string similar to {0}{1}TempCache{1}.
             </summary>
         </member>
         <member name="P:Awesomium.Core.CoreResources.TITLE_Crashed">
@@ -2451,6 +2683,26 @@
             </remarks>
             <threadsafety static="false" instance="false"/>
         </member>
+        <member name="M:Awesomium.Core.WebCore.OnStart(System.ComponentModel.CancelEventArgs)">
+            <summary>
+            Triggers the <see cref="E:Awesomium.Core.WebCore.Starting"/> event.
+            </summary>
+        </member>
+        <member name="M:Awesomium.Core.WebCore.OnStarted(Awesomium.Core.CoreStartEventArgs)">
+            <summary>
+            Triggers the Started event.
+            </summary>
+        </member>
+        <member name="M:Awesomium.Core.WebCore.OnShutdown(Awesomium.Core.CoreShutdownEventArgs)">
+            <summary>
+            Triggers the <see cref="E:Awesomium.Core.WebCore.ShuttingDown"/> event.
+            </summary>
+        </member>
+        <member name="M:Awesomium.Core.WebCore.OnCreateView(Awesomium.Core.CreatedViewEventArgs)">
+            <summary>
+            Triggers the <see cref="E:Awesomium.Core.WebCore.CreatedView"/> event.
+            </summary>
+        </member>
         <member name="M:Awesomium.Core.WebCore.VerifyDependencies">
             <summary>
             Verifies the existence of windows specific dependencies.
@@ -2469,6 +2721,20 @@
             Invokes the main method for an Awesomium Child Process.
             </summary>
             <seealso cref="P:Awesomium.Core.WebCoreConfig.ChildProcessPath"/>
+        </member>
+        <member name="M:Awesomium.Core.WebCore.GetUri(System.String)">
+            <summary>
+            Gets a <see cref="T:System.Uri"/> for URL string.
+            </summary>
+            <param name="url">
+            A <see cref="T:System.String"/> value representing a URL.
+            </param>
+            <returns>
+            A <see cref="T:System.Uri"/> representing the specified URL,
+            or a <see cref="T:System.Uri"/> representing <c>about:blank</c>,
+            if the string specified for <paramref name="url"/>,
+            is not a valid URL.
+            </returns>
         </member>
         <member name="M:Awesomium.Core.WebCore.Initialize(Awesomium.Core.WebCoreConfig)">
             <summary>
@@ -2495,7 +2761,7 @@
             <see cref="T:Awesomium.Core.WebCore"/> is possible per application session (process).
             </note>
             <para>
-            If you set <see cref="P:Awesomium.Core.WebCoreConfig.SaveCacheAndCookies"/> to true, 
+            If you set <see cref="P:Awesomium.Core.WebCoreConfig.SaveCacheAndCookies"/> to <c>true</c>, 
             please make sure that your hosting application is a single instance application, 
             unless you are sure that you provide a unique <see cref="P:Awesomium.Core.WebCoreConfig.UserDataPath"/>
             for each of your application's instances.
@@ -2532,7 +2798,7 @@
             <see cref="T:Awesomium.Core.WebCore"/> is possible per application session (process).
             </note>
             <para>
-            If you set <see cref="P:Awesomium.Core.WebCoreConfig.SaveCacheAndCookies"/> to true, 
+            If you set <see cref="P:Awesomium.Core.WebCoreConfig.SaveCacheAndCookies"/> to <c>true</c>, 
             please make sure that your hosting application is a single instance application, 
             unless you are sure that you provide a unique <see cref="P:Awesomium.Core.WebCoreConfig.UserDataPath"/>
             for each of your application's instances.
@@ -2814,6 +3080,33 @@
             The member is called before starting <see cref="T:Awesomium.Core.WebCore"/>.
             </exception>
         </member>
+        <member name="E:Awesomium.Core.WebCore.Starting">
+            <summary>
+            Occurs when the <see cref="T:Awesomium.Core.WebCore"/> is starting.
+            </summary>
+            <remarks>
+            <note type="caution">
+            Setting <see cref="P:System.ComponentModel.CancelEventArgs.Cancel"/> to <c>true</c>,
+            will prevent the <see cref="T:Awesomium.Core.WebCore"/> from starting. 
+            Use with caution.
+            </note>
+            </remarks>
+        </member>
+        <member name="E:Awesomium.Core.WebCore.Started">
+            <summary>
+            Occurs right after the <see cref="T:Awesomium.Core.WebCore"/> has successfully started.
+            </summary>
+        </member>
+        <member name="E:Awesomium.Core.WebCore.ShuttingDown">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Awesomium.Core.WebCore.CreatedView">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:Awesomium.Core.WebCore.IsChildProcess">
             <summary>
             Gets if the calling process is an Awesomium Child Process.
@@ -2910,6 +3203,11 @@
             </note>
             </remarks>
         </member>
+        <member name="P:Awesomium.Core.WebCore.SyncRoot">
+            <summary>
+            Synchronization object.
+            </summary>
+        </member>
         <member name="T:Awesomium.Core.WebCoreConfig">
             <summary>
             Configuration settings for the <see cref="T:Awesomium.Core.WebCore"/>.
@@ -2971,7 +3269,7 @@
             </item>
             <item>
             <term><see cref="P:Awesomium.Core.WebCoreConfig.UserDataPath"/></term>
-            <description>An empty string which defaults to: "./Default" directory.</description>
+            <description>An empty string which defaults to: <c>CSIDL_APPDATA\Awesomium\Default\</c></description>
             </item>
             <item>
             <term><see cref="P:Awesomium.Core.WebCoreConfig.PluginPath"/></term>
@@ -2979,7 +3277,7 @@
             </item>
             <item>
             <term><see cref="P:Awesomium.Core.WebCoreConfig.LogPath"/></term>
-            <description>An empty string which defaults to the working directory.</description>
+            <description>An empty string which defaults to <c>CSIDL_APPDATA\Awesomium\</c>.</description>
             </item>
             <item>
             <term><see cref="P:Awesomium.Core.WebCoreConfig.LogLevel"/></term>
@@ -2995,7 +3293,7 @@
             </item>
             <item>
             <term><see cref="P:Awesomium.Core.WebCoreConfig.LocalePath"/></term>
-            <description>An empty string which defaults to the location of Awesomium.dll.</description>
+            <description>An empty string which defaults to the location of the native Awesomium library.</description>
             </item>
             <item>
             <term><see cref="P:Awesomium.Core.WebCoreConfig.EnableAutoDetectEncoding"/></term>
@@ -3063,12 +3361,12 @@
         <member name="P:Awesomium.Core.WebCoreConfig.EnablePlugins">
             <summary>
             Indicates whether or not to enable embedded plugins (e.g., Flash).
-            The default is false.
+            The default is <c>true</c>.
             </summary>
         </member>
         <member name="P:Awesomium.Core.WebCoreConfig.EnableJavascript">
             <summary>
-            Indicates whether or not Javascript is enabled. The default is True.
+            Indicates whether or not Javascript is enabled. The default is <c>true</c>.
             </summary>
         </member>
         <member name="P:Awesomium.Core.WebCoreConfig.EnableDatabases">
@@ -3080,8 +3378,12 @@
         <member name="P:Awesomium.Core.WebCoreConfig.UserDataPath">
             <summary>
             Indicates the path to the directory that will be used to store cache, cookies, and other data. 
-            If an empty string is specified, this path defaults to "./Default".
+            If an empty string is specified, this path defaults to <c>CSIDL_APPDATA\Awesomium\Default</c>.
             </summary>
+            <remarks>
+            Relative paths are resolved against <see cref="P:Awesomium.Core.WebCore.PackagePath"/>.
+            That is, the path where the native Awesomium library is located.
+            </remarks>
         </member>
         <member name="P:Awesomium.Core.WebCoreConfig.PluginPath">
             <summary>
@@ -3091,9 +3393,13 @@
         </member>
         <member name="P:Awesomium.Core.WebCoreConfig.LogPath">
             <summary>
-            Indicates the path to store the awesomium.log. 
-            If none is specified, the log will be stored in the working directory.
+            Indicates the path to store the <c>awesomium.log</c>.
+            If none is specified, the log will be stored in <c>CSIDL_APPDATA\Awesomium\</c>.
             </summary>
+            <remarks>
+            Relative paths are resolved against <see cref="P:Awesomium.Core.WebCore.PackagePath"/>.
+            That is, the path where the native Awesomium library is located.
+            </remarks>
         </member>
         <member name="P:Awesomium.Core.WebCoreConfig.LogLevel">
             <summary>
@@ -3119,6 +3425,23 @@
             (this will be AwesomiumProcess if you leave this empty). You can specify your own executable 
             to handle the rendering but you will need to make sure that it calls <see cref="M:Awesomium.Core.WebCore.ChildProcessMain"/>.
             </summary>
+            <remarks>
+            Currently, the use of a managed child process on Windows, is supported on Windows versions
+            newer than and including Windows Vista.
+            <p/>
+            <note type="caution">
+            Your applications must always distribute the default <c>AwesomiumProcess</c>
+            alongside the <c>Awesomium</c> library.
+            <p/>
+            On Windows systems such as Windows XP, setting this property to a managed
+            child process, is ignored and the default rendering process (<c>AwesomiumProcess</c>)
+            is used instead.
+            </note>
+            <note>
+            You can still use C/C++ custom child processes in all Windows versions
+            supported by Awesomium.
+            </note>
+            </remarks>
             <example>
             Example of Usage:
             <code>
@@ -3190,6 +3513,31 @@
             }
             </code>
             </example>
+            <seealso cref="P:Awesomium.Core.WebCoreConfig.SystemSupportsManagedChildProcess"/>
+        </member>
+        <member name="P:Awesomium.Core.WebCoreConfig.SystemSupportsManagedChildProcess">
+            <summary>
+            Gets if the use of a managed custom child process (including <see cref="F:Awesomium.Core.WebCoreConfig.CHILD_PROCESS_SELF"/>),
+            is supported in the current operating system.
+            </summary>
+            <remarks>
+            Currently, the use of a managed child process on Windows, is supported on Windows versions
+            newer than and including Windows Vista.
+            <p/>
+            <note type="caution">
+            Your applications must always distribute the default <c>AwesomiumProcess</c>
+            alongside the <c>Awesomium</c> library.
+            <p/>
+            On Windows systems such as Windows XP, setting <see cref="P:Awesomium.Core.WebCoreConfig.ChildProcessPath"/> to a managed
+            child process, is ignored and the default rendering process (<c>AwesomiumProcess</c>)
+            is used instead.
+            </note>
+            <note>
+            You can still use C/C++ custom child processes in all Windows versions
+            supported by Awesomium.
+            </note>
+            </remarks>
+            <seealso cref="P:Awesomium.Core.WebCoreConfig.ChildProcessPath"/>
         </member>
         <member name="P:Awesomium.Core.WebCoreConfig.LocalePath">
             <summary>
@@ -3308,6 +3656,9 @@
             Indicates whether or not the "same-origin" policy should be disabled. 
             See http://en.wikipedia.org/wiki/Same_origin_policy.
             </summary>
+        </member>
+        <member name="P:Awesomium.Core.WebCoreConfig.DisableWinMessagePump">
+            <exclude />
         </member>
         <member name="P:Awesomium.Core.WebCoreConfig.CustomCSS">
             <summary>
@@ -3967,29 +4318,6 @@
             (see <see cref="P:Awesomium.Core.WebView.IsEnabled"/>).
             </exception>
         </member>
-        <member name="M:Awesomium.Core.WebView.PauseRendering">
-            <summary>
-            Temporarily pauses internal asynchronous rendering.
-            </summary>
-            <remarks>
-            All rendering is actually done asynchronously in a separate process
-            and so the page is usually continuously rendering even if you never call
-            <see cref="M:Awesomium.Core.WebView.Render"/>. Call this to temporarily pause rendering.
-            </remarks>
-            <exception cref="T:System.InvalidOperationException">
-            The member is called on an invalid <see cref="T:Awesomium.Core.WebView"/> instance
-            (see <see cref="P:Awesomium.Core.WebView.IsEnabled"/>).
-            </exception>
-        </member>
-        <member name="M:Awesomium.Core.WebView.ResumeRendering">
-            <summary>
-            Resume rendering after a call to <see cref="M:Awesomium.Core.WebView.PauseRendering"/>.
-            </summary>
-            <exception cref="T:System.InvalidOperationException">
-            The member is called on an invalid <see cref="T:Awesomium.Core.WebView"/> instance
-            (see <see cref="P:Awesomium.Core.WebView.IsEnabled"/>).
-            </exception>
-        </member>
         <member name="M:Awesomium.Core.WebView.InjectMouseMove(System.Int32,System.Int32)">
             <summary>
             Injects a mouse-move event in local coordinates.
@@ -4180,9 +4508,7 @@
         </member>
         <member name="M:Awesomium.Core.WebView.Resize(System.Int32,System.Int32)">
             <summary>
-            Resizes this <see cref="T:Awesomium.Core.WebView"/> to certain dimensions. This operation can fail
-            if another resize is already pending (see <see cref="P:Awesomium.Core.WebView.IsResizing"/>) or if
-            the repaint timeout was exceeded.
+            Initiates an asynchronous resize operation.
             </summary>
             <param name="width">
             The width in pixels to resize to.
@@ -4193,26 +4519,25 @@
             <returns>
             True if the resize was successful. False otherwise.
             </returns>
+            <remarks>
+            Handle the <see cref="E:Awesomium.Core.WebView.ResizeComplete"/> event to be notified 
+            when the operation completes. This operation can fail 
+            if another resize is already pending (see <see cref="P:Awesomium.Core.WebView.IsResizing"/>).
+            </remarks>
             <exception cref="T:System.InvalidOperationException">
             The member is called on an invalid <see cref="T:Awesomium.Core.WebView"/> instance
             (see <see cref="P:Awesomium.Core.WebView.IsEnabled"/>).
             </exception>
         </member>
-        <member name="M:Awesomium.Core.WebView.Resize(System.Int32,System.Int32,System.Boolean,System.Int32)">
+        <member name="M:Awesomium.Core.WebView.Resize(System.Int32,System.Int32,System.Int32)">
             <summary>
-            Resizes this <see cref="T:Awesomium.Core.WebView"/> to certain dimensions. This operation can fail
-            if another resize is already pending (see <see cref="P:Awesomium.Core.WebView.IsResizing"/>) or if
-            the repaint timeout was exceeded.
+            Resizes this <see cref="T:Awesomium.Core.WebView"/> to certain dimensions.
             </summary>
             <param name="width">
             The width in pixels to resize to.
             </param>
             <param name="height">
             The height in pixels to resize to.
-            </param>
-            <param name="waitForRepaint">
-            Whether or not to wait for the <see cref="T:Awesomium.Core.WebView"/> to finish repainting to avoid flicker
-            (default is true).
             </param>
             <param name="repaintTimeoutMs">
             The max amount of time to wait for a repaint, in milliseconds.
@@ -4220,6 +4545,10 @@
             <returns>
             True if the resize was successful. False otherwise.
             </returns>
+            <remarks>
+            This operation can fail if another resize is already pending 
+            (see <see cref="P:Awesomium.Core.WebView.IsResizing"/>) or if the repaint timeout was exceeded.
+            </remarks>
             <exception cref="T:System.InvalidOperationException">
             The member is called on an invalid <see cref="T:Awesomium.Core.WebView"/> instance
             (see <see cref="P:Awesomium.Core.WebView.IsEnabled"/>).
@@ -4904,6 +5233,17 @@
             </note>
             </remarks>
         </member>
+        <member name="P:Awesomium.Core.WebView.IsSourceView">
+            <summary>
+            Gets if this is a source view that displays the source of
+            web-pages loaded to it.
+            </summary>
+            <remarks>
+            You can create a view that displays the source of each web-page
+            loaded to it, by using the <see cref="M:Awesomium.Core.WebCore.CreateSourceWebView(System.Int32,System.Int32)"/>
+            function.
+            </remarks>
+        </member>
         <member name="P:Awesomium.Core.WebView.IsDirty">
             <summary>
             Gets whether or not this <see cref="T:Awesomium.Core.WebView"/> needs to be rendered again.
@@ -4941,6 +5281,16 @@
             The member is accessed on an invalid <see cref="T:Awesomium.Core.WebView"/> instance
             (see <see cref="P:Awesomium.Core.WebView.IsEnabled"/>).
             </exception>
+        </member>
+        <member name="P:Awesomium.Core.WebView.IsNavigating">
+            <summary>
+            Gets if the <see cref="T:Awesomium.Core.WebView"/> is currently navigating to a Url.
+            </summary>
+            <remarks>
+            Unlike <see cref="P:Awesomium.Core.WebView.IsLoadingPage"/> that updates when the actual contents
+            of a page are being downloaded, this property is updated when navigation
+            starts and updates again when loading completes.
+            </remarks>
         </member>
         <member name="P:Awesomium.Core.WebView.Title">
             <summary>
@@ -5060,6 +5410,59 @@
             <seealso cref="T:Awesomium.Core.WebViewContext"/>
             <seealso cref="E:Awesomium.Core.WebView.ShowContextMenu"/>
         </member>
+        <member name="P:Awesomium.Core.WebView.SelfUpdate">
+            <summary>
+            Gets or sets if this view should use an independent rendering timer. 
+            </summary>
+            <remarks>
+            <note type="caution">
+            Setting this property to <c>true</c> will fail if <see cref="P:Awesomium.Core.WebCore.IsAutoUpdateEnabled"/> is <c>false</c>.
+            It is suggested that you check the value of <see cref="P:Awesomium.Core.WebCore.IsAutoUpdateEnabled"/> before attempting
+            to activate <see cref="P:Awesomium.Core.WebView.SelfUpdate"/>.
+            </note>
+            <p/>
+            When auto-update is enabled (see <see cref="P:Awesomium.Core.WebCore.IsAutoUpdateEnabled"/>), updating
+            <see cref="P:Awesomium.Core.WebView.IsDirty"/> and refreshing views, is controlled by the <see cref="T:Awesomium.Core.WebCore"/>
+            using an internal timer, common for all views. The same timer is used to update the <see cref="T:Awesomium.Core.WebCore"/>
+            (see <see cref="M:Awesomium.Core.WebCore.Update"/>) and fire events. While this is a light and effective technique, it is
+            not ideal when you require high performance quality, such as when video content is displayed in views.
+            In these scenarios, setting <see cref="P:Awesomium.Core.WebView.SelfUpdate"/> to <c>true</c> will tell the view to use an
+            independent timer for rendering only, that will significantly improve the rendering quality, to the expense
+            of CPU resources.
+            <p/>
+            <note type="caution">
+            You should always combine the use of <see cref="P:Awesomium.Core.WebView.SelfUpdate"/> with the use of <see cref="P:Awesomium.Core.WebView.IsRendering"/>.
+            When more than one views are using <see cref="P:Awesomium.Core.WebView.SelfUpdate"/> and they all display content that updates too fast (such as videos), 
+            controls that are currently not visible to the user (such as controls that are currently covered by other UI or used in a tab 
+            of a tab-control that is currently not visible), should have rendering paused (see <see cref="P:Awesomium.Core.WebView.IsRendering"/>),
+            to avoid draining out your CPU resources.
+            </note>
+            <p/>
+            <note>
+            The default setting for <see cref="T:Awesomium.Core.WebView"/> is <c>false</c>.
+            </note>
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">
+            The member is accessed on an invalid <see cref="T:Awesomium.Core.WebView"/> instance
+            (see <see cref="P:Awesomium.Core.WebView.IsEnabled"/>).
+            </exception>
+            <seealso cref="P:Awesomium.Core.WebView.IsRendering"/>
+        </member>
+        <member name="P:Awesomium.Core.WebView.IsRendering">
+            <summary>
+            Gets or sets if internal asynchronous rendering is currently active.
+            </summary>
+            <remarks>
+            All rendering is actually done asynchronously in a separate process
+            and so the page is usually continuously rendering internally.
+            Set this to <c>false</c> to temporarily pause rendering.
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">
+            The member is accessed on an invalid <see cref="T:Awesomium.Core.WebView"/> instance
+            (see <see cref="P:Awesomium.Core.WebView.IsEnabled"/>).
+            </exception>
+            <seealso cref="P:Awesomium.Core.WebView.SelfUpdate"/>
+        </member>
         <member name="P:Awesomium.Core.WebView.IsTransparent">
             <summary>
             Gets or sets if pages should be rendered with transparency
@@ -5078,6 +5481,10 @@
             The member is accessed on an invalid <see cref="T:Awesomium.Core.WebView"/> instance
             (see <see cref="P:Awesomium.Core.WebView.IsEnabled"/>).
             </exception>
+            <exception cref="T:System.ArgumentException">
+            Attempted to set this property to true while <see cref="P:Awesomium.Core.WebView.FlushAlpha"/> is also true.
+            </exception>
+            <seealso cref="P:Awesomium.Core.WebView.FlushAlpha"/>
         </member>
         <member name="P:Awesomium.Core.WebView.FlushAlpha">
             <summary>
@@ -5090,6 +5497,10 @@
             is set to <c>false</c> in order to set this property to <c>true</c>.
             </note>
             </remarks>
+            <exception cref="T:System.ArgumentException">
+            Attempted to set this property to true while <see cref="P:Awesomium.Core.WebView.IsTransparent"/> is also true.
+            </exception>
+            <seealso cref="P:Awesomium.Core.WebView.IsTransparent"/>
         </member>
         <member name="P:Awesomium.Core.WebView.Zoom">
             <summary>
@@ -5100,6 +5511,13 @@
             This operation is asynchronous: 
             the value may not change for several milliseconds after
             you set this property.
+            <note>
+            Note that this setting is applied to the current hostname and
+            not the control in general. Is it dynamically updated when
+            you navigate to another domain with different, or no setting.
+            <p/>
+            To get the Zoom setting of a given hostname, use <see cref="M:Awesomium.Core.WebView.GetZoomForHost(System.String)"/>.
+            </note>
             </remarks>
             <exception cref="T:System.InvalidOperationException">
             The member is called on an invalid <see cref="T:Awesomium.Core.WebView"/> instance
@@ -5245,6 +5663,32 @@
             <remarks>
             The value of this property is meaningful when <see cref="P:Awesomium.Core.WebViewContext.IsEditable"/> is set to <c>true</c>.
             </remarks>
+        </member>
+        <member name="T:Awesomium.Windows.RenderOperations">
+            <summary>
+            Defines the operations that can be used when creating
+            a bitmap for a <see cref="!:RenderBuffer"/>.
+            </summary>
+        </member>
+        <member name="F:Awesomium.Windows.RenderOperations.PaintAtResize">
+            <summary>
+            Create a new bitmap wrapping the native pixel buffer in memory, 
+            when none is created yet, or when the pixel buffer has been resized.
+            When its size is not changed, copy the native pixel buffer to the bitmap.
+            </summary>
+        </member>
+        <member name="F:Awesomium.Windows.RenderOperations.Paint">
+            <summary>
+            Always create a new bitmap, wrapping
+            the native pixel buffer in memory.
+            </summary>
+        </member>
+        <member name="F:Awesomium.Windows.RenderOperations.Copy">
+            <summary>
+            Create a new bitmap only when none is created yet,
+            or when the pixel buffer has been resized.
+            Then copy the native pixel buffer to the new bitmap.
+            </summary>
         </member>
         <member name="T:Awesomium.Core.WV">
             <summary>
