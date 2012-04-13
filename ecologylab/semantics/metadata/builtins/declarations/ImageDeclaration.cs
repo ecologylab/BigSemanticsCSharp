@@ -8,7 +8,6 @@
 
 
 using Simpl.Fundamental.Generic;
-using Simpl.Fundamental.Net;
 using Simpl.Serialization;
 using Simpl.Serialization.Attributes;
 using System;
@@ -27,12 +26,6 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 	[SimplInherit]
 	public class ImageDeclaration : ClippableDocument<Image>
 	{
-		/// <summary>
-		/// Relative location of local copy of image.
-		/// </summary>
-		[SimplScalar]
-		private MetadataParsedURL localLocation;
-
 		[SimplScalar]
 		private MetadataDate creationDate;
 
@@ -41,19 +34,6 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 
 		public ImageDeclaration(MetaMetadataCompositeField mmd) : base(mmd) { }
 
-
-		public MetadataParsedURL LocalLocation
-		{
-			get{return localLocation;}
-			set
-			{
-				if (this.localLocation != value)
-				{
-					this.localLocation = value;
-					this.RaisePropertyChanged( () => this.LocalLocation );
-				}
-			}
-		}
 
 		public MetadataDate CreationDate
 		{

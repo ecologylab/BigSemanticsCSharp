@@ -25,14 +25,28 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 	public class InformationCompositionDeclaration : Document
 	{
 		[SimplCollection]
-		[SimplScope("repository_clippings")]
-		[MmName("clippings")]
-		private List<Clipping> clippings;
+		[SimplScope("repository_no_annotations")]
+		[MmName("metadata")]
+		private List<Metadata> metadata;
 
+		/// <summary>
+		/// User annotations.
+		/// </summary>
 		[SimplCollection("annotation")]
 		[MmName("annotations")]
 		private List<Annotation> annotations;
 
+		/// <summary>
+		/// for compatability w old compositions -- do not use!
+		/// </summary>
+		[SimplCollection]
+		[SimplScope("repository_clippings")]
+		[MmName("clippings")]
+		private List<Clipping> clippings;
+
+		/// <summary>
+		/// for compatability w old compositions -- do not use!
+		/// </summary>
 		[SimplCollection]
 		[SimplScope("repository_media")]
 		[MmName("media")]
@@ -50,15 +64,15 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 		public InformationCompositionDeclaration(MetaMetadataCompositeField mmd) : base(mmd) { }
 
 
-		public List<Clipping> Clippings
+		public List<Metadata> Metadata
 		{
-			get{return clippings;}
+			get{return metadata;}
 			set
 			{
-				if (this.clippings != value)
+				if (this.metadata != value)
 				{
-					this.clippings = value;
-					this.RaisePropertyChanged( () => this.Clippings );
+					this.metadata = value;
+					this.RaisePropertyChanged( () => this.Metadata );
 				}
 			}
 		}
@@ -72,6 +86,19 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 				{
 					this.annotations = value;
 					this.RaisePropertyChanged( () => this.Annotations );
+				}
+			}
+		}
+
+		public List<Clipping> Clippings
+		{
+			get{return clippings;}
+			set
+			{
+				if (this.clippings != value)
+				{
+					this.clippings = value;
+					this.RaisePropertyChanged( () => this.Clippings );
 				}
 			}
 		}

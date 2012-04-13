@@ -20,7 +20,7 @@ namespace ecologylab.semantics.metadata.builtins
 	[SimplInherit]
 	public class ClippableDocument<ME> : ClippableDocumentDeclaration<ME> where ME : ClippableDocument<ME>
 	{
-
+        public static readonly int									INITIAL_CAPACITY	= 2;
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
@@ -32,5 +32,21 @@ namespace ecologylab.semantics.metadata.builtins
 
         public ClippableDocument(MetaMetadataCompositeField mmd) : base(mmd) { }
 
+        public List<MediaClipping<ME>> GetClippingsThisIsIn()
+	    {
+		    List<MediaClipping<ME>> result = this.ClippingsThisIsIn;
+		    if (result == null)
+		    {
+			    result = new List<MediaClipping<ME>>(INITIAL_CAPACITY);
+			    this.ClippingsThisIsIn = result;
+		    }
+		    return result;
+	    }
+
+        protected void AddClipping(MediaClipping<ME> clipping)
+	    {
+		    List<MediaClipping<ME>> clippings = GetClippingsThisIsIn();
+		    clippings.Add(clipping);
+	    }
 	}
 }

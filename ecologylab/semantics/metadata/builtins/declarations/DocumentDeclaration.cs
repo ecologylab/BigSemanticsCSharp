@@ -36,6 +36,8 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 		private MetadataString title;
 
 		[SimplScalar]
+		[SimplHints(new Hint[] {Hint.XmlLeaf})]
+		[SimplOtherTags(new String[] {"abstract_field"})]
 		private MetadataString description;
 
 		/// <summary>
@@ -43,6 +45,12 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 		/// </summary>
 		[SimplScalar]
 		private MetadataParsedURL location;
+
+		/// <summary>
+		/// Relative location of a local copy of the document.
+		/// </summary>
+		[SimplScalar]
+		private MetadataParsedURL localLocation;
 
 		[SimplCollection("location")]
 		[MmName("additional_locations")]
@@ -89,6 +97,19 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 				{
 					this.location = value;
 					this.RaisePropertyChanged( () => this.Location );
+				}
+			}
+		}
+
+		public MetadataParsedURL LocalLocation
+		{
+			get{return localLocation;}
+			set
+			{
+				if (this.localLocation != value)
+				{
+					this.localLocation = value;
+					this.RaisePropertyChanged( () => this.LocalLocation );
 				}
 			}
 		}

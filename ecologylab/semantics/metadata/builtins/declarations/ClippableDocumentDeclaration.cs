@@ -28,9 +28,10 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 		/// Clippings based on this.
 		/// </summary>
 		[SimplCollection]
+		[SimplOtherTags(new String[] {"clippings"})]
 		[SimplScope("repository_clippings")]
-		[MmName("clippings")]
-		private List<MediaClipping<ME>> clippings;
+		[MmName("clippings_this_is_in")]
+		private List<MediaClipping<ME>> clippingsThisIsIn;
 
 		[SimplScalar]
 		private MetadataInteger width;
@@ -44,15 +45,15 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 		public ClippableDocumentDeclaration(MetaMetadataCompositeField mmd) : base(mmd) { }
 
 
-		public List<MediaClipping<ME>> Clippings
+		public List<MediaClipping<ME>> ClippingsThisIsIn
 		{
-			get{return clippings;}
+			get{return clippingsThisIsIn;}
 			set
 			{
-				if (this.clippings != value)
+				if (this.clippingsThisIsIn != value)
 				{
-					this.clippings = value;
-					this.RaisePropertyChanged( () => this.Clippings );
+					this.clippingsThisIsIn = value;
+					this.RaisePropertyChanged( () => this.ClippingsThisIsIn );
 				}
 			}
 		}

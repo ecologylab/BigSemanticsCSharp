@@ -32,12 +32,12 @@ namespace ecologylab.semantics.metametadata
          */
         protected static MetaMetadataRepository META_METADATA_REPOSITORY;
 
-        public static MetaMetadata DOCUMENT_META_METADATA;
-        public static MetaMetadata PDF_META_METADATA;
-        public static MetaMetadata SEARCH_META_METADATA;
-        public static MetaMetadata IMAGE_META_METADATA;
-        public static MetaMetadata DEBUG_META_METADATA;
-        public static MetaMetadata IMAGE_CLIPPING_META_METADATA;
+        public MetaMetadata DOCUMENT_META_METADATA;
+        public MetaMetadata PDF_META_METADATA;
+        public MetaMetadata SEARCH_META_METADATA;
+        public MetaMetadata IMAGE_META_METADATA;
+        public MetaMetadata DEBUG_META_METADATA;
+        public MetaMetadata IMAGE_CLIPPING_META_METADATA;
 
         static MetaMetadataRepositoryInit()
         {

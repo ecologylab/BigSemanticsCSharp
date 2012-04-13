@@ -26,5 +26,14 @@ namespace ecologylab.semantics.metadata.builtins
 
         public MediaClipping(MetaMetadataCompositeField mmd) : base(mmd) { }
 
+        public static void InitMediaClipping(MediaClipping<ME> mediaClipping, ME clippedMedia, Document source, Document outlink, String caption, String context)
+	    {
+		    mediaClipping.SourceDoc = source;
+		    //Clipping.InitClipping(mediaClipping, outlink, context);
+		    if (caption != null)
+			    mediaClipping.Caption = new scalar.MetadataString(caption);
+		    mediaClipping.Media = clippedMedia;
+	    }
+
 	}
 }

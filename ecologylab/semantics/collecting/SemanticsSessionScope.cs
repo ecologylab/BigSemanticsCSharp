@@ -40,6 +40,8 @@ namespace ecologylab.semantics.collecting
 
             _awesomiumThread = new Thread(WebBrowserPool.InitializeWebCore) { Name = "Singleton Awesomium Thread", IsBackground = true };
             _awesomiumThread.Start();
+
+            SemanticsSessionScope.Get = this;
             
         }
 
@@ -101,6 +103,11 @@ namespace ecologylab.semantics.collecting
             dispatcher = Dispatcher.FromThread(_awesomiumThread);
             if (dispatcher != null)
                 dispatcher.BeginInvoke(DispatcherPriority.Send, _extractionDelegate, closure);
+        }
+
+        public static SemanticsSessionScope Get
+        {
+            get; set;
         }
     }
 }

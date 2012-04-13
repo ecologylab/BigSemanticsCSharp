@@ -18,6 +18,8 @@ using ecologylab.semantics.metadata;
 using ecologylab.semantics.metadata.builtins.declarations;
 using ecologylab.semantics.metadata.scalar;
 using ecologylab.semantics.metametadata;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
@@ -29,5 +31,31 @@ namespace ecologylab.semantics.metadata.builtins
 
 		public ImageClipping(MetaMetadataCompositeField mmd) : base(mmd) { }
 
+        public ImageClipping(MetaMetadataCompositeField metaMetadata, Image clippedMedia, Document source, Document outlink, String caption, String context) : this(metaMetadata)
+	    {
+		    MediaClipping<Image>.InitMediaClipping(this, clippedMedia, source, outlink, caption, context);
+	    }
+
+        public override bool IsImage
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public ImageSource ImageLocation
+        {
+            get
+            {
+                ImageSource result = null;
+                if (this.Media != null)
+                {
+                    String uri = (this.Media.LocalLocation != null) ? this.Media.LocalLocation.Value.AbsoluteUri : this.Media.Location.Value.AbsoluteUri;
+                    result = new BitmapImage(new Uri(uri));
+                }
+                return result;
+            }
+        }
 	}
 }

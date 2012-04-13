@@ -25,5 +25,12 @@ namespace ecologylab.semantics.metadata.builtins
 
         public Image(MetaMetadataCompositeField metaMetadata) : base(metaMetadata) { }
 
+        public ImageClipping ConstructClipping(Document sourceDocument, Document outlink, String caption, String context)
+	    {
+		    ImageClipping result	= new ImageClipping(ecologylab.semantics.collecting.SemanticsSessionScope.Get.IMAGE_CLIPPING_META_METADATA, this, sourceDocument, outlink, caption, context);
+		    this.AddClipping(result);
+		
+		    return result;
+	    }
 	}
 }

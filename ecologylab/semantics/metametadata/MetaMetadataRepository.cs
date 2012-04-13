@@ -572,7 +572,14 @@ namespace ecologylab.semantics.metametadata
 
         public Image ConstructImage(ParsedUri location)
         {
-            throw new NotImplementedException();
+            MetaMetadata metaMetadata = GetImageMM(location);
+		    Image result = null;
+		    if (metaMetadata != null)
+		    {
+			    result = (Image) metaMetadata.ConstructMetadata(this.MetadataTScope);
+			    result.Location = new MetadataParsedURL(location);
+		    }
+		    return result;
         }
 
         #region Properties

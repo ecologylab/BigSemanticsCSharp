@@ -226,7 +226,7 @@ namespace ecologylab.semantics.metametadata
                         if (mmd1.IsDerivedFrom(mmd0))
                             SetNewMetadataClass(true);
                         else
-                            throw new MetaMetadataException("incompatible types: " + f0 + " => " + f1);
+                            throw new MetaMetadataException("incompatible types: " + mmd0 + " => " + mmd1);
                     }
                 }
             }
