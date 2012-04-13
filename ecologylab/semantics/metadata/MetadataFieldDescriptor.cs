@@ -74,5 +74,15 @@ namespace ecologylab.semantics.metadata
 	    {
 		    return IsScalar ? null : (IMetadata) GetNested(context);
 	    }
+
+        private MetadataFieldDescriptor clonedFrom;
+
+        public MetadataFieldDescriptor Clone()
+        {
+            MetadataFieldDescriptor result = this.MemberwiseClone();
+            result.clonedFrom = this;
+            return result;
+        }
+
 	}
 }
