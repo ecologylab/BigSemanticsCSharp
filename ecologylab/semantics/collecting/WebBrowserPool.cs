@@ -33,7 +33,7 @@ namespace ecologylab.semantics.collecting
 
         private static readonly string appPath = AppDomain.CurrentDomain.BaseDirectory;
         private static readonly string workspace = appPath + @"..\..\..\";
-        private static readonly string jsPath = workspace + @"ecologylabSemantics\javascript\";
+        private static readonly string jsPath = @"./javascript/"; //workspace + @"ecologylabSemantics\javascript\";
         private static readonly string _mmdDomHelperJSString;
         private Dispatcher dispatcher;
         private static readonly Dictionary<MetaMetadata, string> mmdJSONCache = new Dictionary<MetaMetadata, string>();

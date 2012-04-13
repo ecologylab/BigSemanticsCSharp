@@ -179,6 +179,11 @@
     <Compile Include="ecologylab\textformat\NamedStyle.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MetaMetadataTranslationScope.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="javascript\fieldParsers.js" />
@@ -216,6 +221,12 @@
       <Project>{2B7A3C03-D3F8-485D-9AA1-EDC9AB43E42D}</Project>
       <Name>Simpl.Serialization</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
