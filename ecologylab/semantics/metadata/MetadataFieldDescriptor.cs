@@ -79,7 +79,7 @@ namespace ecologylab.semantics.metadata
 
         public MetadataFieldDescriptor Clone()
         {
-            MetadataFieldDescriptor result = this.MemberwiseClone();
+            MetadataFieldDescriptor result = this.MemberwiseClone() as MetadataFieldDescriptor;
             result.clonedFrom = this;
             return result;
         }

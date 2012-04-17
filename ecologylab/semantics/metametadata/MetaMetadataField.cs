@@ -167,6 +167,8 @@ namespace ecologylab.semantics.metametadata
          * in which meta-metadata this field is declared.
          */
         private MetaMetadata declaringMmd = null;
+
+        private MetadataFieldDescriptorProxy _fieldDescriptorProxy;
 	
 
         public MetaMetadataRepository Repository { get; set; }
@@ -174,7 +176,9 @@ namespace ecologylab.semantics.metametadata
         #endregion
         
         public MetaMetadataField()
-		{ }
+		{  
+            _fieldDescriptorProxy = new MetadataFieldDescriptorProxy(this); 
+        }
 
         protected void SortForDisplay()
         {
@@ -528,10 +532,8 @@ namespace ecologylab.semantics.metametadata
 
                         this.metadataFieldDescriptor = metadataFieldDescriptor;
 
-                        // this method handles polymorphic type / changing tags
-                        // Note FIXME !! Proxies and cloning not yet implemented
-                        //						if (this.metadataFieldDescriptor != null)
-                        //							CustomizeFieldDescriptor(metadataTScope, fieldDescriptorProxy);
+                        if (this.metadataFieldDescriptor != null)
+                        	CustomizeFieldDescriptor(metadataTScope, _fieldDescriptorProxy);
                         if (this.metadataFieldDescriptor != metadataFieldDescriptor)
                         {
                             String tagName = this.metadataFieldDescriptor.TagName;
@@ -552,12 +554,10 @@ namespace ecologylab.semantics.metametadata
             return metadataFieldDescriptor;
         }
 
-//        private MetadataFieldDescriptorProxy fieldDescriptorProxy = new MetadataFieldDescriptorProxy();
-//
-//        private void CustomizeFieldDescriptor(SimplTypesScope metadataTScope, MetadataFieldDescriptorProxy fieldDescriptorProxy)
-//	    {
-//	        fieldDescriptorProxy.setTagName(Tag ?? Name);
-//	    }
+        private void CustomizeFieldDescriptor(SimplTypesScope metadataTScope, MetadataFieldDescriptorProxy fieldDescriptorProxy)
+	    {
+	        fieldDescriptorProxy.SetTagName(Tag ?? Name);
+	    }
 
 	    private string GetFieldName(bool capitalized)
 	    {
@@ -590,10 +590,32 @@ namespace ecologylab.semantics.metametadata
             return _capFieldNameInCSharp;
         }
 
+        private String _toString = null;
+
         public override string ToString()
         {
-            return "MetaMetadata [" + Name + "]";
+            String result = _toString;
+		    if (result == null)
+		    {
+			    result = this.GetType().ToString() + ParentString() + "<" + this.Name + ">";
+			    _toString = result;
+		    }
+		    return result;
         }
+
+        public String ParentString()
+	    {
+		    String result = "";
+	
+		    ElementState parent = this.Parent;
+		    while (parent is MetaMetadataField)
+		    {
+			    MetaMetadataField pf = (MetaMetadataField) parent;
+			    result = "<" + pf.Name + ">";
+			    parent = parent.Parent;
+		    }
+		    return result;
+	    }
 
 	    /**
 	     * this class encapsulate the clone-on-write behavior of metadata field descriptor associated
@@ -602,58 +624,58 @@ namespace ecologylab.semantics.metametadata
 	     * @author quyin
 	     *
 	     */
-//        protected internal class MetadataFieldDescriptorProxy
-//        {
-//            private MetaMetadataField outer;
-//            
-//            public MetadataFieldDescriptorProxy(MetaMetadataField outer)
-//            {
-//                this.outer = outer;
-//            }
-//
-//            private void cloneFieldDescriptorOnWrite()
-//		    {
-//			    if (outer.metadataFieldDescriptor.getDescriptorClonedFrom() == null)
-//				    outer.metadataFieldDescriptor = outer.metadataFieldDescriptor.
-//		    }
-//
-//            public void setTagName(String newTagName)
-//		    {
-//			    if (newTagName != null && !newTagName.equals(MetaMetadataField.this.metadataFieldDescriptor.getTagName()))
-//			    {
-//				    cloneFieldDescriptorOnWrite();
-//				    MetaMetadataField.this.metadataFieldDescriptor.setTagName(newTagName);
-//			    }
-//		    }
-//
-//            public void setElementClassDescriptor(MetadataClassDescriptor metadataClassDescriptor)
-//		    {
-//			    if (metadataClassDescriptor != MetaMetadataField.this.metadataFieldDescriptor.getElementClassDescriptor())
-//			    {
-//				    cloneFieldDescriptorOnWrite();
-//				    MetaMetadataField.this.metadataFieldDescriptor.setElementClassDescriptor(metadataClassDescriptor);
-//			    }
-//		    }
-//
-//            public void setCollectionOrMapTagName(String childTag)
-//		    {
-//			    if (childTag != null && !childTag.equals(MetaMetadataField.this.metadataFieldDescriptor.getCollectionOrMapTagName()))
-//			    {
-//				    cloneFieldDescriptorOnWrite();
-//				    MetaMetadataField.this.metadataFieldDescriptor.setCollectionOrMapTagName(childTag);
-//			    }
-//		    }
-//
-//            public void setWrapped(boolean wrapped)
-//		    {
-//			    if (wrapped != MetaMetadataField.this.metadataFieldDescriptor.isWrapped())
-//			    {
-//				    cloneFieldDescriptorOnWrite();
-//				    MetaMetadataField.this.metadataFieldDescriptor.setWrapped(wrapped);
-//			    }
-//		    }
-//
-//        }
+        protected internal class MetadataFieldDescriptorProxy
+        {
+            private MetaMetadataField outer;
+            
+            public MetadataFieldDescriptorProxy(MetaMetadataField outer)
+            {
+                this.outer = outer;
+            }
+
+            private void CloneFieldDescriptorOnWrite()
+		    {
+			    if (outer.MetadataFieldDescriptor.DescriptorClonedFrom == null)
+				    outer.MetadataFieldDescriptor = outer.MetadataFieldDescriptor.Clone();
+		    }
+
+            public void SetTagName(String newTagName)
+		    {
+			    if (newTagName != null && !newTagName.Equals(outer.MetadataFieldDescriptor.TagName))
+			    {
+				    CloneFieldDescriptorOnWrite();
+				    outer.MetadataFieldDescriptor.TagName = newTagName;
+			    }
+		    }
+
+            public void SetElementClassDescriptor(MetadataClassDescriptor metadataClassDescriptor)
+		    {
+			    if (metadataClassDescriptor != outer.MetadataFieldDescriptor.ElementClassDescriptor)
+			    {
+				    CloneFieldDescriptorOnWrite();
+				    outer.MetadataFieldDescriptor.ElementClassDescriptor = metadataClassDescriptor;
+			    }
+		    }
+
+            public void SetCollectionOrMapTagName(String childTag)
+		    {
+			    if (childTag != null && !childTag.Equals(outer.MetadataFieldDescriptor.CollectionOrMapTagName))
+			    {
+				    CloneFieldDescriptorOnWrite();
+				   outer.MetadataFieldDescriptor.CollectionOrMapTagName = childTag;
+			    }
+		    }
+
+            public void SetWrapped(bool wrapped)
+		    {
+			    if (wrapped != outer.MetadataFieldDescriptor.IsWrapped)
+			    {
+				    CloneFieldDescriptorOnWrite();
+				    outer.MetadataFieldDescriptor.IsWrapped = wrapped;
+			    }
+		    }
+
+        }
     }
     
 	

@@ -97,7 +97,23 @@ namespace ecologylab.semantics.metametadata
                     InheritFromTopLevelMetaMetadata(inheritedMmd, repository);
                 }
             }
-            MetaMetadataCompositeField inheritedField = (MetaMetadataCompositeField) InheritedField;
+            if (!inhertedIsInheriting)
+            {
+                inhertedIsInheriting = InheritFromSuperField(repository);
+            }
+
+            // for the root meta-metadata, this may happend
+            if (inheritedMmd == null && InheritedField == null)
+                InheritFrom(repository, null);
+
+            return !inhertedIsInheriting;
+
+        }
+
+        private bool InheritFromSuperField(MetaMetadataRepository repository)
+        {
+            bool inhertedIsInheriting = false;
+            MetaMetadataCompositeField inheritedField = (MetaMetadataCompositeField)InheritedField;
             if (inheritedField != null)
             {
                 inheritedField.Repository = repository;
@@ -113,13 +129,7 @@ namespace ecologylab.semantics.metametadata
                     InheritFromCompositeField(inheritedField, repository);
                 }
             }
-
-            // for the root meta-metadata, this may happend
-            if (inheritedMmd == null && inheritedField == null)
-                InheritFrom(repository, null);
-
-            return !inhertedIsInheriting;
-
+            return inhertedIsInheriting;
         }
 
         private void InheritFieldFinished(MetaMetadataNestedField sender, EventArgs e)
@@ -132,9 +142,11 @@ namespace ecologylab.semantics.metametadata
         }
 
         private void InheritMetaMetadataFinished(MetaMetadataNestedField sender, EventArgs e)
-        {
+        {   
             MetaMetadata inheritedMmd = (MetaMetadata) _waitingToInheritFrom.Pop();
             InheritFromTopLevelMetaMetadata(inheritedMmd, Repository);
+
+            InheritFromSuperField(Repository);
 
             if (_waitingToInheritFrom.Count == 0)
                 FinishInheritance();

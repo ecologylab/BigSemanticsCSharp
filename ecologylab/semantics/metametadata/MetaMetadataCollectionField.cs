@@ -214,6 +214,7 @@ namespace ecologylab.semantics.metametadata
     {
       return GetChildComposite().GetClassAndBindDescriptors(metadataTScope);
     }
+
   }
 
   internal class MetaMetadataClassDescriptor : ClassDescriptor

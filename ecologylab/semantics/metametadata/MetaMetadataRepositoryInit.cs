@@ -60,6 +60,8 @@ namespace ecologylab.semantics.metametadata
 
         private readonly SimplTypesScope _repositoryClippingTranslations;
 
+        private readonly SimplTypesScope _noAnnotationsScope;
+
         /**
          * This constructor should only be called from SemanticsScope's constructor!
          * 
@@ -108,6 +110,10 @@ namespace ecologylab.semantics.metametadata
             _repositoryClippingTranslations  = metadataTranslationScope.GetAssignableSubset(
                                                 SemanticNames.REPOSITORY_CLIPPING_TRANSLATIONS,
                                                 typeof (Clipping));
+
+            _noAnnotationsScope              = metadataTranslationScope.GetSubtractedSubset(
+                                                SemanticNames.REPOSITORY_NO_ANNOTATIONS_TYPE_SCOPE,
+                                                typeof(Annotation));
 
             _generatedMediaTranslations.AddTranslation(typeof(Clipping));
             _generatedMediaTranslations.AddTranslation(typeof(Annotation));

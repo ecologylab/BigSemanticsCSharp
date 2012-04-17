@@ -15,6 +15,7 @@ using ecologylab.semantics.metadata.builtins.declarations;
 using ecologylab.semantics.metadata.scalar;
 using ecologylab.semantics.metadata;
 using ecologylab.semantics.metametadata;
+using System.IO;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
@@ -95,6 +96,22 @@ namespace ecologylab.semantics.metadata.builtins
             // hook for subclasses to perform actions after parsing done.
             // currently, for CompoundDocument to create and visualize clippings.
             // as clipping creation and visualization goes to semantic actions, do we still need this ??
+        }
+
+        public ParsedUri DownloadLocation
+        {
+            get
+            {
+                ParsedUri result	    = Location.Value;
+		        ParsedUri localLocation	= LocalLocation.Value;
+		        if (localLocation != null)
+		        {
+			        FileInfo localFile	= localLocation.File;
+			        if (localFile.Exists)
+				        result	= localLocation;
+		        }
+		        return result;
+            }
         }
 
     }   
