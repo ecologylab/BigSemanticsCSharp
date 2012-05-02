@@ -47,6 +47,9 @@ namespace ecologylab.semantics.metametadata
         [SimplNoWrap]
         private List<MetaMetadataGenericTypeVar> genericTypeVars;
 
+        [SimplScalar]
+        private bool showExpandedInitially;
+
         /**
          * the mmd used by this nested field. corresponding attributes: (child_)type/extends. could be a
          * generated one for inline definitions.
@@ -128,6 +131,12 @@ namespace ecologylab.semantics.metametadata
         {
             get { return promoteChildren; }
             set { promoteChildren = value; }
+        }
+
+        public bool ShowExpandedInitially
+        {
+            get { return showExpandedInitially; }
+            set { showExpandedInitially = value; }
         }
 
         public String PolymorphicScope
