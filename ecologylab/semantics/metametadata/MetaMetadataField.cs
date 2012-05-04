@@ -268,6 +268,11 @@ namespace ecologylab.semantics.metametadata
         }
 
         #region Properties
+
+	    public string DisplayedLabel
+	    {
+            get { return Label ?? Name; }
+	    }
         
         public String Name
 		{

@@ -58,6 +58,12 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 		[SimplScalar]
 		private MetadataFloat metadataVersion;
 
+        [SimplScalar]
+        private MetadataInteger width;
+
+        [SimplScalar]
+        private MetadataInteger height;
+
 		public InformationCompositionDeclaration()
 		{ }
 
@@ -141,5 +147,31 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 				}
 			}
 		}
+
+        public MetadataInteger Width
+        {
+            get { return width; }
+            set
+            {
+                if (this.width != value)
+                {
+                    this.width = value;
+                    this.RaisePropertyChanged(() => this.Width);
+                }
+            }
+        }
+
+        public MetadataInteger Height
+        {
+            get { return height; }
+            set
+            {
+                if (this.height != value)
+                {
+                    this.height = value;
+                    this.RaisePropertyChanged(() => this.Height);
+                }
+            }
+        }
 	}
 }

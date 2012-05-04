@@ -52,8 +52,14 @@
     <Reference Include="AsyncCtpLibrary, Version=1.0.4107.18181, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\ecologylabFundamental\Simpl.Serialization\Lib\AsyncCtpLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="Awesomium.Core, Version=1.6.3.0, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86" />
-    <Reference Include="Awesomium.Windows.Controls, Version=1.6.3.0, Culture=neutral, PublicKeyToken=7a34e179b8b61c39, processorArchitecture=x86" />
+    <Reference Include="Awesomium.Core, Version=1.6.4.0, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Awesomium\Awesomium.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Awesomium.Windows.Controls, Version=1.6.4.0, Culture=neutral, PublicKeyToken=7a34e179b8b61c39, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Awesomium\Awesomium.Windows.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Prism, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
