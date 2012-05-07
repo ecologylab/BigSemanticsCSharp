@@ -129,6 +129,7 @@
     <Compile Include="ecologylab\semantics\metadata\builtins\DocumentMetadataWrap.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\ImageClipping.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\MediaClipping.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\MetadataCollection.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\TextClipping.cs" />
     <Compile Include="ecologylab\semantics\metadata\IMetadata.cs" />
     <Compile Include="ecologylab\semantics\metadata\MmDontInherit.cs" />

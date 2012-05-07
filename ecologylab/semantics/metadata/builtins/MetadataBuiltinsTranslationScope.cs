@@ -27,6 +27,7 @@ namespace ecologylab.semantics.metadata.builtins
             typeof (ImageClipping),
             typeof (MediaClipping<>),
             typeof (TextClipping),
+            typeof (MetadataCollection),
         };
 
         static MetadataBuiltinsTranslationScope()
