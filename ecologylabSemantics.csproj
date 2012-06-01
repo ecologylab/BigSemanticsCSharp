@@ -60,7 +60,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Awesomium\Awesomium.Windows.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Prism, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Practices.Prism, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -129,6 +129,7 @@
     <Compile Include="ecologylab\semantics\metadata\builtins\DocumentMetadataWrap.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\ImageClipping.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\MediaClipping.cs" />
+    <Compile Include="ecologylab\semantics\metadata\builtins\MetadataBuiltinsTypesScope.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\MetadataCollection.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\TextClipping.cs" />
     <Compile Include="ecologylab\semantics\metadata\IMetadata.cs" />
@@ -151,7 +152,6 @@
     <Compile Include="ecologylab\semantics\metadata\builtins\DebugMetadata.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Document.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Image.cs" />
-    <Compile Include="ecologylab\semantics\metadata\builtins\MetadataBuiltinsTranslationScope.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MMSelectorType.cs" />
     <Compile Include="ecologylab\semantics\model\text\ITermVector.cs" />
     <Compile Include="ecologylab\semantics\namesandnums\DocumentParserTagNames.cs" />
