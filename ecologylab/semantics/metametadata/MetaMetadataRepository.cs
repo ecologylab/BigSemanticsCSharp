@@ -227,7 +227,7 @@ namespace ecologylab.semantics.metametadata
             {
                 initializedTypes = true;
                 MetadataScalarType.init();
-                MetadataBuiltinsTranslationScope.Get();
+                MetadataBuiltinsTypesScope.Get();
             }
         }
 

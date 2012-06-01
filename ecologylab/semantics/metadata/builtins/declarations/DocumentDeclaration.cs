@@ -35,16 +35,16 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 		[SimplHints(new Hint[] {Hint.XmlLeaf})]
 		private MetadataString title;
 
-		[SimplScalar]
-		[SimplHints(new Hint[] {Hint.XmlLeaf})]
-		[SimplOtherTags(new String[] {"abstract_field"})]
-		private MetadataString description;
-
 		/// <summary>
 		/// The document's actual location.
 		/// </summary>
 		[SimplScalar]
 		private MetadataParsedURL location;
+
+		[SimplScalar]
+		[SimplHints(new Hint[] {Hint.XmlLeaf})]
+		[SimplOtherTags(new String[] {"abstract_field"})]
+		private MetadataString description;
 
 		/// <summary>
 		/// Relative location of a local copy of the document.
@@ -75,19 +75,6 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 			}
 		}
 
-		public MetadataString Description
-		{
-			get{return description;}
-			set
-			{
-				if (this.description != value)
-				{
-					this.description = value;
-					this.RaisePropertyChanged( () => this.Description );
-				}
-			}
-		}
-
 		public MetadataParsedURL Location
 		{
 			get{return location;}
@@ -97,6 +84,19 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 				{
 					this.location = value;
 					this.RaisePropertyChanged( () => this.Location );
+				}
+			}
+		}
+
+		public MetadataString Description
+		{
+			get{return description;}
+			set
+			{
+				if (this.description != value)
+				{
+					this.description = value;
+					this.RaisePropertyChanged( () => this.Description );
 				}
 			}
 		}

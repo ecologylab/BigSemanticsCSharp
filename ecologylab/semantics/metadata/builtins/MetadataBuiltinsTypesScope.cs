@@ -9,7 +9,7 @@ using ecologylab.semantics.metadata.scalar.types;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
-    public class MetadataBuiltinsTranslationScope
+    public class MetadataBuiltinsTypesScope
     {
         public static string NAME = "metadata_builtin_translations";
 
@@ -30,7 +30,7 @@ namespace ecologylab.semantics.metadata.builtins
             typeof (MetadataCollection),
         };
 
-        static MetadataBuiltinsTranslationScope()
+        static MetadataBuiltinsTypesScope()
         {
             MetadataScalarType.init();
         }
