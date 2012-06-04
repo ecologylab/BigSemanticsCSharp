@@ -32,8 +32,8 @@ namespace ecologylab.semantics.collecting
         private SemanticsSessionScope SemanticsSessionScope { get; set; }
 
         private static readonly string appPath = AppDomain.CurrentDomain.BaseDirectory;
-        private static readonly string workspace = appPath + @"..\..\..\";
-        private static readonly string jsPath = @"./javascript/"; //workspace + @"ecologylabSemantics\javascript\";
+        private static readonly string workspace = appPath + @"..\..\..\..\..\crossPlatformSemantics\CSharp\";
+        private static readonly string jsPath = appPath + @"..\..\..\..\..\..\crossPlatformSemantics\JavaScript\ecologylabSemantics\metadataExtractor\cSharp\";
         private static readonly string _mmdDomHelperJSString;
         private Dispatcher dispatcher;
         private static readonly Dictionary<MetaMetadata, string> mmdJSONCache = new Dictionary<MetaMetadata, string>();
@@ -47,8 +47,7 @@ namespace ecologylab.semantics.collecting
             _mmdDomHelperJSString = File.ReadAllText(jsPath + "simplDeserializer.js");
             _mmdDomHelperJSString += File.ReadAllText(jsPath + "fieldParsers.js");
             _mmdDomHelperJSString += File.ReadAllText(jsPath + "mmdDomHelper.js");
-
-
+            _mmdDomHelperJSString += File.ReadAllText(jsPath + "cSharpExtractor.js");
         }
 
         public WebBrowserPool(SemanticsSessionScope scope)
