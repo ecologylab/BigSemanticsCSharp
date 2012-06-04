@@ -193,12 +193,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="javascript\fieldParsers.js" />
-    <Content Include="javascript\mmdDomHelper.js">
-      <SubType>UserControl</SubType>
-    </Content>
-    <Content Include="javascript\simplDeserializer.js" />
-    <Content Include="javascript\tempJSON\imdbMMDJSON.js" />
     <Content Include="lib\Awesomium\Awesomium.Core.dll" />
     <Content Include="lib\Awesomium\Awesomium.Core.XML" />
     <Content Include="lib\Awesomium\Awesomium.dll" />
@@ -211,10 +205,6 @@
     <Content Include="lib\Awesomium\icudt42.dll" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="javascript\tempJSON\acmPortal.json" />
-    <None Include="javascript\tempJSON\parsedIMDB.json" />
-    <None Include="javascript\tempJSON\simpleHypertext.json" />
-    <None Include="javascript\tempJSON\wikipedia-parsed-hypertext.json" />
     <None Include="lib\Awesomium\Awesomium.Mono.dll.config" />
     <None Include="lib\Awesomium\AwesomiumProcess" />
     <None Include="lib\Awesomium\README" />
