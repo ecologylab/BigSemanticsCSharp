@@ -88,6 +88,8 @@ namespace ecologylab.semantics.documentparsers
             //Console.WriteLine("json:\n" + jsonMMD + "\n");
             //jsonMMD = jsonMMD.Replace("\\", "\\\\");
 
+            webView.JSConsoleMessageAdded += new JSConsoleMessageAddedEventHandler(JSConsoleEvent);
+
             webView.ExecuteJavascript(jsonMMD);
             webView.ExecuteJavascript(WebBrowserPool.MmdDomHelperJsString);
             Console.WriteLine("Done js code execution, calling function. --" + DateTime.Now + " : " + DateTime.Now.Millisecond);
@@ -98,7 +100,7 @@ namespace ecologylab.semantics.documentparsers
             
             //webView.ExecuteJavascript("CallBack.MetadataExtracted('some value');");
             //Return happens through the task, on completion of the method via the callback
-            webView.ExecuteJavascript("extractMetadata(mmd);");
+            webView.ExecuteJavascript("extractMetadataWithCallback(mmd);");
 
             _requestTimedOut.Start();
         }
@@ -130,6 +132,11 @@ namespace ecologylab.semantics.documentparsers
             _requestTimedOut.Stop();
 
             _closure.TaskCompletionSource.TrySetResult(myShinyNewMetadata);
+        }
+
+        public void JSConsoleEvent(object sender, JSConsoleMessageEventArgs e)
+        {
+            Console.WriteLine(e.Message);
         }
     }
 }
