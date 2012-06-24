@@ -199,6 +199,13 @@ namespace ecologylab.semantics.metametadata
             return this.kids;
         }
 
+        ///<summary>
+        /// get the nested fields inside of this one.
+        ///</summary>
+        public virtual DictionaryList<String, MetaMetadataField> GetChildMetaMetadata()
+        {
+            return kids;
+        }
 
         internal virtual bool GetClassAndBindDescriptors(SimplTypesScope metadataTScope)
         {

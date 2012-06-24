@@ -175,6 +175,14 @@ namespace ecologylab.semantics.metametadata
       return (kids != null && kids.Count > 0) ? (MetaMetadataCompositeField)kids.ElementAt(0) : null;
     }
 
+    ///<summary>
+    /// get the nested fields inside of this one.
+    ///</summary>
+    public override DictionaryList<String, MetaMetadataField> GetChildMetaMetadata()
+    {
+        return (kids != null && kids.Count > 0) ? kids.ElementAt(0).GetChildMetaMetadata() : null;
+    }
+
     public String DetermineCollectionChildType()
     {
       return (!childEntity) ? childType : DocumentParserTagNames.ENTITY;
