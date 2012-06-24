@@ -208,7 +208,7 @@ namespace ecologylab.semantics.metametadata
         }
 
 
-        private void TraverseAndInheritMetaMetadata()
+        public void TraverseAndInheritMetaMetadata()
         {
             if (_repositoryByName != null && _repositoryByName.Count > 0)
             {

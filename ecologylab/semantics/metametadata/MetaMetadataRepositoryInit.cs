@@ -13,7 +13,7 @@ namespace ecologylab.semantics.metametadata
     public class MetaMetadataRepositoryInit : DocumentParserTagNames
     {
 
-        public static String DEFAULT_REPOSITORY_LOCATION                        = @"..\..\..\..\MetaMetadataRepository\MmdRepository\mmdrepository";
+        public static String DEFAULT_REPOSITORY_LOCATION                        = @"..\..\..\..\..\MetaMetadataRepository\MmdRepository\mmdrepository";
 
         public static Format DEFAULT_REPOSITORY_FORMAT                          = Format.Xml;
 
