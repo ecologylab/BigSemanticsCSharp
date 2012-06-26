@@ -170,19 +170,19 @@ namespace ecologylab.semantics.metametadata
 
         private MetadataFieldDescriptorProxy _fieldDescriptorProxy;
 	
-        [SimplMap("generic_type_var")]
+/*      [SimplMap("generic_type_var")]
 	    [SimplMapKeyField("name")]
 	    [SimplNoWrap]
 	    private MmdGenericTypeVarScope genericTypeVars;
-
+*/
         public MetaMetadataRepository Repository { get; set; }
 
         #endregion
 
         public MmdGenericTypeVarScope GenericTypeVars
         {
-            get { return genericTypeVars; }
-            set { genericTypeVars = value; }
+            get { return null /*genericTypeVars*/; }
+            set { /*genericTypeVars = value;*/ }
         }
 
         public MetaMetadataField()
@@ -397,16 +397,14 @@ namespace ecologylab.semantics.metametadata
 //            get { return null; }
 //        }
 
-        public virtual String Type
+        public virtual String GetMmdType()
         {
-            get { return null; }
-            set { }
+            return null;
         }
 
-        public virtual string ExtendsAttribute
+        public virtual String GetMmdExtendsAttribute()
         {
-            get { return null; }
-            set { }
+            return null;
         }
 
         public MetadataClassDescriptor MetadataClassDescriptor

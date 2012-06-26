@@ -43,6 +43,8 @@ namespace ecologylab.semantics.metametadata
     /// </para>
     ///</summary>
 
+    public enum NameType { NONE, MMD, GENERIC };
+
     public class InheritanceHandler
     {
         //InheritanceComponentNames from java
@@ -117,14 +119,12 @@ namespace ecologylab.semantics.metametadata
 		    // TODO
 	    }
 
-	    MetaMetadata ResolveMmdName(String mmdName)
+	    public MetaMetadata ResolveMmdName(String mmdName)
 	    {
 		    return ResolveMmdName(mmdName, null);
 	    }
 	
-	    public static enum NameType { NONE, MMD, GENERIC };
-	
-	    MetaMetadata ResolveMmdName(String mmdName, NameType[] nameType)
+	    public MetaMetadata ResolveMmdName(String mmdName, NameType[] nameType)
 	    {
 		    if (mmdName == null)
 			    return null;
@@ -179,9 +179,9 @@ namespace ecologylab.semantics.metametadata
 				    GENERIC_TYPE_VAR_SCOPE);
 		    if (gtvScope == null)
 			    return false;
-		    if (gtvScope.ContainsKey(field.Type) || field.Type == null
+		    if (gtvScope.ContainsKey(field.GetMmdType()) || field.GetMmdType() == null
 				    && gtvScope.ContainsKey(field.Name)
-				    || gtvScope.ContainsKey(field.ExtendsAttribute))
+				    || gtvScope.ContainsKey(field.GetMmdExtendsAttribute()))
 			    return true;
 		    return false;
 	    }

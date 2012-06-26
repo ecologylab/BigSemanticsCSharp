@@ -11,7 +11,7 @@ namespace ecologylab.semantics.metametadata
     /// 
     /// @author quyin
     ///</summary>
-    interface MmdCompilerService
+    public interface MmdCompilerService
     {
 
 	void AddGlobalDependency(String name);

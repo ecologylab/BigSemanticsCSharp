@@ -413,7 +413,7 @@ namespace ecologylab.semantics.metametadata
 
         #region Properties
 
-        public override String Type
+        public String Type
         {
             get { return type; }
             set
@@ -422,6 +422,11 @@ namespace ecologylab.semantics.metametadata
                 if (TypeChangeListener != null)
                     TypeChangeListener(value);
             }
+        }
+
+        public override String GetMmdType()
+        {
+            return type;
         }
 
         public delegate void TypeChanged(String newType);
@@ -485,7 +490,7 @@ namespace ecologylab.semantics.metametadata
             set { reloadPageFirstTime = value; }
         }
 
-        public override string ExtendsAttribute
+        public string ExtendsAttribute
         {
             get { return extendsAttribute; }
             set
@@ -494,6 +499,11 @@ namespace ecologylab.semantics.metametadata
                 if (ExtendsChangeListener != null)
                     ExtendsChangeListener(value);
             }
+        }
+
+        public override string GetMmdExtendsAttribute()
+        {
+            return ExtendsAttribute;
         }
 
         public override string Tag

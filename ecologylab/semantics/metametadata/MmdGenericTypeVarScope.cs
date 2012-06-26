@@ -44,12 +44,12 @@ namespace ecologylab.semantics.metametadata
 				    }
 				    else if (superGenericTypeVar.IsBound() && localGenericTypeVar.IsAssignment())
 				    {
-					    checkAssignmentWithBounds(name, localGenericTypeVar, superGenericTypeVar,
+					    CheckAssignmentWithBounds(name, localGenericTypeVar, superGenericTypeVar,
 							    inheritanceHandler);
 				    }
 				    else
 				    {
-					    checkBoundsWithBounds(name, localGenericTypeVar, superGenericTypeVar, inheritanceHandler);
+					    CheckBoundsWithBounds(name, localGenericTypeVar, superGenericTypeVar, inheritanceHandler);
 				    }
 			    }
 		    }
