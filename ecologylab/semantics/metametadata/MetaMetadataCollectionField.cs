@@ -147,6 +147,12 @@ namespace ecologylab.semantics.metametadata
       set { noWrap = value; }
     }
 
+    public override String Type
+    {
+        get { return ChildType; }
+        set { }
+    }
+
     public Boolean ParseAsHypertext
     {
       get { return parseAsHypertext; }
@@ -157,6 +163,12 @@ namespace ecologylab.semantics.metametadata
     {
       get { return childExtends; }
       set { childExtends = value; }
+    }
+
+    public virtual string ExtendsAttribute
+    {
+        get { return ChildExtends; }
+        set { }
     }
 
     public MetadataScalarType ChildScalarType

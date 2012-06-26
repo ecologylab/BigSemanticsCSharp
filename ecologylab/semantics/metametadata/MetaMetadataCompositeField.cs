@@ -413,7 +413,7 @@ namespace ecologylab.semantics.metametadata
 
         #region Properties
 
-        public String Type
+        public override String Type
         {
             get { return type; }
             set
@@ -485,7 +485,7 @@ namespace ecologylab.semantics.metametadata
             set { reloadPageFirstTime = value; }
         }
 
-        public string ExtendsAttribute
+        public override string ExtendsAttribute
         {
             get { return extendsAttribute; }
             set

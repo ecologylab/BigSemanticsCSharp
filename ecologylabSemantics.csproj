@@ -138,6 +138,7 @@
     <Compile Include="ecologylab\semantics\metadata\scalar\types\MetadataScalarTypeType.cs" />
     <Compile Include="ecologylab\semantics\metadata\SemanticsMixin.cs" />
     <Compile Include="ecologylab\semantics\metametadata\DocumentParserTagNames.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\InheritanceHandler.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MetaMetadataFieldTranslationScope.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MetaMetadataGenericTypeVar.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MetaMetadataRepositoryInit.cs" />
@@ -152,6 +153,9 @@
     <Compile Include="ecologylab\semantics\metadata\builtins\DebugMetadata.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Document.cs" />
     <Compile Include="ecologylab\semantics\metadata\builtins\Image.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\MmdCompilerService.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\MmdGenericTypeVar.cs" />
+    <Compile Include="ecologylab\semantics\metametadata\MmdGenericTypeVarScope.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MMSelectorType.cs" />
     <Compile Include="ecologylab\semantics\model\text\ITermVector.cs" />
     <Compile Include="ecologylab\semantics\namesandnums\DocumentParserTagNames.cs" />
