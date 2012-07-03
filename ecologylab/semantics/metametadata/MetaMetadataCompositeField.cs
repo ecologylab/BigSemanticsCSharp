@@ -75,14 +75,16 @@ namespace ecologylab.semantics.metametadata
                 return null;
         }
 
-        protected override bool InheritMetaMetadataHelper()
+        protected override bool InheritMetaMetadataHelper(InheritanceHandler inheritanceHandler)
         {
+            inheritanceHandler.Push(this);
+
             bool inhertedIsInheriting = false;
             // init
             MetaMetadataRepository repository = Repository;
 
             // determine the structure we should inherit from
-            MetaMetadata inheritedMmd = FindOrGenerateInheritedMetaMetadata(repository);
+            MetaMetadata inheritedMmd = FindOrGenerateInheritedMetaMetadata(repository, inheritanceHandler);
             if (inheritedMmd != null)
             {
                 if (inheritedMmd.InheritInProcess)
@@ -93,24 +95,24 @@ namespace ecologylab.semantics.metametadata
                 }
                 else
                 {
-                    inheritedMmd.InheritMetaMetadata();
-                    InheritFromTopLevelMetaMetadata(inheritedMmd, repository);
+                    inheritedMmd.InheritMetaMetadata(null); //edit
+                    InheritFromTopLevelMetaMetadata(inheritedMmd, repository, inheritanceHandler);
                 }
             }
             if (!inhertedIsInheriting)
             {
-                inhertedIsInheriting = InheritFromSuperField(repository);
+                inhertedIsInheriting = InheritFromSuperField(repository, inheritanceHandler);
             }
 
             // for the root meta-metadata, this may happend
             if (inheritedMmd == null && InheritedField == null)
-                InheritFrom(repository, null);
+                InheritFrom(repository, null, inheritanceHandler);
 
             return !inhertedIsInheriting;
 
         }
 
-        private bool InheritFromSuperField(MetaMetadataRepository repository)
+        private bool InheritFromSuperField(MetaMetadataRepository repository, InheritanceHandler inheritanceHandler)
         {
             bool inhertedIsInheriting = false;
             MetaMetadataCompositeField inheritedField = (MetaMetadataCompositeField)InheritedField;
@@ -125,8 +127,8 @@ namespace ecologylab.semantics.metametadata
                 }
                 else
                 {
-                    inheritedField.InheritMetaMetadata();
-                    InheritFromCompositeField(inheritedField, repository);
+                    inheritedField.InheritMetaMetadata(inheritanceHandler);
+                    InheritFromCompositeField(inheritedField, repository, inheritanceHandler);
                 }
             }
             return inhertedIsInheriting;
@@ -135,7 +137,7 @@ namespace ecologylab.semantics.metametadata
         private void InheritFieldFinished(MetaMetadataNestedField sender, EventArgs e)
         {
             MetaMetadataCompositeField inheritedField = (MetaMetadataCompositeField) _waitingToInheritFrom.Pop();
-            InheritFromCompositeField(inheritedField, Repository);
+            //InheritFromCompositeField(inheritedField, Repository);
 
             if (_waitingToInheritFrom.Count == 0)
                 FinishInheritance();
@@ -144,28 +146,29 @@ namespace ecologylab.semantics.metametadata
         private void InheritMetaMetadataFinished(MetaMetadataNestedField sender, EventArgs e)
         {   
             MetaMetadata inheritedMmd = (MetaMetadata) _waitingToInheritFrom.Pop();
-            InheritFromTopLevelMetaMetadata(inheritedMmd, Repository);
+            //InheritFromTopLevelMetaMetadata(inheritedMmd, Repository); //edit
 
-            InheritFromSuperField(Repository);
+            //InheritFromSuperField(Repository); //edit
 
             if (_waitingToInheritFrom.Count == 0)
                 FinishInheritance();
         }
 
-        private void InheritFromCompositeField(MetaMetadataCompositeField inheritedField, MetaMetadataRepository repository)
+        private void InheritFromCompositeField(MetaMetadataCompositeField inheritedField, MetaMetadataRepository repository, InheritanceHandler inheritanceHandler)
         {
-            
-            InheritFrom(repository, inheritedField);
+
+            InheritFrom(repository, inheritedField, inheritanceHandler);
         }
 
-        private void InheritFromTopLevelMetaMetadata(MetaMetadata inheritedMmd, MetaMetadataRepository repository)
+        private void InheritFromTopLevelMetaMetadata(MetaMetadata inheritedMmd, MetaMetadataRepository repository, InheritanceHandler inheritanceHandler)
         {
-            InheritNonFieldElements(inheritedMmd);
-            InheritFrom(repository, inheritedMmd);
+            InheritNonFieldElements(inheritedMmd, inheritanceHandler);
+            InheritFrom(repository, inheritedMmd, inheritanceHandler);
         }
 
         protected virtual void InheritFrom(MetaMetadataRepository repository,
-                                                       MetaMetadataCompositeField inheritedStructure)
+                                                       MetaMetadataCompositeField inheritedStructure,
+                                                       InheritanceHandler inheritanceHandler)
         {
             
             // init nested fields inside this
@@ -189,7 +192,7 @@ namespace ecologylab.semantics.metametadata
                 {
                     if (field is MetaMetadataNestedField)
                     {
-                        ((MetaMetadataNestedField) field).InheritMetaMetadata();
+                        ((MetaMetadataNestedField)field).InheritMetaMetadata(inheritanceHandler);
                     }
                     string fieldName = field.Name;
                     MetaMetadataField fieldLocal;
@@ -224,7 +227,7 @@ namespace ecologylab.semantics.metametadata
                 if (f is MetaMetadataNestedField)
                 {
                     MetaMetadataNestedField f1 = (MetaMetadataNestedField) f;
-                    f1.InheritMetaMetadata();
+                    f1.InheritMetaMetadata(inheritanceHandler);
                     if (f1.IsNewMetadataClass())
                         SetNewMetadataClass(true);
 
@@ -232,7 +235,7 @@ namespace ecologylab.semantics.metametadata
                     if (f0 != null && f0.GetTypeName() != f1.GetTypeName())
                     {
                         // inherited field w changing base type (polymorphic case)
-                        f1.InheritMetaMetadata();
+                        f1.InheritMetaMetadata(inheritanceHandler);
                         MetaMetadata mmd0 = f0.InheritedMmd;
                         MetaMetadata mmd1 = f1.InheritedMmd;
                         if (mmd1.IsDerivedFrom(mmd0))
@@ -268,12 +271,12 @@ namespace ecologylab.semantics.metametadata
             
         }
 
-        protected virtual void InheritNonFieldElements(MetaMetadata inheritedMmd)
+        protected virtual void InheritNonFieldElements(MetaMetadata inheritedMmd, InheritanceHandler inheritanceHandler)
         {
             MmdScope = new MultiAncestorScope<MetaMetadata>(MmdScope, inheritedMmd.MmdScope);
         }
 
-        protected virtual MetaMetadata FindOrGenerateInheritedMetaMetadata(MetaMetadataRepository repository)
+        protected virtual MetaMetadata FindOrGenerateInheritedMetaMetadata(MetaMetadataRepository repository, InheritanceHandler inheritanceHandler)
         {
             MetaMetadata inheritedMmd = this.InheritedMmd;
             if (inheritedMmd == null)
@@ -308,7 +311,7 @@ namespace ecologylab.semantics.metametadata
                     mmdScope.Put(generatedMmd.Name, generatedMmd);
 
                     // recursively do inheritance on generated mmd
-                    generatedMmd.InheritMetaMetadata(); // this will set generateClassDescriptor to true if necessary
+                    generatedMmd.InheritMetaMetadata(null); // this will set generateClassDescriptor to true if necessary
 
                     MakeThisFieldUseMmd(newTypeName, generatedMmd);
                     return generatedMmd;

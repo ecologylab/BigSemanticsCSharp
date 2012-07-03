@@ -74,7 +74,7 @@ namespace ecologylab.semantics.metametadata
 		    this.repository = rootMmd.Repository;
 	    }
 
-	    void Push(MetaMetadataField mmField)
+	    public void Push(MetaMetadataField mmField)
 	    {
 		    Console.Out.WriteLine("pushing " + mmField);
 		    mmStack.Push(mmField);
@@ -95,7 +95,7 @@ namespace ecologylab.semantics.metametadata
 		    scope.AddIfValueNotNull(GENERIC_TYPE_VAR_SCOPE, mmField.GenericTypeVars);
 	    }
 
-	    void Pop(MetaMetadataField mmField)
+	    public void Pop(MetaMetadataField mmField)
 	    {
 		    MetaMetadataField field = mmStack.Pop();
 		    Console.Out.WriteLine("popping " + field);

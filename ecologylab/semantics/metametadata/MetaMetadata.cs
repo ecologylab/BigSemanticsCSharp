@@ -159,30 +159,35 @@ namespace ecologylab.semantics.metametadata
 		    return false;
 	    }
 
-        protected override bool InheritMetaMetadataHelper()
+        protected override bool InheritMetaMetadataHelper(InheritanceHandler inheritanceHandler)
         {
+            inheritanceHandler = new InheritanceHandler(this);
+
             // init each field's declaringMmd to this (some of them may change during inheritance)
 		    foreach (MetaMetadataField field in Kids.Values)
 			    field.DeclaringMmd = this;
             
-            return base.InheritMetaMetadataHelper();
+            return base.InheritMetaMetadataHelper(inheritanceHandler);
         }
 
-        protected override void InheritNonFieldElements(MetaMetadata inheritedMmd)
+        protected override void InheritNonFieldElements(MetaMetadata inheritedMmd, InheritanceHandler inheritanceHandler)
         {
-            base.InheritNonFieldElements(inheritedMmd);
+            base.InheritNonFieldElements(inheritedMmd, inheritanceHandler);
             InheritAttributes(inheritedMmd);
-            
+
+            if (this.genericTypeVars != null)
+                this.genericTypeVars.InheritFrom(inheritedMmd.genericTypeVars, inheritanceHandler);
+
             //InheritSemanticActions(inheritedMmd);
         }
 
-        protected override void InheritFrom(MetaMetadataRepository repository, MetaMetadataCompositeField inheritedStructure)
+        protected override void InheritFrom(MetaMetadataRepository repository, MetaMetadataCompositeField inheritedStructure, InheritanceHandler inheritanceHandler)
 	    {
-		    base.InheritFrom(repository, inheritedStructure);
+            base.InheritFrom(repository, inheritedStructure, inheritanceHandler);
 		
 		    // for fields referring to this meta-metadata type
 		    // need to do inheritMetaMetadata() again after copying fields from this.getInheritedMmd()
-		    foreach (MetaMetadataField f in this.Kids.Values)
+/*		    foreach (MetaMetadataField f in this.Kids.Values)
 		    {
 			    if (f.GetType() ==  typeof(MetaMetadataNestedField))
 			    {
@@ -190,10 +195,11 @@ namespace ecologylab.semantics.metametadata
 				    if (nested.InheritedMmd == this)
 				    {
 					    nested.ClearInheritFinishedOrInProgressFlag();
-					    nested.InheritMetaMetadata();
+                        nested.InheritMetaMetadata();
 				    }
 			    }
 		    }
+*/
 	    }
 
 	    public new MetadataClassDescriptor BindMetadataClassDescriptor(SimplTypesScope metadataTScope)
@@ -231,7 +237,7 @@ namespace ecologylab.semantics.metametadata
 	        return thisCd;
 	    }
 
-        protected override MetaMetadata FindOrGenerateInheritedMetaMetadata(MetaMetadataRepository repository)
+        protected override MetaMetadata FindOrGenerateInheritedMetaMetadata(MetaMetadataRepository repository, InheritanceHandler inheritanceHandler)
         {
             if (MetaMetadata.IsRootMetaMetadata(this))
                 return null;
@@ -280,7 +286,7 @@ namespace ecologylab.semantics.metametadata
                 // do not use this.type directly because we don't know if that is a definition or just re-using exsiting type
                 MetaMetadata inheritedMmd = InheritedMmd;
                 if (inheritedMmd == null)
-                    InheritMetaMetadata(); // currently, this should never happend because we call this method after inheritance process.
+                    InheritMetaMetadata(null);//edit // currently, this should never happend because we call this method after inheritance process.
                 return inheritedMmd == null ? null : inheritedMmd.GetMetadataClassSimpleName();
             }
 	    }

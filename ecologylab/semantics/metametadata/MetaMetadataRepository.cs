@@ -216,7 +216,7 @@ namespace ecologylab.semantics.metametadata
                 foreach (MetaMetadata metaMetadata in _repositoryByName.Values)
                 {
                     metaMetadata.Repository = this;
-                    metaMetadata.InheritMetaMetadata();
+                    metaMetadata.InheritMetaMetadata(null);
                 }
             }
         }

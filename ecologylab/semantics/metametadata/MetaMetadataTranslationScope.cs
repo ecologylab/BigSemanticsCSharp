@@ -19,6 +19,7 @@ namespace ecologylab.semantics.metametadata
         static Type[] translations = {
             typeof(MetadataClassDescriptor),
             typeof(MetadataFieldDescriptor),
+            typeof(MmdGenericTypeVar),//edit
             typeof(MetaMetadata),
             typeof(SearchEngines),
             typeof(SearchEngine),

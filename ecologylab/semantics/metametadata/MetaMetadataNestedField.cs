@@ -82,13 +82,13 @@ namespace ecologylab.semantics.metametadata
 
         protected abstract String GetMetaMetadataTagToInheritFrom();
 
-        public void InheritMetaMetadata()
+        public void InheritMetaMetadata(InheritanceHandler inheritanceHandler)
         {
             if (inheritFinished || _inheritInProcess) return;
 
             //Debug.WriteLine("inheriting " + this);
             _inheritInProcess = true;
-            if(InheritMetaMetadataHelper())
+            if (InheritMetaMetadataHelper(inheritanceHandler))
                 FinishInheritance();
         }
 
@@ -113,7 +113,7 @@ namespace ecologylab.semantics.metametadata
             inheritingField.InheritFinished += eventHandler;
         }
 
-        protected abstract bool InheritMetaMetadataHelper();
+        protected abstract bool InheritMetaMetadataHelper(InheritanceHandler inheritanceHandler);
 
         public String PackageName
         {
@@ -225,7 +225,7 @@ namespace ecologylab.semantics.metametadata
             MetadataClassDescriptor metadataCd = this.MetadataClassDescriptor;
             if (metadataCd == null)
             {
-                this.InheritMetaMetadata();
+                this.InheritMetaMetadata(null); //edit
 
                 String metadataClassSimpleName = this.GetMetadataClassSimpleName();
                 // first look up by simple name, since package names for some built-ins are wrong

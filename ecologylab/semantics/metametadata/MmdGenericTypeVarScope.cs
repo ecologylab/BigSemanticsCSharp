@@ -59,10 +59,10 @@ namespace ecologylab.semantics.metametadata
 			    MmdGenericTypeVar boundGtv, InheritanceHandler inheritanceHandler)
 	    {
 		    MetaMetadata argMmd = inheritanceHandler.ResolveMmdName(argGtv.Arg);
-		    argMmd.InheritMetaMetadata();
+		    argMmd.InheritMetaMetadata(null);
 
 		    MetaMetadata lowerBoundMmd = inheritanceHandler.ResolveMmdName(boundGtv.ExtendsAttribute);
-		    lowerBoundMmd.InheritMetaMetadata();
+		    lowerBoundMmd.InheritMetaMetadata(null);
 		    bool satisfyLowerBound = lowerBoundMmd == null || argMmd.IsDerivedFrom(lowerBoundMmd);
 
 		    // MetaMetadata upperBoundMmd = inheritanceHandler.resolveMmdName(localGtv.getSuperAttribute());
@@ -76,10 +76,10 @@ namespace ecologylab.semantics.metametadata
 			    InheritanceHandler inheritanceHandler)
 	    {
 		    MetaMetadata lowerBoundMmdLocal = inheritanceHandler.ResolveMmdName(local.ExtendsAttribute);
-		    lowerBoundMmdLocal.InheritMetaMetadata();
+		    lowerBoundMmdLocal.InheritMetaMetadata(null);
 		
 		    MetaMetadata lowerBoundMmdOther = inheritanceHandler.ResolveMmdName(other.ExtendsAttribute);
-		    lowerBoundMmdOther.InheritMetaMetadata();
+		    lowerBoundMmdOther.InheritMetaMetadata(null);
 		
 		    bool lowerBoundsCompatible = lowerBoundMmdOther == null
 				    || lowerBoundMmdLocal.IsDerivedFrom(lowerBoundMmdOther);

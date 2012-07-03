@@ -77,7 +77,7 @@ namespace ecologylab.semantics.metametadata
         return null;
     }
 
-    protected override bool InheritMetaMetadataHelper()
+    protected override bool InheritMetaMetadataHelper(InheritanceHandler inheritanceHandler)
     {
       /*
        * the childComposite should hide all complexity between collection fields and composite fields,
@@ -103,7 +103,7 @@ namespace ecologylab.semantics.metametadata
             childComposite.DeclaringMmd = DeclaringMmd;
             childComposite.MmdScope = MmdScope;
 
-            childComposite.InheritMetaMetadata(); // inheritedMmd might be inferred from type/extends
+            childComposite.InheritMetaMetadata(inheritanceHandler); // inheritedMmd might be inferred from type/extends
 
             InheritedMmd = childComposite.InheritedMmd;
             MmdScope = childComposite.MmdScope;
