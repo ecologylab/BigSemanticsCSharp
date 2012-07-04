@@ -14,8 +14,10 @@ namespace UnitTests
     public class ArticlesInheritanceRelationships
     {
         [TestMethod]
-        public void TesArticlesInheritanceRelationships()
+        public void TestArticlesInheritanceRelationships()
         {
+            //ClassDescriptor c = ClassDescriptor.GetClassDescriptor(typeof(MmdGenericTypeVar));
+
             MetaMetadataRepositoryLoader loader = new MetaMetadataRepositoryLoader();
             SimplTypesScope metadataTranslationScope = RepositoryMetadataTranslationScope.Get();
             SimplTypesScope mmdTScope = MetaMetadataTranslationScope.Get();

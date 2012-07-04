@@ -14,6 +14,7 @@ namespace ecologylabSemantics.ecologylab.semantics.metametadata
 
     private static Type[] translations =
       {
+        //typeof(MmdGenericTypeVar),
         typeof (MetaMetadataField),
         typeof (MetaMetadataScalarField),
         typeof (MetaMetadataNestedField),
