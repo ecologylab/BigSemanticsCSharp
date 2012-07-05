@@ -90,8 +90,13 @@ namespace ecologylab.semantics.metametadata
                 if (inheritedMmd.InheritInProcess)
                 {
                     inhertedIsInheriting = true;
+
+                    // if inheriting from the root mmd, we need to clone and keep the environment right now.
+					InheritanceHandler inheritanceHandlerToUse = inheritanceHandler.clone();
+					inheritanceHandler.Pop(this);
+
                     //inheritedMmd.InheritFinished += (sender, e) => InheritFromTopLevelMetaMetadata(inheritedMmd, repository);
-                    this.AddInheritanceFinishHandler(inheritedMmd, InheritMetaMetadataFinished);
+                    this.AddInheritanceFinishHandler(inheritedMmd, InheritMetaMetadataFinished, inheritanceHandlerToUse);
                 }
                 else
                 {
@@ -122,8 +127,13 @@ namespace ecologylab.semantics.metametadata
                 if (inheritedField.InheritInProcess)
                 {
                     inhertedIsInheriting = true;
+
+                    // if inheriting from the root mmd, we need to clone and keep the environment right now.
+                    InheritanceHandler inheritanceHandlerToUse = inheritanceHandler.clone();
+                    inheritanceHandler.Pop(this);
+
                     //inheritedField.InheritFinished += (sender, e) => InheritFrom(repository, inheritedField);
-                    this.AddInheritanceFinishHandler(inheritedField, InheritFieldFinished);
+                    this.AddInheritanceFinishHandler(inheritedField, InheritFieldFinished, inheritanceHandlerToUse);
                 }
                 else
                 {
@@ -146,9 +156,11 @@ namespace ecologylab.semantics.metametadata
         private void InheritMetaMetadataFinished(MetaMetadataNestedField sender, EventArgs e)
         {   
             MetaMetadata inheritedMmd = (MetaMetadata) _waitingToInheritFrom.Pop();
-            //InheritFromTopLevelMetaMetadata(inheritedMmd, Repository); //edit
+            InheritanceHandler inheritanceHandler = _waitingToInheritFromInheritanceHandler.Pop();
+            
+            InheritFromTopLevelMetaMetadata(inheritedMmd, Repository, inheritanceHandler);
 
-            //InheritFromSuperField(Repository); //edit
+            InheritFromSuperField(Repository, inheritanceHandler);
 
             if (_waitingToInheritFrom.Count == 0)
                 FinishInheritance();
@@ -198,20 +210,36 @@ namespace ecologylab.semantics.metametadata
                     MetaMetadataField fieldLocal;
                     kids.TryGetValue(fieldName, out fieldLocal);
 
-                    if (fieldLocal == null) continue;
-
-                    Debug.WriteLine("inheriting field: " + fieldLocal + " <= " + field);
-                    if (field.GetType() != fieldLocal.GetType())
-                        Debug.WriteLine("local field " + fieldLocal + " hides field " + fieldLocal +
-                                        " with the same name in super mmd type!");
-                    // debug("inheriting field " + fieldLocal + " from " + field);
-                    if (field != fieldLocal)
-                        fieldLocal.InheritedField = field;
-                    fieldLocal.DeclaringMmd = field.DeclaringMmd;
-                    fieldLocal.InheritAttributes(field);
-                    if (fieldLocal is MetaMetadataNestedField)
-                        ((MetaMetadataNestedField) fieldLocal).PackageName =
-                            ((MetaMetadataNestedField) field).PackageName;
+                    if (fieldLocal == null && inheritanceHandler.IsUsingGenerics(field))
+                    {
+                        // if the super field is using generics, we will need to re-evaluate generic type vars
+                        fieldLocal = (MetaMetadataField) Activator.CreateInstance(field.GetType());
+                        
+                        //Prepare Child Field For Inheritance
+                        fieldLocal.Repository = (repository);
+                        if (fieldLocal is MetaMetadataNestedField)
+                        {
+                            MetaMetadataNestedField nested = (MetaMetadataNestedField)fieldLocal;
+                            if (nested.PackageName == null)
+                                nested.PackageName = PackageName;
+                            nested.MmdScope = MmdScope;
+                        }
+                    }
+                    if (fieldLocal != null)
+                    {
+                        Debug.WriteLine("inheriting field: " + fieldLocal + " <= " + field);
+                        if (field.GetType() != fieldLocal.GetType())
+                            Debug.WriteLine("local field " + fieldLocal + " hides field " + fieldLocal +
+                                            " with the same name in super mmd type!");
+                        // debug("inheriting field " + fieldLocal + " from " + field);
+                        if (field != fieldLocal)
+                            fieldLocal.InheritedField = field;
+                        fieldLocal.DeclaringMmd = field.DeclaringMmd;
+                        fieldLocal.InheritAttributes(field);
+                        if (fieldLocal is MetaMetadataNestedField)
+                            ((MetaMetadataNestedField)fieldLocal).PackageName =
+                                ((MetaMetadataNestedField)field).PackageName;
+                    }
                 }
             }
 
@@ -282,73 +310,50 @@ namespace ecologylab.semantics.metametadata
             if (inheritedMmd == null)
             {
                 MultiAncestorScope<MetaMetadata> mmdScope = this.MmdScope;
-                MetaMetadata tempType;
+                String inheritedMmdName = Type ?? Name;
+
                 if (ExtendsAttribute != null)
                 {
                     // determine new type name
-                    String newTypeName = this.Type;
-
-                    if (newTypeName != null && mmdScope.Get(newTypeName) != null)
-                        // currently we don't encourage re-using existing name. however, in the future, when package names are available, we can change this.
-                        throw new MetaMetadataException("meta-metadata '" + newTypeName +
-                                                        "' already exists! please use another name to prevent name collision. hint: use 'tag' to change the tag if needed.");
-
-                    newTypeName = newTypeName ?? this.Name;
-
-                    if (newTypeName == null)
+                    if (inheritedMmdName == null)
                         throw new MetaMetadataException("attribute 'name' must be specified: " + this);
+                    if (inheritanceHandler.ResolveMmdName(inheritedMmdName) != null)
+                        // currently we don't encourage re-using existing name. however, in the future, when package names are available, we can change this.
+                        throw new MetaMetadataException("meta-metadata '" + inheritedMmdName + "' already exists! please use another name to prevent name collision. hint: use 'tag' to change the tag if needed.");
 
                     // determine from which meta-metadata to inherit
-                    String inheritedMmdName = ExtendsAttribute;
-                    inheritedMmd = mmdScope.Get(inheritedMmdName);
-                    if (inheritedMmd == null)
-                        throw new MetaMetadataException("super type not specified or not found: " + this +
-                                                        ", super type name: " + inheritedMmdName);
-
+                    inheritedMmd = inheritanceHandler.ResolveMmdName(ExtendsAttribute);
+                    if (ExtendsAttribute == null || inheritedMmd == null)
+                        throw new MetaMetadataException("super type not specified or recognized: " + this + ", super type name: " + ExtendsAttribute);
+                    
                     // generate inline mmds and put it into current scope
-                    MetaMetadata generatedMmd = GenerateMetaMetadata(newTypeName, inheritedMmd);
-                    mmdScope.Put(newTypeName, generatedMmd);
+                    MetaMetadata generatedMmd = this.GenerateMetaMetadata(inheritedMmdName, inheritedMmd);
+                    mmdScope.Put(inheritedMmdName, generatedMmd);
                     mmdScope.Put(generatedMmd.Name, generatedMmd);
 
                     // recursively do inheritance on generated mmd
                     generatedMmd.InheritMetaMetadata(null); // this will set generateClassDescriptor to true if necessary
 
-                    MakeThisFieldUseMmd(newTypeName, generatedMmd);
+                    MakeThisFieldUseMmd(inheritedMmdName, generatedMmd);
                     return generatedMmd;
                 }
                 else
                 {
                     // use type / extends
-                    String inheritedMmdName = Type ?? Name;
-                    tempType = mmdScope.Get(inheritedMmdName);
-                    if (inheritedMmdName == null && tempType == null)
+                    if (inheritedMmdName == null)
+                        throw new MetaMetadataException("no type / extends defined for " + this
+                            + " (note that due to a limitation explicit child_scalar_type is needed for scalar collection fields, even if it has been declared in super field).");
+
+                    NameType[] nameType = new NameType[1];
+                    inheritedMmd = inheritanceHandler.ResolveMmdName(inheritedMmdName, nameType);
+
+                    if (inheritedMmd == null)
+                        throw new MetaMetadataException("meta-metadata not found: " + inheritedMmdName + " (if you want to define new types inline, you need to specify extends/child_extends).");
+
+                    if (!inheritedMmdName.Equals(inheritedMmd.Name) && nameType[0] == NameType.MMD)
                     {
-                        inheritedMmdName = ExtendsAttribute;
-                        if (inheritedMmdName == null)
-                            //                            throw new MetaMetadataException("no type / extends defined for " + this);
-                            Debug.WriteLine("no type / extends defined for " + this);
-                        SetNewMetadataClass(true);
-                    }
-
-
-                    if (inheritedMmdName != null)
-                    {
-                        inheritedMmd = mmdScope.Get(inheritedMmdName);
-
-                        if (inheritedMmd != null && inheritedMmdName != inheritedMmd.Name)
-                        {
-                            // could be inline mmd
-                            MakeThisFieldUseMmd(GetTypeOrName(), inheritedMmd);
-                        }
-
-                        if (inheritedMmd == null)
-                            throw new MetaMetadataException("meta-metadata not found: " + inheritedMmdName +
-                                                            " (if you want to define new types inline, you need to specify extends/child_extends)");
-                    }
-                    else
-                    {
-
-                        Debug.WriteLine("No InheritedMMD Found");
+                        // could be inline mmd
+                        this.MakeThisFieldUseMmd(inheritedMmdName, inheritedMmd);
                     }
 
                     // process normal mmd / field

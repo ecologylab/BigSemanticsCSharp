@@ -185,6 +185,13 @@ namespace ecologylab.semantics.metametadata
             set { genericTypeVars = value; }
         }
 
+        public static List<MmdGenericTypeVar> EMPTY_GENERIC_TYPE_VAR_COLLECTION = new List<MmdGenericTypeVar>();
+
+        public List<MmdGenericTypeVar> getMetaMetadataGenericTypeVars()
+        {
+            return genericTypeVars == null ? EMPTY_GENERIC_TYPE_VAR_COLLECTION : new List<MmdGenericTypeVar>(genericTypeVars.Values);
+        }
+
         public MetaMetadataField()
 		{  
             _fieldDescriptorProxy = new MetadataFieldDescriptorProxy(this); 

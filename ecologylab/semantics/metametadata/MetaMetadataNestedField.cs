@@ -76,6 +76,8 @@ namespace ecologylab.semantics.metametadata
 
         protected Stack<MetaMetadataNestedField> _waitingToInheritFrom;
 
+        protected Stack<InheritanceHandler> _waitingToInheritFromInheritanceHandler;
+
         protected MetaMetadataNestedField()
         {
         }
@@ -103,12 +105,18 @@ namespace ecologylab.semantics.metametadata
                 InheritFinished(this, EventArgs.Empty);
         }
 
-        public void AddInheritanceFinishHandler(MetaMetadataNestedField inheritingField, InheritFinishedEventHandler eventHandler)
+        public void AddInheritanceFinishHandler(MetaMetadataNestedField inheritingField, InheritFinishedEventHandler eventHandler, InheritanceHandler inheritanceHandler)
         {
             if (_waitingToInheritFrom == null)
                 _waitingToInheritFrom = new Stack<MetaMetadataNestedField>();
 
             _waitingToInheritFrom.Push(inheritingField);
+
+            //adding the InheritanceHandler for this inheritingField
+            if (_waitingToInheritFromInheritanceHandler == null)
+                _waitingToInheritFromInheritanceHandler = new Stack<InheritanceHandler>();
+
+            _waitingToInheritFromInheritanceHandler.Push(inheritanceHandler);
 
             inheritingField.InheritFinished += eventHandler;
         }
