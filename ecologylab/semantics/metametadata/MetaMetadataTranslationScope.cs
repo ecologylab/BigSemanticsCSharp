@@ -34,7 +34,6 @@ namespace ecologylab.semantics.metametadata
             typeof(CookieProcessing),
             typeof(MetaMetadataRepository), 
             typeof(MetaMetadataSelector),
-            typeof(MetaMetadataGenericTypeVar),
             typeof(DefVar)
         };
             //Condition scope

@@ -45,7 +45,7 @@ namespace ecologylab.semantics.metametadata
 
         [SimplCollection("generic_type_var")]
         [SimplNoWrap]
-        private List<MetaMetadataGenericTypeVar> genericTypeVars;
+        private List<MmdGenericTypeVar> genericTypeVars;
 
         [SimplScalar]
         private bool showExpandedInitially;
