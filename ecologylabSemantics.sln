@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaMetadataRepository", ".
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simpl.OODSS", "..\ecologylabFundamental\Simpl.OODSS\Simpl.OODSS.csproj", "{479686B4-ED8A-43B4-A077-CB562E0B0741}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{0E3C0939-1A23-4912-AAF3-F4761F69637B}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -152,6 +154,16 @@ Global
 		{479686B4-ED8A-43B4-A077-CB562E0B0741}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{479686B4-ED8A-43B4-A077-CB562E0B0741}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{479686B4-ED8A-43B4-A077-CB562E0B0741}.Release|x86.ActiveCfg = Release|Any CPU
+		{0E3C0939-1A23-4912-AAF3-F4761F69637B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E3C0939-1A23-4912-AAF3-F4761F69637B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E3C0939-1A23-4912-AAF3-F4761F69637B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0E3C0939-1A23-4912-AAF3-F4761F69637B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0E3C0939-1A23-4912-AAF3-F4761F69637B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0E3C0939-1A23-4912-AAF3-F4761F69637B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E3C0939-1A23-4912-AAF3-F4761F69637B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E3C0939-1A23-4912-AAF3-F4761F69637B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0E3C0939-1A23-4912-AAF3-F4761F69637B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0E3C0939-1A23-4912-AAF3-F4761F69637B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
