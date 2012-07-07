@@ -43,10 +43,10 @@ namespace ecologylab.semantics.metametadata
         [SimplScalar]
         private String schemaOrgItemtype;
 
-        [SimplCollection("generic_type_var")]
+/*      [SimplCollection("generic_type_var")]
         [SimplNoWrap]
         private List<MmdGenericTypeVar> genericTypeVars;
-
+*/
         [SimplScalar]
         private bool showExpandedInitially;
 

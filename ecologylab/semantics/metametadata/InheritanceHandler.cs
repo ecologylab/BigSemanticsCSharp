@@ -179,9 +179,9 @@ namespace ecologylab.semantics.metametadata
 				    GENERIC_TYPE_VAR_SCOPE);
 		    if (gtvScope == null)
 			    return false;
-		    if (gtvScope.ContainsKey(field.GetMmdType()) || field.GetMmdType() == null
-				    && gtvScope.ContainsKey(field.Name)
-				    || gtvScope.ContainsKey(field.GetMmdExtendsAttribute()))
+		    if (((field.GetMmdType() != null) && gtvScope.ContainsKey(field.GetMmdType())) || field.GetMmdType() == null
+				    && ((field.Name != null) && gtvScope.ContainsKey(field.Name))
+                    || ((field.GetMmdExtendsAttribute() != null) && gtvScope.ContainsKey(field.GetMmdExtendsAttribute())))
 			    return true;
 		    return false;
 	    }
