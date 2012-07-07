@@ -322,7 +322,16 @@ namespace ecologylab.semantics.metametadata
                             else
                             {
                                 // domain only -- no pattern
-                                _documentRepositoryByDomain.Add(domain, metaMetadata);
+                                //TODO: 'PUT' HIDES ERRORS. This is only so that we can identify them
+                                if (_documentRepositoryByDomain.ContainsKey(domain))
+                                {
+                                    Console.WriteLine("-----\tError: Adding MMD({0}) for domain({1}), but this domain is already used for MMD({2})", metaMetadata, domain, _documentRepositoryByDomain[domain]);
+                                }
+                                else
+                                {
+                                    _documentRepositoryByDomain.Add(domain, metaMetadata);    
+                                }
+                                
                                 metaMetadata.MMSelectorType = MMSelectorType.DOMAIN;
                             }
                         }

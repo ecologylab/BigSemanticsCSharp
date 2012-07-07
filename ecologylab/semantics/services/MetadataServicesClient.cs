@@ -23,5 +23,8 @@ namespace ecologylab.semantics.services
             _metadataClient = new OODSSClient("127.0.0.1", 2107, typesScope, objectScope);
             _metadataClient.Start();
         }
+
+
+
     }
 }

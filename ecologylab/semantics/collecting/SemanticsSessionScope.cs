@@ -35,11 +35,11 @@ namespace ecologylab.semantics.collecting
             //We might be able to pass in a TCS here, and set completion
             DownloadMonitor = new DownloadMonitor();
 
-            WebBrowserPool = new WebBrowserPool(this);
-            _extractionDelegate = WebBrowserPool.ExtractMetadata;
-
-            _awesomiumThread = new Thread(WebBrowserPool.InitializeWebCore) { Name = "Singleton Awesomium Thread", IsBackground = true };
-            _awesomiumThread.Start();
+//            WebBrowserPool = new WebBrowserPool(this);
+//            _extractionDelegate = WebBrowserPool.ExtractMetadata;
+//
+//            _awesomiumThread = new Thread(WebBrowserPool.InitializeWebCore) { Name = "Singleton Awesomium Thread", IsBackground = true };
+//            _awesomiumThread.Start();
 
             SemanticsSessionScope.Get = this;
             
@@ -87,13 +87,13 @@ namespace ecologylab.semantics.collecting
             var scope = await TaskEx.Run(() => new SemanticsSessionScope(metadataTranslationScope, repoLocation));
 
             //This can be improved to pass the TaskCompletionSource, but a little synchronization logic is required.
-            while (!WebCore.IsRunning)
-            {
-                Console.WriteLine("Waiting for WebCore to Initialize");
-                //NOTE: This isn't a Thread.sleep. TaskEx.delay notifies the CPU to return after the timespan,
-                // It doesn't block the thread.
-                await TaskEx.Delay(TimeSpan.FromMilliseconds(300));
-            }
+//            while (!WebCore.IsRunning)
+//            {
+//                Console.WriteLine("Waiting for WebCore to Initialize");
+//                //NOTE: This isn't a Thread.sleep. TaskEx.delay notifies the CPU to return after the timespan,
+//                // It doesn't block the thread.
+//                await TaskEx.Delay(TimeSpan.FromMilliseconds(300));
+//            }
 
             return scope;
         }
