@@ -76,7 +76,12 @@ namespace ecologylab.semantics.metadata.scalar.types
 			return result;
 		}
 
-		public Object GetValueInstance(String value, String[] formatStrings, IScalarUnmarshallingContext scalarUnmarshallingContext)
+	    public override string Marshall(object instance, TranslationContext context = null)
+	    {
+	        return instance.ToString();
+	    }
+
+	    public Object GetValueInstance(String value, String[] formatStrings, IScalarUnmarshallingContext scalarUnmarshallingContext)
 		{
 			return valueScalarType.GetInstance(value, formatStrings, scalarUnmarshallingContext);
 		}

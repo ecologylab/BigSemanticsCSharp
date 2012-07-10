@@ -51,5 +51,10 @@ namespace ecologylab.semantics.metadata.scalar.types
             }
             return (MetadataScalarType)TypeRegistry.GetScalarTypeBySimpleName(simpleName);			
         }
+
+        public override string Marshall(object instance, TranslationContext context = null)
+        {
+            return instance.ToString();
+        }
     }
 }
