@@ -11,11 +11,16 @@ namespace ecologylab.semantics.services.messages
 {
     public class MetadataRequest : RequestMessage
     {
-        [SimplScalar] private ParsedUri url;
+        [SimplScalar] private String url;
 
         public MetadataRequest()
         {
             
+        }
+
+        public MetadataRequest(String url)
+        {
+            this.url = url;
         }
 
         public override ResponseMessage PerformService(Scope<object> clientSessionScope)
