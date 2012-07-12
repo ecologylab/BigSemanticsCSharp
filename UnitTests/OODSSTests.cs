@@ -14,6 +14,8 @@ namespace UnitTests
         public void TestMetadataServicesClient()
         {
              MetadataServicesClient mmdclient = new MetadataServicesClient();
+            int i = 0; 
+            while (true) i++;
         }
     }
 }

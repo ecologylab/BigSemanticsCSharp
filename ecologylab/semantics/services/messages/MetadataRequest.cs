@@ -22,7 +22,7 @@ namespace ecologylab.semantics.services.messages
         {
             this.url = url;
         }
-
+        
         public override ResponseMessage PerformService(Scope<object> clientSessionScope)
         {
             throw new NotImplementedException();
