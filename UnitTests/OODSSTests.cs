@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ecologylab.semantics.metadata.builtins;
 using ecologylab.semantics.services;
 
 namespace UnitTests
@@ -11,11 +12,19 @@ namespace UnitTests
     public class OODSSTests
     {
         [TestMethod]
-        public void TestMetadataServicesClient()
+        public async void TestMetadataServicesClient()
         {
-             MetadataServicesClient mmdclient = new MetadataServicesClient();
-            int i = 0; 
-            while (true) i++;
+            Console.WriteLine("Initializing client");
+            MetadataServicesClient mmdclient = new MetadataServicesClient();
+
+            Document d = await mmdclient.GetMetadata("http://www.airbnb.com/rooms/36769");
+            Console.WriteLine("Got second metadata object: {0}", d );
+
+
+            Document d2 = await mmdclient.GetMetadata("http://www.airbnb.com/rooms/36769");
+            Console.WriteLine("Got second metadata object: {0}", d2);
+
+            Console.WriteLine("Terminating test cases");
         }
     }
 }
