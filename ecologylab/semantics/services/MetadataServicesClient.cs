@@ -17,17 +17,17 @@ namespace ecologylab.semantics.services
     {
         private readonly OODSSClient _metadataClient;
 
-        public MetadataServicesClient()
+        public event EventHandler<MetadataEventArgs> metadataDownloadComplete;
+
+        public MetadataServicesClient(SimplTypesScope metadatascope)
         {
-            SimplTypesScope typesScope = SimplTypesScope.Get("MetadataServicesTranslationScope", 
+            SimplTypesScope typesScope = SimplTypesScope.Get("MetadataServicesTranslationScope",
+                                                        metadatascope,
                                                         typeof (MetadataRequest),
                                                         typeof (MetadataResponse));
             Scope<object> objectScope = new Scope<object>();
 
-            _metadataClient = new OODSSClient("127.0.0.1", 2107, typesScope, objectScope);
-            //_metadataClient.AddRequest();
-            //_metadataClient.AddRequest(new MetadataRequest("http://www.airbnb.com/rooms/36769"));
-            
+            _metadataClient = new OODSSClient("127.0.0.1", 2107, typesScope, objectScope);            
             _metadataClient.Start();
         }
 
@@ -47,8 +47,27 @@ namespace ecologylab.semantics.services
             if(metadataResponse != null && metadataResponse is MetadataResponse)
             {
                 result = (metadataResponse as MetadataResponse).Metadata;
+
+                this.metadataDownloadComplete(this, new MetadataEventArgs(result));
             }
+
             return result;
+        }
+
+        public class MetadataEventArgs : EventArgs
+        {
+            private Document metadata;
+
+            public MetadataEventArgs(Document metadata)
+            {
+                this.metadata = metadata;
+            }
+
+            public Document Metadata
+            {
+                get { return metadata; }
+                set { metadata = value; }
+            }
         }
     }
 }
