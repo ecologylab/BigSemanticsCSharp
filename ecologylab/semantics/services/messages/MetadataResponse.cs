@@ -12,8 +12,8 @@ namespace ecologylab.semantics.services.messages
 {
     public class MetadataResponse : ResponseMessage
     {
-        [SimplComposite] 
-        [SimplScope(SemanticNames.REPOSITORY_METADATA_TRANSLATIONS)]
+        [SimplComposite]
+        [SimplScope(/*SemanticNames.REPOSITORY_METADATA_TRANSLATIONS*/"meta-metadata-compiler-tscope")]
         private Document metadata;
 
         public MetadataResponse()

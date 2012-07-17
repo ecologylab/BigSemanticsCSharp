@@ -23,11 +23,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simpl.OODSS", "..\ecologyla
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{0E3C0939-1A23-4912-AAF3-F4761F69637B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMTestSemanticService", "..\ecologylabSemanticsExamples\MMTestSemanticService\MMTestSemanticService.csproj", "{EEB5B0D7-0BF2-4298-8651-BA98647BDA55}"
+EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -164,8 +162,22 @@ Global
 		{0E3C0939-1A23-4912-AAF3-F4761F69637B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0E3C0939-1A23-4912-AAF3-F4761F69637B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0E3C0939-1A23-4912-AAF3-F4761F69637B}.Release|x86.ActiveCfg = Release|Any CPU
+		{EEB5B0D7-0BF2-4298-8651-BA98647BDA55}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{EEB5B0D7-0BF2-4298-8651-BA98647BDA55}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{EEB5B0D7-0BF2-4298-8651-BA98647BDA55}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{EEB5B0D7-0BF2-4298-8651-BA98647BDA55}.Debug|x86.ActiveCfg = Debug|x86
+		{EEB5B0D7-0BF2-4298-8651-BA98647BDA55}.Debug|x86.Build.0 = Debug|x86
+		{EEB5B0D7-0BF2-4298-8651-BA98647BDA55}.Release|Any CPU.ActiveCfg = Release|x86
+		{EEB5B0D7-0BF2-4298-8651-BA98647BDA55}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{EEB5B0D7-0BF2-4298-8651-BA98647BDA55}.Release|Mixed Platforms.Build.0 = Release|x86
+		{EEB5B0D7-0BF2-4298-8651-BA98647BDA55}.Release|x86.ActiveCfg = Release|x86
+		{EEB5B0D7-0BF2-4298-8651-BA98647BDA55}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
