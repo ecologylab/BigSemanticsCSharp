@@ -572,7 +572,13 @@ namespace ecologylab.semantics.metametadata
                         this.metadataFieldDescriptor = metadataFieldDescriptor;
 
                         if (this.metadataFieldDescriptor != null)
-                        	CustomizeFieldDescriptor(metadataTScope, _fieldDescriptorProxy);
+                        {
+                            // it is possible that the fieldescriptor in the fieldDescriptor proxy has been removed during clone.
+                            // if so, make a new fieldDescriptorProxy.
+                            if (!_fieldDescriptorProxy.FieldDescriptorExists())
+                                _fieldDescriptorProxy = new MetadataFieldDescriptorProxy(this);
+                            CustomizeFieldDescriptor(metadataTScope, _fieldDescriptorProxy);
+                        }
                         if (this.metadataFieldDescriptor != metadataFieldDescriptor)
                         {
                             String tagName = this.metadataFieldDescriptor.TagName;
@@ -714,6 +720,16 @@ namespace ecologylab.semantics.metametadata
 			    }
 		    }
 
+            public Boolean FieldDescriptorExists()
+            {
+                return outer.metadataFieldDescriptor != null;
+            }
+
+        }
+
+        internal MetaMetadataField Clone()
+        {
+            return (MetaMetadataField) this.MemberwiseClone();
         }
     }
     
