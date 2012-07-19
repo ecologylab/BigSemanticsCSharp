@@ -10,12 +10,16 @@ using Simpl.Serialization;
 using ecologylab.collections;
 using ecologylab.semantics.metadata.builtins;
 using ecologylab.semantics.services.messages;
+using ecologylab.semantics.services;
+using ecologylab.semantics.collecting;
 
 namespace ecologylab.semantics.services
 {
     public class MetadataServicesClient
     {
         private readonly OODSSClient _metadataClient;
+
+        private SemanticsGlobalCollection<Document> globalColection; 
 
         public event EventHandler<MetadataEventArgs> metadataDownloadComplete;
 
@@ -27,6 +31,8 @@ namespace ecologylab.semantics.services
                                                         typeof (MetadataResponse));
             Scope<object> objectScope = new Scope<object>();
 
+            globalColection = new SemanticsGlobalCollection<Document>();
+
             _metadataClient = new OODSSClient("127.0.0.1", 2107, typesScope, objectScope);            
             _metadataClient.Start();
         }
@@ -37,21 +43,32 @@ namespace ecologylab.semantics.services
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public async Task<Document> GetMetadata(string url)
+        public async void GetMetadata(string url)
         {
-            Console.WriteLine("Performing asynchronous call");
-            ResponseMessage metadataResponse = await _metadataClient.RequestAsync(new MetadataRequest(url));
-            Console.WriteLine("Received asynchronous request ");
+            ParsedUri puri = new ParsedUri(url);
 
             Document result = null;
-            if(metadataResponse != null && metadataResponse is MetadataResponse)
-            {
-                result = (metadataResponse as MetadataResponse).Metadata;
+            globalColection.TryGetDocument(puri, out result);
 
+            if (result == null)
+            {
+                Console.WriteLine("Performing asynchronous call");
+                ResponseMessage metadataResponse = await _metadataClient.RequestAsync(new MetadataRequest(url));
+                Console.WriteLine("Received asynchronous request ");
+
+                if (metadataResponse != null && metadataResponse is MetadataResponse)
+                {
+                    result = (metadataResponse as MetadataResponse).Metadata;
+
+                    globalColection.AddDocument(result, puri);
+
+                    this.metadataDownloadComplete(this, new MetadataEventArgs(result));
+                }
+            }
+            else
+            {
                 this.metadataDownloadComplete(this, new MetadataEventArgs(result));
             }
-
-            return result;
         }
 
         public class MetadataEventArgs : EventArgs
