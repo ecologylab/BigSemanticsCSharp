@@ -48,12 +48,12 @@ namespace UnitTests
             Console.WriteLine("Initializing client");
             MetadataServicesClient mmdclient = new MetadataServicesClient(RepositoryMetadataTranslationScope.Get());
 
-            Document d = await mmdclient.GetMetadata("http://www.amazon.com/gp/product/B0050SYS5A/");
-            Console.WriteLine("Got second metadata object: {0}", d );
+            mmdclient.GetMetadata("http://dl.acm.org/citation.cfm?id=1871437.1871580");
+            //Console.WriteLine("Got second metadata object: {0}", d );
+        
 
-
-            Document d2 = await mmdclient.GetMetadata("http://www.airbnb.com/rooms/36769");
-            Console.WriteLine("Got second metadata object: {0}", d2);
+            mmdclient.GetMetadata("http://www.amazon.com/gp/product/B0050SYS5A/");
+            //Console.WriteLine("Got second metadata object: {0}", d2);
 
             Console.WriteLine("Terminating test cases");
         }
