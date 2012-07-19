@@ -300,8 +300,36 @@ namespace ecologylab.semantics.metametadata
         protected void BindMetadataFieldDescriptors(SimplTypesScope metadataTScope,
                                                     MetadataClassDescriptor metadataClassDescriptor)
         {
+            if (this.InheritedMmd != null)
+            {
+                MetaMetadata inheritedMmd = this.InheritedMmd;
+
+                // check if the class's base class is genereic typed, and make sure itself is not generic.  
+                if (metadataClassDescriptor.GetGenericTypeVars().Count == 0 && inheritedMmd.GenericTypeVars != null)
+                {
+                    DictionaryList<string, MetaMetadataField> clonedKids = new DictionaryList<string, MetaMetadataField>();
+                    foreach (KeyValuePair<string, MetaMetadataField> entry in Kids)
+                    {
+                        string key = entry.Key;
+                        MetaMetadataField field = entry.Value;
+                        
+                        // look up to see if the field is declared in a generic typed class. If not, it does not need to clone it.
+                        if (field.DeclaringMmd.GenericTypeVars != null && field.DeclaringMmd.IsGenericMetadata)
+                        {
+                            // clone the field
+                            field = field.Clone();
+                            // remove the inherited field descriptor
+                            field.MetadataFieldDescriptor = null;
+                        }
+                        clonedKids.Put(key, field);
+                    }
+                    Kids = clonedKids;
+                }
+            }
+
             // copy the kids collection first to prevent modification to the collection during iteration (which may invalidate the iterator).
             List<MetaMetadataField> fields = new List<MetaMetadataField>(Kids.Values);
+
             foreach (MetaMetadataField thatChild in fields)
             {
                 // look up by field name and bind
