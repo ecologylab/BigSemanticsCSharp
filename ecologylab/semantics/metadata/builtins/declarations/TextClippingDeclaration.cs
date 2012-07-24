@@ -18,7 +18,7 @@ using ecologylab.semantics.metadata.builtins;
 using ecologylab.semantics.metadata.scalar;
 using ecologylab.semantics.metametadata;
 
-namespace ecologylab.semantics.metadata.builtins.declarations 
+namespace ecologylab.semantics.metadata.builtins.declarations  
 {
 	[SimplInherit]
 	public class TextClippingDeclaration : Clipping

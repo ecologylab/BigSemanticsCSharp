@@ -10,7 +10,8 @@ using ecologylab.semantics.metadata.builtins;
 using ecologylab.semantics.metametadata;
 
 
-using ecologylab.semantics.metadata.builtins.declarations;
+using ecologylab.semantics.metadata;
+using ecologylab.semantics.metadata.builtins;
 
 // Developer should proof-read this TranslationScope before using it for production.
 namespace ecologylab.semantics.metadata.builtins.declarations 
@@ -22,7 +23,7 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 
 		public static SimplTypesScope Get()
 		{
-			return SimplTypesScope.Get("repository_builtin_declarations_scope",
+			return SimplTypesScope.Get("SemanticNames.REPOSITORY_METADATA_TRANSLATIONS",
 				typeof(AnnotationDeclaration),
 				typeof(ClippableDocumentDeclaration<>),
 				typeof(ClippingDeclaration),
