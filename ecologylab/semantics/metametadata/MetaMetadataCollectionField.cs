@@ -228,6 +228,13 @@ namespace ecologylab.semantics.metametadata
 		return null;
 	}
 
+    protected override void CustomizeFieldDescriptor(SimplTypesScope metadataTScope, MetadataFieldDescriptorProxy fdProxy)
+    {
+        base.CustomizeFieldDescriptor(metadataTScope, fdProxy);
+        fdProxy.SetCollectionOrMapTagName(ChildTag);
+        fdProxy.SetWrapped(!NoWrap);
+    }
+
     internal override bool GetClassAndBindDescriptors(SimplTypesScope metadataTScope)
     {
       return GetChildComposite().GetClassAndBindDescriptors(metadataTScope);
