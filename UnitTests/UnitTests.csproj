@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="ArticlesInheritanceRelationships.cs" />
     <Compile Include="OODSSTests.cs" />
+    <Compile Include="PrefixCollectionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

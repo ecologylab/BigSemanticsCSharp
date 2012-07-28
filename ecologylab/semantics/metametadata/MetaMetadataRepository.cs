@@ -134,6 +134,10 @@ namespace ecologylab.semantics.metametadata
 
         private static bool initializedTypes;
 
+        ///<summary>
+        /// Collection of URL prefixes.
+        ///</summary>
+        private PrefixCollection<MetaMetadata> urlPrefixCollection = new PrefixCollection<MetaMetadata>('/');
 
         #endregion
 
@@ -297,42 +301,54 @@ namespace ecologylab.semantics.metametadata
                     }
                     else
                     {
-                        // here, url_path_tree is handled through regex.
-                        // use .pattern() for comparison
-                        String domain = selector.Domain ??
-                                        (selector.UrlPathTree != null ? selector.UrlPathTree.Domain : null);
-                        if (domain != null)
+                        ParsedUri urlPathTree = selector.UrlPathTree;
+                        if (urlPathTree != null)
                         {
-                            Regex urlPattern = selector.UrlRegex ??
-                                               (selector.UrlPathTree == null
-                                                    ? null
-                                                    : new Regex(selector.UrlPathTree.ToString().Replace("*", "[^/]+")));
-                            if (urlPattern != null)
+                            PrefixPhrase<MetaMetadata> pp = urlPrefixCollection.Add(urlPathTree);
+                            pp.MappedObject = metaMetadata;
+                            metaMetadata.MMSelectorType = MMSelectorType.LOCATION;
+                        }
+                        else
+                        {
+                            // here, url_path_tree is handled through regex.
+                            // use .pattern() for comparison
+                            String domain = selector.Domain; //??
+//                                            (selector.UrlPathTree != null ? selector.UrlPathTree.Domain : null);
+                            if (domain != null)
                             {
-                                List<RepositoryPatternEntry> bucket;
-                                repositoryByPattern.TryGetValue(domain, out bucket);
-                                if (bucket == null)
+                                Regex urlPattern = selector.UrlRegex; //??
+//                                                   (selector.UrlPathTree == null
+//                                                       ? null
+//                                                        : new Regex(selector.UrlPathTree.ToString().Replace("*", "[^/]+")));
+                                if (urlPattern != null)
                                 {
-                                    bucket = new List<RepositoryPatternEntry>(2);
-                                    repositoryByPattern.Add(domain, bucket);
-                                }
-                                bucket.Add(new RepositoryPatternEntry(urlPattern, metaMetadata));
-                                metaMetadata.MMSelectorType = MMSelectorType.LOCATION;
-                            }
-                            else
-                            {
-                                // domain only -- no pattern
-                                //TODO: 'PUT' HIDES ERRORS. This is only so that we can identify them
-                                if (_documentRepositoryByDomain.ContainsKey(domain))
-                                {
-                                    Console.WriteLine("-----\tError: Adding MMD({0}) for domain({1}), but this domain is already used for MMD({2})", metaMetadata, domain, _documentRepositoryByDomain[domain]);
+                                    List<RepositoryPatternEntry> bucket;
+                                    repositoryByPattern.TryGetValue(domain, out bucket);
+                                    if (bucket == null)
+                                    {
+                                        bucket = new List<RepositoryPatternEntry>(2);
+                                        repositoryByPattern.Add(domain, bucket);
+                                    }
+                                    bucket.Add(new RepositoryPatternEntry(urlPattern, metaMetadata));
+                                    metaMetadata.MMSelectorType = MMSelectorType.LOCATION;
                                 }
                                 else
                                 {
-                                    _documentRepositoryByDomain.Add(domain, metaMetadata);    
+                                    // domain only -- no pattern
+                                    //TODO: 'PUT' HIDES ERRORS. This is only so that we can identify them
+                                    if (_documentRepositoryByDomain.ContainsKey(domain))
+                                    {
+                                        Console.WriteLine(
+                                            "-----\tError: Adding MMD({0}) for domain({1}), but this domain is already used for MMD({2})",
+                                            metaMetadata, domain, _documentRepositoryByDomain[domain]);
+                                    }
+                                    else
+                                    {
+                                        _documentRepositoryByDomain.Add(domain, metaMetadata);
+                                    }
+
+                                    metaMetadata.MMSelectorType = MMSelectorType.DOMAIN;
                                 }
-                                
-                                metaMetadata.MMSelectorType = MMSelectorType.DOMAIN;
                             }
                         }
                     }
@@ -481,7 +497,11 @@ namespace ecologylab.semantics.metametadata
                     {
                         //Check to see if the url prefix is actually a url-path tree.
                         //TODO: For url-path-tree cases, we should just generate a regex to handle those cases.
-
+                        PrefixPhrase<MetaMetadata> matchingPrefix = urlPrefixCollection.getMatchingPrefix(uri);
+                        if (matchingPrefix != null)
+                        {
+                            result = matchingPrefix.MappedObject;
+                        }
                     }
 
                     if (result == null)
