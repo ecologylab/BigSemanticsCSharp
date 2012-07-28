@@ -546,32 +546,32 @@ namespace ecologylab.semantics.metametadata
         }
 
 
-        public MetadataFieldDescriptor BindMetadataFieldDescriptor(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataClassDescriptor)
+        public MetadataFieldDescriptor BindMetadataFieldDescriptor(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataCd)
         {
-            MetadataFieldDescriptor metadataFieldDescriptor = this.metadataFieldDescriptor;
-            if (metadataFieldDescriptor == null)
+            MetadataFieldDescriptor metadataFd = MetadataFieldDescriptor;
+            if (metadataFd == null)
             {
-                metadataFieldDescriptor = this.metadataFieldDescriptor;
+                metadataFd = MetadataFieldDescriptor;
                 String fieldName = this.GetFieldName(false);
-                if (metadataFieldDescriptor == null)
+                if (metadataFd == null)
                 {
-                    FieldDescriptor fd = metadataClassDescriptor.GetFieldDescriptorByFieldName(fieldName);
-                    metadataFieldDescriptor = (MetadataFieldDescriptor) fd;
-                    if (metadataFieldDescriptor != null)
+                    FieldDescriptor fd = metadataCd.GetFieldDescriptorByFieldName(fieldName);
+                    metadataFd = (MetadataFieldDescriptor)fd;
+                    if (metadataFd != null)
                     {
                         // FIXME is the following "if" statement still useful? I never see the condition is
                         // true. can we remove it? -- yin 7/26/2011
                         // if we don't have a field, then this is a wrapped collection, so we need to get the
                         // wrapped field descriptor
-                        if (metadataFieldDescriptor.Field == null)
+                        if (metadataFd.Field == null)
                         {
-                            FieldDescriptor wfd = metadataFieldDescriptor.WrappedFd;
-                            metadataFieldDescriptor = (MetadataFieldDescriptor) wfd;
+                            FieldDescriptor wfd = metadataFd.WrappedFd;
+                            metadataFd = (MetadataFieldDescriptor)wfd;
                         }
 
-                        this.metadataFieldDescriptor = metadataFieldDescriptor;
+                        MetadataFieldDescriptor = metadataFd;
 
-                        if (this.metadataFieldDescriptor != null)
+                        if (MetadataFieldDescriptor != null)
                         {
                             // it is possible that the fieldescriptor in the fieldDescriptor proxy has been removed during clone.
                             // if so, make a new fieldDescriptorProxy.
@@ -579,14 +579,20 @@ namespace ecologylab.semantics.metametadata
                                 _fieldDescriptorProxy = new MetadataFieldDescriptorProxy(this);
                             CustomizeFieldDescriptor(metadataTScope, _fieldDescriptorProxy);
                         }
-                        if (this.metadataFieldDescriptor != metadataFieldDescriptor)
+                        if (MetadataFieldDescriptor != metadataFd)
                         {
-                            String tagName = this.metadataFieldDescriptor.TagName;
-                            int fieldType = this.metadataFieldDescriptor.FdType;
-                            if (fieldType == FieldTypes.CollectionElement || fieldType == FieldTypes.MapElement)
-                                tagName = this.metadataFieldDescriptor.CollectionOrMapTagName;
-                            metadataClassDescriptor.AllFieldDescriptorsByTagNames.Put(tagName,
-                                                                                      this.metadataFieldDescriptor);
+                            // the field descriptor has been modified in customizeFieldDescriptor()!
+                            // we need to update it in the class descriptor so that deserialization of metadata
+                            // objects can work correctly, e.g. using the right classDescriptor for a composite
+                            // field or a right elementClassDescriptor for a collection field.
+
+                            CustomizeFieldDescriptorInClass(metadataTScope, metadataCd);
+                            //String tagName = this.metadataFieldDescriptor.TagName;
+                            //int fieldType = this.metadataFieldDescriptor.FdType;
+                            //if (fieldType == FieldTypes.CollectionElement || fieldType == FieldTypes.MapElement)
+                            //    tagName = this.metadataFieldDescriptor.CollectionOrMapTagName;
+                            //metadataClassDescriptor.AllFieldDescriptorsByTagNames.Put(tagName,
+                            //                                                          this.metadataFieldDescriptor);
                         }
                     }
                 }
@@ -599,7 +605,36 @@ namespace ecologylab.semantics.metametadata
             return metadataFieldDescriptor;
         }
 
-        private void CustomizeFieldDescriptor(SimplTypesScope metadataTScope, MetadataFieldDescriptorProxy fieldDescriptorProxy)
+        private void CustomizeFieldDescriptorInClass(SimplTypesScope metadataTScope, MetadataClassDescriptor metadataCd)
+        {
+            MetadataFieldDescriptor oldFD =
+                (MetadataFieldDescriptor) metadataCd.GetFieldDescriptorByFieldName(GetFieldName(false));
+            String newTagName = MetadataFieldDescriptor.TagName;
+
+            metadataCd.Replace(oldFD, MetadataFieldDescriptor);
+
+            MetadataFieldDescriptor wrapperFD = (MetadataFieldDescriptor) MetadataFieldDescriptor.Wrapper;
+            if (wrapperFD != null)
+            {
+                MetadataFieldDescriptor clonedWrapperFD = wrapperFD.Clone();
+                clonedWrapperFD.TagName = newTagName;
+                clonedWrapperFD.WrappedFd = metadataFieldDescriptor;
+                metadataCd.Replace(wrapperFD, clonedWrapperFD);
+            }
+
+            int fieldType = MetadataFieldDescriptor.FdType;
+            if (fieldType == FieldTypes.CollectionElement || fieldType == FieldTypes.MapElement)
+            {
+                if (!MetadataFieldDescriptor.IsWrapped)
+                {
+                    string childTagName = MetadataFieldDescriptor.CollectionOrMapTagName;
+                    oldFD = (MetadataFieldDescriptor) metadataCd.GetFieldDescriptorByTag(childTagName);
+                    metadataCd.Replace(oldFD, MetadataFieldDescriptor);
+                }
+            }
+        }
+
+	    protected virtual void CustomizeFieldDescriptor(SimplTypesScope metadataTScope, MetadataFieldDescriptorProxy fieldDescriptorProxy)
 	    {
 	        fieldDescriptorProxy.SetTagName(Tag ?? Name);
 	    }
@@ -672,7 +707,7 @@ namespace ecologylab.semantics.metametadata
         protected internal class MetadataFieldDescriptorProxy
         {
             private MetaMetadataField outer;
-            
+
             public MetadataFieldDescriptorProxy(MetaMetadataField outer)
             {
                 this.outer = outer;
@@ -698,7 +733,7 @@ namespace ecologylab.semantics.metametadata
 			    if (metadataClassDescriptor != outer.MetadataFieldDescriptor.ElementClassDescriptor)
 			    {
 				    CloneFieldDescriptorOnWrite();
-				    outer.MetadataFieldDescriptor.ElementClassDescriptor = metadataClassDescriptor;
+				    outer.MetadataFieldDescriptor.SetElementClassDescriptor(metadataClassDescriptor);
 			    }
 		    }
 
@@ -706,7 +741,7 @@ namespace ecologylab.semantics.metametadata
 		    {
 			    if (childTag != null && !childTag.Equals(outer.MetadataFieldDescriptor.CollectionOrMapTagName))
 			    {
-				    CloneFieldDescriptorOnWrite();
+				   CloneFieldDescriptorOnWrite();
 				   outer.MetadataFieldDescriptor.CollectionOrMapTagName = childTag;
 			    }
 		    }
