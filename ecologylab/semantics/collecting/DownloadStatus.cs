@@ -9,5 +9,11 @@
         DOWNLOAD_DONE,
         IOERROR,
         RECYCLED,
+
+        //for semantic service
+        REQUESTED,
+        RECEIVED,
+        ERROR,
+        DONE
     }
 }

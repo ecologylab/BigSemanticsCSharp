@@ -11,6 +11,7 @@ using ecologylab.semantics.collecting;
 using ecologylab.semantics.documentparsers;
 using ecologylab.semantics.metadata.scalar;
 using ecologylab.semantics.metametadata;
+using ecologylab.semantics.services;
 
 namespace ecologylab.semantics.metadata.builtins
 {
@@ -32,6 +33,10 @@ namespace ecologylab.semantics.metadata.builtins
         public DocumentParsingDone DocumentParsingDoneHandler { get; set; }
 
         public TaskCompletionSource<Document> TaskCompletionSource { get; set; }
+
+        public event EventHandler<DocumentClosureEventArgs> continuations;
+
+        public MetadataServicesClient MetadataServicesClient { get; set; }
 
         internal DocumentClosure(SemanticsSessionScope semanticsSessionScope, Document document)
         {
@@ -182,6 +187,24 @@ namespace ecologylab.semantics.metadata.builtins
                 // TODO recycle oldDocument
             }
         }
+
+        public async void RequestMetadata()
+        {
+            this.DownloadStatus = DownloadStatus.REQUESTED;
+
+            try
+            {
+                this.Document = await this.MetadataServicesClient.GetMetadata(Document.Location.ToString());
+
+                this.DownloadStatus = DownloadStatus.RECEIVED;
+
+                continuations(this, null);
+            }
+            catch(Exception exception)
+            {
+                this.DownloadStatus = DownloadStatus.ERROR;
+            }
+        }
     }
 
     public class DocumentClosureConnectionHelper : IConnectionHelperJustRemote
@@ -236,6 +259,22 @@ namespace ecologylab.semantics.metadata.builtins
             // TODO -- what if redirectedDocument is already in the queue or being downloaded?
 
             return false;
+        }
+    }
+
+    public class DocumentClosureEventArgs : EventArgs
+    {
+        private DocumentClosure documentClosure;
+
+        public DocumentClosureEventArgs(DocumentClosure metadata)
+        {
+            this.documentClosure = metadata;
+        }
+
+        public DocumentClosure DocumentClosure
+        {
+            get { return documentClosure; }
+            set { documentClosure = value; }
         }
     }
 }

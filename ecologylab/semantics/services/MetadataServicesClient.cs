@@ -43,7 +43,7 @@ namespace ecologylab.semantics.services
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public async void GetMetadata(string url)
+        public async Task<Document> GetMetadata(string url)
         {
             ParsedUri puri = new ParsedUri(url);
 
@@ -61,14 +61,12 @@ namespace ecologylab.semantics.services
                     result = (metadataResponse as MetadataResponse).Metadata;
 
                     globalColection.AddDocument(result, puri);
-
-                    this.metadataDownloadComplete(this, new MetadataEventArgs(result));
                 }
             }
-            else
-            {
-                this.metadataDownloadComplete(this, new MetadataEventArgs(result));
-            }
+
+            this.metadataDownloadComplete(this, new MetadataEventArgs(result));
+
+            return result;
         }
 
         public class MetadataEventArgs : EventArgs

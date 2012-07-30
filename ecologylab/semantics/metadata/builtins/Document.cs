@@ -31,6 +31,8 @@ namespace ecologylab.semantics.metadata.builtins
         [SimplScalar]
         private MetadataParsedURL favicon;
 
+        private DocumentClosure documentClosure;
+
         public Document()
         { }
 
@@ -112,6 +114,32 @@ namespace ecologylab.semantics.metadata.builtins
 		        }
 		        return result;
             }
+        }
+
+        ///<summary> 
+        /// @return A closure for this, or null, if this is not fit to be parsed.
+        ///</summary>
+        public DocumentClosure GetOrConstructClosure()
+	    {
+		    DocumentClosure result	= this.documentClosure;
+		    if (result == null /*&& !isRecycled() && getLocation() != null*/)
+		    {
+				result	= this.documentClosure;
+				if (result == null)
+				{
+//					if (semanticInlinks == null)
+//						semanticInlinks	= new SemanticInLinks();
+					
+					result	= ConstructClosure();
+					this.documentClosure = result;
+				}
+		    }
+		    return result == null/* || result.downloadStatus == DownloadStatus.RECYCLED*/ ? null : result;
+	    }
+
+        public DocumentClosure ConstructClosure()
+        {
+            return new DocumentClosure(SemanticsSessionScope , this);
         }
 
     }   
