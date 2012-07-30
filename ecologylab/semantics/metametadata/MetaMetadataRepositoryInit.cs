@@ -5,12 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Simpl.Serialization;
+using ecologylab.collections;
 using ecologylab.semantics.metadata.builtins;
 using ecologylab.semantics.namesandnums;
 
 namespace ecologylab.semantics.metametadata
 {
-    public class MetaMetadataRepositoryInit : DocumentParserTagNames
+    public class MetaMetadataRepositoryInit : Scope<Object>
     {
 
         public static String DEFAULT_REPOSITORY_LOCATION                        = @"..\..\..\..\..\MetaMetadataRepository\MmdRepository\mmdrepository";
@@ -92,27 +93,27 @@ namespace ecologylab.semantics.metametadata
                 metadataTranslationScope
                 );
 
-            DOCUMENT_META_METADATA          = META_METADATA_REPOSITORY.GetMMByName(DOCUMENT_TAG);
-            PDF_META_METADATA               = META_METADATA_REPOSITORY.GetMMByName(PDF_TAG);
-            SEARCH_META_METADATA            = META_METADATA_REPOSITORY.GetMMByName(SEARCH_TAG);
-            IMAGE_META_METADATA             = META_METADATA_REPOSITORY.GetMMByName(IMAGE_TAG);
-            DEBUG_META_METADATA             = META_METADATA_REPOSITORY.GetMMByName(DEBUG_TAG);
-            IMAGE_CLIPPING_META_METADATA    = META_METADATA_REPOSITORY.GetMMByName(IMAGE_CLIPPING_TAG);
+            DOCUMENT_META_METADATA = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.DocumentTag);
+            PDF_META_METADATA = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.PdfTag);
+            SEARCH_META_METADATA = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.SearchTag);
+            IMAGE_META_METADATA = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.ImageTag);
+            DEBUG_META_METADATA = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.DebugTag);
+            IMAGE_CLIPPING_META_METADATA = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.ImageClippingTag);
 
             _metaMetadataRepository          = META_METADATA_REPOSITORY;
 
             _generatedDocumentTranslations   = metadataTranslationScope.GetAssignableSubset(
-                                                SemanticNames.REPOSITORY_DOCUMENT_TRANSLATIONS,
+                                                SemanticNames.RepositoryDocumentTranslations,
                                                 typeof (Document));
             _generatedMediaTranslations      = metadataTranslationScope.GetAssignableSubset(
-                                                SemanticNames.REPOSITORY_MEDIA_TRANSLATIONS,
+                                                SemanticNames.RepositoryMediaTranslations,
                                                 typeof (ClippableDocument<>));
             _repositoryClippingTranslations  = metadataTranslationScope.GetAssignableSubset(
-                                                SemanticNames.REPOSITORY_CLIPPING_TRANSLATIONS,
+                                                SemanticNames.RepositoryClippingTranslations,
                                                 typeof (Clipping));
 
             _noAnnotationsScope              = metadataTranslationScope.GetSubtractedSubset(
-                                                SemanticNames.REPOSITORY_NO_ANNOTATIONS_TYPE_SCOPE,
+                                                SemanticNames.RepositoryNoAnnotationsTypeScope,
                                                 typeof(Annotation));
 
             _generatedMediaTranslations.AddTranslation(typeof(Clipping));

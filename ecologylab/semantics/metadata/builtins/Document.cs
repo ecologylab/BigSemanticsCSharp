@@ -16,6 +16,7 @@ using ecologylab.semantics.metadata.scalar;
 using ecologylab.semantics.metadata;
 using ecologylab.semantics.metametadata;
 using System.IO;
+using ecologylab.semantics.services;
 
 namespace ecologylab.semantics.metadata.builtins 
 {
@@ -119,7 +120,7 @@ namespace ecologylab.semantics.metadata.builtins
         ///<summary> 
         /// @return A closure for this, or null, if this is not fit to be parsed.
         ///</summary>
-        public DocumentClosure GetOrConstructClosure()
+        public DocumentClosure GetOrConstructClosure(MetadataServicesClient client)
 	    {
 		    DocumentClosure result	= this.documentClosure;
 		    if (result == null /*&& !isRecycled() && getLocation() != null*/)
@@ -130,16 +131,17 @@ namespace ecologylab.semantics.metadata.builtins
 //					if (semanticInlinks == null)
 //						semanticInlinks	= new SemanticInLinks();
 					
-					result	= ConstructClosure();
+					result	= ConstructClosure(client);
 					this.documentClosure = result;
 				}
 		    }
 		    return result == null/* || result.downloadStatus == DownloadStatus.RECYCLED*/ ? null : result;
 	    }
 
-        public DocumentClosure ConstructClosure()
+        public DocumentClosure ConstructClosure(MetadataServicesClient client)
         {
-            return new DocumentClosure(SemanticsSessionScope , this);
+            return new DocumentClosure(SemanticsSessionScope , this)
+                {MetadataServicesClient = client};
         }
 
     }   

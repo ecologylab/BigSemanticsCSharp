@@ -14,6 +14,7 @@ using ecologylab.semantics.metadata.scalar.types;
 using ecologylab.semantics.metametadata;
 using Simpl.Fundamental.Collections;
 using System.Net;
+using ecologylab.semantics.services;
 
 namespace ecologylab.semantics.collecting
 {
@@ -25,6 +26,8 @@ namespace ecologylab.semantics.collecting
         private readonly DispatcherDelegate _extractionDelegate;
         private Dispatcher dispatcher;
         public WebBrowserPool WebBrowserPool { get; set; }
+
+        public MetadataServicesClient MetadataServicesClient { get; set; }
 
         public delegate void DispatcherDelegate(DocumentClosure closure);
 
@@ -40,6 +43,8 @@ namespace ecologylab.semantics.collecting
 //
 //            _awesomiumThread = new Thread(WebBrowserPool.InitializeWebCore) { Name = "Singleton Awesomium Thread", IsBackground = true };
 //            _awesomiumThread.Start();
+
+            MetadataServicesClient = new MetadataServicesClient(metadataTranslationScope);
 
             SemanticsSessionScope.Get = this;
             

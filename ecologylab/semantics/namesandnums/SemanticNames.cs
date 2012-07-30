@@ -7,14 +7,16 @@ namespace ecologylab.semantics.namesandnums
 {
     public static class SemanticNames
     {
-        public const String	REPOSITORY_METADATA_TRANSLATIONS	    = "repository_metadata";
+        public const String	RepositoryMetadataTranslations	    = "repository_metadata";
 
-	    public const String	REPOSITORY_DOCUMENT_TRANSLATIONS	    = "repository_documents";
+	    public const String	RepositoryDocumentTranslations	    = "repository_documents";
 
-	    public const String	REPOSITORY_MEDIA_TRANSLATIONS		    = "repository_media";
+	    public const String	RepositoryMediaTranslations		    = "repository_media";
 
-	    public const String	REPOSITORY_CLIPPING_TRANSLATIONS	    = "repository_clippings";
+	    public const String	RepositoryClippingTranslations	    = "repository_clippings";
 
-        public const String	REPOSITORY_NO_ANNOTATIONS_TYPE_SCOPE	= "repository_no_annotations";
+        public const String	RepositoryNoAnnotationsTypeScope	= "repository_no_annotations";
+
+        public const String MetadataServicesClient              = "metadata_services_client";
     }
 }

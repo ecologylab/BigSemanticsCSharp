@@ -9,7 +9,7 @@ namespace ecologylab.semantics.metadata.builtins
     [SimplInherit]
     public class MetadataCollection : Metadata
     {
-        [SimplCollection(SemanticNames.REPOSITORY_METADATA_TRANSLATIONS)] 
+        [SimplCollection(SemanticNames.RepositoryMetadataTranslations)] 
         private List<Metadata> collection;
 
         public MetadataCollection(List<Metadata> metadatas) : base()
