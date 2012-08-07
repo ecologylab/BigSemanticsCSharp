@@ -12,6 +12,7 @@ using ecologylab.semantics.metametadata;
 
 using ecologylab.semantics.metadata;
 using ecologylab.semantics.metadata.builtins;
+using ecologylab.semantics.namesandnums;
 
 // Developer should proof-read this TranslationScope before using it for production.
 namespace ecologylab.semantics.metadata.builtins.declarations 
@@ -23,7 +24,7 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 
 		public static SimplTypesScope Get()
 		{
-			return SimplTypesScope.Get("SemanticNames.REPOSITORY_METADATA_TRANSLATIONS",
+			return SimplTypesScope.Get(SemanticNames.REPOSITORY_METADATA_TRANSLATIONS,
 				typeof(AnnotationDeclaration),
 				typeof(ClippableDocumentDeclaration<>),
 				typeof(ClippingDeclaration),
