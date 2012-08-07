@@ -24,7 +24,7 @@ namespace ecologylab.semantics.metadata.builtins.declarations
 
 		public static SimplTypesScope Get()
 		{
-			return SimplTypesScope.Get(SemanticNames.REPOSITORY_METADATA_TRANSLATIONS,
+			return SimplTypesScope.Get(SemanticNames.REPOSITORY_BUILTIN_DECLARATIONS_SCOPE,
 				typeof(AnnotationDeclaration),
 				typeof(ClippableDocumentDeclaration<>),
 				typeof(ClippingDeclaration),
