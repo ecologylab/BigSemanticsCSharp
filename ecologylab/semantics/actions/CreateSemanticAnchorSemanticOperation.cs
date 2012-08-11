@@ -18,9 +18,24 @@ namespace ecologylab.semantics.actions
 	/// </summary>
     [SimplInherit]
 	[SimplTag("create_semantic_anchor")]
-    public class CreateSemanticAnchorSemanticAction : SemanticAction
+    public class CreateSemanticAnchorSemanticOperation : SemanticOperation
 	{
-		public CreateSemanticAnchorSemanticAction()
+		public CreateSemanticAnchorSemanticOperation()
 		{ }
+
+	    public override string GetOperationName()
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public override void HandleError()
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public override object Perform(object obj)
+	    {
+	        throw new NotImplementedException();
+	    }
 	}
 }

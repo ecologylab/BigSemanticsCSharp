@@ -35,5 +35,20 @@ namespace ecologylab.semantics.actions
 			get{return checks;}
 			set{checks = value;}
 		}
+
+	    public override bool Evaluate(SemanticOperationHandler handler)
+	    {
+		    bool flag = true;
+		    if (checks != null)
+		    {
+			    foreach (Condition check in checks)
+			    {
+				    flag = flag && check.Evaluate(handler);
+				    if (!flag)
+					    break;
+			    }
+		    }
+		    return flag;
+	    }
 	}
 }

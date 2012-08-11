@@ -37,16 +37,16 @@ namespace ecologylab.semantics.metametadata
 		private Boolean dontGenerateClass;
 
         [SimplCollection]
-        [SimplScope(SemanticActionTranslationScope.ScopeName)]
-	    private List<SemanticAction> beforeSemanticActions;
+        [SimplScope(SemanticOperationTranslationScope.ScopeName)]
+	    private List<SemanticOperation> beforeSemanticActions;
 
         [SimplCollection]
-        [SimplScope(SemanticActionTranslationScope.ScopeName)]
-        private List<SemanticAction> semanticActions;
+        [SimplScope(SemanticOperationTranslationScope.ScopeName)]
+        private List<SemanticOperation> semanticActions;
 
         [SimplCollection]
-        [SimplScope(SemanticActionTranslationScope.ScopeName)]
-        private List<SemanticAction> afterSemanticActions;
+        [SimplScope(SemanticOperationTranslationScope.ScopeName)]
+        private List<SemanticOperation> afterSemanticActions;
 
         [SimplScalar]
         [MmDontInherit]
@@ -139,6 +139,21 @@ namespace ecologylab.semantics.metametadata
             get { return redirectHandling; }
             set { redirectHandling = value; }
 	    }
+
+	    public List<SemanticOperation> BeforeSemanticActions 
+        {
+            get { return beforeSemanticActions; }
+        }
+
+        public List<SemanticOperation> SemanticActions
+        {
+            get { return semanticActions; }
+        }
+
+        public List<SemanticOperation> AfterSemanticActions
+        {
+            get { return afterSemanticActions; }
+        }
 
 	    #endregion
 

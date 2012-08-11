@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using Simpl.Serialization.Attributes;
+using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
@@ -17,9 +18,14 @@ namespace ecologylab.semantics.actions
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("if")]
-    public class IfSemanticAction : NestedSemanticAction 
+    public class IfSemanticOperation : NestedSemanticOperation 
 	{
-		public IfSemanticAction()
+		public IfSemanticOperation()
 		{ }
+
+	    public override String GetOperationName()
+	    {
+		    return SemanticOperationStandardMethods.IF;
+	    }
 	}
 }

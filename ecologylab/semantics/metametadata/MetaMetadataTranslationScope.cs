@@ -25,8 +25,8 @@ namespace ecologylab.semantics.metametadata
             typeof(SearchEngine),
             typeof(UserAgent), 
             typeof(NamedStyle), 
-            typeof(SemanticAction),
-            typeof(NestedSemanticAction),
+            typeof(SemanticOperation),
+            typeof(NestedSemanticOperation),
             typeof(SemanticsSite),
             typeof(BasicSite),
             typeof(Argument),
@@ -51,7 +51,7 @@ namespace ecologylab.semantics.metametadata
 
         public static SimplTypesScope Get()
         {
-          SimplTypesScope semanticActionScope = SemanticActionTranslationScope.Get();
+          SimplTypesScope semanticActionScope = SemanticOperationTranslationScope.Get();
           SimplTypesScope conditionScope = SimplTypesScope.Get("condition_scope", conditionClasses);
           SimplTypesScope mmdScope = SimplTypesScope.Get("meta_metadata", MetaMetadataFieldTranslationScope.Get(),
                                                          translations);

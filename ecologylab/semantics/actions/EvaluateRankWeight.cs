@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using Simpl.Serialization.Attributes;
+using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
@@ -17,9 +18,39 @@ namespace ecologylab.semantics.actions
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("eval_rank_wt")]
-    public class EvaluateRankWeight : SemanticAction 
+    public class EvaluateRankWeight : SemanticOperation 
 	{
 		public EvaluateRankWeight()
 		{ }
+
+	    public static readonly double TransferFuncCenter = .5; // the bend of the sigmoid
+
+	    public static readonly double CurveAmount = 10;
+
+	    public override String GetOperationName()
+	    {
+		    return SemanticOperationStandardMethods.EVALUATE_RANK_WEIGHT;
+	    }
+
+	    public override void HandleError()
+	    {
+	    }
+
+	    ///<summary>
+	    /// Function which evaluates rank weight Also applies a transfer function to make this sequence top
+	    /// heavy 
+	    /// http://www.wolframalpha.com/input/?i=Plot[(1+%2B+E^(-10*(x-.6)))^(-1),+{x,+0,+1}]
+	    ///</summary>
+	    public override Object Perform(Object obj)
+	    {
+		    int index = GetArgumentInteger(SemanticOperationNamedArguments.INDEX, 0);
+            int size = GetArgumentInteger(SemanticOperationNamedArguments.SIZE, 0);
+		    float result = ((float) size - index) / size;
+
+		    double e = Math.E;
+		    float val = (float)( 1 / (1 + Math.Pow(e, CurveAmount * (TransferFuncCenter - result))));
+
+		    return val;
+	    }
 	}
 }

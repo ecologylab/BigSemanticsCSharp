@@ -27,6 +27,12 @@ namespace ecologylab.semantics.metametadata
 		[SimplScalar]
 		private String value;
 
+        ///<summary>
+	    /// The value of the argument if the first value is null.
+	    ///</summary>
+        [SimplScalar]
+	    private String altValue;
+
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
@@ -88,5 +94,11 @@ namespace ecologylab.semantics.metametadata
 		{
             return name;
 		}
+
+	    public String AltValue
+	    {
+            get { return altValue; }
+            set { altValue = value; }
+	    }
 	}
 }

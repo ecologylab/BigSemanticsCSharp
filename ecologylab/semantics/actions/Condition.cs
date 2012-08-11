@@ -17,6 +17,12 @@ namespace ecologylab.semantics.actions
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	[SimplInherit]
-	public class Condition 	{
+	public class Condition : ElementState	
+    {
+        public virtual bool Evaluate(SemanticOperationHandler handler)
+        {
+            Console.WriteLine("Condition.Evaluate() gets called: this should never happen.");
+            return false;
+        }
 	}
 }

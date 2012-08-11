@@ -51,6 +51,7 @@
     <Compile Include="OODSSTests.cs" />
     <Compile Include="PrefixCollectionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SemanticOperationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\MetaMetadataRepository\MetaMetadataRepository.csproj">
@@ -75,6 +76,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data\InformationCompositionDeclarationExample.xml" />
+    <Content Include="Data\InformationCompositionDeclarationUseAuthor.xml" />
     <Content Include="Data\TestRepository\testArticles.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

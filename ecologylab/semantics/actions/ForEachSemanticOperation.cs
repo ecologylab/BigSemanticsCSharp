@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using Simpl.Serialization.Attributes;
+using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
@@ -17,7 +18,7 @@ namespace ecologylab.semantics.actions
 	/// </summary>
 	[SimplInherit]
 	[SimplTag("for_each")]
-    public class ForEachSemanticAction : NestedSemanticAction
+    public class ForEachSemanticOperation : NestedSemanticOperation
 	{
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -56,7 +57,7 @@ namespace ecologylab.semantics.actions
 		[SimplScalar]
 		private String size;
 
-		public ForEachSemanticAction()
+		public ForEachSemanticOperation()
 		{ }
 
 		public String Collection
@@ -94,5 +95,10 @@ namespace ecologylab.semantics.actions
 			get{return size;}
 			set{size = value;}
 		}
+
+	    public override String GetOperationName()
+	    {
+		    return SemanticOperationStandardMethods.FOR_EACH;
+	    }
 	}
 }

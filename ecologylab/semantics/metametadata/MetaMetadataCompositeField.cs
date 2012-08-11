@@ -37,7 +37,7 @@ namespace ecologylab.semantics.metametadata
 
         [SimplScalar] private Boolean wrap;
 
-        [SimplCollection] [SimplScope("semantic_action_translation_scope")] private List<SemanticAction> semanticActions;
+        [SimplCollection] [SimplScope("semantic_action_translation_scope")] private List<SemanticOperation> semanticActions;
 
         [SimplCollection("def_var")] [SimplNoWrap] private List<DefVar> defVars;
 
@@ -480,7 +480,7 @@ namespace ecologylab.semantics.metametadata
             set { parser = value; }
         }
 
-        public List<SemanticAction> SemanticActions
+        public List<SemanticOperation> SemanticActions
         {
             get { return semanticActions; }
             set { semanticActions = value; }

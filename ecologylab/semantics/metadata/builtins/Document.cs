@@ -69,6 +69,28 @@ namespace ecologylab.semantics.metadata.builtins
             AdditionalLocations.Add(additionalLocation);
         }
 
+        ///<summary>
+	    /// Get the old location from this.
+	    /// Set the location of this to the newLocation.
+        /// Add a mapping in the GlobalCollection from newLocation to this.
+	    /// Add the old location for this as an additionalLocation for this.
+	    ///</summary>
+	    public void ChangeLocation(ParsedUri newLocation)
+	    {
+		    if (newLocation != null)
+		    {
+			    ParsedUri origLocation	= Location.Value;
+			    if (!origLocation.Equals(newLocation))
+			    {
+				    Location = new MetadataParsedURL(newLocation);
+                    if (SemanticsSessionScope != null)
+                        SemanticsSessionScope.GlobalDocumentCollection.AddDocument(this, newLocation);
+                    AddAdditionalLocation(Location);
+			    }
+		    }
+	    }
+
+
         public void InheritValues(Document oldDocument)
         {
             oldDocument.SemanticsSessionScope.GlobalDocumentCollection.Remap(oldDocument, this);
@@ -138,11 +160,41 @@ namespace ecologylab.semantics.metadata.builtins
 		    return result == null/* || result.downloadStatus == DownloadStatus.RECYCLED*/ ? null : result;
 	    }
 
+        ///<summary> 
+        /// @return A closure for this, or null, if this is not fit to be parsed.
+        ///</summary>
+        public DocumentClosure GetOrConstructClosure()
+        {
+            DocumentClosure result = this.documentClosure;
+            if (result == null /*&& !isRecycled() && getLocation() != null*/)
+            {
+                result = this.documentClosure;
+                if (result == null)
+                {
+                    //					if (semanticInlinks == null)
+                    //						semanticInlinks	= new SemanticInLinks();
+
+                    result = ConstructClosure();
+                    this.documentClosure = result;
+                }
+            }
+            return result == null/* || result.downloadStatus == DownloadStatus.RECYCLED*/ ? null : result;
+        }
+
+
         public DocumentClosure ConstructClosure(MetadataServicesClient client)
         {
             return new DocumentClosure(SemanticsSessionScope , this)
                 {MetadataServicesClient = client};
         }
 
+        public DocumentClosure ConstructClosure()
+        {
+            return new DocumentClosure(SemanticsSessionScope, this);
+        }
+
+        public virtual void AddClipping(Clipping clipping)
+        {
+        }
     }   
 }

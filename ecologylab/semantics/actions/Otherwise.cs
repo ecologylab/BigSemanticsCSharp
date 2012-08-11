@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using Simpl.Serialization.Attributes;
+using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
@@ -16,9 +17,23 @@ namespace ecologylab.semantics.actions
 	/// missing java doc comments or could not find the source file.
 	/// </summary>
 	[SimplInherit]
-    public class Otherwise : NestedSemanticAction
+    public class Otherwise : NestedSemanticOperation
 	{
 		public Otherwise()
 		{ }
+
+        public override String GetOperationName()
+		{
+			return SemanticOperationStandardMethods.OTHERWISE;
+		}
+
+		///<summary>
+		/// Otherwise.perform() does not do anything since Otherwise is merely a container for nested
+		/// semantic actions.
+		///</summary>
+		public override Object Perform(Object obj)
+		{
+			return null;
+		}
 	}
 }
