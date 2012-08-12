@@ -79,13 +79,13 @@ namespace ecologylab.semantics.metadata.builtins
 	    {
 		    if (newLocation != null)
 		    {
-			    ParsedUri origLocation	= Location.Value;
-			    if (!origLocation.Equals(newLocation))
+                MetadataParsedURL origLocation = Location;
+			    if (!origLocation.Value.Equals(newLocation))
 			    {
 				    Location = new MetadataParsedURL(newLocation);
                     if (SemanticsSessionScope != null)
                         SemanticsSessionScope.GlobalDocumentCollection.AddDocument(this, newLocation);
-                    AddAdditionalLocation(Location);
+                    AddAdditionalLocation(origLocation);
 			    }
 		    }
 	    }

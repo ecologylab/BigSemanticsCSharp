@@ -55,7 +55,11 @@ namespace UnitTests
 	    public void ChooseSemanticOperation()// throws SIMPLTranslationException
 	    {
 		    String xml = "<choose><case><not_null /><get_field /><for_each /></case><case><not_null /><set_metadata /></case><otherwise><get_field /></otherwise></choose>";
-		    ChooseSemanticOperation choose = (ChooseSemanticOperation) MetaMetadataTranslationScope.Get().Deserialize(xml, StringFormat.Xml);
+		    //String xml2 = "<filter_location><alternative_host>dl.acm.org</alternative_host><set_param name=\"preflayout\" value=\"flat\" /><strip_param name=\"coll\" /></filter_location>";
+            //String xml3 = "<set_param name=\"preflayout\" value=\"flat\" />";
+            
+            //Object obj = MetaMetadataTranslationScope.Get().Deserialize(xml2, StringFormat.Xml);
+            ChooseSemanticOperation choose = (ChooseSemanticOperation) MetaMetadataTranslationScope.Get().Deserialize(xml, StringFormat.Xml);
 		    Console.WriteLine(choose);
 		    Console.WriteLine(choose.Cases);
 		    Console.WriteLine(choose.Otherwise);
@@ -76,7 +80,7 @@ namespace UnitTests
                                         _repositoryMetadataTranslationScope,
                                         MetaMetadataRepositoryInit.DEFAULT_REPOSITORY_LOCATION);
 
-            InformationCompositionDeclaration doc = (InformationCompositionDeclaration)_repositoryMetadataTranslationScope.DeserializeFile(collectedExampleUrlMetadataNoAuthor, Format.Xml);
+            InformationCompositionDeclaration doc = (InformationCompositionDeclaration)_repositoryMetadataTranslationScope.DeserializeFile(collectedExampleUrlMetadata, Format.Xml);
             
             foreach (Metadata metadata in doc.Metadata)
             {
@@ -87,6 +91,38 @@ namespace UnitTests
             }
 
             Console.WriteLine(SimplTypesScope.Serialize(doc, StringFormat.Xml));
+        }
+
+        [TestMethod]
+        public void BeforeSemanticOperationTest()// throws SIMPLTranslationException
+        {
+            //test FilterLocation.paramOps & alternativeHosts
+            String url1 = "http://dl.acm.org/citation.cfm?id=2063231.2063237&amp;coll=DL";
+            
+            //test FilterLocation.stripPrefix
+            String url2 = "http://www.amazon.co.uk/gp/bestsellers/books/515344/ref=123";
+
+            //test FilterLocation.Regex
+            //added in file products.xml in meta_metadata name="amazon_bestseller_list":
+            //<before_semantic_actions>
+	        //  <filter_location>
+	        //      <regex match="http://([w]+)\.amazon\.com/gp" replace="http://t$1.gstatic.com/images" />
+	        //  </filter_location>
+		    //</before_semantic_actions>	
+            String url3 = "http://www.amazon.com/gp/bestsellers/books/6";
+
+            SimplTypesScope _repositoryMetadataTranslationScope = RepositoryMetadataTranslationScope.Get();
+
+            SemanticsGlobalScope _semanticsSessionScope = new SemanticsSessionScope(
+                                        _repositoryMetadataTranslationScope,
+                                        MetaMetadataRepositoryInit.DEFAULT_REPOSITORY_LOCATION);
+
+            Document metadata = _semanticsSessionScope.GetOrConstructDocument(new ParsedUri(url1));
+
+            MetaMetadata metaMetadata = (MetaMetadata)metadata.MetaMetadata;
+
+            SemanticOperationHandler handler = new SemanticOperationHandler(_semanticsSessionScope, null);
+            handler.TakeSemanticOperations(metaMetadata, metadata, metaMetadata.BeforeSemanticActions);
         }
 
     }

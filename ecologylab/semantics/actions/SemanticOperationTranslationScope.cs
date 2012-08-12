@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Simpl.Serialization;
+using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions
 {
@@ -26,7 +27,11 @@ namespace ecologylab.semantics.actions
             typeof(SearchSemanticOperation),
             typeof(SetFieldSemanticOperation),
             typeof(SetMetadataSemanticOperation),
-            typeof(SemanticOperation)
+            typeof(SemanticOperation),
+            typeof(FilterLocation),
+            typeof(SetParam),
+            typeof(StripParam),
+            typeof(ParamOp)
         };
 
         public static SimplTypesScope Get()

@@ -28,8 +28,12 @@ namespace ecologylabSemantics.ecologylab.semantics.actions
 			    {
 				    if (replace == null)
 					    replace	= "";
-				    //String resultString = matcher..replaceAll(replace);
-				    //result = ParsedUri.GetAbsolute(resultString);
+                    Console.WriteLine(matcher.Groups[0].Value + " " + matcher.Groups[1].Value);
+			        String rez = input.ToString().Replace(matcher.Groups[0].Value, replace);
+                    for (int i = 1; i < matcher.Groups.Count; i++)
+                        rez = rez.Replace("$" + i, matcher.Groups[i].Value);
+				    
+				    result = new ParsedUri(rez);
 			    }
 		    }
 		    return result;

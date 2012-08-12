@@ -24,7 +24,7 @@ namespace ecologylabSemantics.ecologylab.semantics.actions
     [SimplTag("filter_location")]
     public class FilterLocation : SemanticOperation
     {
-	    [SimplClasses( new Type[]{typeof(SetParam), typeof(StripParam)})]
+	    [SimplClasses( new[] {typeof(SetParam), typeof(StripParam)})]
 	    [SimplNoWrap]
 	    [SimplCollection]
 	    List<ParamOp> paramOps;
