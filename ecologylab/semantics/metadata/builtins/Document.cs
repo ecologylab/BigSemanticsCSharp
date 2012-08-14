@@ -142,22 +142,20 @@ namespace ecologylab.semantics.metadata.builtins
         ///<summary> 
         /// @return A closure for this, or null, if this is not fit to be parsed.
         ///</summary>
-        public DocumentClosure GetOrConstructClosure(MetadataServicesClient client)
+        public DocumentClosure GetOrConstructClosure(MetadataServicesClient client, SemanticsGlobalCollection<Document> downloadedDocumentCollection)
 	    {
 		    DocumentClosure result	= this.documentClosure;
-		    if (result == null /*&& !isRecycled() && getLocation() != null*/)
+		    if (result == null)
 		    {
 				result	= this.documentClosure;
 				if (result == null)
 				{
-//					if (semanticInlinks == null)
-//						semanticInlinks	= new SemanticInLinks();
-					
-					result	= ConstructClosure(client);
+
+                    result = ConstructClosure(client, downloadedDocumentCollection);
 					this.documentClosure = result;
 				}
 		    }
-		    return result == null/* || result.downloadStatus == DownloadStatus.RECYCLED*/ ? null : result;
+		    return result;
 	    }
 
         ///<summary> 
@@ -182,10 +180,11 @@ namespace ecologylab.semantics.metadata.builtins
         }
 
 
-        public DocumentClosure ConstructClosure(MetadataServicesClient client)
+        public DocumentClosure ConstructClosure(MetadataServicesClient client, SemanticsGlobalCollection<Document> downloadedDocumentCollection)
         {
             return new DocumentClosure(SemanticsSessionScope , this)
-                {MetadataServicesClient = client};
+                {MetadataServicesClient = client,
+                GlobalDocumentCollection = downloadedDocumentCollection};
         }
 
         public DocumentClosure ConstructClosure()

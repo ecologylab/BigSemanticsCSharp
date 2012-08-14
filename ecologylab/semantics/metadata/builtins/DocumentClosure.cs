@@ -34,9 +34,10 @@ namespace ecologylab.semantics.metadata.builtins
 
         public TaskCompletionSource<Document> TaskCompletionSource { get; set; }
 
-        public event EventHandler<DocumentClosureEventArgs> continuations;
+        public event EventHandler<DocumentClosureEventArgs> Continuations;
 
         public MetadataServicesClient MetadataServicesClient { get; set; }
+        public SemanticsGlobalCollection<Document> GlobalDocumentCollection { get; set; }
 
         internal DocumentClosure(SemanticsSessionScope semanticsSessionScope, Document document)
         {
@@ -188,17 +189,26 @@ namespace ecologylab.semantics.metadata.builtins
             }
         }
 
-        public async void RequestMetadata()
+        public async void GetMetadata()
         {
             this.DownloadStatus = DownloadStatus.REQUESTED;
 
             try
             {
-                this.Document = await this.MetadataServicesClient.GetMetadata(Document.Location.ToString());
+                Document result;
+                GlobalDocumentCollection.TryGetDocument(Document.Location.Value, out result);
 
-                this.DownloadStatus = DownloadStatus.RECEIVED;
+                if (result == null)
+                {
+                    this.Document = await this.MetadataServicesClient.RequestMetadata(Document.Location.Value);
 
-                continuations(this, null);
+                    this.DownloadStatus = DownloadStatus.RECEIVED;
+
+                    if (Document != null)
+                        GlobalDocumentCollection.AddDocument(Document, Document.Location.Value);
+                }
+
+                Continuations(this, new DocumentClosureEventArgs(this));
             }
             catch(Exception exception)
             {
@@ -266,9 +276,9 @@ namespace ecologylab.semantics.metadata.builtins
     {
         private DocumentClosure documentClosure;
 
-        public DocumentClosureEventArgs(DocumentClosure metadata)
+        public DocumentClosureEventArgs(DocumentClosure documentClosure)
         {
-            this.documentClosure = metadata;
+            this.documentClosure = documentClosure;
         }
 
         public DocumentClosure DocumentClosure

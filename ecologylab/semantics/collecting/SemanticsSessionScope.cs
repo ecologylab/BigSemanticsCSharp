@@ -44,7 +44,7 @@ namespace ecologylab.semantics.collecting
 //            _awesomiumThread = new Thread(WebBrowserPool.InitializeWebCore) { Name = "Singleton Awesomium Thread", IsBackground = true };
 //            _awesomiumThread.Start();
 
-            MetadataServicesClient = new MetadataServicesClient(metadataTranslationScope);
+            MetadataServicesClient = new MetadataServicesClient(metadataTranslationScope, this);
 
             SemanticsSessionScope.Get = this;
             
