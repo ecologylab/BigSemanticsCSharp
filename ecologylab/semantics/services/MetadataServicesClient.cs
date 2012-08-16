@@ -24,7 +24,8 @@ namespace ecologylab.semantics.services
             SimplTypesScope typesScope = SimplTypesScope.Get("MetadataServicesTranslationScope",
                                                         metadatascope,
                                                         typeof (MetadataRequest),
-                                                        typeof (MetadataResponse));
+                                                        typeof (MetadataResponse),
+                                                        typeof (SemanticServiceError));
 
             _metadataClient = new OODSSClient("127.0.0.1", 2107, typesScope, semanticSessionScope);            
             _metadataClient.Start();
@@ -47,7 +48,10 @@ namespace ecologylab.semantics.services
             if (metadataResponse != null && metadataResponse is MetadataResponse)
             {
                 result = (metadataResponse as MetadataResponse).Metadata;
-
+            }
+            else if (metadataResponse != null && metadataResponse is SemanticServiceError)
+            {
+                (metadataResponse as SemanticServiceError).Perform();
             }
             else 
                 throw new Exception();

@@ -11,6 +11,12 @@ using System.Net.Sockets;
 
 namespace UnitTests
 {
+    using Simpl.Fundamental.Net;
+    using Simpl.OODSS.Messages;
+    using Simpl.Serialization;
+
+    using ecologylab.semantics.services.messages;
+
     [TestClass]
     public class OODSSTests
     {
@@ -46,16 +52,42 @@ namespace UnitTests
         public async void TestMetadataServicesClient()
         {
             Console.WriteLine("Initializing client");
-            MetadataServicesClient mmdclient = new MetadataServicesClient(RepositoryMetadataTranslationScope.Get());
+            MetadataServicesClient mmdclient = new MetadataServicesClient(RepositoryMetadataTranslationScope.Get(), null);
 
-            mmdclient.GetMetadata("http://dl.acm.org/citation.cfm?id=1871437.1871580");
+            mmdclient.RequestMetadata(new ParsedUri("http://dl.acm.org/citation.cfm?id=1871437.1871580"));
             //Console.WriteLine("Got second metadata object: {0}", d );
-        
 
-            mmdclient.GetMetadata("http://www.amazon.com/gp/product/B0050SYS5A/");
+
+            mmdclient.RequestMetadata(new ParsedUri("http://www.amazon.com/gp/product/B0050SYS5A/"));
             //Console.WriteLine("Got second metadata object: {0}", d2);
 
             Console.WriteLine("Terminating test cases");
+        }
+
+        [TestMethod]
+        public void TestSemanticServiceError()
+        {
+            SimplTypesScope repositoryMetadataTranslationScope = RepositoryMetadataTranslationScope.Get();
+
+            SimplTypesScope typesScope = SimplTypesScope.Get("MetadataServicesTranslationScope",
+                                                        repositoryMetadataTranslationScope,
+                                                        typeof(MetadataRequest),
+                                                        typeof(MetadataResponse),
+                                                        typeof(SemanticServiceError));
+            String response = "<semantic_service_error code=\"2001\" error_message=\"Error\" />";
+
+            ServiceMessage serviceMessage = (ServiceMessage) typesScope.Deserialize(response, StringFormat.Xml);
+
+            try
+            {
+                (serviceMessage as SemanticServiceError).Perform();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            Console.WriteLine(SimplTypesScope.Serialize(serviceMessage, StringFormat.Xml));
         }
     }
 }

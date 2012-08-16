@@ -15,6 +15,8 @@ using ecologylab.semantics.services;
 
 namespace ecologylab.semantics.metadata.builtins
 {
+    using ecologylab.semantics.services.messages;
+
     public class DocumentClosure
     {
         public SemanticsSessionScope SemanticsSessionScope { get; private set; }
@@ -191,28 +193,23 @@ namespace ecologylab.semantics.metadata.builtins
 
         public async void GetMetadata()
         {
-            this.DownloadStatus = DownloadStatus.REQUESTED;
-
-            try
+            if (this.DownloadStatus != DownloadStatus.RECEIVED)
             {
-                Document result;
-                GlobalDocumentCollection.TryGetDocument(Document.Location.Value, out result);
+                this.DownloadStatus = DownloadStatus.REQUESTED;
 
-                if (result == null)
+                try
                 {
                     this.Document = await this.MetadataServicesClient.RequestMetadata(Document.Location.Value);
 
                     this.DownloadStatus = DownloadStatus.RECEIVED;
 
-                    if (Document != null)
-                        GlobalDocumentCollection.AddDocument(Document, Document.Location.Value);
+                    Continuations(this, new DocumentClosureEventArgs(this));
                 }
-
-                Continuations(this, new DocumentClosureEventArgs(this));
-            }
-            catch(Exception exception)
-            {
-                this.DownloadStatus = DownloadStatus.ERROR;
+                catch (Exception exception)
+                {
+                    this.DownloadStatus = DownloadStatus.ERROR;
+                    Continuations(this, new DocumentClosureEventArgs(this, exception));
+                }
             }
         }
     }
@@ -276,9 +273,17 @@ namespace ecologylab.semantics.metadata.builtins
     {
         private DocumentClosure documentClosure;
 
+        private Exception exception;
+
         public DocumentClosureEventArgs(DocumentClosure documentClosure)
         {
             this.documentClosure = documentClosure;
+        }
+
+        public DocumentClosureEventArgs(DocumentClosure documentClosure, Exception exception) :
+            this(documentClosure)
+        {
+            this.exception = exception;
         }
 
         public DocumentClosure DocumentClosure

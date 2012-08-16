@@ -206,6 +206,7 @@
     <Compile Include="ecologylab\semantics\namesandnums\SemanticNames.cs" />
     <Compile Include="ecologylab\semantics\services\messages\MetadataRequest.cs" />
     <Compile Include="ecologylab\semantics\services\messages\MetadataResponse.cs" />
+    <Compile Include="ecologylab\semantics\services\messages\SemanticServiceError.cs" />
     <Compile Include="ecologylab\semantics\services\MetadataServicesClient.cs" />
     <Compile Include="ecologylab\textformat\NamedStyle.cs" />
     <Compile Include="ecologylab\semantics\metametadata\MetaMetadataTranslationScope.cs" />
