@@ -13,27 +13,28 @@ using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
+    /// <summary>
+    /// missing java doc comments or could not find the source file.
+    /// </summary>
+    [SimplInherit]
     public class Otherwise : NestedSemanticOperation
-	{
-		public Otherwise()
-		{ }
+    {
+        public Otherwise()
+        {
+        }
 
         public override String GetOperationName()
-		{
-			return SemanticOperationStandardMethods.OTHERWISE;
-		}
+        {
+            return SemanticOperationStandardMethods.Otherwise;
+        }
 
-		///<summary>
-		/// Otherwise.perform() does not do anything since Otherwise is merely a container for nested
-		/// semantic actions.
-		///</summary>
-		public override Object Perform(Object obj)
-		{
-			return null;
-		}
-	}
+        /// <summary>
+        /// Otherwise.perform() does not do anything since Otherwise is merely a container for nested
+        /// semantic actions.
+        /// </summary>
+        public override Object Perform(Object obj)
+        {
+            return null;
+        }
+    }
 }

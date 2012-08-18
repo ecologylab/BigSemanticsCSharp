@@ -16,69 +16,71 @@ using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
-	[SimplTag("create_and_visualize_text_surrogate")]
+    /// <summary>
+    /// This action needs to be implemented by the client.
+    /// </summary>
+    [SimplInherit]
+    [SimplTag("create_and_visualize_text_surrogate")]
     public class CreateAndVisualizeTextSurrogateSemanticOperation : SemanticOperation
-	{
+    {
         public CreateAndVisualizeTextSurrogateSemanticOperation()
-		{ }
+        {
+        }
 
-	    public override String GetOperationName()
-	    {
-		    return SemanticOperationStandardMethods.CREATE_AND_VISUALIZE_TEXT_SURROGATE;
-	    }
+        public override string GetOperationName()
+        {
+            return SemanticOperationStandardMethods.CreateAndVisualizeTextSurrogate;
+        }
 
-	    public override void HandleError()
-	    {
-	    }
+        public override void HandleError()
+        {
+        }
 
-	    static readonly int MAX_WORDS_IN_GIST = 8;
-	    private String CreateGist(String text)
-	    {
-		    String[] words = text.Split(' ');
-		    String returnString = "";
-		    int wordCount = 0;
-		    foreach(String word in words)
-		    {
-			    if(wordCount > 0)
-			        returnString += " ";
-			    returnString += word;
-			    wordCount++;
-			    if(wordCount >= MAX_WORDS_IN_GIST)
-				    break;
-		    }
-		    return returnString;
-	    }
-	
-	    public override Object Perform(Object obj)
-	    {
-		    Console.WriteLine("Adding text clipping");
-		    bool isSemanticText = GetArgumentBoolean(SemanticOperationNamedArguments.SEMANTIC_TEXT, false);
-		    
-            Object contextObject = GetArgumentObject(SemanticOperationNamedArguments.TEXT);
-            String context = (contextObject != null) ? contextObject.ToString() : null; 
+        static readonly int MAX_WORDS_IN_GIST = 8;
 
-		    // TODO use html context -- need methods to strip tags to set regular context from it.
-		    Object htmlContextObject = GetArgumentObject(SemanticOperationNamedArguments.HTML_CONTEXT);
-            String htmlContext = (htmlContextObject != null) ? htmlContextObject.ToString() : null;
+        private string CreateGist(string text)
+        {
+            string[] words = text.Split(' ');
+            string returnString = "";
+            int wordCount = 0;
+            foreach(string word in words)
+            {
+                if(wordCount > 0)
+                    returnString += " ";
+                returnString += word;
+                wordCount++;
+                if(wordCount >= MAX_WORDS_IN_GIST)
+                    break;
+            }
+            return returnString;
+        }
+
+        public override object Perform(object obj)
+        {
+            Console.WriteLine("Adding text clipping");
+            bool isSemanticText = GetArgumentBoolean(SemanticOperationNamedArguments.SemanticText, false);
+
+            object contextObject = GetArgumentObject(SemanticOperationNamedArguments.Text);
+            string context = (contextObject != null) ? contextObject.ToString() : null; 
+
+            // TODO use html context -- need methods to strip tags to set regular context from it.
+            object htmlContextObject = GetArgumentObject(SemanticOperationNamedArguments.HtmlContext);
+            string htmlContext = (htmlContextObject != null) ? htmlContextObject.ToString() : null;
             
             if (context != null)
-		    {
-			    Document sourceDocument = ResolveSourceDocument();
-			    //We will do something smarter here later when we have interest vectors.
+            {
+                Document sourceDocument = ResolveSourceDocument();
+                // We will do something smarter here later when we have interest vectors.
                 TextClipping textClipping = new TextClipping(sessionScope.MetaMetadataRepository.GetMMByName(DocumentParserTagNames.TextTag));
-		        //textClipping.setText(createGist(context));
-			    textClipping.Text = new MetadataString(context);
-			    textClipping.Context = new MetadataString(context);
+                //textClipping.setText(createGist(context));
+                textClipping.Text = new MetadataString(context);
+                textClipping.Context = new MetadataString(context);
 
-			    textClipping.SourceDoc = sourceDocument;
+                textClipping.SourceDoc = sourceDocument;
                 
                 sourceDocument.AddClipping(textClipping);
-		    }
-		    return null;
-	    }
-	}
+            }
+            return null;
+        }
+    }
 }

@@ -10,26 +10,27 @@ namespace ecologylabSemantics.ecologylab.semantics.actions
 {
     public abstract class ParamOp : ElementState
     {
-	    [SimplScalar]
-	    private String name;
-	
-	    public String Name
-	    {
+        [SimplScalar]
+        private String name;
+
+        public String Name
+        {
             get { return name; }
-	    }
-	
-	    protected SemanticOperationHandler handler;
+            set { name = value; }
+        }
+
+        protected SemanticOperationHandler handler;
 
         public SemanticOperationHandler SemanticHandler
-	    {
+        {
             set { this.handler = value; }
-	    }
-	
-	    public ParamOp()
-	    {
-	    }
+        }
 
-	    public abstract void TransformParams(Dictionary<String, String> parametersMap);
+        public ParamOp()
+        {
+        }
+
+        public abstract void TransformParams(Dictionary<String, String> parametersMap);
 
     }
 }

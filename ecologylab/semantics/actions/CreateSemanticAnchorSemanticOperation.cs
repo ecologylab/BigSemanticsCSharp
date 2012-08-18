@@ -13,29 +13,30 @@ using Simpl.Serialization.Attributes;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
+    /// <summary>
+    /// missing java doc comments or could not find the source file.
+    /// </summary>
     [SimplInherit]
-	[SimplTag("create_semantic_anchor")]
+    [SimplTag("create_semantic_anchor")]
     public class CreateSemanticAnchorSemanticOperation : SemanticOperation
-	{
-		public CreateSemanticAnchorSemanticOperation()
-		{ }
+    {
+        public CreateSemanticAnchorSemanticOperation()
+        {
+        }
 
-	    public override string GetOperationName()
-	    {
-	        throw new NotImplementedException();
-	    }
+        public override string GetOperationName()
+        {
+            throw new NotImplementedException();
+        }
 
-	    public override void HandleError()
-	    {
-	        throw new NotImplementedException();
-	    }
+        public override void HandleError()
+        {
+            throw new NotImplementedException();
+        }
 
-	    public override object Perform(object obj)
-	    {
-	        throw new NotImplementedException();
-	    }
-	}
+        public override object Perform(object obj)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

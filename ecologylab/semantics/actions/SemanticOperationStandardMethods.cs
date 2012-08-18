@@ -6,95 +6,90 @@ using System.Text;
 namespace ecologylabSemantics.ecologylab.semantics.actions
 {
 
+    /// <summary>
+    /// This part contains some standard semantic methods for semantic actions. This basically contains
+    /// all the high level semantic actions which can be used.
+    /// @author amathur
+    /// </summary>
     public abstract class SemanticOperationStandardMethods : SemanticOperationKeyWords
     {
 
-        /**
-         * StandardMethods
-         * 
-         * This part contains some standard semantic methods for semantic actions. This basically contains
-         * all the high level semantic actions which can be used.
-         * 
-         * @author amathur
-         * 
-         */
-
-        ///<summary>
+        /// <summary>
         /// conditional branching with only one branch, without <code>else</code>. to use <code>else</code>
         /// , you need to use <code>choose</code>.
-        ///</summary>
-        public static String IF = "if";
+        /// </summary>
+        public static string If = "if";
 
-        ///<summary>
+        /// <summary>
         /// conditional branching with multiply branches.
-        ///</summary>
-        public static String CHOOSE = "choose";
+        /// </summary>
+        public static string Choose = "choose";
 
-        ///<summary>
+        /// <summary>
         /// used in <code>choose</code> as the default branch.
-        ///</summary>
-        public static String OTHERWISE = "otherwise";
+        /// </summary>
+        public static string Otherwise = "otherwise";
 
-        ///<summary>
+        /// <summary>
         /// looping.
-        ///</summary>
-        public static String FOR_EACH = "for_each";
+        /// </summary>
+        public static string ForEach = "for_each";
 
-        ///<summary>
+        /// <summary>
         /// get field of an object and put it in the variable map so that following actions can access it.
-        ///</summary>
-        public static String GET_FIELD_ACTION = "get_field";
+        /// </summary>
+        public static string GetFieldAction = "get_field";
 
-        ///<summary>
+        /// <summary>
         /// set field of an object.
-        ///</summary>
-        public static String SET_FIELD_ACTION = "set_field";
+        /// </summary>
+        public static string SetFieldAction = "set_field";
 
-        ///<summary>
+        /// <summary>
         /// set metadata for an object
-        ///</summary>
-        public static String SET_METADATA = "set_metadata";
+        /// </summary>
+        public static string SetMetadata = "set_metadata";
 
-        ///<summary>
+        /// <summary>
         /// link handling action.
-        ///</summary>
-        public static String PARSE_DOCUMENT = "parse_document";
+        /// </summary>
+        public static string ParseDocument = "parse_document";
 
-        ///<summary>
+        /// <summary>
         /// image handling action.
-        ///</summary>
-        public static String CREATE_AND_VISUALIZE_IMG_SURROGATE = "create_and_visualize_img_surrogate";
+        /// </summary>
+        public static string CreateAndVisualizeImgSurrogate = "create_and_visualize_img_surrogate";
 
-        ///<summary>
+        /// <summary>
         /// text handling action.
-        ///</summary>
-        public static String CREATE_AND_VISUALIZE_TEXT_SURROGATE = "create_and_visualize_text_surrogate";
+        /// </summary>
+        public static string CreateAndVisualizeTextSurrogate = "create_and_visualize_text_surrogate";
 
-        ///<summary>
+        /// <summary>
         /// text handling action.
-        ///</summary>
-        public static String VISUALIZE_CLIPPINGS = "visualize_clippings";
+        /// </summary>
+        public static string VisualizeClippings = "visualize_clippings";
 
-        public static String FILTER_LOCATION = "filter_location";
+        public static string FilterLocation = "filter_location";
 
-        ///<summary>
+        /// <summary>
         /// start a new search.
-        ///</summary>
-        public static String SEARCH = "search";
+        /// </summary>
+        public static string Search = "search";
 
-        ///<summary>
+        /// <summary>
         /// prevent info collector from obtaining info from a site.
-        ///</summary>
-        public static String BACK_OFF_FROM_SITE = "back_off_from_site";
+        /// </summary>
+        public static string BackOffFromSite = "back_off_from_site";
 
-        public static String CREATE_SEMANTIC_ANCHOR = "create_semantic_anchor";
+        public static string CreateSemanticAnchor = "create_semantic_anchor";
 
-        public static String EVALUATE_RANK_WEIGHT = "eval_rank_wt";
+        public static string EvaluateRankWeight = "eval_rank_wt";
 
-        public static String GET_LINKED_METADATA = "get_linked_metadata";
+        public static string GetLinkedMetadata = "get_linked_metadata";
 
-        public static String RESELECT_METAMETADATA_AND_EXTRACT = "reselect_meta_metadata_and_extract";
+        public static string ReselectMetametadataAndExtract = "reselect_meta_metadata_and_extract";
 
-        public static String ADD_MIXIN = "add_mixin";
+        public static string AddMixin = "add_mixin";
     }
 }

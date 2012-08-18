@@ -13,36 +13,37 @@ using ecologylab.collections;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
-	public class Null : Condition
-	{
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		private String value;
+    /// <summary>
+    /// missing java doc comments or could not find the source file.
+    /// </summary>
+    [SimplInherit]
+    public class Null : Condition
+    {
+        /// <summary>
+        /// This is the name of the element you want to check whether it is null or not.
+        /// </summary>
+        [SimplScalar]
+        private String value;
 
-		public Null()
-		{ }
+        public Null()
+        {
+        }
 
-		public String Value
-		{
-			get{return value;}
-			set{this.value = value;}
-		}
+        public String Value
+        {
+            get { return value; }
+            set { this.value = value; }
+        }
 
-	    /**
-	     * If the element is found in the semantic action environment and is not a null pointer, return
-	     * true. Otherwise, return false.
-	     */
-	    public override bool Evaluate(SemanticOperationHandler handler)
-	    {
-		    String name = Value;
+        /// <summary>
+        /// If the element is found in the semantic action environment and is not a null pointer, return
+        /// true. Otherwise, return false.
+        /// </summary>
+        public override bool Evaluate(SemanticOperationHandler handler)
+        {
+            String name = Value;
             Scope<Object> theMap = handler.SemanticOperationVariableMap;
-		    return theMap.ContainsKey(name) && theMap[name] == null;
-	    }
-	}
+            return theMap.ContainsKey(name) && theMap[name] == null;
+        }
+    }
 }

@@ -16,58 +16,59 @@ using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
-	[SimplTag("get_field")]
+    /// <summary>
+    /// missing java doc comments or could not find the source file.
+    /// </summary>
+    [SimplInherit]
+    [SimplTag("get_field")]
     public class GetFieldSemanticOperation : SemanticOperation 
-	{
-		public GetFieldSemanticOperation()
-		{ }
+    {
+        public GetFieldSemanticOperation()
+        {
+        }
 
         private static Dictionary<String, PropertyInfo> cachedGetterPropertys = new Dictionary<string, PropertyInfo>();
 
         private PropertyInfo GetGetterProperty(Type context, String getterName)
-	    {
-		    String id = context + "." + getterName;
+        {
+            String id = context + "." + getterName;
             if (cachedGetterPropertys.ContainsKey(id))
                 return cachedGetterPropertys[id];
 
             PropertyInfo method = ReflectionTools.GetProperty(context, getterName);
             cachedGetterPropertys.Add(id, method);
-		    return method;
-	    }
+            return method;
+        }
 
-	    public override String GetOperationName()
-	    {
-		    return SemanticOperationStandardMethods.GET_FIELD_ACTION;
-	    }
+        public override string GetOperationName()
+        {
+            return SemanticOperationStandardMethods.GetFieldAction;
+        }
 
-	    public override void HandleError()
-	    {
-	    }
+        public override void HandleError()
+        {
+        }
 
-	    public override Object Perform(Object obj)
-	    {
-		    String returnObjectName = GetReturnObjectName();
+        public override object Perform(object obj)
+        {
+            String returnObjectName = GetReturnObjectName();
             String getterName = XmlTools.CamelCaseFromXMLElementName(returnObjectName, true);
-		    PropertyInfo method = GetGetterProperty(obj.GetType(), getterName);
-		    if (method == null)
-		    {
-			    Console.WriteLine("get_field failed: object={1}, getter={2}()", obj, getterName);
-		    }
-		    else
-			    try
-			    {
-				    return method.GetValue(obj, null);
-			    }
-			    catch (Exception e)
-			    {
-				    Console.WriteLine(System.Environment.StackTrace);
-				    Console.WriteLine("get_field failed: object={1}, getter={2}()", obj, getterName);
-			    }
-		    return null;
-	    }
-	}
+            PropertyInfo method = GetGetterProperty(obj.GetType(), getterName);
+            if (method == null)
+            {
+                Console.WriteLine("get_field failed: object={1}, getter={2}()", obj, getterName);
+            }
+            else
+                try
+                {
+                    return method.GetValue(obj, null);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(System.Environment.StackTrace);
+                    Console.WriteLine("get_field failed: object={1}, getter={2}()", obj, getterName);
+                }
+            return null;
+        }
+    }
 }

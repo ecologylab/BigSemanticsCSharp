@@ -17,74 +17,72 @@ using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
-	[SimplTag("create_and_visualize_img_surrogate")]
+    /// <summary>
+    /// This action needs to be implemented by the client.
+    /// </summary>
+    [SimplInherit]
+    [SimplTag("create_and_visualize_img_surrogate")]
     public class CreateAndVisualizeImgSurrogateSemanticOperation : SemanticOperation 
-	{
+    {
         public CreateAndVisualizeImgSurrogateSemanticOperation()
-		{ }
-	    
-	    public override String GetOperationName()
-	    {
-		    return SemanticOperationStandardMethods.CREATE_AND_VISUALIZE_IMG_SURROGATE;
-	    }
-
-	    public override void HandleError()
-	    {
-	    }
-
-/*        public override Object Perform(Object obj)
         {
-            return null;
+            
         }
+
+        public override String GetOperationName()
+        {
+            return SemanticOperationStandardMethods.CreateAndVisualizeImgSurrogate;
+        }
+
+        public override void HandleError()
+        {
+        }
+
+
+        public override Object Perform(Object obj)
+        {
+            Document source	= ResolveSourceDocument();
+
+            Image image = (Image) GetArgumentObject(SemanticOperationNamedArguments.Metadata);
+            if (image == null)
+            {
+                ParsedUri imagePURL = (ParsedUri) GetArgumentObject(SemanticOperationNamedArguments.ImagePurl);
+/*              if (imagePURL != null)
+                {
+                    image = sessionScope.GetOrConstructImage(imagePURL);
+
+                    //TODO -- if it already exists: (1) do we need to download??
+                    // (2) should we merge metadata
+                }
 */
-	    public override Object Perform(Object obj)
-	    {
-		    Document source	= ResolveSourceDocument();
+            }
+            else
+            {
+                //TODO add to global collections?! if already there merge!
+            }
+            if (image != null && image.Location != null)
+            {
+                image.SemanticsSessionScope = sessionScope as SemanticsSessionScope;
 
-		    Image image = (Image) GetArgumentObject(SemanticOperationNamedArguments.METADATA);
-		    if (image == null)
-		    {
-			    ParsedUri imagePURL = (ParsedUri) GetArgumentObject(SemanticOperationNamedArguments.IMAGE_PURL);
-/*			    if (imagePURL != null)
-			    {
-				    image								= sessionScope.GetOrConstructImage(imagePURL);
-				
-				    //TODO -- if it already exists: (1) do we need to download??
-				    //															(2) should we merge metadata
-			    }
-*/
-		    }
-		    else
-		    {
-			    //TODO add to global collections?! if already there merge!
-		    }
-		    if (image != null && image.Location != null)
-		    {
-			    image.SemanticsSessionScope = sessionScope as SemanticsSessionScope;
+                Document mixin = (Document) GetArgumentObject(SemanticOperationNamedArguments.Mixin);
+                if (mixin != null)
+                    image.AddMixin(mixin);
 
-			    Document mixin = (Document) GetArgumentObject(SemanticOperationNamedArguments.MIXIN);
-			    if (mixin != null)
-				    image.AddMixin(mixin);
-			
-			    Object captionObject = GetArgumentObject(SemanticOperationNamedArguments.CAPTION);
-                String caption = (captionObject != null) ? captionObject.ToString() : null;
+                object captionObject = GetArgumentObject(SemanticOperationNamedArguments.Caption);
+                string caption = (captionObject != null) ? captionObject.ToString() : null;
 
-                int width  		 		 		= GetArgumentInteger(SemanticOperationNamedArguments.WIDTH, 0);
-			    int height  		 		 	= GetArgumentInteger(SemanticOperationNamedArguments.HEIGHT, 0);
-			
-			    ParsedUri hrefPURL 		= (ParsedUri) GetArgumentObject(SemanticOperationNamedArguments.HREF);
-			    Document outlink 			= (Document) GetArgumentObject(SemanticOperationNamedArguments.HREF_METADATA);
-			    if (hrefPURL != null & outlink == null)
-				    outlink				= sessionScope.GetOrConstructDocument(hrefPURL);
-			
-			    ImageClipping imageClipping	= image.ConstructClipping(source, outlink, caption, null);
+                int width = GetArgumentInteger(SemanticOperationNamedArguments.Width, 0);
+                int height = GetArgumentInteger(SemanticOperationNamedArguments.Height, 0);
+
+                ParsedUri hrefPURL = (ParsedUri) GetArgumentObject(SemanticOperationNamedArguments.Href);
+                Document outlink = (Document) GetArgumentObject(SemanticOperationNamedArguments.HrefMetadata);
+                if (hrefPURL != null & outlink == null)
+                    outlink = sessionScope.GetOrConstructDocument(hrefPURL);
+
+                ImageClipping imageClipping	= image.ConstructClipping(source, outlink, caption, null);
                 source.AddClipping(imageClipping);
 
-		        DocumentClosure imageClosure;
+                DocumentClosure imageClosure;
                 
                 if (this.sessionScope is SemanticsSessionScope &&
                     (this.sessionScope as SemanticsSessionScope).MetadataServicesClient != null)
@@ -100,22 +98,20 @@ namespace ecologylab.semantics.actions
                     }
                 }
                 else
-		        {
-		            image.GetOrConstructClosure();
-		        }
+                {
+                    image.GetOrConstructClosure();
+                }
 
-			    return image;
-		    }
-		    else
-		    {
-			    MetaMetadata mm	= GetMetaMetadata();
-			    String mmString	= mm != null ? mm.Name : "Couldn't getMetaMetadata()";
-			    Console.WriteLine("Can't createAndVisualizeImgSurrogate because null PURL: " + mmString
-					    + " - " + source.Location);
-		    }
+                return image;
+            }
+            else
+            {
+                MetaMetadata mm	= GetMetaMetadata();
+                string mmString	= mm != null ? mm.Name : "Couldn't getMetaMetadata()";
+                Console.WriteLine("Can't createAndVisualizeImgSurrogate because null PURL: " + mmString + " - " + source.Location);
+            }
 
-		    return null;
-	    }
-
-	}
+            return null;
+        }
+    }
 }

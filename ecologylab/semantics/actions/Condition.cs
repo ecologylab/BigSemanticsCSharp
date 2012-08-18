@@ -13,16 +13,16 @@ using Simpl.Serialization;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
-	public class Condition : ElementState	
+    /// <summary>
+    /// missing java doc comments or could not find the source file.
+    /// </summary>
+    [SimplInherit]
+    public class Condition : ElementState	
     {
         public virtual bool Evaluate(SemanticOperationHandler handler)
         {
             Console.WriteLine("Condition.Evaluate() gets called: this should never happen.");
             return false;
         }
-	}
+    }
 }

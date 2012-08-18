@@ -13,52 +13,53 @@ using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
-	[SimplTag("search")]
+    /// <summary>
+    /// missing java doc comments or could not find the source file.
+    /// </summary>
+    [SimplInherit]
+    [SimplTag("search")]
     public class SearchSemanticOperation : SemanticOperation 
-	{
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		private String engine;
+    {
+        /// <summary>
+        /// missing java doc comments or could not find the source file.
+        /// </summary>
+        [SimplScalar]
+        private String engine;
 
-		public SearchSemanticOperation()
-		{ }
+        public SearchSemanticOperation()
+        {
+        }
 
-		public String Engine
-		{
-			get{return engine;}
-			set{engine = value;}
-		}
+        public String Engine
+        {
+            get { return engine; }
+            set { engine = value; }
+        }
 
         protected static readonly String ArgQuery = "query";
 
-	    public override String GetOperationName()
-	    {
-		    return SemanticOperationStandardMethods.SEARCH;
-	    }
+        public override String GetOperationName()
+        {
+            return SemanticOperationStandardMethods.Search;
+        }
 
-	    public override void HandleError()
-	    {
-	    }
+        public override void HandleError()
+        {
+        }
 
-	    public override Object Perform(Object obj)
-	    {
+        public override Object Perform(Object obj)
+        {
             String query = (String)GetArgumentObject(ArgQuery);
-		    if (String.IsNullOrEmpty(query))
-			    return null;
+            if (String.IsNullOrEmpty(query))
+                return null;
 
-/*		    SearchState search = new SearchState(query, engine);
-		    search.initialize(sessionScope);
-		    SeedSet seedSet = new SeedSet();
-		    seedSet.setParentSeedSet(sessionScope.getSeeding().getSeedSet());
-		    seedSet.add(search, sessionScope);
-		    seedSet.performSeeding(sessionScope, true);*/
-		    return null;
-	    }
-	}
+            /*SearchState search = new SearchState(query, engine);
+            search.initialize(sessionScope);
+            SeedSet seedSet = new SeedSet();
+            seedSet.setParentSeedSet(sessionScope.getSeeding().getSeedSet());
+            seedSet.add(search, sessionScope);
+            seedSet.performSeeding(sessionScope, true);*/
+            return null;
+        }
+    }
 }

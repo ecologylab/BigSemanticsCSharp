@@ -13,28 +13,29 @@ using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
-	[SimplTag("set_metadata")]
+    /// <summary>
+    /// missing java doc comments or could not find the source file.
+    /// </summary>
+    [SimplInherit]
+    [SimplTag("set_metadata")]
     public class SetMetadataSemanticOperation : SemanticOperation 
-	{
-		public SetMetadataSemanticOperation()
-		{ }
+    {
+        public SetMetadataSemanticOperation()
+        {
+        }
 
-	    public override string GetOperationName()
-	    {
-            return SemanticOperationStandardMethods.SET_METADATA;
-	    }
+        public override string GetOperationName()
+        {
+            return SemanticOperationStandardMethods.SetMetadata;
+        }
 
-	    public override void HandleError()
-	    {
-	    }
+        public override void HandleError()
+        {
+        }
 
-	    public override object Perform(object obj)
-	    {
+        public override object Perform(object obj)
+        {
             throw new SystemException("Andruid decided this is no longer part of semantics in tng. Instead, pass a source_document argument to parse_document or create_image_surrogate!");
-	    }
-	}
+        }
+    }
 }

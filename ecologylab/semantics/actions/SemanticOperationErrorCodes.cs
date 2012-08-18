@@ -7,6 +7,6 @@ namespace ecologylabSemantics.ecologylab.semantics.actions
 {
     public abstract class SemanticOperationErrorCodes
     {
-    	public static String NULL_METHOD_ERROR= "Null Method Error";
+        public static string NullMethodError= "Null Method Error";
     }
 }

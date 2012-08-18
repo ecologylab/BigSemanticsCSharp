@@ -13,109 +13,108 @@ using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
-	[SimplTag("choose")]
+    /// <summary>
+    /// missing java doc comments or could not find the source file.
+    /// </summary>
+    [SimplInherit]
+    [SimplTag("choose")]
     public class ChooseSemanticOperation : SemanticOperation
-	{
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplNoWrap]
-		[SimplCollection("case")]
+    {
+        /// <summary>
+        /// missing java doc comments or could not find the source file.
+        /// </summary>
+        [SimplNoWrap]
+        [SimplCollection("case")]
         private List<IfSemanticOperation> cases;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplComposite]
+        /// <summary>
+        /// missing java doc comments or could not find the source file.
+        /// </summary>
+        [SimplComposite]
         private Otherwise otherwise;
 
         public ChooseSemanticOperation()
-		{ }
+        { }
 
         public List<IfSemanticOperation> Cases
-		{
-			get{return cases;}
-			set{cases = value;}
-		}
+        {
+            get{ return cases; }
+            set{ cases = value; }
+        }
 
-		public Otherwise Otherwise
-		{
-			get{return otherwise;}
-			set{otherwise = value;}
-		}
+        public Otherwise Otherwise
+        {
+            get { return otherwise; }
+            set { otherwise = value; }
+        }
 
-	    public override String GetOperationName()
-	    {
-		    return SemanticOperationStandardMethods.CHOOSE;
-	    }
+        public override string GetOperationName()
+        {
+            return SemanticOperationStandardMethods.Choose;
+        }
 
-	    public override void HandleError()
-	    {
-	    }
+        public override void HandleError()
+        {
+        }
 
-	    public override Object Perform(Object obj)
-	    {
-		    int selectedCaseIndex = -1;
-            int state = (Int32)semanticOperationHandler.GetOperationState(this, "state", INIT);
-		    if (state == INIT)
-		    {
-			    state = INTER;
+        public override object Perform(object obj)
+        {
+            int selectedCaseIndex = -1;
+            int state = (int) semanticOperationHandler.GetOperationState(this, "state", INIT);
+            if (state == INIT)
+            {
+                state = INTER;
 
-			    if (cases != null)
-				    for (int i = 0; i < cases.Count; ++i)
-				    {
+                if (cases != null)
+                    for (int i = 0; i < cases.Count; ++i)
+                    {
                         if (semanticOperationHandler.CheckConditionsIfAny(cases[i]))
-					    {
+                        {
                             semanticOperationHandler.SetOperationState(this, "select", i);
-						    break;
-					    }
-				    }
-		    }
+                            break;
+                        }
+                    }
+            }
 
-		    if (selectedCaseIndex >= 0)
-		    {
-			    IfSemanticOperation aCase = cases[selectedCaseIndex];
-			    List<SemanticOperation> nestedSemanticActions = aCase.NestedSemanticActionList;
-			    foreach (SemanticOperation nestedSemanticAction in nestedSemanticActions)
-                    semanticOperationHandler.HandleSemanticOperation(nestedSemanticAction, documentParser,
-						    sessionScope);
-		    }
-		    else
-		    {
-			    if (otherwise != null)
-			    {
-				    List<SemanticOperation> otherwiseActions = otherwise.NestedSemanticActionList;
-				    foreach (SemanticOperation action in otherwiseActions)
-				    {
+            if (selectedCaseIndex >= 0)
+            {
+                IfSemanticOperation aCase = cases[selectedCaseIndex];
+                List<SemanticOperation> nestedSemanticActions = aCase.NestedSemanticActionList;
+                foreach (SemanticOperation nestedSemanticAction in nestedSemanticActions)
+                    semanticOperationHandler.HandleSemanticOperation(nestedSemanticAction, documentParser, sessionScope);
+            }
+            else
+            {
+                if (otherwise != null)
+                {
+                    List<SemanticOperation> otherwiseActions = otherwise.NestedSemanticActionList;
+                    foreach (SemanticOperation action in otherwiseActions)
+                    {
                         semanticOperationHandler.HandleSemanticOperation(action, documentParser, sessionScope);
-				    }
-			    }
-		    }
+                    }
+                }
+            }
 
-		    return null;
-	    }
+            return null;
+        }
 
         public override void SetNestedOperationState(String name, Object value)
-	    {
-		    if (cases != null)
-		    {
-			    foreach (IfSemanticOperation aCase in cases)
-			    {
-				    SemanticOperationHandler handler = SemanticOperationHandler;
+        {
+            if (cases != null)
+            {
+                foreach (IfSemanticOperation aCase in cases)
+                {
+                    SemanticOperationHandler handler = SemanticOperationHandler;
                     aCase.SemanticOperationHandler = handler;
                     SemanticOperationHandler.SetOperationState(aCase, name, value);
                     aCase.SetNestedOperationState(name, value);
-			    }
-		    }
-		    if (otherwise != null)
-		    {
+                }
+            }
+            if (otherwise != null)
+            {
                 semanticOperationHandler.SetOperationState(otherwise, name, value);
                 otherwise.SetNestedOperationState(name, value);
-		    }
-	    }
-	}
+            }
+        }
+    }
 }

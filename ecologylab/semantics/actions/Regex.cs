@@ -11,33 +11,33 @@ namespace ecologylabSemantics.ecologylab.semantics.actions
 {
     public class Regex : ElementState
     {
-	    [SimplScalar]
+        [SimplScalar]
         System.Text.RegularExpressions.Regex match;
-	
-	    [SimplScalar]
-	    String replace;
-	
-	    public ParsedUri Perform(ParsedUri input)
-	    {
-		    ParsedUri result = null;
-		    if (input != null && match != null)
-		    {
-			    String str	= input.ToString();
-			    Match matcher	= match.Match(str);
-			    if (matcher.Success)
-			    {
-				    if (replace == null)
-					    replace	= "";
+
+        [SimplScalar]
+        String replace;
+
+        public ParsedUri Perform(ParsedUri input)
+        {
+            ParsedUri result = null;
+            if (input != null && match != null)
+            {
+                String str = input.ToString();
+                Match matcher = match.Match(str);
+                if (matcher.Success)
+                {
+                    if (replace == null)
+                        replace	= "";
                     Console.WriteLine(matcher.Groups[0].Value + " " + matcher.Groups[1].Value);
-			        String rez = input.ToString().Replace(matcher.Groups[0].Value, replace);
+                    String rez = input.ToString().Replace(matcher.Groups[0].Value, replace);
                     for (int i = 1; i < matcher.Groups.Count; i++)
                         rez = rez.Replace("$" + i, matcher.Groups[i].Value);
-				    
-				    result = new ParsedUri(rez);
-			    }
-		    }
-		    return result;
-	    }
+
+                    result = new ParsedUri(rez);
+                }
+            }
+            return result;
+        }
     }
 
 }

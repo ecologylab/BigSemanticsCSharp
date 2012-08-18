@@ -13,19 +13,20 @@ using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
-	[SimplTag("if")]
+    /// <summary>
+    /// missing java doc comments or could not find the source file.
+    /// </summary>
+    [SimplInherit]
+    [SimplTag("if")]
     public class IfSemanticOperation : NestedSemanticOperation 
-	{
-		public IfSemanticOperation()
-		{ }
+    {
+        public IfSemanticOperation()
+        {
+        }
 
-	    public override String GetOperationName()
-	    {
-		    return SemanticOperationStandardMethods.IF;
-	    }
-	}
+        public override string GetOperationName()
+        {
+            return SemanticOperationStandardMethods.If;
+        }
+    }
 }

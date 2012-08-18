@@ -5,72 +5,76 @@ using System.Text;
 
 namespace ecologylabSemantics.ecologylab.semantics.actions
 {
+    /// <summary>
+    ///TODO Probably remane this class.
+    ///@author amathur
+    /// </summary>
     public abstract class SemanticOperationKeyWords : SemanticOperationNamedArguments
     {
-        public static String DOCUMENT_TYPE = "documentType";
+        public static string DocumentType = "documentType";
 
-        public static String CONTAINER = "container";
+        public static string Container = "container";
 
-        public static String INFO_COLLECTOR = "infoCollector";
+        public static string InfoCollector = "infoCollector";
 
-        public static String INFO_COLLECTOR_DATA_TYPE = "InfoCollector";
+        public static string InfoCollectorDataType = "InfoCollector";
 
-        public static String METADATA = "metadata";
+        public static string Metadata = "metadata";
 
-        public static String NOT_NULL_CHECK = "NOT_NULL";
+        public static string NotNullCheck = "NOT_NULL";
 
-        ///<summary>
+        /// <summary>
         /// Used for methods with boolean value
-        ///</summary>
-        public static String METHOD_CHECK = "METHOD_CHECK";
+        /// </summary>
+        public static string MethodCheck = "METHOD_CHECK";
 
-        ///<summary>
+        /// <summary>
         /// To specify that we have to take action on a collection
-        ///</summary>
-        public static String COLLECTION = "collection";
+        /// </summary>
+        public static string Collection = "collection";
 
-        ///<summary>
+        /// <summary>
         /// Key word for the current collection object of the loop. ie the kth object. This is not
         /// avaiableto user.
-        ///</summary>
-        public static String CURRENT_COLLECTION_INDEX = "current-collection-index";
+        /// </summary>
+        public static string CurrentCollectionIndex = "current-collection-index";
 
-        public static String NODE_SET = "node_list";
+        public static string NodeSet = "node_list";
 
-        ///<summary>
+        /// <summary>
         /// Root Node of the document
-        ///</summary>
-        public static String DOCUMENT_ROOT_NODE = "__DocumentRootNode__";
+        /// </summary>
+        public static string DocumentRootNode = "__DocumentRootNode__";
 
-        public static String NODE = "node";
+        public static string Node = "node";
 
-        public static String TRUE = "true";
+        public static string True = "true";
 
-        public static String FALSE = "false";
+        public static string False = "false";
 
-        public static String NULL = "null";
+        public static string Null = "null";
 
-        public static String TRUE_PURL = "TRUE_PURL";
+        public static string TruePurl = "TRUE_PURL";
 
-        public static String DIRECT_BINDING_PARSER = "direct";
+        public static string DirectBindingParser = "direct";
 
-        public static String XPATH_PARSER = "xpath";
+        public static string XpathParser = "xpath";
 
-        public static String HTML_IMAGE_DOM_TEXT_PARSER = "html_dom_image_text";
+        public static string HtmlImageDomTextParser = "html_dom_image_text";
 
-        public static String FILE_DIRECTORY_PARSER = "file_directory";
+        public static string FileDirectoryParser = "file_directory";
 
-        public static String FEED_PARSER = "feed";
+        public static string FeedParser = "feed";
 
-        public static String PDF_PARSER = "pdf";
+        public static string PdfParser = "pdf";
 
-        public static String IMAGE_PARSER = "image";
+        public static string ImageParser = "image";
 
-        public static String PURLCONNECTION_MIME = "purl_connect_mime";
+        public static string PurlconnectionMime = "purl_connect_mime";
 
-        public static String DOCUMENT_CALLER = "document_caller";
+        public static string DocumentCaller = "document_caller";
 
-        public static String SURROUNDING_META_METADATA_STACK = "__SurroundingMetaMetadataStack__";
+        public static string SurroundingMetaMetadataStack = "__SurroundingMetaMetadataStack__";
 
     }
 }

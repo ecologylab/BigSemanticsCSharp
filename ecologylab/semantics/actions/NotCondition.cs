@@ -12,32 +12,33 @@ using Simpl.Serialization.Attributes;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
-	[SimplTag("not")]
-	public class NotCondition : Condition
-	{
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplComposite]
-		[SimplScope("condition_scope")]
-		private Condition check;
+    /// <summary>
+    /// missing java doc comments or could not find the source file.
+    /// </summary>
+    [SimplInherit]
+    [SimplTag("not")]
+    public class NotCondition : Condition
+    {
+        /// <summary>
+        /// missing java doc comments or could not find the source file.
+        /// </summary>
+        [SimplComposite]
+        [SimplScope("condition_scope")]
+        private Condition check;
 
-		public NotCondition()
-		{ }
+        public NotCondition()
+        {
+        }
 
-		public Condition Check
-		{
-			get{return check;}
-			set{check = value;}
-		}
+        public Condition Check
+        {
+            get { return check; }
+            set { check = value; }
+        }
 
         public override bool Evaluate(SemanticOperationHandler handler)
         {
             return !check.Evaluate(handler);
         }
-	}
+    }
 }

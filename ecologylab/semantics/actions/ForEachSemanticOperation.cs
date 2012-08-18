@@ -13,92 +13,92 @@ using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
-	[SimplTag("for_each")]
+    /// <summary>
+    /// missing java doc comments or could not find the source file.
+    /// </summary>
+    [SimplInherit]
+    [SimplTag("for_each")]
     public class ForEachSemanticOperation : NestedSemanticOperation
-	{
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		private String collection;
+    {
+        /// <summary>
+        /// Name of the collection object on which for loop is applied
+        /// </summary>
+        [SimplScalar]
+        private String collection;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		[SimplTag("as")]
-		private String asStr;
+        /// <summary>
+        /// Name of the iterator [iterator variable]
+        /// </summary>
+        [SimplScalar]
+        [SimplTag("as")]
+        private String asStr;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		private String start;
+        /// <summary>
+        /// Starting index
+        /// </summary>
+        [SimplScalar]
+        private String start;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		private String end;
+        /// <summary>
+        /// end index
+        /// </summary>
+        [SimplScalar]
+        private String end;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		private String currentIndex;
+        /// <summary>
+        /// current index of loop
+        /// </summary>
+        [SimplScalar]
+        private String currentIndex;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		private String size;
+        /// <summary>
+        /// variable to store collection size.
+        /// </summary>
+        [SimplScalar]
+        private String size;
 
-		public ForEachSemanticOperation()
-		{ }
+        public ForEachSemanticOperation()
+        { }
 
-		public String Collection
-		{
-			get{return collection;}
-			set{collection = value;}
-		}
+        public String Collection
+        {
+            get { return collection; }
+            set { collection = value; }
+        }
 
-		public String AsStr
-		{
-			get{return asStr;}
-			set{asStr = value;}
-		}
+        public String AsStr
+        {
+            get { return asStr; }
+            set { asStr = value; }
+        }
 
-		public String Start
-		{
-			get{return start;}
-			set{start = value;}
-		}
+        public String Start
+        {
+            get { return start; }
+            set { start = value; }
+        }
 
-		public String End
-		{
-			get{return end;}
-			set{end = value;}
-		}
+        public String End
+        {
+            get { return end; }
+            set { end = value; }
+        }
 
-		public String CurrentIndex
-		{
-			get{return currentIndex;}
-			set{currentIndex = value;}
-		}
+        public String CurrentIndex
+        {
+            get { return currentIndex; }
+            set { currentIndex = value; } 
+        }
 
-		public String Size
-		{
-			get{return size;}
-			set{size = value;}
-		}
+        public String Size
+        {
+            get { return size; }
+            set { size = value; }
+        }
 
-	    public override String GetOperationName()
-	    {
-		    return SemanticOperationStandardMethods.FOR_EACH;
-	    }
-	}
+        public override String GetOperationName()
+        {
+            return SemanticOperationStandardMethods.ForEach;
+        }
+    }
 }

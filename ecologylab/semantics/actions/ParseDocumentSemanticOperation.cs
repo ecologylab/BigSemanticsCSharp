@@ -14,96 +14,91 @@ using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
-	[SimplTag("parse_document")]
+    /// <summary>
+    /// missing java doc comments or could not find the source file.
+    /// </summary>
+    [SimplInherit]
+    [SimplTag("parse_document")]
     public class ParseDocumentSemanticOperation : SemanticOperation
-	{
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		[SimplHints(new Hint[] { Hint.XmlAttribute })]
-		private Boolean now;
+    {
+        /// <summary>
+        /// missing java doc comments or could not find the source file.
+        /// </summary>
+        [SimplScalar]
+        [SimplHints(new Hint[] { Hint.XmlAttribute })]
+        private Boolean now;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		[SimplHints(new Hint[] { Hint.XmlAttribute })]
-		private Boolean onlyPickTopDocuments;
+        /// <summary>
+        /// This attribute is meant to be used when we only require the top document to actually be sent to
+        /// the infoCollector. It requires two strings
+        /// </summary>
+        [SimplScalar]
+        [SimplHints(new Hint[] { Hint.XmlAttribute })]
+        private Boolean onlyPickTopDocuments;
 
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		[SimplHints(new Hint[] { Hint.XmlAttribute })]
-		private Int32 numberOfTopDocuments;
+        /// <summary>
+        /// missing java doc comments or could not find the source file.
+        /// </summary>
+        [SimplScalar]
+        [SimplHints(new Hint[] { Hint.XmlAttribute })]
+        private Int32 numberOfTopDocuments;
 
-		public ParseDocumentSemanticOperation()
-		{ }
+        public ParseDocumentSemanticOperation()
+        {
+        }
 
-		public Boolean Now
-		{
-			get{return now;}
-			set{now = value;}
-		}
+        public Boolean Now
+        {
+            get { return now; }
+            set { now = value; }
+        }
 
-		public Boolean OnlyPickTopDocuments
-		{
-			get{return onlyPickTopDocuments;}
-			set{onlyPickTopDocuments = value;}
-		}
+        public Boolean OnlyPickTopDocuments
+        {
+            get { return onlyPickTopDocuments; }
+            set { onlyPickTopDocuments = value; }
+        }
 
-		public Int32 NumberOfTopDocuments
-		{
-			get{return numberOfTopDocuments;}
-			set{numberOfTopDocuments = value;}
-		}
+        public Int32 NumberOfTopDocuments
+        {
+            get { return numberOfTopDocuments; }
+            set { numberOfTopDocuments = value; }
+        }
 
-	    public override string GetOperationName()
-	    {
-            return SemanticOperationStandardMethods.PARSE_DOCUMENT;
-	    }
+        public override string GetOperationName()
+        {
+            return SemanticOperationStandardMethods.ParseDocument;
+        }
 
-	    public override void HandleError()
-	    {
-	    }
+        public override void HandleError()
+        {
+        }
 
-	    public override object Perform(object obj)
-	    {
-	        return PerformBasic(obj);
-	    }
+        public override object Perform(object obj)
+        {
+            return PerformBasic(obj);
+        }
 
         public Object PerformBasic(Object obj)
         {
-            //if (Now)
+            if (Now)
             {
                 Document document = GetOrCreateDocument(documentParser /*, linkType*/);
 
-                //		ParsedURL purl = (ParsedURL) getArgumentObject(SemanticActionNamedArguments.CONTAINER_LINK);
-                Document source = (Document)SemanticOperationHandler.SemanticOperationVariableMap.Get(SemanticOperationKeyWords.METADATA);
-/*                if (source != null)
-                {
-                    document.addInlink(source);
-                    // if there is a source, we should re-use that dispatch target.
-                    // e.g. search results from a search
-                    ArrayList<Continuation<DocumentClosure>> continuations = source.getOrConstructClosure().getContinuations();
-                    document.getOrConstructClosure().addContinuations(continuations);
-                }*/
+                //ParsedURL purl = (ParsedURL) getArgumentObject(SemanticActionNamedArguments.CONTAINER_LINK);
+                Document source = (Document)SemanticOperationHandler.SemanticOperationVariableMap.Get(SemanticOperationKeyWords.Metadata);
+
                 if (documentParser != null)
                 {
                     //document.queueDownload();
                 }
                 else
                 {
-                    //document.GetOrConstructClosure().RequestMetadata();
+                    document.GetOrConstructClosure().GetMetadata();
                 }
                 
             }
             return null;
         }
-	}
+    }
 }

@@ -12,52 +12,55 @@ using Simpl.Serialization.Attributes;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
+    /// <summary>
+    /// This class is the base class for semantic actions which can have nested semantic actions inside
+    /// them. Right now only FOREACH and IF semantic actions can have other semantic actions nested
+    /// inside them.
+    /// </summary>
+    [SimplInherit]
     public class NestedSemanticOperation : SemanticOperation
-	{
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplNoWrap]
-		[SimplCollection]
-		[SimplScope("semantic_action_translation_scope")]
+    {
+        /// <summary>
+        /// List of nested semantic actions.
+        /// </summary>
+        [SimplNoWrap]
+        [SimplCollection]
+        [SimplScope("semantic_action_translation_scope")]
         private List<SemanticOperation> nestedSemanticActionList;
 
         public NestedSemanticOperation()
-		{ }
+        {
+        }
 
         public List<SemanticOperation> NestedSemanticActionList
-		{
-			get{return nestedSemanticActionList;}
-			set{nestedSemanticActionList = value;}
-		}
+        {
+            get { return nestedSemanticActionList; }
+            set { nestedSemanticActionList = value; }
+        }
 
-	    public override String GetOperationName()
-	    {
-		    return null;
-	    }
+        public override string GetOperationName()
+        {
+            return null;
+        }
 
         public override void HandleError()
         {
         }
 
-        public override Object Perform(Object obj)
+        public override object Perform(object obj)
         {
             return null;
         }
 
         public override void SetNestedOperationState(String name, Object value)
-	    {
-		    foreach (SemanticOperation action in nestedSemanticActionList)
-		    {
+        {
+            foreach (SemanticOperation action in nestedSemanticActionList)
+            {
                 SemanticOperationHandler handler = SemanticOperationHandler;
                 action.SemanticOperationHandler = handler;
-			    handler.SetOperationState(action, name, value);
+	            handler.SetOperationState(action, name, value);
                 action.SetNestedOperationState(name, value);
-		    }
-	    }
-	}
+            }
+        }
+    }
 }

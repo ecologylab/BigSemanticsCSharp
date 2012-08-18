@@ -11,18 +11,18 @@ namespace ecologylabSemantics.ecologylab.semantics.actions
     {
         public static readonly String ConditionScope = "condition_scope";
 
-	    private static readonly	Type[] Classes = {
-		    typeof(Condition),
-		    typeof(AndCondition),
-		    typeof(OrCondition),
-		    typeof(NotCondition),
-		    typeof(NotNull),
-		    typeof(Null)
-	    };
+        private static readonly	Type[] Classes = {
+            typeof(Condition),
+            typeof(AndCondition),
+            typeof(OrCondition),
+            typeof(NotCondition),
+            typeof(NotNull),
+            typeof(Null)
+        };
 
-	    public static SimplTypesScope Get()
-	    {
-		    return SimplTypesScope.Get(ConditionScope, Classes);
-	    }
+        public static SimplTypesScope Get()
+        {
+            return SimplTypesScope.Get(ConditionScope, Classes);
+        }
     }
 }

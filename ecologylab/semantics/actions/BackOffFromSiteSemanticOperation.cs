@@ -13,63 +13,43 @@ using ecologylabSemantics.ecologylab.semantics.actions;
 
 namespace ecologylab.semantics.actions 
 {
-	/// <summary>
-	/// missing java doc comments or could not find the source file.
-	/// </summary>
-	[SimplInherit]
-	[SimplTag("back_off_from_site")]
+    /// <summary>
+    /// By default, this method prevent the InfoCollector from collecting information from the specified
+    /// domain, by calling the reject() method of the InfoCollector. You specify the unwanted domain by
+    /// providing the "domain" semantic argument in the meta-metadata xml codes.
+    /// </summary>
+    [SimplInherit]
+    [SimplTag("back_off_from_site")]
     public class BackOffFromSiteSemanticOperation : SemanticOperation 
-	{
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[SimplScalar]
-		private String domain;
+    {
+        /// <summary>
+        /// missing java doc comments or could not find the source file.
+        /// </summary>
+        [SimplScalar]
+        private String domain;
 
         public BackOffFromSiteSemanticOperation()
-		{ }
+        { }
 
-		public String Domain
-		{
-			get{return domain;}
-			set{domain = value;}
-		}
+        public string Domain
+        {
+            get { return domain; }
+            set{ domain = value; }
+        }
 
-	    public override String GetOperationName()
-	    {
-		    return SemanticOperationStandardMethods.BACK_OFF_FROM_SITE;
-	    }
+        public override string GetOperationName()
+        {
+            return SemanticOperationStandardMethods.BackOffFromSite;
+        }
         
 
-	    public override void HandleError()
-	    {
-	    }
+        public override void HandleError()
+        {
+        }
 
-        public override Object Perform(Object obj)
+        public override object Perform(object obj)
         {
             return null;
         }
-
-/*	    public Object Perform(Object obj)
-	    {
-		    if (domain != null)
-		    {
-			    SemanticsSite site	= sessionScope.MetaMetadataRepository.GetSite(domain);
-			    site.etAbnormallyLongNextAvailableTime();
-			
-    //			debug("\t\t\tStep 2: Adding site to rejects");
-    //			infoCollector.reject(domain);
-	
-			    debug("\t\t\tStep 2: Removing from current download Queues");
-			    sessionScope.getDownloadMonitors().killSite(site);
-	
-			    debug("\t\t\tStep 3: Removing from candidate pools");
-			    Crawler crawler	= sessionScope.getCrawler();
-			    if (crawler != null)
-				    crawler.killSite(site);
-		    }
-		    return null;
-	    }
-*/
-	}
+    }
 }
