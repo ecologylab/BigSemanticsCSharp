@@ -69,26 +69,26 @@ namespace ecologylab.semantics.metadata.builtins
             AdditionalLocations.Add(additionalLocation);
         }
 
-        ///<summary>
-	    /// Get the old location from this.
-	    /// Set the location of this to the newLocation.
+        /// <summary>
+        /// Get the old location from this.
+        /// Set the location of this to the newLocation.
         /// Add a mapping in the GlobalCollection from newLocation to this.
-	    /// Add the old location for this as an additionalLocation for this.
-	    ///</summary>
-	    public void ChangeLocation(ParsedUri newLocation)
-	    {
-		    if (newLocation != null)
-		    {
+        /// Add the old location for this as an additionalLocation for this.
+        /// </summary>
+        public void ChangeLocation(ParsedUri newLocation)
+        {
+            if (newLocation != null)
+            {
                 MetadataParsedURL origLocation = Location;
-			    if (!origLocation.Value.Equals(newLocation))
-			    {
-				    Location = new MetadataParsedURL(newLocation);
+                if (!origLocation.Value.Equals(newLocation))
+                {
+                    Location = new MetadataParsedURL(newLocation);
                     if (SemanticsSessionScope != null)
                         SemanticsSessionScope.GlobalDocumentCollection.AddDocument(this, newLocation);
                     AddAdditionalLocation(origLocation);
-			    }
-		    }
-	    }
+                }
+            }
+        }
 
 
         public void InheritValues(Document oldDocument)
@@ -127,40 +127,49 @@ namespace ecologylab.semantics.metadata.builtins
         {
             get
             {
-                ParsedUri result	    = Location.Value;
-		        ParsedUri localLocation	= LocalLocation.Value;
-		        if (localLocation != null)
-		        {
-			        FileInfo localFile	= localLocation.File;
-			        if (localFile.Exists)
-				        result	= localLocation;
-		        }
-		        return result;
+                ParsedUri result = Location.Value;
+                ParsedUri localLocation = LocalLocation.Value;
+                if (localLocation != null)
+                {
+                    FileInfo localFile = localLocation.File;
+                    if (localFile.Exists)
+                        result = localLocation;
+                }
+                return result;
             }
         }
 
-        ///<summary> 
-        /// @return A closure for this, or null, if this is not fit to be parsed.
-        ///</summary>
-        public DocumentClosure GetOrConstructClosure(MetadataServicesClient client, SemanticsGlobalCollection<Document> downloadedDocumentCollection)
-	    {
-		    DocumentClosure result	= this.documentClosure;
-		    if (result == null)
-		    {
-				result	= this.documentClosure;
-				if (result == null)
-				{
+        /// <summary>
+        /// Gets or constructs a DocumentClosure for this document
+        /// </summary>
+        /// <param name="client">
+        /// if the documentClosure field is null then creates a new one and sets
+        /// its MetadataServicesClient field to param client 
+        /// </param>
+        /// <returns>
+        /// A closure for this, or null, if this is not fit to be parsed.
+        /// </returns>
+        public DocumentClosure GetOrConstructClosure(MetadataServicesClient client)
+        {
+            DocumentClosure result = this.documentClosure;
+            if (result == null)
+            {
+                result = this.documentClosure;
+                if (result == null)
+                {
+                    result = ConstructClosure(client);
+                    this.documentClosure = result;
+                }
+            }
+            return result;
+        }
 
-                    result = ConstructClosure(client, downloadedDocumentCollection);
-					this.documentClosure = result;
-				}
-		    }
-		    return result;
-	    }
-
-        ///<summary> 
-        /// @return A closure for this, or null, if this is not fit to be parsed.
-        ///</summary>
+        /// <summary>
+        /// Gets or constructs a DocumentClosure for this document
+        /// </summary>
+        /// <returns>
+        /// A closure for this, or null, if this is not fit to be parsed.
+        /// </returns>
         public DocumentClosure GetOrConstructClosure()
         {
             DocumentClosure result = this.documentClosure;
@@ -169,8 +178,8 @@ namespace ecologylab.semantics.metadata.builtins
                 result = this.documentClosure;
                 if (result == null)
                 {
-                    //					if (semanticInlinks == null)
-                    //						semanticInlinks	= new SemanticInLinks();
+                    /*if (semanticInlinks == null)
+                    semanticInlinks = new SemanticInLinks();*/
 
                     result = ConstructClosure();
                     this.documentClosure = result;
@@ -179,14 +188,27 @@ namespace ecologylab.semantics.metadata.builtins
             return result == null/* || result.downloadStatus == DownloadStatus.RECYCLED*/ ? null : result;
         }
 
-
-        public DocumentClosure ConstructClosure(MetadataServicesClient client, SemanticsGlobalCollection<Document> downloadedDocumentCollection)
+        /// <summary>
+        /// constructs a DocumentClosure for this document
+        /// </summary>
+        /// <param name="client">
+        /// sets the new DocumentClosures MetadataServicesClient field to param client 
+        /// </param>
+        /// <returns>
+        /// A closure for this document
+        /// </returns>
+        public DocumentClosure ConstructClosure(MetadataServicesClient client)
         {
             return new DocumentClosure(SemanticsSessionScope , this)
-                {MetadataServicesClient = client,
-                GlobalDocumentCollection = downloadedDocumentCollection};
+                { MetadataServicesClient = client };
         }
 
+        /// <summary>
+        /// constructs a DocumentClosure for this document
+        /// </summary>
+        /// <returns>
+        /// A closure for this document
+        /// </returns>
         public DocumentClosure ConstructClosure()
         {
             return new DocumentClosure(SemanticsSessionScope, this);

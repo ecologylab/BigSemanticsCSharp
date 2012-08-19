@@ -10,6 +10,10 @@ using ecologylab.semantics.metadata.scalar.types;
 
 namespace UnitTests
 {
+    /// <summary>
+    /// ported from Java project simplTranslators, source folder 'test', 
+    /// class ecologylab.semantics.compiler.TestNewMetaMetadataCompiler
+    /// </summary>
     [TestClass]
     public class ArticlesInheritanceRelationships
     {
@@ -23,8 +27,7 @@ namespace UnitTests
             MetaMetadataRepository repository = MetaMetadataRepositoryLoader.ReadDirectoryRecursively(
                 "../../../UnitTests/Data/TestRepository",
                 mmdTScope,
-                metadataTranslationScope
-                );
+                metadataTranslationScope);
 
             repository.TraverseAndInheritMetaMetadata();
 

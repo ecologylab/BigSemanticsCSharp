@@ -17,6 +17,10 @@ namespace UnitTests
 
     using ecologylab.semantics.services.messages;
 
+    /// <summary>
+    /// Test the comunication with the Semantic Service using OODSS and the functionality of
+    /// MetadataServicesClient class. 
+    /// </summary>
     [TestClass]
     public class OODSSTests
     {

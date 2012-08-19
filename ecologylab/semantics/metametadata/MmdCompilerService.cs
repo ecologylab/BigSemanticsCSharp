@@ -6,20 +6,19 @@ using Simpl.Serialization;
 
 namespace ecologylab.semantics.metametadata 
 {
-    ///<summary>
+    /// <summary>
     /// Make it possible for MetaMetadataField objects to use compiler services.
-    /// 
     /// @author quyin
-    ///</summary>
+    /// </summary>
     public interface MmdCompilerService
     {
 
-	void AddGlobalDependency(String name);
+    void AddGlobalDependency(String name);
 
-	void AddCurrentClassDependency(ClassDescriptor dependency);
+    void AddCurrentClassDependency(ClassDescriptor dependency);
 
-	void AddLibraryTScopeDependency(String name);
-	
+    void AddLibraryTScopeDependency(String name);
+
 //	void appendGenericTypeVarParameterizations(Appendable appendable, Collection<MmdGenericTypeVar> mmdGenericTypeVars, MetaMetadataRepository repository);
     }
 }

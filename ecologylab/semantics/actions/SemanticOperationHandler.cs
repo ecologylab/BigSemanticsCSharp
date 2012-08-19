@@ -219,7 +219,7 @@ namespace ecologylab.semantics.actions
             catch (Exception e)
             {
                 if (e is SemanticOperationExecutionException)
-                    throw e;
+                    throw ;
                 throw new SemanticOperationExecutionException(e, operation, semanticOperationVariableMap);
             }
         }

@@ -10,8 +10,14 @@ using ecologylab.collections;
 
 namespace ecologylab.semantics.services.messages
 {
+    /// <summary>
+    /// The metadata response that is received from the semantic service after a request message from the client.
+    /// </summary>
     public class MetadataResponse : ResponseMessage
     {
+        /// <summary>
+        /// The metadata received from the semantic service for the requested uri
+        /// </summary>
         [SimplComposite]
         [SimplScope(SemanticNames.RepositoryMetadataTranslations/*"meta-metadata-compiler-tscope"*/)]
         private Document metadata;

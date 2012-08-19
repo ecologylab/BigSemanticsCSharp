@@ -15,6 +15,10 @@ using ecologylab.semantics.collecting;
 
 namespace ecologylab.semantics.services
 {
+    /// <summary>
+    /// This class encapsulates the comunication and the process to get the metadata from 
+    /// a Semantic Service using a OODSSClient
+    /// </summary>
     public class MetadataServicesClient
     {
         private readonly OODSSClient _metadataClient;
@@ -32,11 +36,10 @@ namespace ecologylab.semantics.services
         }
 
         /// <summary>
-        /// 
-        /// Encapsulate the oodss client requst in a simpler GetMetadata call.
+        /// Encapsulate the oodss client requst in a simpler RequestMetadata call.
         /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
+        /// <param name="uri">the uri fot which to get the metadata</param>
+        /// <returns>the metadata received from the Semantic Service </returns>
         public async Task<Document> RequestMetadata(ParsedUri uri)
         {
             Document result = null;

@@ -9,8 +9,14 @@ using ecologylab.collections;
 
 namespace ecologylab.semantics.services.messages
 {
+    /// <summary>
+    /// The metadata that is serialized and sent to the semantic service
+    /// </summary>
     public class MetadataRequest : RequestMessage
     {
+        /// <summary>
+        /// The url for which is wanted the metadata extracted by the semantic service and sent back to the client
+        /// </summary>
         [SimplScalar] private String url;
 
         public MetadataRequest()
