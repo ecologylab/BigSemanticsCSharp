@@ -52,16 +52,14 @@ namespace Ecologylab.Semantics.MetadataNS
 		
             FieldInfo thatField = this.Field;
 
-	        result = SemanticsPlatformSpecifics.Get().DeriveMmNameFromField(thatField);
-
-//            foreach (CustomAttributeData cad in thatField.CustomAttributes)
-//            {
-//                if (cad.Constructor.DeclaringType == typeof(MmName))
-//                {
-//                    result = (String) cad.ConstructorArguments[0].Value;
-//                    break;
-//                }
-//            }
+            foreach (CustomAttributeData cad in thatField.CustomAttributes)
+            {
+                if (cad.AttributeType == typeof(MmName))
+                {
+                    result = (String) cad.ConstructorArguments[0].Value;
+                    break;
+                }
+            }
 
             if (result == null)
             {

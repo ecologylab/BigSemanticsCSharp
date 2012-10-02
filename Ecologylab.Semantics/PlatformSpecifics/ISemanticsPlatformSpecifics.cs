@@ -15,12 +15,6 @@ namespace Ecologylab.Semantics.PlatformSpecifics
         // check if a file is a dictionary
         bool FileIsADictionary(object file);
 
-        // derive mm name
-        string DeriveMmNameFromField(FieldInfo thatField);
-
-
-        object InvokeInstance(Type metadataClass, Type[] argClasses, object[] argObjects);
-
         FieldInfo GetFieldFromTypeWithName(Type type, String fieldName);
     }
 }

@@ -12,6 +12,7 @@ using System.IO;
 using Ecologylab.Semantics.Actions;
 using Ecologylab.Semantics.MetadataNS;
 using Ecologylab.Semantics.PlatformSpecifics;
+using Simpl.Fundamental.Generic;
 using Simpl.Serialization.Attributes;
 
 using Simpl.Serialization;
@@ -325,7 +326,9 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 	            Type[] argClasses = new Type[] { typeof(MetaMetadataCompositeField) };
 	            object[] argObjects = new object[] { this };
                 //result = metadataClass.GetConstructor(argClasses).Invoke(argObjects) as Metadata.Metadata;
-                result = SemanticsPlatformSpecifics.Get().InvokeInstance(metadataClass, argClasses, argObjects) as MetadataNS.Metadata;
+                
+                //result = SemanticsPlatformSpecifics.Get().InvokeInstance(metadataClass, argClasses, argObjects) as MetadataNS.Metadata;
+	            result = ReflectionTools.GetInstance<Metadata>(metadataClass, argObjects);
 	            // TODO handle mixins.
 	        }
 	        return result;
