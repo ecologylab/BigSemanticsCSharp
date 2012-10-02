@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Ecologylab.Semantics.MetadataNS;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -22,19 +23,9 @@ namespace Ecologylab.Semantics.PlatformSpecifics
             throw new NotImplementedException();
         }
 
-        public string DeriveMmNameFromField(FieldInfo thatField)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object InvokeInstance(Type metadataClass, Type[] argClasses, object[] argObjects)
-        {
-            throw new NotImplementedException();
-        }
-
         public FieldInfo GetFieldFromTypeWithName(Type type, string fieldName)
         {
-            throw new NotImplementedException();
+            return type.GetTypeInfo().GetDeclaredField(fieldName);
         }
     }
 }
