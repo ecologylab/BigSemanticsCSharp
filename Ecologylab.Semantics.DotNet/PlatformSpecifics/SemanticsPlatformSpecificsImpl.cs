@@ -32,28 +32,6 @@ namespace Ecologylab.Semantics.PlatformSpecifics
             throw new FileNotFoundException();
         }
 
-        public string DeriveMmNameFromField(FieldInfo thatField)
-        {
-            String result = null;
-            foreach (CustomAttributeData cad in thatField.CustomAttributes)
-            {
-                if (cad.Constructor.DeclaringType == typeof(MmName))
-                {
-                    result = (String)cad.ConstructorArguments[0].Value;
-                    break;
-                }
-            }
-            return result;
-        }
-
-        public object InvokeInstance(Type metadataClass, Type[] argClasses, object[] argObjects)
-        {
-            var constructorInfo = metadataClass.GetConstructor(argClasses);
-            if (constructorInfo != null)
-                return constructorInfo.Invoke(argObjects);
-            return null;
-        }
-
         public FieldInfo GetFieldFromTypeWithName(Type type, string fieldName)
         {
             return type.GetField(fieldName);
