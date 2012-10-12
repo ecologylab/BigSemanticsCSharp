@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Simpl.Fundamental.Collections;
 using Simpl.Fundamental.Generic;
 using Simpl.Fundamental.PlatformSpecifics;
@@ -23,110 +24,114 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 		    fileNameExts.Put(Format.Json, ".json");
 	    }
 
-        public static MetaMetadataRepository ReadDirectoryRecursively(String path, SimplTypesScope mmdTScope, SimplTypesScope metadataTScope)
+        public static async Task<MetaMetadataRepository> ReadDirectoryRecursively(MetaMetadataRepository mainRepo, String path, SimplTypesScope mmdTScope, SimplTypesScope metadataTScope)
         {
-            MetaMetadataRepository mainRepo = new MetaMetadataRepository
-                {
-                    RepositoryByName = new Dictionary<string, MetaMetadata>(),
-                    PackageMmdScopes = new Dictionary<string, MultiAncestorScope<MetaMetadata>>()
-                };
-
             Stack<string> stack = new Stack<string>();
             stack.Push(path);
             while(stack.Count > 0)
             {
                 string dir = stack.Pop();
-                Debug.WriteLine("Looking in : "  + dir);
+                Debug.WriteLine("Looking in : " + dir);
                 //String[] files = Directory.GetFiles(dir, "*.xml");
-                String[] files = FundamentalPlatformSpecifics.Get().GetFilesFromDirectory(dir, "*.xml");
-                foreach (String file in files)
+                string[] files = await FundamentalPlatformSpecifics.Get().GetFilesFromDirectory(dir, ".xml");
+                foreach (string file in files)
                 {
-                    MetaMetadataRepository thatRepo = ReadRepository(file, mmdTScope, metadataTScope, mainRepo);
+                    MetaMetadataRepository thatRepo = await ReadRepository(file, mmdTScope, metadataTScope, mainRepo);
                     if (thatRepo != null)
                         mainRepo.IntegrateRepository(thatRepo);
+
+                    //string[] directories = Directory.GetDirectories(dir);
+                    //                                           string[] directories = await FundamentalPlatformSpecifics.Get().GetDirectoriesFromDirectory(dir);
+                    //                                           foreach (
+                    //                                                    string innerDir in directories.Where(
+                    //                                                                                          innerDir =>
+                    //                                                                                            !innerDir.Contains(".svn")))
+                    //                                                                                    stack.Push(innerDir);
+                    //                                                                            });
                 }
-                //string[] directories = Directory.GetDirectories(dir);
-                string[] directories = FundamentalPlatformSpecifics.Get().GetDirectoriesFromDirectory(dir);
-                foreach (string innerDir in directories.Where(innerDir => !innerDir.Contains(".svn")))
-                    stack.Push(innerDir);
+                
             }
+
             return mainRepo;
         }
 
-        public static MetaMetadataRepository ReadRepository(String filename, SimplTypesScope mmdTScope, SimplTypesScope metadataTScope, MetaMetadataRepository mainRepo)
+        public static async Task<MetaMetadataRepository> ReadRepository(string filename, SimplTypesScope mmdTScope, SimplTypesScope metadataTScope, MetaMetadataRepository mainRepo)
         {
             MetaMetadataRepository repo = null;
             Debug.WriteLine("MetaMetadataRepository Reading:\t\t" + filename);
 
             try
             {
-                repo = (MetaMetadataRepository)mmdTScope.DeserializeFile(filename, Format.Xml);
-                repo.MetadataTScope = metadataTScope;
-                repo.File = filename;
-                repo.InitializeSuffixAndMimeDicts();
-
-                if (repo.RepositoryByName == null)
-                    return repo;
-
-                foreach (var repoEntry in repo.RepositoryByName)
+                repo = await mmdTScope.DeserializeFile(filename, Format.Xml) as MetaMetadataRepository;
+                if (repo != null)
                 {
-                    MetaMetadata mmd = repoEntry.Value;
-                    string mmdName = repoEntry.Key;
+                    repo.MetadataTScope = metadataTScope;
+                    repo.File = filename;
+                    repo.InitializeSuffixAndMimeDicts();
 
-                    //mmd.File = new FileInfo(filename);
-                    mmd.File = FundamentalPlatformSpecifics.Get().CreateFile(filename);
-                    mmd.Parent = mainRepo;
-                    mmd.Repository = mainRepo;
+                    if (repo.RepositoryByName == null)
+                        return repo;
 
-                    string packageName = mmd.PackageName ?? repo.PackageName;
-                    if (packageName == null)
-                        throw new MetaMetadataException("No Package Name Specified For " + mmd);
-                    mmd.PackageName = packageName;
-
-                    MultiAncestorScope<MetaMetadata> packageMmdScopes;
-                    mainRepo.PackageMmdScopes.TryGetValue(mmd.PackageName, out packageMmdScopes);
-                    if(packageMmdScopes == null)
+                    foreach (var repoEntry in repo.RepositoryByName)
                     {
-                        packageMmdScopes = new MultiAncestorScope<MetaMetadata>(new[] {mainRepo.RepositoryByName});
-                        mainRepo.PackageMmdScopes.Put(packageName, packageMmdScopes);
-                    }
+                        MetaMetadata mmd = repoEntry.Value;
+                        string mmdName = repoEntry.Key;
 
-                    MetaMetadata existingMmd;
-                    switch (mmd.Visibility)
-                    {
-                        case Visibility.GLOBAL:
+                        //mmd.File = new FileInfo(filename);
+                        mmd.File = FundamentalPlatformSpecifics.Get().CreateFile(filename);
+                        mmd.Parent = mainRepo;
+                        mmd.Repository = mainRepo;
+
+                        string packageName = mmd.PackageName ?? repo.PackageName;
+                        if (packageName == null)
+                            throw new MetaMetadataException("No Package Name Specified For " + mmd);
+                        mmd.PackageName = packageName;
+
+                        MultiAncestorScope<MetaMetadata> packageMmdScopes;
+                        mainRepo.PackageMmdScopes.TryGetValue(mmd.PackageName, out packageMmdScopes);
+                        if(packageMmdScopes == null)
+                        {
+                            packageMmdScopes = new MultiAncestorScope<MetaMetadata>(new[] {mainRepo.RepositoryByName});
+                            mainRepo.PackageMmdScopes.Put(packageName, packageMmdScopes);
+                        }
+
+                        MetaMetadata existingMmd;
+                        switch (mmd.Visibility)
+                        {
+                            case Visibility.GLOBAL:
                             
-                            mainRepo.RepositoryByName.TryGetValue(mmdName, out existingMmd);
+                                mainRepo.RepositoryByName.TryGetValue(mmdName, out existingMmd);
 
-                            if (existingMmd != null && existingMmd != mmd)
-                                throw new MetaMetadataException("MMD already exists: " + mmdName + " in " + filename);
+                                if (existingMmd != null && existingMmd != mmd)
+                                    throw new MetaMetadataException("MMD already exists: " + mmdName + " in " + filename);
 
-                            mainRepo.RepositoryByName.Put(mmdName, mmd);
-                            break;
-                        case Visibility.PACKAGE:
-                            packageMmdScopes.TryGetValue(mmdName, out existingMmd);
+                                mainRepo.RepositoryByName.Put(mmdName, mmd);
+                                break;
+                            case Visibility.PACKAGE:
+                                packageMmdScopes.TryGetValue(mmdName, out existingMmd);
 
-                            if (existingMmd != null && existingMmd != mmd)
-                                throw new MetaMetadataException("MMD already exists: " + mmdName + " in " + filename);
+                                if (existingMmd != null && existingMmd != mmd)
+                                    throw new MetaMetadataException("MMD already exists: " + mmdName + " in " + filename);
 
-                            packageMmdScopes.Put(mmdName, mmd);
-                            break;
+                                packageMmdScopes.Put(mmdName, mmd);
+                                break;
+                        }
                     }
-                }
 
-                foreach (MetaMetadata metaMetadata in repo.RepositoryByName.Values)
-                {
-                    if (metaMetadata.PackageName == null)
+                    foreach (MetaMetadata metaMetadata in repo.RepositoryByName.Values)
                     {
-                        Debug.WriteLine("No Package name defined for: " + metaMetadata.Name);
-                        continue;
+                        if (metaMetadata.PackageName == null)
+                        {
+                            Debug.WriteLine("No Package name defined for: " + metaMetadata.Name);
+                            continue;
+                        }
+                        MultiAncestorScope<MetaMetadata> packageMmdScope;
+                        mainRepo.PackageMmdScopes.TryGetValue(metaMetadata.PackageName, out packageMmdScope);
+                        metaMetadata.MmdScope = packageMmdScope;
                     }
-                    MultiAncestorScope<MetaMetadata> packageMmdScope;
-                    mainRepo.PackageMmdScopes.TryGetValue(metaMetadata.PackageName, out packageMmdScope);
-                    metaMetadata.MmdScope = packageMmdScope;
-                }
 
-                mainRepo.IntegrateRepository(repo);
+                    mainRepo.IntegrateRepository(repo);
+                }
             }
             catch (Exception e)
             {

@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Ecologylab.Semantics.MetadataNS.Builtins;
 using Ecologylab.Semantics.Namesandnums;
 using Ecologylab.Collections;
+using Simpl.Fundamental.Collections;
 using Simpl.Fundamental.PlatformSpecifics;
 using Simpl.Serialization;
 
@@ -26,6 +28,8 @@ namespace Ecologylab.Semantics.MetaMetadataNS
         protected object MetametadataRepositoryDirFile;
 
         protected object MetametadataSitesFile;
+
+        public event EventHandler<EventArgs> RepositoryLoaded;
 
         /**
          * 
@@ -69,7 +73,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
          * 
          * @param _metadataTranslationScope
          */
-        public MetaMetadataRepositoryInit(SimplTypesScope metadataTranslationScope, string repoLocation)
+        public MetaMetadataRepositoryInit(SimplTypesScope metadataTranslationScope, string repoLocation, EventHandler<EventArgs> onCompleted)
         {
             //		    if (SingletonApplicationEnvironment.isInUse() && !SingletonApplicationEnvironment.runningInEclipse())
             //		    {
@@ -81,47 +85,61 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             //			    METAMETADATA_REPOSITORY_DIR_FILE 	= Assets.getAsset(mmAssetsRoot, null, "repository", null, !USE_ASSETS_CACHE, SemanticsAssetVersions.METAMETADATA_ASSET_VERSION);
             //		    }
             //		    else
-            {
-                //MetametadataRepositoryDirFile = new FileInfo(repoLocation);
-                MetametadataRepositoryDirFile = FundamentalPlatformSpecifics.Get().CreateFile(repoLocation);
-            }
 
-            this._metadataTranslationScope = metadataTranslationScope;
+            MetametadataRepositoryDirFile = repoLocation;
+
+            this._metadataTranslationScope = metadataTranslationScope; 
             Debug.WriteLine("\t\t-- Reading meta_metadata from " + MetametadataRepositoryDirFile);
 
-            META_METADATA_REPOSITORY = MetaMetadataRepositoryLoader.ReadDirectoryRecursively(
-                repoLocation,
-                MetaMetadataTranslationScope.Get(),
-                metadataTranslationScope
-                );
+            if (onCompleted != null)
+                this.RepositoryLoaded += onCompleted;
 
-            DocumentMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.DocumentTag);
-            PdfMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.PdfTag);
-            SearchMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.SearchTag);
-            ImageMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.ImageTag);
-            DebugMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.DebugTag);
-            ImageClippingMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.ImageClippingTag);
+            META_METADATA_REPOSITORY = new MetaMetadataRepository
+                {
+                    RepositoryByName = new Dictionary<string, MetaMetadata>(),
+                    PackageMmdScopes = new Dictionary<string, MultiAncestorScope<MetaMetadata>>()
+                };
 
-            _metaMetadataRepository          = META_METADATA_REPOSITORY;
+            _metaMetadataRepository = META_METADATA_REPOSITORY;
 
-            _generatedDocumentTranslations   = metadataTranslationScope.GetAssignableSubset(
+            _generatedDocumentTranslations = metadataTranslationScope.GetAssignableSubset(
                                                 SemanticNames.RepositoryDocumentTranslations,
-                                                typeof (Document));
-            _generatedMediaTranslations      = metadataTranslationScope.GetAssignableSubset(
+                                                typeof(Document));
+            _generatedMediaTranslations = metadataTranslationScope.GetAssignableSubset(
                                                 SemanticNames.RepositoryMediaTranslations,
-                                                typeof (ClippableDocument<>));
-            _repositoryClippingTranslations  = metadataTranslationScope.GetAssignableSubset(
+                                                typeof(ClippableDocument<>));
+            _repositoryClippingTranslations = metadataTranslationScope.GetAssignableSubset(
                                                 SemanticNames.RepositoryClippingTranslations,
-                                                typeof (Clipping));
+                                                typeof(Clipping));
 
-            _noAnnotationsScope              = metadataTranslationScope.GetSubtractedSubset(
+            _noAnnotationsScope = metadataTranslationScope.GetSubtractedSubset(
                                                 SemanticNames.RepositoryNoAnnotationsTypeScope,
                                                 typeof(Annotation));
 
-            _generatedMediaTranslations.AddTranslation(typeof(Clipping));
-            _generatedMediaTranslations.AddTranslation(typeof(Annotation));
+            DocumentMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.DocumentTag);
+                                          PdfMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.PdfTag);
+                                          SearchMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.SearchTag);
+                                          ImageMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.ImageTag);
+                                          DebugMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.DebugTag);
+                                          ImageClippingMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.ImageClippingTag);
 
-            META_METADATA_REPOSITORY.BindMetadataClassDescriptorsToMetaMetadata(metadataTranslationScope);
+                                          _generatedMediaTranslations.AddTranslation(typeof(Clipping));
+                                          _generatedMediaTranslations.AddTranslation(typeof(Annotation));
+               
+        }
+
+        public async void LoadRepositoryAsync()
+        {
+            MetaMetadataRepository mainRepo = await MetaMetadataRepositoryLoader.ReadDirectoryRecursively(
+                META_METADATA_REPOSITORY,
+                MetametadataRepositoryDirFile as string,
+                MetaMetadataTranslationScope.Get(),
+                _metadataTranslationScope
+                );
+
+            mainRepo.BindMetadataClassDescriptorsToMetaMetadata(_metadataTranslationScope);
+            if (RepositoryLoaded != null)
+                RepositoryLoaded(mainRepo, new EventArgs());
         }
 
         #region Properties

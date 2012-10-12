@@ -37,7 +37,7 @@ namespace Ecologylab.Semantics.Collecting
             return doc;
         }
 
-        public SemanticsGlobalScope(SimplTypesScope metadataTranslationScope, string repoLocation) : base(metadataTranslationScope, repoLocation)
+        public SemanticsGlobalScope(SimplTypesScope metadataTranslationScope, string repoLocation, EventHandler<EventArgs> onCompleted) : base(metadataTranslationScope, repoLocation, onCompleted)
         {
             _globalDocumentCollection = new SemanticsGlobalCollection<Document>();
         }

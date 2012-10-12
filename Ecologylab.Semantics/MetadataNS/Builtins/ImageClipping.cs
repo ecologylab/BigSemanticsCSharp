@@ -2,6 +2,7 @@ using Ecologylab.Semantics.MetaMetadataNS;
 using Ecologylab.Semantics.MetadataNS.Builtins.Declarations;
 using Ecologylab.Semantics.PlatformSpecifics;
 using Simpl.Fundamental.Generic;
+using Simpl.Fundamental.Net;
 using Simpl.Serialization;
 using Simpl.Serialization.Attributes;
 using System;
@@ -34,15 +35,15 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
             }
         }
 
-        public object ImageLocation
+        public ParsedUri ImageLocation
         {
             get
             {
-                object result = null;       // System.Windows.Media.ImageSource || Windows.UI.Xaml.Media.ImageSource
+                ParsedUri result = null;       // System.Windows.Media.ImageSource || Windows.UI.Xaml.Media.ImageSource
                 if (this.Media != null)
                 {
-                    String uri = (this.Media.LocalLocation != null) ? this.Media.LocalLocation.Value.AbsoluteUri : this.Media.Location.Value.AbsoluteUri;
-                    result = SemanticsPlatformSpecifics.Get().CreateNewBitmapImageFromUri(new Uri(uri));
+                    result = new ParsedUri((this.Media.LocalLocation != null) ? this.Media.LocalLocation.Value.AbsoluteUri : this.Media.Location.Value.AbsoluteUri);
+                    //result = SemanticsPlatformSpecifics.Get().CreateNewBitmapImageFromUri(new Uri(uri));
                 }
                 return result;
             }

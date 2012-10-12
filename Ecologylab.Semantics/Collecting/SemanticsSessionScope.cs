@@ -26,12 +26,12 @@ namespace Ecologylab.Semantics.Collecting
 
         public delegate void DispatcherDelegate(DocumentClosure closure);
 
-        public SemanticsSessionScope(SimplTypesScope metadataTranslationScope, string repoLocation)
-            : base(metadataTranslationScope, repoLocation)
+        public SemanticsSessionScope(SimplTypesScope metadataTranslationScope, string repoLocation, EventHandler<EventArgs> onCompleted)
+            : base(metadataTranslationScope, repoLocation, onCompleted)
         {
             DownloadMonitor = new DownloadMonitor();
 
-            MetadataServicesClient = new MetadataServicesClient(metadataTranslationScope, this);
+            //MetadataServicesClient = new MetadataServicesClient(metadataTranslationScope, this);
 
             SemanticsSessionScope.Get = this;
             
@@ -78,7 +78,7 @@ namespace Ecologylab.Semantics.Collecting
 //            var scope =
 //                await Task.Factory.StartNew(() => new SemanticsSessionScope(metadataTranslationScope, repoLocation));
 
-            var scope = await Task.Run(() => new SemanticsSessionScope(metadataTranslationScope, repoLocation));
+            var scope = await Task.Run(() => new SemanticsSessionScope(metadataTranslationScope, repoLocation, null));
             //This can be improved to pass the TaskCompletionSource, but a little synchronization logic is required.
 //            while (!WebCore.IsRunning)
 //            {
