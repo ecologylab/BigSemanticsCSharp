@@ -15,7 +15,7 @@ namespace Ecologylab.Semantics.PlatformSpecifics
     {
         public object CreateNewBitmapImageFromUri(Uri uri)
         {
-            return (ImageSource) new BitmapImage(uri);
+            return new BitmapImage(uri);
         }
 
         public bool FileIsADictionary(object file)
