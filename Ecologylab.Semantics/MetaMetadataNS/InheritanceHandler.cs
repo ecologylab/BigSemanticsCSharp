@@ -138,7 +138,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 		    if (field is MetaMetadataNestedField)
 		    {
 			    MetaMetadataNestedField nested = (MetaMetadataNestedField) field;
-			    result = nested.MmdScope.Get(mmdName);
+			    nested.MmdScope.TryGetValue(mmdName, out result);
 			    if (result != null)
 				    if (nameType != null && nameType.Length > 0)
 					    nameType[0] = NameType.MMD;

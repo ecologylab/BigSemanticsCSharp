@@ -301,7 +301,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
         protected virtual void InheritNonFieldElements(MetaMetadata inheritedMmd, InheritanceHandler inheritanceHandler)
         {
-            MmdScope = new MultiAncestorScope<MetaMetadata>(MmdScope, inheritedMmd.MmdScope);
+            MmdScope = new MmdScope(MmdScope, inheritedMmd.MmdScope);
         }
 
         protected virtual MetaMetadata FindOrGenerateInheritedMetaMetadata(MetaMetadataRepository repository, InheritanceHandler inheritanceHandler)
@@ -309,7 +309,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             MetaMetadata inheritedMmd = this.InheritedMmd;
             if (inheritedMmd == null)
             {
-                MultiAncestorScope<MetaMetadata> mmdScope = this.MmdScope;
+                MmdScope mmdScope = this.MmdScope;
                 String inheritedMmdName = Type ?? Name;
 
                 if (ExtendsAttribute != null)
@@ -391,7 +391,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                                                 Repository = Repository,
                                                 Visibility = Visibility.PACKAGE,
                                                 MmdScope =
-                                                    new MultiAncestorScope<MetaMetadata>(this.MmdScope,
+                                                    new MmdScope(this.MmdScope,
                                                                                          inheritedMmd.MmdScope)
                                             };
             if (SchemaOrgItemtype != null)

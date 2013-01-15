@@ -51,6 +51,9 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 		[SimplHints(new Hint[] {Hint.XmlAttribute})]
 		private Boolean trim;
 
+        [SimplScalar]
+        private bool normalizeText;
+
 		public FieldParserElement()
 		{ }
 

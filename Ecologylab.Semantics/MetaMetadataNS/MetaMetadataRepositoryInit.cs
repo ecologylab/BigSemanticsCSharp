@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Ecologylab.Semantics.MetadataNS.Builtins;
 using Ecologylab.Semantics.Namesandnums;
 using Ecologylab.Collections;
 using Simpl.Fundamental.Collections;
+using Simpl.Fundamental.Net;
 using Simpl.Fundamental.PlatformSpecifics;
 using Simpl.Serialization;
 
@@ -56,7 +58,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             return META_METADATA_REPOSITORY;
         }
 
-        private readonly MetaMetadataRepository _metaMetadataRepository;
+        private MetaMetadataRepository _metaMetadataRepository;
 
         private readonly SimplTypesScope _metadataTranslationScope;
 
@@ -94,14 +96,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             if (onCompleted != null)
                 this.RepositoryLoaded += onCompleted;
 
-            META_METADATA_REPOSITORY = new MetaMetadataRepository
-                {
-                    RepositoryByName = new Dictionary<string, MetaMetadata>(),
-                    PackageMmdScopes = new Dictionary<string, MultiAncestorScope<MetaMetadata>>()
-                };
-
-            _metaMetadataRepository = META_METADATA_REPOSITORY;
-
+            
             _generatedDocumentTranslations = metadataTranslationScope.GetAssignableSubset(
                                                 SemanticNames.RepositoryDocumentTranslations,
                                                 typeof(Document));
@@ -116,20 +111,25 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                                                 SemanticNames.RepositoryNoAnnotationsTypeScope,
                                                 typeof(Annotation));
 
-            DocumentMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.DocumentTag);
-                                          PdfMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.PdfTag);
-                                          SearchMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.SearchTag);
-                                          ImageMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.ImageTag);
-                                          DebugMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.DebugTag);
-                                          ImageClippingMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.ImageClippingTag);
+            
 
-                                          _generatedMediaTranslations.AddTranslation(typeof(Clipping));
-                                          _generatedMediaTranslations.AddTranslation(typeof(Annotation));
+            _generatedMediaTranslations.AddTranslation(typeof(Clipping));
+            _generatedMediaTranslations.AddTranslation(typeof(Annotation));
                
         }
 
         public async void LoadRepositoryAsync()
         {
+            META_METADATA_REPOSITORY = new MetaMetadataRepository
+            {
+                RepositoryByName = new Dictionary<string, MetaMetadata>(),
+                PackageMmdScopes = new Dictionary<string, MmdScope>()
+            };
+
+            _metaMetadataRepository = META_METADATA_REPOSITORY;
+
+            SetDefaultMetaMetadatas();
+
             MetaMetadataRepository mainRepo = await MetaMetadataRepositoryLoader.ReadDirectoryRecursively(
                 META_METADATA_REPOSITORY,
                 MetametadataRepositoryDirFile as string,
@@ -137,9 +137,42 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                 _metadataTranslationScope
                 );
 
-            mainRepo.BindMetadataClassDescriptorsToMetaMetadata(_metadataTranslationScope);
+            
+
+            BindAndCallback(mainRepo);
+        }
+
+
+        private void SetDefaultMetaMetadatas()
+        {
+            DocumentMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.DocumentTag);
+            PdfMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.PdfTag);
+            SearchMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.SearchTag);
+            ImageMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.ImageTag);
+            DebugMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.DebugTag);
+            ImageClippingMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.ImageClippingTag);
+        }
+
+        private void BindAndCallback(MetaMetadataRepository repository)
+        {
+            repository.BindMetadataClassDescriptorsToMetaMetadata(_metadataTranslationScope);
             if (RepositoryLoaded != null)
-                RepositoryLoaded(mainRepo, new EventArgs());
+                RepositoryLoaded(repository, new EventArgs());
+        }
+
+        public static async Task<MetaMetadataRepository> RequestMetaMetadataRepository(ParsedUri requestUri)
+        {
+            return await MetaMetadataTranslationScope.Get().DeserializeUri(requestUri) as MetaMetadataRepository;
+        }
+
+        public async void LoadRepositoryFromServiceAsync(ParsedUri serviceUri)
+        {
+            _metaMetadataRepository     = await RequestMetaMetadataRepository(serviceUri);
+            META_METADATA_REPOSITORY    = _metaMetadataRepository;
+
+            SetDefaultMetaMetadatas();
+            
+            BindAndCallback(META_METADATA_REPOSITORY);
         }
 
         #region Properties

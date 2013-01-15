@@ -116,7 +116,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
         private Dictionary<String, MetaMetadata> _repositoryBySuffix = new Dictionary<string, MetaMetadata>();
 
-        private Dictionary<string, MultiAncestorScope<MetaMetadata>> packageMmdScopes;
+        private Dictionary<string, MmdScope> packageMmdScopes;
 
         /// <summary>
         /// missing java doc comments or could not find the source file.
@@ -164,7 +164,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
         {
             this.MetadataTScope = metadataTScope;
 
-            TraverseAndInheritMetaMetadata();
+            //TraverseAndInheritMetaMetadata();
 
             // global metadata classes
             // use another copy because we may modify the scope during the process
@@ -186,12 +186,15 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                 AddToRepositoryByClassName(mmd);
                 //mmd.setUpLinkWith(this); //Note Implement linking.
             }
-            foreach (MultiAncestorScope<MetaMetadata> scope in this.PackageMmdScopes.Values)
+            if (PackageMmdScopes != null)
             {
-                foreach (MetaMetadata mmd in scope.Values)
+                foreach (MmdScope scope in this.PackageMmdScopes.Values)
                 {
-                    AddToRepositoryByClassName(mmd);
-                    //mmd.setUpLinkWith(this); //Note Implement linking.
+                    foreach (MetaMetadata mmd in scope.Values)
+                    {
+                        AddToRepositoryByClassName(mmd);
+                        //mmd.setUpLinkWith(this); //Note Implement linking.
+                    }
                 }
             }
 
@@ -701,7 +704,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             set { sites = value; }
         }
 
-        public Dictionary<string, MultiAncestorScope<MetaMetadata>> PackageMmdScopes
+        public Dictionary<string, MmdScope> PackageMmdScopes
         {
             get { return packageMmdScopes; }
             set { packageMmdScopes = value; }

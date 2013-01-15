@@ -138,7 +138,13 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 	    private String schemaOrgItemprop;
 
         [SimplScalar]
-	    private String fieldParserKey;
+        private String fieldParserKey;
+
+	    [SimplScalar] 
+        private String otherTags;
+
+        [SimplScalar]
+        private bool extractAsHtml;
 
         protected MetadataClassDescriptor metadataClassDescriptor;
 
@@ -157,13 +163,20 @@ namespace Ecologylab.Semantics.MetaMetadataNS
         /**
 	    * from which field this one inherits. could be null if this field is declared for the first time.
 	    */
+        [SimplComposite]
+        [SimplScope(NestedMetaMetadataFieldTypesScope.Name)]
+        [SimplWrap]
         private MetaMetadataField inheritedField = null;
 
+        [SimplScalar]
+        [MmDontInherit]
 	    protected bool inheritFinished;
 
         /**
          * in which meta-metadata this field is declared.
          */
+        [SimplComposite]
+        [MmDontInherit]
         private MetaMetadata declaringMmd = null;
 
         private MetadataFieldDescriptorProxy _fieldDescriptorProxy;
@@ -172,6 +185,10 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 	    [SimplMapKeyField("name")]
 	    [SimplNoWrap]
 	    protected MmdGenericTypeVarScope genericTypeVars;
+
+        [SimplScalar]
+        [MmDontInherit]
+        private bool usedForInlineMmdDef;
 
         public MetaMetadataRepository Repository { get; set; }
 

@@ -91,7 +91,6 @@ namespace Ecologylab.Semantics.Collecting
             return scope;
         }
 
-
         public static SemanticsSessionScope Get
         {
             get; set;

@@ -201,7 +201,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
     public override void DeserializationPostHook(TranslationContext translationContext)
     {
       int typeCode = this.GetFieldType();
-      if (typeCode == FieldTypes.CollectionScalar)
+      if (typeCode == FieldTypes.CollectionScalar || this.inheritFinished)
         return;
 
       String childCompositeName = ChildType ?? UNRESOLVED_NAME;

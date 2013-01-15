@@ -39,6 +39,10 @@ namespace Ecologylab.Semantics.MetaMetadataNS
         [SimplScalar]
 	    private Hint hint;
 
+	    [SimplScalar] 
+        [SimplTag("as_composite_scalar")] 
+        private bool compositeScalar;
+
 		public MetaMetadataScalarField()
 		{ }
 
