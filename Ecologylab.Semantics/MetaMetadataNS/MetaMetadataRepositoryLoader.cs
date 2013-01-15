@@ -78,7 +78,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                         string mmdName = repoEntry.Key;
 
                         //mmd.File = new FileInfo(filename);
-                        mmd.File = FundamentalPlatformSpecifics.Get().CreateFile(filename);
+                        mmd.File = await FundamentalPlatformSpecifics.Get().CreateFile(filename);
                         mmd.Parent = mainRepo;
                         mmd.Repository = mainRepo;
 
