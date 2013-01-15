@@ -156,7 +156,9 @@
     <Compile Include="MetaMetadataNS\MmdCompilerService.cs" />
     <Compile Include="MetaMetadataNS\MmdGenericTypeVar.cs" />
     <Compile Include="MetaMetadataNS\MmdGenericTypeVarScope.cs" />
+    <Compile Include="MetaMetadataNS\MmdScope.cs" />
     <Compile Include="MetaMetadataNS\MMSelectorType.cs" />
+    <Compile Include="MetaMetadataNS\NestedMetaMetadataFieldTypesScope.cs" />
     <Compile Include="MetaMetadataNS\Net\UserAgent.cs" />
     <Compile Include="MetaMetadataNS\RegexFilter.cs" />
     <Compile Include="MetaMetadataNS\RepositoryPatternEntry.cs" />

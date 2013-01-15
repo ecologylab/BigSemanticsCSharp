@@ -50,13 +50,16 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
         public static SimplTypesScope Get()
         {
-          SimplTypesScope semanticActionScope = SemanticOperationTranslationScope.Get();
-          SimplTypesScope conditionScope = SimplTypesScope.Get("condition_scope", conditionClasses);
-          SimplTypesScope mmdScope = SimplTypesScope.Get("meta_metadata", MetaMetadataFieldTranslationScope.Get(),
+            SimplTypesScope semanticActionScope = SemanticOperationTranslationScope.Get();
+            SimplTypesScope conditionScope = SimplTypesScope.Get("condition_scope", conditionClasses);
+            SimplTypesScope nestedFieldTypes = NestedMetaMetadataFieldTypesScope.Get();
+            SimplTypesScope mmdScope = SimplTypesScope.Get("meta_metadata", MetaMetadataFieldTranslationScope.Get(),
                                                          translations);
-          mmdScope.AddTranslations(semanticActionScope);
-          mmdScope.AddTranslations(conditionScope);
-          return mmdScope;
+            mmdScope.AddTranslations(semanticActionScope);
+            mmdScope.AddTranslations(conditionScope);
+            mmdScope.AddTranslations(nestedFieldTypes);
+
+            return mmdScope;
         }
     }
 }

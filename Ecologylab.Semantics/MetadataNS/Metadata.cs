@@ -10,6 +10,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Ecologylab.Semantics.MetadataNS.Builtins.Declarations;
 using Ecologylab.Semantics.MetaMetadataNS;
 using Ecologylab.Semantics.MetadataNS;
@@ -68,6 +69,8 @@ namespace Ecologylab.Semantics.MetadataNS
 	    private MetaMetadataCompositeField GetMetaMetadata()
         {
             MetaMetadataCompositeField mm = _metaMetadata;
+
+            //mm = await MetaMetadataTranslationScope.Get().Deserialize()
             if (_repository == null)
                 _repository = MetaMetadataRepositoryInit.getRepository();
 

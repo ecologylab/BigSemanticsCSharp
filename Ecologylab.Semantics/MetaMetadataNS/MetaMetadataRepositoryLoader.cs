@@ -87,11 +87,11 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                             throw new MetaMetadataException("No Package Name Specified For " + mmd);
                         mmd.PackageName = packageName;
 
-                        MultiAncestorScope<MetaMetadata> packageMmdScopes;
+                        MmdScope packageMmdScopes;
                         mainRepo.PackageMmdScopes.TryGetValue(mmd.PackageName, out packageMmdScopes);
                         if(packageMmdScopes == null)
                         {
-                            packageMmdScopes = new MultiAncestorScope<MetaMetadata>(new[] {mainRepo.RepositoryByName});
+                            packageMmdScopes = new MmdScope(mainRepo.RepositoryByName);
                             mainRepo.PackageMmdScopes.Put(packageName, packageMmdScopes);
                         }
 
@@ -125,7 +125,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                             Debug.WriteLine("No Package name defined for: " + metaMetadata.Name);
                             continue;
                         }
-                        MultiAncestorScope<MetaMetadata> packageMmdScope;
+                        MmdScope packageMmdScope;
                         mainRepo.PackageMmdScopes.TryGetValue(metaMetadata.PackageName, out packageMmdScope);
                         metaMetadata.MmdScope = packageMmdScope;
                     }

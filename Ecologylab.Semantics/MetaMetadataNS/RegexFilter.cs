@@ -32,6 +32,13 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 		[SimplHints(new Hint[] { Hint.XmlAttribute })]
 		private String replace;
 
+        [SimplScalar]
+        private bool normalizeText;
+
+        [SimplScalar]
+        [SimplHints(Hint.XmlAttribute)]
+        private int group;
+
 		public RegexFilter()
 		{ }
 

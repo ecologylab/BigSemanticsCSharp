@@ -20,21 +20,20 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 		        _nextMetadatas = firstMetadata.Mixins.GetEnumerator();
 	    }
 
-	    public override bool MoveNext() 
+	    public override bool MoveNext()
 	    {
-            if (base.MoveNext())
-                return true;
+	        bool result = false;
 
-            bool newMetadata = (_currentIterator == null && _firstIterator.Current == null) || 
-			    (_currentIterator != null && _currentIterator.Current == null); // && (currentIterator == firstIterator ) || ();
+            bool newMetadata = (_currentIterator == null && _firstIterator.Current == null) || (_currentIterator != null && _currentIterator.Current == null);
             if (newMetadata && _nextMetadatas != null)
             {
                 _nextMetadatas.MoveNext();
                 _currentMetadata = _nextMetadatas.Current;
-                return true;
             }
-            
-		    return false;
+
+	        result = base.MoveNext();
+
+	        return result;
 	    }
 	
 	    public MetadataNS.Metadata CurrentMetadata

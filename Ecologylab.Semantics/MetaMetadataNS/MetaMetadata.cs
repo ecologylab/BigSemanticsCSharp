@@ -271,7 +271,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                 }
                 if (inheritedMmdName == null)
                     throw new MetaMetadataException("no type/extends specified: " + this);
-                inheritedMmd = this.MmdScope.Get(inheritedMmdName);
+                inheritedMmd = this.MmdScope[inheritedMmdName];
                 if (inheritedMmd == null)
                     throw new MetaMetadataException("meta-metadata '" + inheritedMmdName + "' not found.");
                 InheritedMmd = inheritedMmd;
@@ -288,7 +288,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
 	    protected override String GetMetadataClassName()
         {
-            return this.PackageName + "." + GetMetadataClassSimpleName();
+            return this.CSharpPackageName + "." + GetMetadataClassSimpleName();
         }
 
         protected override string GetMetadataClassSimpleName()
@@ -303,8 +303,8 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                 // re-using existing type
                 // do not use this.type directly because we don't know if that is a definition or just re-using exsiting type
                 MetaMetadata inheritedMmd = InheritedMmd;
-                if (inheritedMmd == null)
-                    InheritMetaMetadata(null);//edit // currently, this should never happend because we call this method after inheritance process.
+//                if (inheritedMmd == null)
+//                    InheritMetaMetadata(null);//edit // currently, this should never happend because we call this method after inheritance process.
                 return inheritedMmd == null ? null : inheritedMmd.GetMetadataClassSimpleName();
             }
 	    }

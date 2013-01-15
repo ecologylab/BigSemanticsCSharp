@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 using Ecologylab.Semantics.MetadataNS;
 using Simpl.Fundamental.Collections;
 using Simpl.Fundamental.Generic;
@@ -54,12 +55,25 @@ namespace Ecologylab.Semantics.MetaMetadataNS
          * the mmd used by this nested field. corresponding attributes: (child_)type/extends. could be a
          * generated one for inline definitions.
          */
+        [SimplComposite]
+        [MmDontInherit]
         private MetaMetadata inheritedMmd;
 
         /**
          * should we generate a metadata class descriptor for this field. used by the compiler.
          */
-        private bool _isNewMetadataClass;
+        [SimplScalar]
+        [MmDontInherit]
+        private bool newMetadataClass;
+
+        [SimplComposite]
+        [MmDontInherit]
+        private MmdScope mmdScope;
+
+        [SimplScalar]
+        private String otherTags;
+
+
 
         private bool    mmdScopeTraversed;
         
@@ -123,6 +137,55 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
         protected abstract bool InheritMetaMetadataHelper(InheritanceHandler inheritanceHandler);
 
+        private static String csharpNSMetadata = "Ecologylab.Semantics.Metadata";
+        private static String csharpNSMetadataNS = "Ecologylab.Semantics.MetadataNS";
+        private static String csharpNSMetaMetadata = "Ecologylab.Semantics.Metametadata";
+        private static String csharpNSMetaMetadataNS = "Ecologylab.Semantics.MetaMetadataNS";
+        private static String csharpNSLibraryDot = "Ecologylab.Semantics.Generated.Library.";
+
+        private String _csharpPackageName;
+
+        public String CSharpPackageName
+        {
+            get
+            {
+                String result = _csharpPackageName;
+                if (result == null)
+                {
+                    //TODO implement StringBuilderUtils
+                    var sb = new StringBuilder(); //StringBuilderUtils.aquire();
+                    for (int i = 0; i < packageName.Length; ++i)
+                    {
+                        char c = packageName[i];
+                        char pc = i == 0 ? (char) 0 : packageName[i - 1];
+                        if (c != '_')
+                            sb.Append((i == 0 || pc == '.' || pc == '_') ? Char.ToUpper(c) : c);
+                    }
+                    result = sb.ToString();
+                    //StringBuilderUtils.release(sb);
+                    sb.Clear();
+                }
+
+                if (result.StartsWith(csharpNSMetadata)
+                    && !result.StartsWith(csharpNSMetadataNS))
+                {
+                    result = result.Replace(csharpNSMetadata, csharpNSMetadataNS);
+                }
+                else if (result.StartsWith(csharpNSMetaMetadata)
+                    && !result.StartsWith(csharpNSMetaMetadataNS))
+                {
+                    result = result.Replace(csharpNSMetaMetadata, csharpNSMetaMetadataNS);
+                }
+                else if (result.StartsWith(csharpNSLibraryDot))
+                {
+                    if (!result.EndsWith("NS"))
+                        result += "NS";
+                }
+
+                return result;
+            }
+        }
+
         public String PackageName
         {
             get { return packageName; }
@@ -165,8 +228,12 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             set { schemaOrgItemtype = value; }
         }
 
-	    public MultiAncestorScope<MetaMetadata> MmdScope
-        { get; set; }
+        public MmdScope MmdScope
+        {
+            get { return mmdScope; }
+            set { mmdScope = value; }
+        }
+
         public MetaMetadata InheritedMmd
         {
             get { return inheritedMmd; }
@@ -175,12 +242,12 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
         public virtual bool IsNewMetadataClass()
         {
-            return _isNewMetadataClass;
+            return newMetadataClass;
         }
 
         public void SetNewMetadataClass(bool b)
         {
-            _isNewMetadataClass = b;
+            newMetadataClass = b;
         }
 
         public bool MmdScopeTraversed
@@ -248,18 +315,18 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             MetadataClassDescriptor metadataCd = this.metadataClassDescriptor;
             if (metadataCd == null)
             {
-                this.InheritMetaMetadata(null); //edit
+                //this.InheritMetaMetadata(null); //edit
 
                 String metadataClassSimpleName = this.GetMetadataClassSimpleName();
                 // first look up by simple name, since package names for some built-ins are wrong
 
                 metadataCd =
-                    (MetadataClassDescriptor)metadataTScope.EntriesByClassSimpleName.Get(metadataClassSimpleName);
+                    (MetadataClassDescriptor)metadataTScope.GetClassDescriptorBySimpleName(metadataClassSimpleName);
                 if (metadataCd == null)
                 {
                     String metadataClassName = this.GetMetadataClassName();
 
-                    metadataCd = (MetadataClassDescriptor)metadataTScope.EntriesByClassName.Get(metadataClassName);
+                    metadataCd = (MetadataClassDescriptor)metadataTScope.GetClassDescriptorByClassName(metadataClassName);
                     if (metadataCd == null)
                     {
                         try
@@ -447,7 +514,12 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                 if (thisMmd == superMmd || thisMmd.IsDerivedFrom(superMmd))
                 {
                     MetadataClassDescriptor elementMetadataCD = thisMmd.GetMetadataClassDescriptor(metadataTScope);
-                    fdProxy.SetElementClassDescriptor(elementMetadataCD);
+                    if (elementMetadataCD != null)
+                        fdProxy.SetElementClassDescriptor(elementMetadataCD);
+                    else
+                    {
+                        Debug.WriteLine("can't bind FieldDescriptor because metadata class does not exist for: " + thisMmd.ToString());
+                    }
                 }
                 else
                 {
