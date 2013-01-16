@@ -11,9 +11,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UnitTests</RootNamespace>
     <AssemblyName>UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,10 +33,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AsyncCtpLibrary, Version=1.0.4107.18181, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.Practices.Prism, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -54,31 +55,51 @@
     <Compile Include="SemanticOperationTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MetaMetadataRepository\MetaMetadataRepository.csproj">
-      <Project>{D8BA7D48-F64D-46FA-B901-0D3906E6AD5C}</Project>
-      <Name>MetaMetadataRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.Fundamental\Simpl.Fundamental.csproj">
-      <Project>{9A755A5E-88AA-4000-A9A7-ABDED3193855}</Project>
-      <Name>Simpl.Fundamental</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.Serialization\Simpl.Serialization.csproj">
-      <Project>{2B7A3C03-D3F8-485D-9AA1-EDC9AB43E42D}</Project>
-      <Name>Simpl.Serialization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ecologylabGeneratedSemantics\ecologylabGeneratedSemantics.csproj">
-      <Project>{3121E696-14DE-4987-BCED-588E4AB9259F}</Project>
-      <Name>ecologylabGeneratedSemantics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ecologylabSemantics.csproj">
-      <Project>{3A67F507-1E77-4ED6-BD46-981E66D15F92}</Project>
-      <Name>ecologylabSemantics</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Data\InformationCompositionDeclarationExample.xml" />
     <Content Include="Data\InformationCompositionDeclarationUseAuthor.xml" />
     <Content Include="Data\TestRepository\testArticles.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.Fundamental.DotNet\Simpl.Fundamental.DotNet.csproj">
+      <Project>{cab84a50-f2bb-475d-875c-c928c0a206f8}</Project>
+      <Name>Simpl.Fundamental.DotNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.Fundamental\Simpl.Fundamental.csproj">
+      <Project>{10287dd6-0c07-4737-9469-0aa21b7723bf}</Project>
+      <Name>Simpl.Fundamental</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.OODSS.DotNet\Simpl.OODSS.DotNet.csproj">
+      <Project>{15834bb9-1743-40b3-a2ab-e5ce87fa2753}</Project>
+      <Name>Simpl.OODSS.DotNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.OODSS\Simpl.OODSS.csproj">
+      <Project>{4f3bf780-cc24-4eba-9238-5d99b83d1e27}</Project>
+      <Name>Simpl.OODSS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.Serialization.DotNet\Simpl.Serialization.DotNet.csproj">
+      <Project>{b3cf19e7-32c1-410a-950d-5b92850854e8}</Project>
+      <Name>Simpl.Serialization.DotNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.Serialization\Simpl.Serialization.csproj">
+      <Project>{16c61dd8-68b1-4509-8e18-6f7e80b605a3}</Project>
+      <Name>Simpl.Serialization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecologylabGeneratedSemantics\Ecologylab.Semantics.Generated.csproj">
+      <Project>{3121e696-14de-4987-bced-588e4ab9259f}</Project>
+      <Name>Ecologylab.Semantics.Generated</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ecologylab.Semantics.DotNet\Ecologylab.Semantics.DotNet.csproj">
+      <Project>{07773e05-51d2-4fa1-abcf-cfe76b449175}</Project>
+      <Name>Ecologylab.Semantics.DotNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ecologylab.Semantics.Test\Ecologylab.Semantics.Test.csproj">
+      <Project>{a061c654-59c2-4d8c-ac3e-ffe8cdcff946}</Project>
+      <Name>Ecologylab.Semantics.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ecologylab.Semantics\Ecologylab.Semantics.csproj">
+      <Project>{3a67f507-1e77-4ed6-bd46-981e66d15f92}</Project>
+      <Name>Ecologylab.Semantics</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
