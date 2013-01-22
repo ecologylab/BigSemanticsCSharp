@@ -37,8 +37,8 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                 foreach (string file in files)
                 {
                     MetaMetadataRepository thatRepo = await ReadRepository(file, mmdTScope, metadataTScope, mainRepo);
-                    if (thatRepo != null)
-                        mainRepo.IntegrateRepository(thatRepo);
+                    // if (thatRepo != null)
+                    //    mainRepo.IntegrateRepository(thatRepo);
 
                     //string[] directories = Directory.GetDirectories(dir);
                     //                                           string[] directories = await FundamentalPlatformSpecifics.Get().GetDirectoriesFromDirectory(dir);

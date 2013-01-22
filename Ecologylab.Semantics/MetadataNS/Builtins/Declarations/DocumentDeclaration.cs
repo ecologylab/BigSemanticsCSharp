@@ -32,7 +32,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 		/// The Title of the Document
 		/// </summary>
 		[SimplScalar]
-		[SimplHints(Hint.XmlLeaf)]
+		[SimplHints(new Hint[] {Hint.XmlLeaf})]
 		[SimplCompositeAsScalar]
 		private MetadataString title;
 
@@ -43,7 +43,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 		private MetadataParsedURL location;
 
 		[SimplScalar]
-		[SimplHints(Hint.XmlLeaf)]
+		[SimplHints(new Hint[] {Hint.XmlLeaf})]
 		[SimplOtherTags(new String[] {"abstract_field"})]
 		private MetadataString description;
 
