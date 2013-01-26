@@ -173,11 +173,12 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             InitializeRepositoryAndPerformBinding();
         }
 
-        public async void LoadRepositoryFromServiceAsync(ParsedUri serviceUri, object cacheFile)
+        public async void LoadRepositoryFromServiceAsync(ParsedUri serviceUri, object cacheFile = null)
         {
             _metaMetadataRepository     = await RequestMetaMetadataRepository(serviceUri);
 
-            SimplTypesScope.Serialize(_metaMetadataRepository, cacheFile, Format.Xml);
+            if (cacheFile != null)
+                SimplTypesScope.Serialize(_metaMetadataRepository, cacheFile, Format.Xml);
 
             InitializeRepositoryAndPerformBinding();
         }
