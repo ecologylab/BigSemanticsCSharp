@@ -116,6 +116,11 @@ namespace Ecologylab.Semantics.MetadataNS.Scalar.Types
 	    {
 	        throw new NotImplementedException();
 	    }
+
+        public override  ScalarType OperativeScalarType
+        {
+            get { return valueScalarType; }
+        }
 	}
 
 	public class MetadataStringScalarType : MetadataScalarType

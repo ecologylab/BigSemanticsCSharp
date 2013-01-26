@@ -165,13 +165,29 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             return await MetaMetadataTranslationScope.Get().DeserializeUri(requestUri) as MetaMetadataRepository;
         }
 
-        public async void LoadRepositoryFromServiceAsync(ParsedUri serviceUri)
+        public async void LoadRepositoryFromCache(object file)
+        {
+            _metaMetadataRepository =
+                await MetaMetadataTranslationScope.Get().Deserialize(file, Format.Xml) as MetaMetadataRepository;
+
+            InitializeRepositoryAndPerformBinding();
+        }
+
+        public async void LoadRepositoryFromServiceAsync(ParsedUri serviceUri, object cacheFile)
         {
             _metaMetadataRepository     = await RequestMetaMetadataRepository(serviceUri);
-            META_METADATA_REPOSITORY    = _metaMetadataRepository;
+
+            SimplTypesScope.Serialize(_metaMetadataRepository, cacheFile, Format.Xml);
+
+            InitializeRepositoryAndPerformBinding();
+        }
+
+        private void InitializeRepositoryAndPerformBinding()
+        {
+            META_METADATA_REPOSITORY = _metaMetadataRepository;
 
             SetDefaultMetaMetadatas();
-            
+
             BindAndCallback(META_METADATA_REPOSITORY);
         }
 

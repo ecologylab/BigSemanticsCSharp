@@ -54,7 +54,8 @@ namespace Ecologylab.Semantics.MetadataNS.Scalar.Types
 
         public override string Marshall(object instance, TranslationContext context = null)
         {
-            return instance.ToString();
+            var metadataScalarType = instance as MetadataScalarType;
+            return (metadataScalarType != null) ? metadataScalarType.OperativeScalarType.SimplName : instance.ToString();
         }
 
         public override bool SimplEquals(object left, object right)
