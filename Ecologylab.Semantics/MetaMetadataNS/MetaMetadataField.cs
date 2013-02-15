@@ -190,7 +190,28 @@ namespace Ecologylab.Semantics.MetaMetadataNS
         [MmDontInherit]
         private bool usedForInlineMmdDef;
 
-        public MetaMetadataRepository Repository { get; set; }
+	    private MetaMetadataRepository _metaMetadataRepository = null;
+
+	    public MetaMetadataRepository Repository
+	    {
+	        get
+	        {
+	            var result = _metaMetadataRepository;
+                if (result == null)
+                {
+                    var parent = this.Parent;
+                    while (parent != null && !(parent is MetaMetadataRepository))
+                    {
+                        parent = parent.Parent;
+                    }
+                    result = parent as MetaMetadataRepository;
+                    _metaMetadataRepository = result;
+                }
+
+	            return result;
+	        }
+            set { _metaMetadataRepository = value; }
+	    }
 
         #endregion
 

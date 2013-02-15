@@ -52,13 +52,13 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
             MetadataServicesClient = semanticsSessionScope.MetadataServicesClient;
         }
 
-        public void PerformDownload()
+        public async Task<Document> PerformDownload()
         {
             // change status
             lock (downloadStatusLock)
             {
                 if (!(DownloadStatus == DownloadStatus.QUEUED || DownloadStatus == DownloadStatus.UNPROCESSED))
-                    return ; // if not queued or unprocessed, it must either hasn't enter the queue or has already been processed.
+                    return Document; // if not queued or unprocessed, it must either hasn't enter the queue or has already been processed.
                 DownloadStatus = DownloadStatus.CONNECTING;
             }
 
@@ -86,7 +86,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
                 //Parser is responsible for setting result in the documentClosure.TaskCompletionSource
                 DocumentParser.Parse();
 
-                GetMetadata();
+                await GetMetadata();
 
                 // TODO after semantic actions
 
@@ -104,6 +104,8 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
 
             if (PURLConnection != null) PURLConnection.Recycle();
             PURLConnection = null;
+
+            return Document;
         }
 
         public void Connect()
@@ -200,7 +202,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
             }
         }
 
-        public async void GetMetadata()
+        public async Task<Document> GetMetadata()
         {
             if (this.DownloadStatus != DownloadStatus.RECEIVED)
             {
@@ -211,15 +213,17 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
                     this.Document = await this.MetadataServicesClient.RequestMetadata(Document.Location.Value);
 
                     this.DownloadStatus = DownloadStatus.RECEIVED;
-
-                    Continuations(this, new DocumentClosureEventArgs(this));
+                    if (Continuations != null)
+                        Continuations(this, new DocumentClosureEventArgs(this));
                 }
                 catch (Exception exception)
                 {
                     this.DownloadStatus = DownloadStatus.ERROR;
-                    Continuations(this, new DocumentClosureEventArgs(this, exception));
+                    if (Continuations != null)
+                        Continuations(this, new DocumentClosureEventArgs(this, exception));
                 }
             }
+            return this.Document;
         }
     }
 

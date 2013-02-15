@@ -33,5 +33,10 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
 		
 		    return result;
 	    }
+
+        public override bool IsImage
+        {
+            get { return true; }
+        }
 	}
 }

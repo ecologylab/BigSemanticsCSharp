@@ -433,7 +433,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
                 // process hide and shadows
                 HashSet<String> nonDisplayedFieldNames = NonDisplayedFieldNames;
-                if (thatChild.Hide)
+                if (thatChild.Hide && !"image".Equals(thatChild.Name))
                     nonDisplayedFieldNames.Add(thatChild.Name);
                 if (thatChild.Shadows != null)
                     nonDisplayedFieldNames.Add(thatChild.Shadows);

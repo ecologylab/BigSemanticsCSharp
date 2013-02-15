@@ -31,7 +31,7 @@ namespace Ecologylab.Semantics.Collecting
         {
             DownloadMonitor = new DownloadMonitor();
 
-            //MetadataServicesClient = new MetadataServicesClient(metadataTranslationScope, this);
+            MetadataServicesClient = new MetadataServicesClient(metadataTranslationScope, this);
 
             SemanticsSessionScope.Get = this;
             
@@ -58,17 +58,17 @@ namespace Ecologylab.Semantics.Collecting
             DocumentClosure closure = new DocumentClosure(this, doc)
                                           {TaskCompletionSource = new TaskCompletionSource<Document>()};
 
-            DownloadMonitor.QueueExtractionRequest(closure);
-            Document documentResult = null;
-            try
-            {
-                documentResult = await closure.TaskCompletionSource.Task;
-            
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Extraction Exception Caught: " + e.Message);
-            }
+            //DownloadMonitor.QueueExtractionRequest(closure);
+            Document documentResult = await closure.PerformDownload();
+//            try
+//            {
+//                documentResult = await closure.TaskCompletionSource.Task;
+//            
+//            }
+//            catch (Exception e)
+//            {
+//                Debug.WriteLine("Extraction Exception Caught: " + e.Message);
+//            }
 
             return documentResult;
         }

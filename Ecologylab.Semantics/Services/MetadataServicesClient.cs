@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Ecologylab.Semantics.Collecting;
@@ -19,20 +20,26 @@ namespace Ecologylab.Semantics.Services
     public class MetadataServicesClient
     {
         private readonly WebSocketOODSSClient _metadataClient;
+        private readonly ParsedUri _serviceBaseUri = new ParsedUri("http://ecoarray0:2080/BigSemanticsService/metadata.xml");
+        private readonly SimplTypesScope _metadataTypeScope;
 
-        public MetadataServicesClient(SimplTypesScope metadatascope, SemanticsSessionScope semanticSessionScope)
+        public MetadataServicesClient(SimplTypesScope metadatascope, SemanticsSessionScope semanticSessionScope, bool useWebSockets = false)
         {
             SimplTypesScope[] oodssAndMetadataScope = {metadatascope, DefaultServicesTranslations.Get()};
 
-            SimplTypesScope typesScope = SimplTypesScope.Get("MetadataServicesTranslationScope",
+            _metadataTypeScope = SimplTypesScope.Get("MetadataServicesTranslationScope",
                                                         oodssAndMetadataScope,
                                                         typeof (MetadataRequest),
                                                         typeof (MetadataResponse),
                                                         typeof (SemanticServiceError)
                                                         );
 
-            _metadataClient = new WebSocketOODSSClient("127.0.0.1", 2018, typesScope, semanticSessionScope);            
-            _metadataClient.StartAsync();
+            if (useWebSockets)
+            {
+                _metadataClient = new WebSocketOODSSClient("127.0.0.1", 2018, _metadataTypeScope, semanticSessionScope);
+                _metadataClient.StartAsync();
+            }
+            
         }
 
         /// <summary>
@@ -45,20 +52,29 @@ namespace Ecologylab.Semantics.Services
         {
             Document result = null;
 
-            Debug.WriteLine("Performing asynchronous call");
-            ResponseMessage metadataResponse = _metadataClient.RequestAsync(new MetadataRequest(uri.ToString())).Result;
-            Debug.WriteLine("Received asynchronous request ");
+            if (_metadataClient != null)
+            {
+                Debug.WriteLine("Performing asynchronous call");
+                ResponseMessage metadataResponse =
+                    _metadataClient.RequestAsync(new MetadataRequest(uri.ToString())).Result;
+                Debug.WriteLine("Received asynchronous request ");
 
-            if (metadataResponse != null && metadataResponse is MetadataResponse)
-            {
-                result = (metadataResponse as MetadataResponse).Metadata;
+                if (metadataResponse != null && metadataResponse is MetadataResponse)
+                {
+                    result = (metadataResponse as MetadataResponse).Metadata;
+                }
+                else if (metadataResponse != null && metadataResponse is SemanticServiceError)
+                {
+                    (metadataResponse as SemanticServiceError).Perform();
+                }
+                else
+                    throw new Exception();
             }
-            else if (metadataResponse != null && metadataResponse is SemanticServiceError)
+            else
             {
-                (metadataResponse as SemanticServiceError).Perform();
+                var requestUri = new ParsedUri(_serviceBaseUri, "?url=" + uri.AbsoluteUri);
+                result = await _metadataTypeScope.DeserializeUri(requestUri, Format.Xml) as Document;
             }
-            else 
-                throw new Exception();
 
             return result;
         }
