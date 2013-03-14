@@ -101,7 +101,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.Serialization\Simpl.Serialization.csproj">
+    <ProjectReference Include="..\..\..\Simpl\ecologylabFundamental.NET\Simpl.Serialization\Simpl.Serialization.csproj">
       <Project>{16C61DD8-68B1-4509-8E18-6F7E80B605A3}</Project>
       <Name>Simpl.Serialization</Name>
     </ProjectReference>
