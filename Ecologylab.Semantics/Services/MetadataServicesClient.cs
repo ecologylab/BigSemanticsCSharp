@@ -20,10 +20,10 @@ namespace Ecologylab.Semantics.Services
     public class MetadataServicesClient
     {
         private readonly WebSocketOODSSClient _metadataClient;
-        private readonly ParsedUri _serviceBaseUri = new ParsedUri("http://ecoarray0:2080/BigSemanticsService/metadata.xml");
+        private readonly ParsedUri _serviceBaseUri;
         private readonly SimplTypesScope _metadataTypeScope;
 
-        public MetadataServicesClient(SimplTypesScope metadatascope, SemanticsSessionScope semanticSessionScope, bool useWebSockets = false)
+        public MetadataServicesClient(SimplTypesScope metadatascope, SemanticsSessionScope semanticSessionScope, ParsedUri serviceUri, bool useWebSockets = false)
         {
             SimplTypesScope[] oodssAndMetadataScope = {metadatascope, DefaultServicesTranslations.Get()};
 
@@ -32,7 +32,9 @@ namespace Ecologylab.Semantics.Services
                                                         typeof (MetadataRequest),
                                                         typeof (MetadataResponse),
                                                         typeof (SemanticServiceError)
-                                                        );
+                                                    );
+
+            _serviceBaseUri = serviceUri;
 
             if (useWebSockets)
             {
