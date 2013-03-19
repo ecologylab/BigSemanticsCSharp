@@ -69,21 +69,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.Fundamental\Simpl.Fundamental.csproj">
-      <Project>{10287dd6-0c07-4737-9469-0aa21b7723bf}</Project>
-      <Name>Simpl.Fundamental</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.OODSS\Simpl.OODSS.csproj">
-      <Project>{4f3bf780-cc24-4eba-9238-5d99b83d1e27}</Project>
-      <Name>Simpl.OODSS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.Serialization\Simpl.Serialization.csproj">
-      <Project>{16c61dd8-68b1-4509-8e18-6f7e80b605a3}</Project>
-      <Name>Simpl.Serialization</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Collecting\DownloadMonitor.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -227,7 +212,20 @@
     <Compile Include="Services\MetadataServicesClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Simpl\ecologylabFundamental.NET\Simpl.Fundamental\Simpl.Fundamental.csproj">
+      <Project>{10287dd6-0c07-4737-9469-0aa21b7723bf}</Project>
+      <Name>Simpl.Fundamental</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Simpl\ecologylabFundamental.NET\Simpl.OODSS\Simpl.OODSS.csproj">
+      <Project>{4f3bf780-cc24-4eba-9238-5d99b83d1e27}</Project>
+      <Name>Simpl.OODSS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Simpl\ecologylabFundamental.NET\Simpl.Serialization\Simpl.Serialization.csproj">
+      <Project>{16c61dd8-68b1-4509-8e18-6f7e80b605a3}</Project>
+      <Name>Simpl.Serialization</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
