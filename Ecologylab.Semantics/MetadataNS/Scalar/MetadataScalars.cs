@@ -18,7 +18,7 @@ namespace Ecologylab.Semantics.MetadataNS.Scalar
         }
     }
 
-    abstract public class MetadataScalarBase<T> : IMetadataScalar<T>
+    abstract public class MetadataScalarBase<T> : IMetadataScalar<object>
     {
         public T value;
         public static String VALUE_FIELD_NAME	    = "value";
@@ -42,6 +42,12 @@ namespace Ecologylab.Semantics.MetadataNS.Scalar
         public override String ToString()
         {
             return value == null ? "null" : value.ToString();
+        }
+
+        object IMetadataScalar<object>.Value
+        {
+            get { return Value; }
+            set { Value = (T) value; }
         }
     }
 
@@ -75,21 +81,21 @@ namespace Ecologylab.Semantics.MetadataNS.Scalar
 	    }
 
     }
-    public class MetadataInteger : MetadataScalarBase<int>
+    public class MetadataInteger : MetadataScalarBase<Int32>
     {
         public MetadataInteger(){}
         public MetadataInteger(object value):base(value)
         {}
 
     }
-    public class MetadataFloat : MetadataScalarBase<float>
+    public class MetadataFloat : MetadataScalarBase<Single>
     {
         public MetadataFloat(){}
         public MetadataFloat(object value):base(value)
         {}
 
     }
-    public class MetadataDouble: MetadataScalarBase<double>
+    public class MetadataDouble: MetadataScalarBase<Double>
     {
         public MetadataDouble(){}
         public MetadataDouble(object value):base(value)
