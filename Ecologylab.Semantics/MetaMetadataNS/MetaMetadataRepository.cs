@@ -203,7 +203,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
         private void AddToRepositoryByClassName(MetaMetadata mmd)
         {
-            if (mmd.ExtendsAttribute != null)
+            if (mmd.ExtendsAttribute != null || mmd.IsNewMetadataClass())
             {
                 MetadataClassDescriptor mcd = mmd.MetadataClassDescriptor;
 			    if (mcd != null)
