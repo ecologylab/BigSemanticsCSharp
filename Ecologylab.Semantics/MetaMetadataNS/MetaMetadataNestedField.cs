@@ -432,8 +432,9 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                 // set defininig mmdfield
 
                 // process hide and shadows
+                var isImage = thatChild is MetaMetadataCompositeField && "image".Equals(((MetaMetadataCompositeField) thatChild).Type);
                 HashSet<String> nonDisplayedFieldNames = NonDisplayedFieldNames;
-                if (thatChild.Hide && !"image".Equals(thatChild.Name))
+                if (thatChild.Hide && !isImage)
                     nonDisplayedFieldNames.Add(thatChild.Name);
                 if (thatChild.Shadows != null)
                     nonDisplayedFieldNames.Add(thatChild.Shadows);
