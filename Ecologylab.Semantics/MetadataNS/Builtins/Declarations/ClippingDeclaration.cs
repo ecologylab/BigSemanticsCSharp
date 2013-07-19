@@ -40,11 +40,10 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 		[MmName("source_doc")]
 		private Document sourceDoc;
 
-		[SimplComposite]
-		[SimplWrap]
+		[SimplCollection]
 		[SimplScope("repository_documents")]
-		[MmName("outlink")]
-		private Document outlink;
+		[MmName("outlinks")]
+		private List<Document> outlinks;
 
 		public ClippingDeclaration()
 		{ }
@@ -104,14 +103,14 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 			}
 		}
 
-		public Document Outlink
+		public List<Document> Outlinks
 		{
-			get{return outlink;}
+			get{return outlinks;}
 			set
 			{
-				if (this.outlink != value)
+				if (this.outlinks != value)
 				{
-					this.outlink = value;
+					this.outlinks = value;
 					// TODO we need to implement our property change notification mechanism.
 				}
 			}
