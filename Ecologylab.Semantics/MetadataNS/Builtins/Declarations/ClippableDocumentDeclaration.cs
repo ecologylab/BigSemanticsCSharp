@@ -22,7 +22,7 @@ using System.Collections.Generic;
 namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations 
 {
 	[SimplInherit]
-	public class ClippableDocumentDeclaration<ME> : Document where ME : ClippableDocument<ME>
+	public class ClippableDocumentDeclaration : Document
 	{
 		/// <summary>
 		/// Clippings based on this.
@@ -31,7 +31,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 		[SimplOtherTags(new String[] {"clippings"})]
 		[SimplScope("repository_clippings")]
 		[MmName("clippings_this_is_in")]
-		private List<MediaClipping<ME>> clippingsThisIsIn;
+		private List<IClipping<Metadata>> clippingsThisIsIn;
 
 		[SimplScalar]
 		private MetadataInteger width;
@@ -45,7 +45,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 		public ClippableDocumentDeclaration(MetaMetadataCompositeField mmd) : base(mmd) { }
 
 
-		public List<MediaClipping<ME>> ClippingsThisIsIn
+		public List<IClipping<Metadata>> ClippingsThisIsIn
 		{
 			get{return clippingsThisIsIn;}
 			set

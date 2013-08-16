@@ -154,7 +154,7 @@ namespace Ecologylab.Semantics.MetadataNS
 			    {
 				    if (mfd.IsScalar && !mfd.IsCollection)
 					    hasVisibleNonNullField = MetadataString.IsNotNullAndEmptyValue(mfd.GetValueString(currentMetadata));
-				    else if (mfd.IsNested)
+				    else if (mfd.IsComposite)
 				    {
 					    Metadata nestedMetadata = (Metadata) mfd.GetNestedMetadata(currentMetadata);
 					    hasVisibleNonNullField = (nestedMetadata != null) ? (nestedMetadata.NumberOfVisibleFields() > 0) : false;

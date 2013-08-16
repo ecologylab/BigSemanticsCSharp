@@ -17,12 +17,26 @@ using Simpl.Serialization.Attributes;
 namespace Ecologylab.Semantics.MetadataNS.Builtins 
 {
     [SimplInherit]
-	public class Clipping : ClippingDeclaration
+	public class Clipping<M> : ClippingDeclaration<M>, IClipping<M> where M : Metadata
 	{
-
 		public Clipping() { }
 
 		public Clipping(MetaMetadataCompositeField mmd) : base(mmd) { }
 
+        public static void InitMediaClipping<CM>(Clipping<CM> mediaClipping, CM clippedMedia, Document source, Document outlink, String caption, String context) where CM : Metadata
+	    {
+		    mediaClipping.SourceDoc = source;
+		    //Clipping.InitClipping(mediaClipping, outlink, context);
+		    if (caption != null)
+			    mediaClipping.Caption = new Scalar.MetadataString(caption);
+		    mediaClipping.Media = clippedMedia;
+	    }
 	}
+
+    public interface IClipping<out TM> where TM : Metadata
+    {
+        TM Media { get; }
+
+        Document SourceDoc { get; set; }
+    }
 }

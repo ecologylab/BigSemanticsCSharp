@@ -18,34 +18,28 @@ using Simpl.Serialization.Attributes;
 namespace Ecologylab.Semantics.MetadataNS.Builtins
 {
 	[SimplInherit]
-	public class ClippableDocument<ME> : ClippableDocumentDeclaration<ME> where ME : ClippableDocument<ME>
+	public class ClippableDocument : ClippableDocumentDeclaration
 	{
         public static readonly int									INITIAL_CAPACITY	= 2;
-		/// <summary>
-		/// missing java doc comments or could not find the source file.
-		/// </summary>
-		[MmName("caption")]
-		[SimplScalar]
-		private MetadataString caption;
 
 		public ClippableDocument() { }
 
         public ClippableDocument(MetaMetadataCompositeField mmd) : base(mmd) { }
 
-        public List<MediaClipping<ME>> GetClippingsThisIsIn()
+        public List<IClipping<Metadata>> GetClippingsThisIsIn()
 	    {
-		    List<MediaClipping<ME>> result = this.ClippingsThisIsIn;
+		    List<IClipping<Metadata>> result = this.ClippingsThisIsIn;
 		    if (result == null)
 		    {
-			    result = new List<MediaClipping<ME>>(INITIAL_CAPACITY);
+                result = new List<IClipping<Metadata>>(INITIAL_CAPACITY);
 			    this.ClippingsThisIsIn = result;
 		    }
 		    return result;
 	    }
 
-        protected void AddClipping(MediaClipping<ME> clipping)
+        protected void AddClipping(IClipping<Metadata> clipping)
 	    {
-		    List<MediaClipping<ME>> clippings = GetClippingsThisIsIn();
+            List<IClipping<Metadata>> clippings = GetClippingsThisIsIn();
 		    clippings.Add(clipping);
 	    }
 	}

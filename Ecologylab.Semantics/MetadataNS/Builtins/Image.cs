@@ -28,7 +28,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
 
         public ImageClipping ConstructClipping(Document sourceDocument, Document outlink, String caption, String context)
 	    {
-		    ImageClipping result	= new ImageClipping(SemanticsSessionScope.Get.ImageClippingMetaMetadata, this, sourceDocument, outlink, caption, context);
+		    var result	= new ImageClipping(SemanticsSessionScope.Get.ImageClippingMetaMetadata, this, sourceDocument, outlink, caption, context);
 		    this.AddClipping(result);
 		
 		    return result;

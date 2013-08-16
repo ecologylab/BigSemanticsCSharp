@@ -34,7 +34,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 		/// </summary>
 		[SimplCollection("annotation")]
 		[MmName("annotations")]
-		private List<Annotation> annotations;
+		private List<TextSelfmade> annotations;
 
 		/// <summary>
 		/// for compatability w old compositions -- do not use!
@@ -42,7 +42,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 		[SimplCollection]
 		[SimplScope("repository_clippings")]
 		[MmName("clippings")]
-		private List<Clipping> clippings;
+		private List<Clipping<Metadata>> clippings;
 
 		/// <summary>
 		/// for compatability w old compositions -- do not use!
@@ -53,7 +53,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
         private List<Metadata> media;
 
 		[SimplScalar]
-		private MetadataFloat version;
+		private MetadataString version;
 
 		[SimplScalar]
 		private MetadataFloat metadataVersion;
@@ -77,7 +77,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 			}
 		}
 
-		public List<Annotation> Annotations
+		public List<TextSelfmade> Annotations
 		{
 			get{return annotations;}
 			set
@@ -90,7 +90,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 			}
 		}
 
-		public List<Clipping> Clippings
+		public List<Clipping<Metadata>> Clippings
 		{
 			get{return clippings;}
 			set
@@ -116,7 +116,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 			}
 		}
 
-		public MetadataFloat Version
+		public MetadataString Version
 		{
 			get{return version;}
 			set

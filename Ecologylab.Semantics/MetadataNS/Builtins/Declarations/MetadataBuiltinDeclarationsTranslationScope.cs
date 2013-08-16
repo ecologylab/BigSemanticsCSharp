@@ -22,18 +22,24 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 		public static SimplTypesScope Get()
 		{
 			return SimplTypesScope.Get("repository_builtin_declarations_scope",
-				typeof(AnnotationDeclaration),
-				typeof(ClippableDocumentDeclaration<>),
-				typeof(ClippingDeclaration),
+				typeof(AnnotateDeclaration),
+				typeof(AssignPrimaryLinkDeclaration),
+				typeof(ClippableDocumentDeclaration),
+				typeof(ClippingDeclaration<>),
 				typeof(CompoundDocumentDeclaration),
+				typeof(CreativeActDeclaration),
+				typeof(CurateLinkDeclaration),
 				typeof(DebugMetadataDeclaration),
 				typeof(DocumentDeclaration),
 				typeof(DocumentMetadataWrapDeclaration),
+				typeof(HtmlTextDeclaration),
 				typeof(ImageClippingDeclaration),
 				typeof(ImageDeclaration),
-				typeof(MediaClippingDeclaration<>),
+				typeof(ImageSelfmadeDeclaration),
 				typeof(MetadataDeclaration),
-				typeof(TextClippingDeclaration));
+				typeof(RichArtifactDeclaration<>),
+				typeof(TextClippingDeclaration),
+				typeof(TextSelfmadeDeclaration));
 		}
 
 	}

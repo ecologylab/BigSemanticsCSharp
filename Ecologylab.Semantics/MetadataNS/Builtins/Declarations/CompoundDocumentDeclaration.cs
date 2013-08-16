@@ -43,7 +43,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 		[SimplCollection]
 		[SimplScope("repository_clippings")]
 		[MmName("clippings")]
-		private List<Clipping> clippings;
+		private List<IClipping<Metadata>> clippings;
 
 		[SimplComposite]
 		[MmName("root_document")]
@@ -81,7 +81,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 			}
 		}
 
-		public List<Clipping> Clippings
+		public List<IClipping<Metadata>> Clippings
 		{
 			get{return clippings;}
 			set

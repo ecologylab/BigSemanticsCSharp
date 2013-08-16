@@ -50,27 +50,44 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="SerializeRichArtifactsAsJson.cs" />
     <Compile Include="TestLoadingRepositoryAsOneFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.Fundamental\Simpl.Fundamental.csproj">
+    <ProjectReference Include="..\..\..\Simpl\simplCSharp\Simpl.Fundamental.DotNet\Simpl.Fundamental.DotNet.csproj">
+      <Project>{cab84a50-f2bb-475d-875c-c928c0a206f8}</Project>
+      <Name>Simpl.Fundamental.DotNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Simpl\simplCSharp\Simpl.Fundamental\Simpl.Fundamental.csproj">
       <Project>{10287dd6-0c07-4737-9469-0aa21b7723bf}</Project>
       <Name>Simpl.Fundamental</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.OODSS\Simpl.OODSS.csproj">
+    <ProjectReference Include="..\..\..\Simpl\simplCSharp\Simpl.OODSS.DotNet\Simpl.OODSS.DotNet.csproj">
+      <Project>{15834bb9-1743-40b3-a2ab-e5ce87fa2753}</Project>
+      <Name>Simpl.OODSS.DotNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Simpl\simplCSharp\Simpl.OODSS\Simpl.OODSS.csproj">
       <Project>{4f3bf780-cc24-4eba-9238-5d99b83d1e27}</Project>
       <Name>Simpl.OODSS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ecologylabFundamental\Simpl.Serialization\Simpl.Serialization.csproj">
+    <ProjectReference Include="..\..\..\Simpl\simplCSharp\Simpl.Serialization.DotNet\Simpl.Serialization.DotNet.csproj">
+      <Project>{b3cf19e7-32c1-410a-950d-5b92850854e8}</Project>
+      <Name>Simpl.Serialization.DotNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Simpl\simplCSharp\Simpl.Serialization\Simpl.Serialization.csproj">
       <Project>{16c61dd8-68b1-4509-8e18-6f7e80b605a3}</Project>
       <Name>Simpl.Serialization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ecologylabGeneratedSemantics\Ecologylab.Semantics.Generated.csproj">
+    <ProjectReference Include="..\..\BigSemanticsWrapperRepository\BigSemantics.GeneratedClassesCSharp\Ecologylab.Semantics.Generated.csproj">
       <Project>{3121e696-14de-4987-bced-588e4ab9259f}</Project>
       <Name>Ecologylab.Semantics.Generated</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ecologylabSemantics\Ecologylab.Semantics\Ecologylab.Semantics.csproj">
+    <ProjectReference Include="..\Ecologylab.Semantics.DotNet\Ecologylab.Semantics.DotNet.csproj">
+      <Project>{07773e05-51d2-4fa1-abcf-cfe76b449175}</Project>
+      <Name>Ecologylab.Semantics.DotNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ecologylab.Semantics\Ecologylab.Semantics.csproj">
       <Project>{3a67f507-1e77-4ed6-bd46-981e66d15f92}</Project>
       <Name>Ecologylab.Semantics</Name>
     </ProjectReference>

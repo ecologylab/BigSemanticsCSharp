@@ -24,7 +24,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
 
         public ImageClipping(MetaMetadataCompositeField metaMetadata, Image clippedMedia, Document source, Document outlink, String caption, String context) : this(metaMetadata)
 	    {
-		    MediaClipping<Image>.InitMediaClipping(this, clippedMedia, source, outlink, caption, context);
+		    InitMediaClipping(this, clippedMedia, source, outlink, caption, context);
 	    }
 
         public override bool IsImage

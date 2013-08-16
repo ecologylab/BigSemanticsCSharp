@@ -21,23 +21,23 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
 	     * If rootDocument non-null, get and construct in that, as necessary; else get and construct in this, as necessary.
 	     * @return
 	     */
-	    public List<Clipping> GetClippings()
+	    public List<IClipping<Metadata>> GetClippings()
 	    {
 		    return RootDocument != null ? RootDocument.SelfClippings() : SelfClippings();
 	    }
 
-	    private List<Clipping> SelfClippings()
+	    private List<IClipping<Metadata>> SelfClippings()
 	    {
-		    List<Clipping> result = this.Clippings;
+		    List<IClipping<Metadata>> result = this.Clippings;
 		    if (result == null)
 		    {
-			    result = new List<Clipping>();
+			    result = new List<IClipping<Metadata>>();
 			    this.Clippings = result;
 		    }
 		    return result;
 	    }
 
-	    public List<Clipping> GetSelfClippings()
+	    public List<IClipping<Metadata>> GetSelfClippings()
 	    {
 		    return Clippings;
 	    }
@@ -45,7 +45,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
 	    ///<summary>
 	    /// Add to collection of clippings, representing our compound documentness.
 	    ///</summary>
-	    public override void AddClipping(Clipping clipping)
+	    public override void AddClipping(IClipping<Metadata> clipping)
 	    {
 		    GetClippings().Add(clipping);
 	    }

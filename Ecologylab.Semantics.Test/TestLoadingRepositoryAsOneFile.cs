@@ -23,6 +23,7 @@ namespace Ecologylab.Semantics.Test
 
             _scope = new SemanticsSessionScope(RepositoryMetadataTranslationScope.Get(),
                                                "TestData/MmdRepo",
+                                               null,
                                                delegate { ValidateRepo(); });
             _scope.LoadRepositoryAsync();
         }

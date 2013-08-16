@@ -78,34 +78,56 @@
     <Compile Include="Documentparsers\XPathParser.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MetadataNS\Builtins\Annotation.cs" />
+    <Compile Include="MetadataNS\Builtins\Annotate.cs" />
+    <Compile Include="MetadataNS\Builtins\AssignPrimaryLink.cs" />
+    <Compile Include="MetadataNS\Builtins\BuiltinMediaTypeScope.cs" />
+    <Compile Include="MetadataNS\Builtins\CreativeActsTypesScope.cs" />
+    <Compile Include="MetadataNS\Builtins\CurateLink.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\AssignPrimaryLinkDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\AudioDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\CurateLinkDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\MediaProviderDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\SequencedClippableDocumentDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\VideoDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\WebVideoDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\ImageSelfmade.cs" />
+    <Compile Include="MetadataNS\Builtins\MediaProvider.cs" />
+    <Compile Include="MetadataNS\Builtins\SequencedClippableDocument.cs" />
+    <Compile Include="MetadataNS\Builtins\TextSelfmade.cs" />
     <Compile Include="MetadataNS\Builtins\ClippableDocument.cs" />
     <Compile Include="MetadataNS\Builtins\Clipping.cs" />
     <Compile Include="MetadataNS\Builtins\CompoundDocument.cs" />
+    <Compile Include="MetadataNS\Builtins\CreativeAct.cs" />
     <Compile Include="MetadataNS\Builtins\DebugMetadata.cs" />
-    <Compile Include="MetadataNS\Builtins\Declarations\AnnotationDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\AnnotateDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\ClippableDocumentDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\ClippingDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\CompoundDocumentDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\CreativeActDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\DebugMetadataDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\DocumentDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\DocumentMetadataWrapDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\HtmlTextDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\ImageClippingDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\ImageDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\ImageSelfmadeDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\InformationCompositionDeclaration.cs" />
-    <Compile Include="MetadataNS\Builtins\Declarations\MediaClippingDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\MetadataBuiltinDeclarationsTranslationScope.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\MetadataDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\RichArtifactDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\TextClippingDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\TextSelfmadeDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Document.cs" />
     <Compile Include="MetadataNS\Builtins\DocumentClosure.cs" />
     <Compile Include="MetadataNS\Builtins\DocumentMetadataWrap.cs" />
+    <Compile Include="MetadataNS\Builtins\HtmlText.cs" />
     <Compile Include="MetadataNS\Builtins\Image.cs" />
     <Compile Include="MetadataNS\Builtins\ImageClipping.cs" />
-    <Compile Include="MetadataNS\Builtins\MediaClipping.cs" />
     <Compile Include="MetadataNS\Builtins\MetadataBuiltinsTypesScope.cs" />
     <Compile Include="MetadataNS\Builtins\MetadataCollection.cs" />
+    <Compile Include="MetadataNS\Builtins\RichArtifact.cs" />
     <Compile Include="MetadataNS\Builtins\TextClipping.cs" />
+    <Compile Include="MetadataNS\Builtins\WebVideo.cs" />
     <Compile Include="MetadataNS\IMetadata.cs" />
     <Compile Include="MetadataNS\Metadata.cs" />
     <Compile Include="MetadataNS\MetadataClassDescriptor.cs" />
@@ -118,6 +140,7 @@
     <Compile Include="MetadataNS\Scalar\Types\MetadataScalarType.cs" />
     <Compile Include="MetadataNS\Scalar\Types\MetadataScalarTypeType.cs" />
     <Compile Include="MetadataNS\SemanticsMixin.cs" />
+    <Compile Include="MetadataNS\Builtins\Video.cs" />
     <Compile Include="MetaMetadataNS\Argument.cs" />
     <Compile Include="MetaMetadataNS\DefVar.cs" />
     <Compile Include="MetaMetadataNS\FieldParserElement.cs" />
@@ -213,15 +236,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Simpl\ecologylabFundamental.NET\Simpl.Fundamental\Simpl.Fundamental.csproj">
+    <ProjectReference Include="..\..\..\Simpl\simplCSharp\Simpl.Fundamental\Simpl.Fundamental.csproj">
       <Project>{10287dd6-0c07-4737-9469-0aa21b7723bf}</Project>
       <Name>Simpl.Fundamental</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Simpl\ecologylabFundamental.NET\Simpl.OODSS\Simpl.OODSS.csproj">
+    <ProjectReference Include="..\..\..\Simpl\simplCSharp\Simpl.OODSS\Simpl.OODSS.csproj">
       <Project>{4f3bf780-cc24-4eba-9238-5d99b83d1e27}</Project>
       <Name>Simpl.OODSS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Simpl\ecologylabFundamental.NET\Simpl.Serialization\Simpl.Serialization.csproj">
+    <ProjectReference Include="..\..\..\Simpl\simplCSharp\Simpl.Serialization\Simpl.Serialization.csproj">
       <Project>{16c61dd8-68b1-4509-8e18-6f7e80b605a3}</Project>
       <Name>Simpl.Serialization</Name>
     </ProjectReference>

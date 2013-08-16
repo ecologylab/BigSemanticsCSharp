@@ -72,8 +72,8 @@ namespace Ecologylab.Semantics.Actions
 			    //We will do something smarter here later when we have interest vectors.
                 TextClipping textClipping = new TextClipping(sessionScope.MetaMetadataRepository.GetMMByName(DocumentParserTagNames.TextTag));
 		        //textClipping.setText(createGist(context));
-			    textClipping.Text = new MetadataString(context);
-			    textClipping.Context = new MetadataString(context);
+			    textClipping.Media.Text = new MetadataString(context);
+			    //textClipping.Context = new MetadataString(context);
 
 			    textClipping.SourceDoc = sourceDocument;
                 

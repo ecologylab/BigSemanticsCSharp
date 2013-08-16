@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Ecologylab.Semantics.MetadataNS;
 using Ecologylab.Semantics.MetadataNS.Builtins;
 using Ecologylab.Semantics.Namesandnums;
 using Ecologylab.Collections;
@@ -102,19 +103,19 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                                                 typeof(Document));
             _generatedMediaTranslations = metadataTranslationScope.GetAssignableSubset(
                                                 SemanticNames.RepositoryMediaTranslations,
-                                                typeof(ClippableDocument<>));
+                                                typeof(ClippableDocument));
             _repositoryClippingTranslations = metadataTranslationScope.GetAssignableSubset(
                                                 SemanticNames.RepositoryClippingTranslations,
-                                                typeof(Clipping));
+                                                typeof(Clipping<>));
 
             _noAnnotationsScope = metadataTranslationScope.GetSubtractedSubset(
                                                 SemanticNames.RepositoryNoAnnotationsTypeScope,
-                                                typeof(Annotation));
+                                                typeof(TextSelfmade));
 
             
 
-            _generatedMediaTranslations.AddTranslation(typeof(Clipping));
-            _generatedMediaTranslations.AddTranslation(typeof(Annotation));
+            _generatedMediaTranslations.AddTranslation(typeof(Clipping<>));
+            _generatedMediaTranslations.AddTranslation(typeof(TextSelfmade));
                
         }
 

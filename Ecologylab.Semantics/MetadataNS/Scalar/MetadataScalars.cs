@@ -9,16 +9,15 @@ using System.IO;
 namespace Ecologylab.Semantics.MetadataNS.Scalar
 {
 
-    public interface IMetadataScalar<T>
+    public interface IMetadataScalar<out T>
     {
         T Value
         {
             get;
-            set;
         }
     }
 
-    abstract public class MetadataScalarBase<T> : IMetadataScalar<object>
+    abstract public class MetadataScalarBase<T> : IMetadataScalar<T>
     {
         public T value;
         public static String VALUE_FIELD_NAME	    = "value";
@@ -42,12 +41,6 @@ namespace Ecologylab.Semantics.MetadataNS.Scalar
         public override String ToString()
         {
             return value == null ? "null" : value.ToString();
-        }
-
-        object IMetadataScalar<object>.Value
-        {
-            get { return Value; }
-            set { Value = (T) value; }
         }
     }
 

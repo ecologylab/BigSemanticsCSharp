@@ -270,7 +270,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                 Dictionary<String, MetaMetadata> repositoryByUrlStripped;
                 Dictionary<String, List<RepositoryPatternEntry>> repositoryByPattern;
 
-                if (typeof(ClippableDocument<>).GetTypeInfo().IsAssignableFrom(metadataClass.GetTypeInfo()))
+                if (typeof(ClippableDocument).GetTypeInfo().IsAssignableFrom(metadataClass.GetTypeInfo()))
                 {
                     repositoryByUrlStripped = _clippableDocumentRepositoryByUrlStripped;
                     repositoryByPattern = _clippableDocumentRepositoryByPattern;

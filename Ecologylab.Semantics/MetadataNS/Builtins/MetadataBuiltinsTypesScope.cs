@@ -11,23 +11,31 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
 {
     public class MetadataBuiltinsTypesScope
     {
-        public static string Name = "metadata_builtin_translations";
+        public static readonly string Name = "metadata_builtin_translations";
+
+        public static readonly SimplTypesScope[] InheritedScopes =
+            new[] 
+            { 
+                MetadataBuiltinDeclarationsTranslationScope.Get(), 
+                BuiltinMediaTypeScope.Get(),
+                CreativeActsTypesScope.Get()
+            };
 
         protected static Type[] Translations =
         {
             typeof (Metadata),
-            typeof (Annotation),
-            typeof (ClippableDocument<>),
-            typeof (Clipping),
+            typeof (TextSelfmade),
+            typeof (ClippableDocument),
+            typeof (Clipping<>),
             typeof (CompoundDocument),
             typeof (DebugMetadata),
             typeof (Document),
             typeof (DocumentMetadataWrap),
-            typeof (Image),
             typeof (ImageClipping),
-            typeof (MediaClipping<>),
             typeof (TextClipping),
             typeof (MetadataCollection),
+            typeof (RichArtifact<>),
+            typeof (ImageSelfmade),
         };
 
         static MetadataBuiltinsTypesScope()
@@ -37,7 +45,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
 
         public static SimplTypesScope Get()
         {
-            return SimplTypesScope.Get(Name, MetadataBuiltinDeclarationsTranslationScope.Get(), Translations);
+            return SimplTypesScope.Get(Name, InheritedScopes, Translations);
         }
     }
 }

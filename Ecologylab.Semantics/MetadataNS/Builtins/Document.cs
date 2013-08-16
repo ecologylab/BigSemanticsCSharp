@@ -203,7 +203,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
             return new DocumentClosure(SemanticsSessionScope, this);
         }
 
-        public virtual void AddClipping(Clipping clipping)
+        public virtual void AddClipping(IClipping<Metadata> clipping)
         {
         }
     }   

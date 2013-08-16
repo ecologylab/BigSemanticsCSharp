@@ -80,13 +80,19 @@ namespace Ecologylab.Semantics.MetadataNS.Scalar.Types
 
 	    public override string Marshall(object instance, TranslationContext context = null)
 	    {
-	        return instance.ToString();
+	        var metadataScalarInstance = instance as IMetadataScalar<object>;
+	        return (metadataScalarInstance != null) ? OperativeScalarType.Marshall(metadataScalarInstance.Value, context) : instance.ToString();
 	    }
 
 	    public Object GetValueInstance(String value, String[] formatStrings, IScalarUnmarshallingContext scalarUnmarshallingContext)
 		{
-			return valueScalarType.GetInstance(value, formatStrings, scalarUnmarshallingContext);
+			return OperativeScalarType.GetInstance(value, formatStrings, scalarUnmarshallingContext);
 		}
+
+        public override bool NeedsJsonQuotationWrap()
+        {
+            return OperativeScalarType.NeedsJsonQuotationWrap();
+        }
 
 		public static void init()
 		{
@@ -195,6 +201,12 @@ namespace Ecologylab.Semantics.MetadataNS.Scalar.Types
 		{
             return new MetadataDate(GetValueInstance(value, formatStrings, scalarUnmarshallingContext));
 		}
+
+        public override string Marshall(object instance, TranslationContext context = null)
+        {
+            var metadataScalarInstance = instance as IMetadataScalar<DateTime>;
+            return (metadataScalarInstance != null) ? OperativeScalarType.Marshall(metadataScalarInstance.Value, context) : instance.ToString();
+        }
 	}
 
     //TODO: to get file type right. 

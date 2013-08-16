@@ -10,7 +10,6 @@
 using Ecologylab.Collections;
 using Ecologylab.Semantics.MetaMetadataNS;
 using Ecologylab.Semantics.MetadataNS.Builtins;
-using Ecologylab.Semantics.MetadataNS.Scalar;
 using Simpl.Fundamental.Generic;
 using Simpl.Serialization;
 using Simpl.Serialization.Attributes;
@@ -21,28 +20,12 @@ using System.Collections.Generic;
 namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations 
 {
 	[SimplInherit]
-	public class TextClippingDeclaration : Clipping
+	public class TextClippingDeclaration : Clipping<HtmlText>
 	{
-		[SimplScalar]
-		private MetadataString text;
-
 		public TextClippingDeclaration()
 		{ }
 
 		public TextClippingDeclaration(MetaMetadataCompositeField mmd) : base(mmd) { }
 
-
-		public MetadataString Text
-		{
-			get{return text;}
-			set
-			{
-				if (this.text != value)
-				{
-					this.text = value;
-					// TODO we need to implement our property change notification mechanism.
-				}
-			}
-		}
 	}
 }
