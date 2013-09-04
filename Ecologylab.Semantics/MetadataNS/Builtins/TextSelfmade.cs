@@ -17,6 +17,7 @@ using Simpl.Serialization.Attributes;
 namespace Ecologylab.Semantics.MetadataNS.Builtins 
 {
 	[SimplInherit]
+    [SimplOtherTags("annotation")]
 	public class TextSelfmade : TextSelfmadeDeclaration
 	{
 
