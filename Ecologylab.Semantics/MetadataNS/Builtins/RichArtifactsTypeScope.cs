@@ -7,14 +7,18 @@ using Simpl.Serialization;
 
 namespace Ecologylab.Semantics.MetadataNS.Builtins
 {
-    public class BuiltinMediaTypeScope
+    public class RichArtifactsTypeScope
     {
-        public static readonly string Name = "repository_media";
+        public static readonly string Name = "rich_artifacts_scope";
 
         protected static readonly Type[] Translations =
             {
-                typeof (HtmlText),
-                typeof (Image),
+                typeof (RichArtifact<>),
+                typeof (Clipping<>),
+                typeof (ImageClipping),
+                typeof (TextClipping),
+                typeof (ImageSelfmade),
+                typeof (TextSelfmade),
             };
 
         public static SimplTypesScope Get()
