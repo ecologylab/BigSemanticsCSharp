@@ -24,6 +24,8 @@ namespace Ecologylab.Semantics.Collecting
 
         public MetadataServicesClient MetadataServicesClient { get; set; }
 
+        public ParsedUri MetadataServiceUri { get; set; }
+
         public delegate void DispatcherDelegate(DocumentClosure closure);
 
         public SemanticsSessionScope(SimplTypesScope metadataTranslationScope, string repoLocation, ParsedUri serviceUri, EventHandler<EventArgs> onCompleted)
