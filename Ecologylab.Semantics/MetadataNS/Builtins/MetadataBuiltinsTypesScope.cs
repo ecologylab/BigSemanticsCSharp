@@ -18,24 +18,19 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
             { 
                 MetadataBuiltinDeclarationsTranslationScope.Get(), 
                 BuiltinMediaTypeScope.Get(),
-                CreativeActsTypesScope.Get()
+                CreativeActsTypesScope.Get(),
+                RichArtifactsTypeScope.Get(),
             };
 
         protected static Type[] Translations =
         {
             typeof (Metadata),
-            typeof (TextSelfmade),
             typeof (ClippableDocument),
-            typeof (Clipping<>),
             typeof (CompoundDocument),
             typeof (DebugMetadata),
             typeof (Document),
             typeof (DocumentMetadataWrap),
-            typeof (ImageClipping),
-            typeof (TextClipping),
             typeof (MetadataCollection),
-            typeof (RichArtifact<>),
-            typeof (ImageSelfmade),
         };
 
         static MetadataBuiltinsTypesScope()

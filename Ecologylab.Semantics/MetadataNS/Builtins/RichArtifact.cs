@@ -8,7 +8,7 @@ using Ecologylab.Semantics.MetadataNS.Builtins.Declarations;
 
 namespace Ecologylab.Semantics.MetadataNS.Builtins
 {
-    public class RichArtifact<M> : RichArtifactDeclaration<M> where M : Metadata
+    public class RichArtifact<M> : RichArtifactDeclaration<M>, IRichArtifact<M> where M : Metadata
     {
         public RichArtifact()
         {
@@ -19,6 +19,10 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
         {
             CreativeActs = new List<CreativeAct>();
         }
+    }
 
+    public interface IRichArtifact<out TM> where TM: Metadata
+    {
+        TM Media { get; }
     }
 }

@@ -35,8 +35,6 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
 
     public interface IClipping<out TM> where TM : Metadata
     {
-        TM Media { get; }
-
         Document SourceDoc { get; set; }
     }
 }

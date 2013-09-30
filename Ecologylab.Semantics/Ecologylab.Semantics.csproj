@@ -84,15 +84,9 @@
     <Compile Include="MetadataNS\Builtins\CreativeActsTypesScope.cs" />
     <Compile Include="MetadataNS\Builtins\CurateLink.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\AssignPrimaryLinkDeclaration.cs" />
-    <Compile Include="MetadataNS\Builtins\Declarations\AudioDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\RichArtifactsTypeScope.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\CurateLinkDeclaration.cs" />
-    <Compile Include="MetadataNS\Builtins\Declarations\MediaProviderDeclaration.cs" />
-    <Compile Include="MetadataNS\Builtins\Declarations\SequencedClippableDocumentDeclaration.cs" />
-    <Compile Include="MetadataNS\Builtins\Declarations\VideoDeclaration.cs" />
-    <Compile Include="MetadataNS\Builtins\Declarations\WebVideoDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\ImageSelfmade.cs" />
-    <Compile Include="MetadataNS\Builtins\MediaProvider.cs" />
-    <Compile Include="MetadataNS\Builtins\SequencedClippableDocument.cs" />
     <Compile Include="MetadataNS\Builtins\TextSelfmade.cs" />
     <Compile Include="MetadataNS\Builtins\ClippableDocument.cs" />
     <Compile Include="MetadataNS\Builtins\Clipping.cs" />
@@ -111,7 +105,6 @@
     <Compile Include="MetadataNS\Builtins\Declarations\ImageClippingDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\ImageDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\ImageSelfmadeDeclaration.cs" />
-    <Compile Include="MetadataNS\Builtins\Declarations\InformationCompositionDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\MetadataBuiltinDeclarationsTranslationScope.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\MetadataDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\RichArtifactDeclaration.cs" />
@@ -127,7 +120,6 @@
     <Compile Include="MetadataNS\Builtins\MetadataCollection.cs" />
     <Compile Include="MetadataNS\Builtins\RichArtifact.cs" />
     <Compile Include="MetadataNS\Builtins\TextClipping.cs" />
-    <Compile Include="MetadataNS\Builtins\WebVideo.cs" />
     <Compile Include="MetadataNS\IMetadata.cs" />
     <Compile Include="MetadataNS\Metadata.cs" />
     <Compile Include="MetadataNS\MetadataClassDescriptor.cs" />
@@ -140,7 +132,6 @@
     <Compile Include="MetadataNS\Scalar\Types\MetadataScalarType.cs" />
     <Compile Include="MetadataNS\Scalar\Types\MetadataScalarTypeType.cs" />
     <Compile Include="MetadataNS\SemanticsMixin.cs" />
-    <Compile Include="MetadataNS\Builtins\Video.cs" />
     <Compile Include="MetaMetadataNS\Argument.cs" />
     <Compile Include="MetaMetadataNS\DefVar.cs" />
     <Compile Include="MetaMetadataNS\FieldParserElement.cs" />
