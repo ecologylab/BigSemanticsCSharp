@@ -14,6 +14,8 @@ using Simpl.Fundamental.Collections;
 using Simpl.Fundamental.Net;
 using Simpl.Fundamental.PlatformSpecifics;
 using Simpl.Serialization;
+using Simpl.Serialization.Context;
+using Simpl.Serialization.Types;
 
 namespace Ecologylab.Semantics.MetaMetadataNS
 {
@@ -116,6 +118,8 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
             _generatedMediaTranslations.AddTranslation(typeof(Clipping<>));
             _generatedMediaTranslations.AddTranslation(typeof(TextSelfmade));
+            _generatedMediaTranslations.AddTranslation(typeof(HtmlText));
+            _generatedMediaTranslations.AddTranslation(typeof(WebVideo));
                
         }
 
@@ -163,7 +167,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
         public static async Task<MetaMetadataRepository> RequestMetaMetadataRepository(ParsedUri requestUri)
         {
-            return await MetaMetadataTranslationScope.Get().DeserializeUri(requestUri) as MetaMetadataRepository;
+            return await MetaMetadataTranslationScope.Get().DeserializeUri(requestUri, Format.Xml, new TranslationContext(requestUri)) as MetaMetadataRepository;
         }
 
         public async Task<MetaMetadataRepository> LoadRepositoryFromCache(object file)
@@ -178,7 +182,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
         public async Task<MetaMetadataRepository> LoadRepositoryFromServiceAsync(ParsedUri serviceUri, object cacheFile = null)
         {
-            _metaMetadataRepository     = await RequestMetaMetadataRepository(serviceUri);
+            _metaMetadataRepository     = await RequestMetaMetadataRepository(new ParsedUri(serviceUri, "mmdrepository.xml"));
 
             if (cacheFile != null)
                 SimplTypesScope.Serialize(_metaMetadataRepository, cacheFile, Format.Xml);
@@ -207,6 +211,11 @@ namespace Ecologylab.Semantics.MetaMetadataNS
         public MetaMetadataRepository MetaMetadataRepository
         {
             get { return _metaMetadataRepository; }
+        }
+
+        public SimplTypesScope ClippingTranslations
+        {
+            get { return _repositoryClippingTranslations; }
         }
 
         #endregion

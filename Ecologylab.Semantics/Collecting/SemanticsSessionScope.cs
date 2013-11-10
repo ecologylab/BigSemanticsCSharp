@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Ecologylab.Semantics.MetadataNS;
 using Ecologylab.Semantics.MetadataNS.Builtins;
 using Ecologylab.Semantics.Services;
 using Simpl.Fundamental.Net;
@@ -22,21 +24,20 @@ namespace Ecologylab.Semantics.Collecting
 
         private readonly DispatcherDelegate _extractionDelegate;
 
-        public MetadataServicesClient MetadataServicesClient { get; set; }
-
         public ParsedUri MetadataServiceUri { get; set; }
+
+        public HttpClient HttpClient { get; set; }
 
         public delegate void DispatcherDelegate(DocumentClosure closure);
 
-        public SemanticsSessionScope(SimplTypesScope metadataTranslationScope, string repoLocation, ParsedUri serviceUri, EventHandler<EventArgs> onCompleted)
+        public SemanticsSessionScope(SimplTypesScope metadataTranslationScope, string repoLocation, ParsedUri serviceUri,
+            EventHandler<EventArgs> onCompleted)
             : base(metadataTranslationScope, repoLocation, onCompleted)
         {
-            DownloadMonitor = new DownloadMonitor();
-
-            MetadataServicesClient = new MetadataServicesClient(metadataTranslationScope, this, serviceUri);
-
             SemanticsSessionScope.Get = this;
-            
+
+            MetadataServiceUri = serviceUri;
+            HttpClient = new HttpClient();
         }
 
         public DownloadMonitor DownloadMonitor { get; private set; }
@@ -48,7 +49,7 @@ namespace Ecologylab.Semantics.Collecting
             return doc;
         }
 
-        public async Task<Document> GetDocument(ParsedUri puri)
+        public async new Task<Document> GetDocument(ParsedUri puri)
         {
             if (puri == null)
             {
@@ -56,40 +57,22 @@ namespace Ecologylab.Semantics.Collecting
                 return null;
             }
 
-            Document doc = GetOrConstructDocument(puri);
-            DocumentClosure closure = new DocumentClosure(this, doc)
-                                          {TaskCompletionSource = new TaskCompletionSource<Document>()};
+            var doc = base.GetDocument(puri);
+            if (doc == null)
+            {
+                var response = await HttpClient.GetAsync(new Uri(MetadataServiceUri, "metadata.xml?url=" + puri.AbsoluteUri));
+                if (response.IsSuccessStatusCode)
+                {
+                    doc = this.MetadataTranslationScope.Deserialize(await response.Content.ReadAsStreamAsync(), Format.Xml) as Document;
+                }
+            }
 
-            //DownloadMonitor.QueueExtractionRequest(closure);
-            Document documentResult = await closure.PerformDownload();
-//            try
-//            {
-//                documentResult = await closure.TaskCompletionSource.Task;
-//            
-//            }
-//            catch (Exception e)
-//            {
-//                Debug.WriteLine("Extraction Exception Caught: " + e.Message);
-//            }
-
-            return documentResult;
+            return doc;
         }
 
         public async static Task<SemanticsSessionScope> InitAsync(SimplTypesScope metadataTranslationScope, string repoLocation, ParsedUri serviceUri)
         {
-//            var scope =
-//                await Task.Factory.StartNew(() => new SemanticsSessionScope(metadataTranslationScope, repoLocation));
-
             var scope = await Task.Run(() => new SemanticsSessionScope(metadataTranslationScope, repoLocation, serviceUri, null));
-            //This can be improved to pass the TaskCompletionSource, but a little synchronization logic is required.
-//            while (!WebCore.IsRunning)
-//            {
-//                Console.WriteLine("Waiting for WebCore to Initialize");
-//                //NOTE: This isn't a Thread.sleep. TaskEx.delay notifies the CPU to return after the timespan,
-//                // It doesn't block the thread.
-//                await TaskEx.Delay(TimeSpan.FromMilliseconds(300));
-//            }
-
             return scope;
         }
 

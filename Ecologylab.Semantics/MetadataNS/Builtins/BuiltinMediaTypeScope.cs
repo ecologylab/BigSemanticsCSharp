@@ -15,6 +15,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
             {
                 typeof (HtmlText),
                 typeof (Image),
+                typeof (WebVideo)
             };
 
         public static SimplTypesScope Get()

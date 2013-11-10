@@ -21,12 +21,8 @@ namespace Ecologylab.Semantics.Collecting
 
         public virtual Document GetOrConstructDocument(ParsedUri location)
         {
-            if (location == null)
-                return null;
-            
-            Document doc;
-
-            GlobalDocumentCollection.TryGetDocument(location, out doc);
+            var doc = GetDocument(location);
+   
             if(doc == null)
             {
                 doc = MetaMetadataRepository.ConstructDocument(location, false);
@@ -34,6 +30,17 @@ namespace Ecologylab.Semantics.Collecting
                     GlobalDocumentCollection.AddDocument(doc, location);
             }
             
+            return doc;
+        }
+
+        public Document GetDocument(ParsedUri location)
+        {
+            if (location == null)
+                return null;
+
+            Document doc;
+            GlobalDocumentCollection.TryGetDocument(location, out doc);
+
             return doc;
         }
 

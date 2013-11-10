@@ -17,8 +17,14 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
                 typeof (Clipping<>),
                 typeof (ImageClipping),
                 typeof (TextClipping),
+                typeof (VideoClipping),
                 typeof (ImageSelfmade),
                 typeof (TextSelfmade),
+                typeof (WebVideo),
+                typeof (HtmlText),
+                typeof (Image),
+                typeof (Video),
+                typeof (Audio)
             };
 
         public static SimplTypesScope Get()

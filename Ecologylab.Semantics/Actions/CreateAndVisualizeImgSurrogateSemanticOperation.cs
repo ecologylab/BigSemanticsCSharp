@@ -87,8 +87,7 @@ namespace Ecologylab.Semantics.Actions
 
 		        DocumentClosure imageClosure;
                 
-                if (this.sessionScope is SemanticsSessionScope &&
-                    (this.sessionScope as SemanticsSessionScope).MetadataServicesClient != null)
+                if (this.sessionScope is SemanticsSessionScope)
                 {
                     imageClosure = image.GetOrConstructClosure();
 

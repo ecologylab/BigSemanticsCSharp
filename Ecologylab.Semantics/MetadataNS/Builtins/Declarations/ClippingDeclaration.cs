@@ -42,7 +42,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 		public ClippingDeclaration(MetaMetadataCompositeField mmd) : base(mmd) { }
 
 
-		public Document SourceDoc
+		public virtual Document SourceDoc
 		{
 			get{return sourceDoc;}
 			set

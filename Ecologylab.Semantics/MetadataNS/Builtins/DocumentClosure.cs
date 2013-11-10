@@ -49,7 +49,6 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
         {
             SemanticsSessionScope = semanticsSessionScope;
             Document = document;
-            MetadataServicesClient = semanticsSessionScope.MetadataServicesClient;
         }
 
         public async Task<Document> PerformDownload()

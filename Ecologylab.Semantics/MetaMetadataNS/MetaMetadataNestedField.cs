@@ -532,12 +532,12 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
         protected virtual string GetMetadataClassName()
         {
-            return InheritedMmd.GetMetadataClassName();
+            return (inheritedMmd != null) ? InheritedMmd.GetMetadataClassName() : null;
         }
 
         protected virtual string GetMetadataClassSimpleName()
         {
-            return InheritedMmd.GetMetadataClassSimpleName();
+            return (inheritedMmd != null) ? InheritedMmd.GetMetadataClassSimpleName() : null;
         }
 
         public void ClearInheritFinishedOrInProgressFlag()

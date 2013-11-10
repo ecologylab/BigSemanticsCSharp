@@ -12,13 +12,14 @@ using System.Linq;
 using System.Text;
 using Ecologylab.Semantics.MetaMetadataNS;
 using Ecologylab.Semantics.MetadataNS.Builtins.Declarations;
+using Simpl.Fundamental.Net;
 using Simpl.Serialization.Attributes;
 
 namespace Ecologylab.Semantics.MetadataNS.Builtins 
 {
     [SimplInherit]
 	public class Clipping<M> : ClippingDeclaration<M>, IClipping<M> where M : Metadata
-	{
+    {
 		public Clipping() { }
 
 		public Clipping(MetaMetadataCompositeField mmd) : base(mmd) { }
@@ -31,6 +32,8 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
 			    mediaClipping.Caption = new Scalar.MetadataString(caption);
 		    mediaClipping.Media = clippedMedia;
 	    }
+
+        
 	}
 
     public interface IClipping<out TM> where TM : Metadata

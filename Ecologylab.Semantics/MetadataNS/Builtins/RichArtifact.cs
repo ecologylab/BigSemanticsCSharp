@@ -5,11 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Ecologylab.Semantics.MetaMetadataNS;
 using Ecologylab.Semantics.MetadataNS.Builtins.Declarations;
+using Simpl.Fundamental.Net;
+using Simpl.Serialization.Attributes;
 
 namespace Ecologylab.Semantics.MetadataNS.Builtins
 {
     public class RichArtifact<M> : RichArtifactDeclaration<M>, IRichArtifact<M> where M : Metadata
     {
+        [SimplScalar]
+        [SimplTag("primary_location")]
+        private ParsedUri _primaryLocation;
+
         public RichArtifact()
         {
             CreativeActs = new List<CreativeAct>();
