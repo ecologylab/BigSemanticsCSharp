@@ -32,7 +32,6 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
         [SimplScalar]
         private MetadataParsedURL favicon;
 
-        [SimplScalar]
         private DownloadStatus downloadStatus = DownloadStatus.UNPROCESSED;
 
         private DocumentClosure documentClosure;
