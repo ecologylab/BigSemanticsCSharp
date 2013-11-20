@@ -60,10 +60,10 @@ namespace Ecologylab.Semantics.Collecting
             var doc = base.GetDocument(puri);
             if (doc == null)
             {
-                var response = await HttpClient.GetAsync(new Uri(MetadataServiceUri, "metadata.xml?url=" + puri.AbsoluteUri));
+                var response = await HttpClient.GetAsync(new Uri(MetadataServiceUri, "metadata.json?url=" + puri.AbsoluteUri));
                 if (response.IsSuccessStatusCode)
                 {
-                    doc = this.MetadataTranslationScope.Deserialize(await response.Content.ReadAsStreamAsync(), Format.Xml) as Document;
+                    doc = this.MetadataTranslationScope.Deserialize(await response.Content.ReadAsStreamAsync(), Format.Json) as Document;
                 }
             }
 
