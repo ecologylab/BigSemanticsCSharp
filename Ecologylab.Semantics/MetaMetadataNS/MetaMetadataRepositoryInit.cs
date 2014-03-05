@@ -119,7 +119,6 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             _generatedMediaTranslations.AddTranslation(typeof(Clipping<>));
             _generatedMediaTranslations.AddTranslation(typeof(TextSelfmade));
             _generatedMediaTranslations.AddTranslation(typeof(HtmlText));
-            _generatedMediaTranslations.AddTranslation(typeof(WebVideo));
                
         }
 
@@ -150,24 +149,41 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
         private void SetDefaultMetaMetadatas()
         {
-            DocumentMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.DocumentTag);
-            PdfMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.PdfTag);
-            SearchMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.SearchTag);
-            ImageMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.ImageTag);
-            DebugMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.DebugTag);
-            ImageClippingMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.ImageClippingTag);
+            if (META_METADATA_REPOSITORY != null)
+            {
+                DocumentMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.DocumentTag);
+                PdfMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.PdfTag);
+                SearchMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.SearchTag);
+                ImageMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.ImageTag);
+                DebugMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.DebugTag);
+                ImageClippingMetaMetadata = META_METADATA_REPOSITORY.GetMMByName(DocumentParserTagNames.ImageClippingTag);
+            }
         }
 
         private void BindAndCallback(MetaMetadataRepository repository)
         {
-            repository.BindMetadataClassDescriptorsToMetaMetadata(_metadataTranslationScope);
+            if (repository != null)
+                repository.BindMetadataClassDescriptorsToMetaMetadata(_metadataTranslationScope);
+            
             if (RepositoryLoaded != null)
                 RepositoryLoaded(repository, new EventArgs());
         }
 
         public static async Task<MetaMetadataRepository> RequestMetaMetadataRepository(ParsedUri requestUri)
         {
-            return await MetaMetadataTranslationScope.Get().DeserializeUri(requestUri, Format.Xml, new TranslationContext(requestUri)) as MetaMetadataRepository;
+            MetaMetadataRepository repository = null;
+
+            try
+            {
+                repository = await MetaMetadataTranslationScope.Get().DeserializeUri(requestUri, Format.Xml, new TranslationContext(requestUri)) as MetaMetadataRepository;
+            }
+            catch (Exception)
+            {
+                Debug.WriteLine("Error loading Meta-metadata Repo. Service is down?!");
+            }
+            
+
+            return repository;
         }
 
         public async Task<MetaMetadataRepository> LoadRepositoryFromCache(object file)

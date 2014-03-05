@@ -48,5 +48,27 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
                 return result;
             }
         }
+
+	    public static ImageClipping ConstructClipping(ParsedUri location, Document sourceDoc, Document creator)
+	    {
+            var imageClipping = new ImageClipping
+            {
+                Media = new Image
+                {
+                    Location = new MetadataParsedURL(location)
+                },
+                SourceDoc = sourceDoc,
+                CreativeActs = new List<CreativeAct>(),
+
+            };
+            imageClipping.CreativeActs.Add(new CreativeAct
+            {
+                Action = CreativeAct.CreativeAction.CurateClipping,
+                Time = new MetadataDate(DateTime.UtcNow),
+                Creator = creator
+            });
+
+	        return imageClipping;
+	    }
 	}
 }

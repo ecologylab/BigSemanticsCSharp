@@ -17,9 +17,8 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
             new[] 
             { 
                 MetadataBuiltinDeclarationsTranslationScope.Get(), 
-                BuiltinMediaTypeScope.Get(),
                 CreativeActsTypesScope.Get(),
-                RichArtifactsTypeScope.Get(),
+
             };
 
         protected static Type[] Translations =

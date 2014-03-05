@@ -29,5 +29,10 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
 
 		public TextClipping(MetaMetadataCompositeField mmd) : base(mmd) { }
 
+	    public string Text
+	    {
+            get { return (Media != null) ? Media.HtmlString.Value : ""; }
+	    }
+
 	}
 }

@@ -74,7 +74,7 @@ namespace Ecologylab.Semantics.MetadataNS
 
         public IMetadata GetNestedMetadata(IMetadata context)
 	    {
-		    return IsScalar ? null : (IMetadata) GetNested(context);
+		    return IsScalar ? null : GetNested(context) as IMetadata;
 	    }
 
         private MetadataFieldDescriptor clonedFrom;

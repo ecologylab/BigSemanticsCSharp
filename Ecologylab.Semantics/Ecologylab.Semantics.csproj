@@ -80,18 +80,11 @@
     </Compile>
     <Compile Include="MetadataNS\Builtins\Annotate.cs" />
     <Compile Include="MetadataNS\Builtins\AssignPrimaryLink.cs" />
-    <Compile Include="MetadataNS\Builtins\Audio.cs" />
-    <Compile Include="MetadataNS\Builtins\AudioClipping.cs" />
-    <Compile Include="MetadataNS\Builtins\AudioSelfmade.cs" />
-    <Compile Include="MetadataNS\Builtins\BuiltinMediaTypeScope.cs" />
     <Compile Include="MetadataNS\Builtins\CreativeActsTypesScope.cs" />
     <Compile Include="MetadataNS\Builtins\CurateLink.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\AssignPrimaryLinkDeclaration.cs" />
-    <Compile Include="MetadataNS\Builtins\MediaProvider.cs" />
-    <Compile Include="MetadataNS\Builtins\RichArtifactsTypeScope.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\CurateLinkDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\ImageSelfmade.cs" />
-    <Compile Include="MetadataNS\Builtins\SequencedClippableDocument.cs" />
     <Compile Include="MetadataNS\Builtins\TextSelfmade.cs" />
     <Compile Include="MetadataNS\Builtins\ClippableDocument.cs" />
     <Compile Include="MetadataNS\Builtins\Clipping.cs" />
@@ -125,10 +118,6 @@
     <Compile Include="MetadataNS\Builtins\MetadataCollection.cs" />
     <Compile Include="MetadataNS\Builtins\RichArtifact.cs" />
     <Compile Include="MetadataNS\Builtins\TextClipping.cs" />
-    <Compile Include="MetadataNS\Builtins\Video.cs" />
-    <Compile Include="MetadataNS\Builtins\VideoClipping.cs" />
-    <Compile Include="MetadataNS\Builtins\VideoSelfmade.cs" />
-    <Compile Include="MetadataNS\Builtins\WebVideo.cs" />
     <Compile Include="MetadataNS\IMetadata.cs" />
     <Compile Include="MetadataNS\Metadata.cs" />
     <Compile Include="MetadataNS\MetadataClassDescriptor.cs" />

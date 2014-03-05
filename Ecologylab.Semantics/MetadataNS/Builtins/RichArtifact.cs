@@ -25,10 +25,13 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
         {
             CreativeActs = new List<CreativeAct>();
         }
+        
     }
 
     public interface IRichArtifact<out TM> where TM: Metadata
     {
         TM Media { get; }
     }
+
+    
 }
