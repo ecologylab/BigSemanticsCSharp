@@ -30,6 +30,16 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
             typeof (Document),
             typeof (DocumentMetadataWrap),
             typeof (MetadataCollection),
+            typeof (Annotate),
+            typeof (Audio),
+            typeof (HtmlText),
+            typeof (Image),
+            typeof (SequencedClippableDocument),
+            typeof (Video),
+            typeof (ImageClipping),
+            typeof (ImageSelfmade),
+            typeof (TextClipping),
+            typeof (TextSelfmade),
         };
 
         static MetadataBuiltinsTypesScope()

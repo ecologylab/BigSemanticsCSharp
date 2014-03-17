@@ -24,6 +24,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 			return SimplTypesScope.Get("repository_builtin_declarations_scope",
 				typeof(AnnotateDeclaration),
 				typeof(AssignPrimaryLinkDeclaration),
+				typeof(AudioDeclaration),
 				typeof(ClippableDocumentDeclaration),
 				typeof(ClippingDeclaration<>),
 				typeof(CompoundDocumentDeclaration),
@@ -38,8 +39,10 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 				typeof(ImageSelfmadeDeclaration),
 				typeof(MetadataDeclaration),
 				typeof(RichArtifactDeclaration<>),
+				typeof(SequencedClippableDocumentDeclaration),
 				typeof(TextClippingDeclaration),
-				typeof(TextSelfmadeDeclaration));
+				typeof(TextSelfmadeDeclaration),
+				typeof(VideoDeclaration));
 		}
 
 	}

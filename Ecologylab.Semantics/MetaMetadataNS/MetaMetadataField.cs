@@ -51,8 +51,9 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
 		/// </summary>
-		[SimplScalar]
-		private String xpath;
+		[SimplCollection("xpath")]
+        [SimplNoWrap]
+		private List<String> xpaths;
 
 		/// <summary>
 		/// missing java doc comments or could not find the source file.
@@ -352,10 +353,10 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 			set{tag = value;}
 		}
 
-		public String Xpath
+		public List<String> Xpaths
 		{
-			get{return xpath;}
-			set{xpath = value;}
+			get{return xpaths;}
+			set{xpaths = value;}
 		}
 
 		public String ContextNode
