@@ -72,7 +72,7 @@ namespace Ecologylab.Semantics.MetadataNS
 
             //mm = await MetaMetadataTranslationScope.Get().Deserialize()
             if (_repository == null)
-                _repository = MetaMetadataRepositoryInit.getRepository();
+                _repository = MetaMetadataRepositoryInit.GetRepository();
 
             if (mm == null && _repository != null)
             {

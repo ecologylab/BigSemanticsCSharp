@@ -56,7 +56,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             MetaMetadataRepository.InitializeTypes();
         }
 
-        public static MetaMetadataRepository getRepository()
+        public static MetaMetadataRepository GetRepository()
         {
             return META_METADATA_REPOSITORY;
         }
