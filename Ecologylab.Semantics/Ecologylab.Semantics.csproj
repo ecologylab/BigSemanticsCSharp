@@ -231,18 +231,24 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Simpl\simplCSharp\Simpl.Fundamental\Simpl.Fundamental.csproj">
-      <Project>{10287dd6-0c07-4737-9469-0aa21b7723bf}</Project>
-      <Name>Simpl.Fundamental</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Simpl\simplCSharp\Simpl.OODSS\Simpl.OODSS.csproj">
-      <Project>{4f3bf780-cc24-4eba-9238-5d99b83d1e27}</Project>
-      <Name>Simpl.OODSS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Simpl\simplCSharp\Simpl.Serialization\Simpl.Serialization.csproj">
-      <Project>{16c61dd8-68b1-4509-8e18-6f7e80b605a3}</Project>
-      <Name>Simpl.Serialization</Name>
-    </ProjectReference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Simpl.Fundamental">
+      <HintPath>..\lib\Simpl.Fundamental.dll</HintPath>
+    </Reference>
+    <Reference Include="Simpl.Fundamental.WindowsStoreApps">
+      <HintPath>..\lib\Simpl.Fundamental.WindowsStoreApps.dll</HintPath>
+    </Reference>
+    <Reference Include="Simpl.OODSS">
+      <HintPath>..\lib\Simpl.OODSS.dll</HintPath>
+    </Reference>
+    <Reference Include="Simpl.OODSS.WindowsStoreApps">
+      <HintPath>..\lib\Simpl.OODSS.WindowsStoreApps.dll</HintPath>
+    </Reference>
+    <Reference Include="Simpl.Serialization">
+      <HintPath>..\lib\Simpl.Serialization.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
