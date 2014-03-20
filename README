@@ -1,5 +1,3 @@
-The Interface Ecology Lab ( ecologylab.net ) has recently moved all code from svn to github.
+BigSemantics is a free and open-source software architecture for developing powerful applications that present interactive metadata semantics from diverse information sources.
 
-If this repository does not have a wiki, please look at the s.im.pl guide ( http://ecologylab.net/research/simplGuide/index.html ).
-
-Subscribe to meta-metadata developers group ( http://groups.google.com/group/metametadata/subscribe ), or s.im.pl api developers group ( http://groups.google.com/group/ecologylabAPI/subscribe ) to see our history and ask questions.
+This is the C# code base for BigSemantics. Please refer to the [https://github.com/ecologylab/BigSemantics/wiki BigSemantics wiki] for more information and how to setup a development environment.
