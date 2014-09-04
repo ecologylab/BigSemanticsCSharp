@@ -26,7 +26,7 @@ namespace Ecologylab.Semantics.Actions
 
 	    public override Object Perform(Object obj)// throws IOException
 	    {
-		    CompoundDocument doc = (CompoundDocument) obj;
+		    RichDocument doc = (RichDocument) obj;
 		    MetaMetadata mmd = (MetaMetadata) doc.MetaMetadata;
 /*		    Dictionary<MetaMetadataSelector, MetaMetadata> reselectMap = mmd.ReselectMap;
 		    if (reselectMap != null)

@@ -93,13 +93,13 @@
     <Compile Include="MetadataNS\Builtins\TextSelfmade.cs" />
     <Compile Include="MetadataNS\Builtins\ClippableDocument.cs" />
     <Compile Include="MetadataNS\Builtins\Clipping.cs" />
-    <Compile Include="MetadataNS\Builtins\CompoundDocument.cs" />
+    <Compile Include="MetadataNS\Builtins\RichDocument.cs" />
     <Compile Include="MetadataNS\Builtins\CreativeAct.cs" />
     <Compile Include="MetadataNS\Builtins\DebugMetadata.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\AnnotateDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\ClippableDocumentDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\ClippingDeclaration.cs" />
-    <Compile Include="MetadataNS\Builtins\Declarations\CompoundDocumentDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\RichDocumentDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\CreativeActDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\DebugMetadataDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\DocumentDeclaration.cs" />

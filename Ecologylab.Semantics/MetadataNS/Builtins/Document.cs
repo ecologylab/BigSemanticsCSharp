@@ -64,6 +64,12 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
             }
         }
 
+        public MetadataString Title
+        {
+            get { return new MetadataString(Location.ToString()); }
+            set { }
+        }
+
         #region Runtime Properties
 
         public SemanticsSessionScope SemanticsSessionScope { get; set; }
@@ -72,7 +78,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
 
         public override String ToString()
         {
-            return (Title != null) ? Title.Value : base.ToString();
+            return base.ToString() + "[" + Location + "]";
         }
 
         public void AddAdditionalLocation(MetadataParsedURL additionalLocation)

@@ -25,7 +25,7 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins
         {
             typeof (Metadata),
             typeof (ClippableDocument),
-            typeof (CompoundDocument),
+            typeof (RichDocument),
             typeof (DebugMetadata),
             typeof (Document),
             typeof (DocumentMetadataWrap),

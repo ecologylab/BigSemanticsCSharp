@@ -32,7 +32,6 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 		/// Stores the name of the meta-metadata, and is used on restoring from XML.
 		/// </summary>
 		[SimplScalar]
-		[SimplTag("mm_name")]
 		private MetadataString metaMetadataName;
 
 		[SimplCollection]

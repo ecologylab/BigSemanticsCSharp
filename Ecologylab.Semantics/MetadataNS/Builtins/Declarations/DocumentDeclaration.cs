@@ -23,28 +23,16 @@ using System.Collections.Generic;
 namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations 
 {
 	/// <summary>
-	/// The Document Class
+	/// The Primitive Document Class. Even images should extend this.
 	/// </summary>
 	[SimplInherit]
 	public class DocumentDeclaration : Metadata
 	{
 		/// <summary>
-		/// The Title of the Document
-		/// </summary>
-		[SimplScalar]
-		[SimplHints(new Hint[] {Hint.XmlLeaf})]
-		[SimplCompositeAsScalar]
-		private MetadataString title;
-
-		/// <summary>
 		/// The document's actual location.
 		/// </summary>
 		[SimplScalar]
 		private MetadataParsedURL location;
-
-		[SimplScalar]
-		[SimplHints(new Hint[] {Hint.XmlLeaf})]
-		private MetadataString description;
 
 		/// <summary>
 		/// Relative location of a local copy of the document.
@@ -52,38 +40,15 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 		[SimplScalar]
 		private MetadataParsedURL localLocation;
 
-		/// <summary>
-		/// Huamn readable name of the site.
-		/// </summary>
-		[SimplScalar]
-		private MetadataString siteName;
-
-		[SimplCollection("location")]
+		[SimplCollection("additional_location")]
 		[MmName("additional_locations")]
 		private List<Ecologylab.Semantics.MetadataNS.Scalar.MetadataParsedURL> additionalLocations;
-
-		[SimplComposite]
-		[MmName("see_also")]
-		private Document seeAlso;
 
 		public DocumentDeclaration()
 		{ }
 
 		public DocumentDeclaration(MetaMetadataCompositeField mmd) : base(mmd) { }
 
-
-		public MetadataString Title
-		{
-			get{return title;}
-			set
-			{
-				if (this.title != value)
-				{
-					this.title = value;
-					// TODO we need to implement our property change notification mechanism.
-				}
-			}
-		}
 
 		public MetadataParsedURL Location
 		{
@@ -93,19 +58,6 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 				if (this.location != value)
 				{
 					this.location = value;
-					// TODO we need to implement our property change notification mechanism.
-				}
-			}
-		}
-
-		public MetadataString Description
-		{
-			get{return description;}
-			set
-			{
-				if (this.description != value)
-				{
-					this.description = value;
 					// TODO we need to implement our property change notification mechanism.
 				}
 			}
@@ -124,19 +76,6 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 			}
 		}
 
-		public MetadataString SiteName
-		{
-			get{return siteName;}
-			set
-			{
-				if (this.siteName != value)
-				{
-					this.siteName = value;
-					// TODO we need to implement our property change notification mechanism.
-				}
-			}
-		}
-
 		public List<Ecologylab.Semantics.MetadataNS.Scalar.MetadataParsedURL> AdditionalLocations
 		{
 			get{return additionalLocations;}
@@ -145,19 +84,6 @@ namespace Ecologylab.Semantics.MetadataNS.Builtins.Declarations
 				if (this.additionalLocations != value)
 				{
 					this.additionalLocations = value;
-					// TODO we need to implement our property change notification mechanism.
-				}
-			}
-		}
-
-		public Document SeeAlso
-		{
-			get{return seeAlso;}
-			set
-			{
-				if (this.seeAlso != value)
-				{
-					this.seeAlso = value;
 					// TODO we need to implement our property change notification mechanism.
 				}
 			}
