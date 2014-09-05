@@ -172,7 +172,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 		    {
                 if (mmd == baseMmd)
 				    return true;
-			    mmd = mmd.InheritedMmd;
+			    mmd = mmd.SuperMmd;
 		    }
 		    return false;
 	    }
@@ -260,7 +260,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             if (MetaMetadata.IsRootMetaMetadata(this))
                 return null;
 
-            MetaMetadata inheritedMmd = this.InheritedMmd;
+            MetaMetadata inheritedMmd = this.TypeMmd;
             if (inheritedMmd == null)
             {
                 String inheritedMmdName = this.Type;
@@ -271,10 +271,10 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                 }
                 if (inheritedMmdName == null)
                     throw new MetaMetadataException("no type/extends specified: " + this);
-                inheritedMmd = this.MmdScope[inheritedMmdName];
+                inheritedMmd = (MetaMetadata) this.Scope[inheritedMmdName];
                 if (inheritedMmd == null)
                     throw new MetaMetadataException("meta-metadata '" + inheritedMmdName + "' not found.");
-                InheritedMmd = inheritedMmd;
+                TypeMmd = inheritedMmd;
             }
             return inheritedMmd;
         }
@@ -302,7 +302,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             {
                 // re-using existing type
                 // do not use this.type directly because we don't know if that is a definition or just re-using exsiting type
-                MetaMetadata inheritedMmd = InheritedMmd;
+                MetaMetadata inheritedMmd = TypeMmd;
 //                if (inheritedMmd == null)
 //                    InheritMetaMetadata(null);//edit // currently, this should never happend because we call this method after inheritance process.
                 return inheritedMmd == null ? null : inheritedMmd.GetMetadataClassSimpleName();
@@ -334,8 +334,13 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 	        return result;
 	    }
 
-        
-	}
+        public MetaMetadata SuperMmd
+        {
+            get { return (MetaMetadata) SuperField; }
+            set { SuperField = value; }
+        }
+
+    }
 
     public enum RedirectHandling
     {

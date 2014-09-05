@@ -98,20 +98,20 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             childComposite.Repository = Repository;
             childComposite.PackageName = PackageName;
 
-            if (InheritedField != null)
-              childComposite.InheritedField = (InheritedField as MetaMetadataCollectionField).GetChildComposite();
+            if (SuperField != null)
+              childComposite.SuperField = (SuperField as MetaMetadataCollectionField).GetChildComposite();
             childComposite.DeclaringMmd = DeclaringMmd;
-            childComposite.MmdScope = MmdScope;
+            childComposite.Scope = Scope;
 
             childComposite.InheritMetaMetadata(inheritanceHandler); // inheritedMmd might be inferred from type/extends
 
-            InheritedMmd = childComposite.InheritedMmd;
-            MmdScope = childComposite.MmdScope;
+            TypeMmd = childComposite.TypeMmd;
+            Scope = childComposite.Scope;
             break;
           }
         case FieldTypes.CollectionScalar:
           {
-            MetaMetadataField inheritedField = InheritedField;
+            MetaMetadataField inheritedField = SuperField;
             if (inheritedField != null)
               InheritAttributes(inheritedField);
             break;
@@ -201,7 +201,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
     public override void DeserializationPostHook(TranslationContext translationContext)
     {
       int typeCode = this.GetFieldType();
-      if (typeCode == FieldTypes.CollectionScalar || this.inheritFinished)
+      if (typeCode == FieldTypes.CollectionScalar || this.inheritDone)
         return;
 
       String childCompositeName = ChildType ?? UNRESOLVED_NAME;

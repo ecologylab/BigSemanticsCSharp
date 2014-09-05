@@ -15,8 +15,10 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 	    protected static readonly Type[]	Translations	= new Type[] {
 		    typeof(MetaMetadataField),
 		    typeof(MetaMetadataScalarField),
+		    typeof(MetaMetadataNestedField),
 		    typeof(MetaMetadataCompositeField),
 		    typeof(MetaMetadataCollectionField),
+		    typeof(MetaMetadata),
             typeof(MmdScope),
 	    };
 

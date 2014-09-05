@@ -6,6 +6,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Simpl.Serialization;
 using System.Text;
 using System.Collections.Generic;
+using Ecologylab.Semantics.MetadataNS.Scalar.Types;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Ecologylab.Semantics.Test
 {
@@ -16,22 +19,25 @@ namespace Ecologylab.Semantics.Test
         SemanticsSessionScope _scope;
 
         [TestMethod]
-        public void TestLoadingRepository()
+        public void TestLoadingPostInheritanceRepository()
         {
-            Console.WriteLine(System.IO.Directory.GetCurrentDirectory());
             SimplTypesScope.graphSwitch = SimplTypesScope.GRAPH_SWITCH.ON;
+            MetadataScalarType.init();
 
-            _scope = new SemanticsSessionScope(RepositoryMetadataTranslationScope.Get(),
-                                               "TestData/MmdRepo",
-                                               null,
-                                               delegate { ValidateRepo(); });
-            _scope.LoadRepositoryAsync();
+            String workingDirPath = System.IO.Directory.GetCurrentDirectory();
+            FileInfo repoFile = new FileInfo(workingDirPath + "\\..\\..\\..\\..\\BigSemanticsWrapperRepository\\BigSemanticsWrappers\\PostInheritanceRepository\\post-inheritance-repository.xml");
+            Assert.IsTrue(repoFile.Exists);
+            MetaMetadataRepositoryInit repoInit =
+                new MetaMetadataRepositoryInit(RepositoryMetadataTranslationScope.Get(),
+                                               repoFile.FullName,
+                                               null);
+            Task<MetaMetadataRepository> task = repoInit.LoadRepositoryFromCache(repoFile);
+            task.Wait();
+            ValidateRepo(task.Result);
         }
 
-        public void ValidateRepo()
+        public void ValidateRepo(MetaMetadataRepository repo)
         {
-            MetaMetadataRepository repo = _scope.MetaMetadataRepository;
-
             Console.WriteLine(repo.RepositoryByName.Count);
             List<string> mmdNames = new List<string>(repo.RepositoryByName.Keys);
             mmdNames.Sort();

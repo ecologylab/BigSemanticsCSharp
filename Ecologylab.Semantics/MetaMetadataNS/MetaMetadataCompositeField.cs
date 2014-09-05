@@ -110,7 +110,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             }
 
             // for the root meta-metadata, this may happend
-            if (inheritedMmd == null && InheritedField == null)
+            if (inheritedMmd == null && SuperField == null)
                 InheritFrom(repository, null, inheritanceHandler);
 
             return !inhertedIsInheriting;
@@ -120,7 +120,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
         private bool InheritFromSuperField(MetaMetadataRepository repository, InheritanceHandler inheritanceHandler)
         {
             bool inhertedIsInheriting = false;
-            MetaMetadataCompositeField inheritedField = (MetaMetadataCompositeField)InheritedField;
+            MetaMetadataCompositeField inheritedField = (MetaMetadataCompositeField)SuperField;
             if (inheritedField != null)
             {
                 inheritedField.Repository = repository;
@@ -192,7 +192,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                     MetaMetadataNestedField nested = (MetaMetadataNestedField) f;
                     if (nested.PackageName == null)
                         nested.PackageName = PackageName;
-                    nested.MmdScope = MmdScope;
+                    nested.Scope = Scope;
                 }
 
             // inherit fields with attributes from inheritedStructure
@@ -222,7 +222,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                             MetaMetadataNestedField nested = (MetaMetadataNestedField)fieldLocal;
                             if (nested.PackageName == null)
                                 nested.PackageName = PackageName;
-                            nested.MmdScope = MmdScope;
+                            nested.Scope = Scope;
                         }
                     }
                     if (fieldLocal != null)
@@ -233,7 +233,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                                             " with the same name in super mmd type!");
                         // debug("inheriting field " + fieldLocal + " from " + field);
                         if (field != fieldLocal)
-                            fieldLocal.InheritedField = field;
+                            fieldLocal.SuperField = field;
                         fieldLocal.DeclaringMmd = field.DeclaringMmd;
                         fieldLocal.InheritAttributes(field);
                         if (fieldLocal is MetaMetadataNestedField)
@@ -247,7 +247,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             foreach (MetaMetadataField f in subfields)
             {
                 // a new field is defined inside this mmd
-                if (f.DeclaringMmd == this && f.InheritedField == null)
+                if (f.DeclaringMmd == this && f.SuperField == null)
                     SetNewMetadataClass(true);
 
                 // recursively call this method on nested fields
@@ -259,13 +259,13 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                     if (f1.IsNewMetadataClass())
                         SetNewMetadataClass(true);
 
-                    MetaMetadataNestedField f0 = (MetaMetadataNestedField) f.InheritedField;
+                    MetaMetadataNestedField f0 = (MetaMetadataNestedField) f.SuperField;
                     if (f0 != null && f0.GetTypeName() != f1.GetTypeName())
                     {
                         // inherited field w changing base type (polymorphic case)
                         f1.InheritMetaMetadata(inheritanceHandler);
-                        MetaMetadata mmd0 = f0.InheritedMmd;
-                        MetaMetadata mmd1 = f1.InheritedMmd;
+                        MetaMetadata mmd0 = f0.TypeMmd;
+                        MetaMetadata mmd1 = f1.TypeMmd;
                         if (mmd1.IsDerivedFrom(mmd0))
                             SetNewMetadataClass(true);
                         else
@@ -301,15 +301,15 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
         protected virtual void InheritNonFieldElements(MetaMetadata inheritedMmd, InheritanceHandler inheritanceHandler)
         {
-            MmdScope = new MmdScope(MmdScope, inheritedMmd.MmdScope);
+            Scope = new MmdScope(Scope, inheritedMmd.Scope);
         }
 
         protected virtual MetaMetadata FindOrGenerateInheritedMetaMetadata(MetaMetadataRepository repository, InheritanceHandler inheritanceHandler)
         {
-            MetaMetadata inheritedMmd = this.InheritedMmd;
+            MetaMetadata inheritedMmd = this.TypeMmd;
             if (inheritedMmd == null)
             {
-                MmdScope mmdScope = this.MmdScope;
+                MmdScope mmdScope = this.Scope;
                 String inheritedMmdName = Type ?? Name;
 
                 if (ExtendsAttribute != null)
@@ -358,7 +358,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
                     // process normal mmd / field
                     Debug.WriteLine("setting " + this + ".inheritedMmd to " + inheritedMmd);
-                    InheritedMmd = inheritedMmd;
+                    TypeMmd = inheritedMmd;
                 }
             }
             return inheritedMmd;
@@ -367,7 +367,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
         protected void MakeThisFieldUseMmd(String previousName, MetaMetadata mmd)
         {
             // must set this before generatedMmd.inheritMetaMetadata() to meet inheritMetaMetadata() prerequisites
-            InheritedMmd = mmd;
+            TypeMmd = mmd;
             // make this field as if is using generatedMmd as type
             Type = mmd.Name;
             ExtendsAttribute = null;
@@ -386,13 +386,13 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                                                 Name = generatedName,
                                                 PackageName = PackageName,
                                                 Type = null,
-                                                InheritedMmd = inheritedMmd,
+                                                TypeMmd = inheritedMmd,
                                                 ExtendsAttribute = inheritedMmd.Name,
                                                 Repository = Repository,
                                                 Visibility = Visibility.PACKAGE,
-                                                MmdScope =
-                                                    new MmdScope(this.MmdScope,
-                                                                                         inheritedMmd.MmdScope)
+                                                Scope =
+                                                    new MmdScope(this.Scope,
+                                                                                         inheritedMmd.Scope)
                                             };
             if (SchemaOrgItemtype != null)
                 generatedMmd.SchemaOrgItemtype = SchemaOrgItemtype;

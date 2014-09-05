@@ -167,11 +167,12 @@ namespace Ecologylab.Semantics.MetaMetadataNS
         [SimplComposite]
         [SimplScope(NestedMetaMetadataFieldTypesScope.Name)]
         [SimplWrap]
-        private MetaMetadataField inheritedField = null;
+        [MmDontInherit]
+        private MetaMetadataField superField = null;
 
         [SimplScalar]
         [MmDontInherit]
-	    protected bool inheritFinished;
+	    protected bool inheritDone;
 
         /**
          * in which meta-metadata this field is declared.
@@ -473,10 +474,10 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             set{ metadataFieldDescriptor = value; } 
         }
 
-	    public MetaMetadataField InheritedField
+	    public MetaMetadataField SuperField
 	    {
-	        get { return inheritedField; }
-	        set { inheritedField = value; }
+	        get { return superField; }
+	        set { superField = value; }
 	    }
 
 	    public MetaMetadata DeclaringMmd

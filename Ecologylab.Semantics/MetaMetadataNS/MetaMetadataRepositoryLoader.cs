@@ -91,7 +91,8 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                         mainRepo.PackageMmdScopes.TryGetValue(mmd.PackageName, out packageMmdScopes);
                         if(packageMmdScopes == null)
                         {
-                            packageMmdScopes = new MmdScope(mainRepo.RepositoryByName);
+                            packageMmdScopes = new MmdScope(repo.PackageName);
+                            packageMmdScopes.PutAll(mainRepo.RepositoryByName);
                             mainRepo.PackageMmdScopes.Put(packageName, packageMmdScopes);
                         }
 
@@ -108,7 +109,9 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                                 mainRepo.RepositoryByName.Put(mmdName, mmd);
                                 break;
                             case Visibility.PACKAGE:
-                                packageMmdScopes.TryGetValue(mmdName, out existingMmd);
+                                Object mmdObj = null;
+                                packageMmdScopes.TryGetValue(mmdName, out mmdObj);
+                                existingMmd = (MetaMetadata) mmdObj;
 
                                 if (existingMmd != null && existingMmd != mmd)
                                     throw new MetaMetadataException("MMD already exists: " + mmdName + " in " + filename);
@@ -127,7 +130,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                         }
                         MmdScope packageMmdScope;
                         mainRepo.PackageMmdScopes.TryGetValue(metaMetadata.PackageName, out packageMmdScope);
-                        metaMetadata.MmdScope = packageMmdScope;
+                        metaMetadata.Scope = packageMmdScope;
                     }
 
                     mainRepo.IntegrateRepository(repo);

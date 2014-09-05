@@ -57,7 +57,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
          */
         [SimplComposite]
         [MmDontInherit]
-        private MetaMetadata inheritedMmd;
+        private MetaMetadata typeMmd;
 
         /**
          * should we generate a metadata class descriptor for this field. used by the compiler.
@@ -68,12 +68,10 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
         [SimplComposite]
         [MmDontInherit]
-        private MmdScope mmdScope;
+        private MmdScope scope;
 
         [SimplScalar]
         private String otherTags;
-
-
 
         private bool    mmdScopeTraversed;
         
@@ -100,7 +98,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
         public void InheritMetaMetadata(InheritanceHandler inheritanceHandler)
         {
-            if (inheritFinished || _inheritInProcess) return;
+            if (inheritDone || _inheritInProcess) return;
 
             //Debug.WriteLine("inheriting " + this);
             _inheritInProcess = true;
@@ -113,7 +111,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             this.SortForDisplay();
 
             _inheritInProcess = false;
-            inheritFinished = true;
+            inheritDone = true;
 
             if (InheritFinished != null)
                 InheritFinished(this, EventArgs.Empty);
@@ -228,16 +226,16 @@ namespace Ecologylab.Semantics.MetaMetadataNS
             set { schemaOrgItemtype = value; }
         }
 
-        public MmdScope MmdScope
+        public MmdScope Scope
         {
-            get { return mmdScope; }
-            set { mmdScope = value; }
+            get { return scope; }
+            set { scope = value; }
         }
 
-        public MetaMetadata InheritedMmd
+        public MetaMetadata TypeMmd
         {
-            get { return inheritedMmd; }
-            set { inheritedMmd = value; }
+            get { return typeMmd; }
+            set { typeMmd = value; }
         }
 
         public virtual bool IsNewMetadataClass()
@@ -284,7 +282,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
             if (result == null)
             {
-                MetaMetadataField inherited = InheritedField;
+                MetaMetadataField inherited = SuperField;
                 if (inherited != null)
                 {
                     // use inherited field's type
@@ -348,8 +346,8 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                         }
                         catch (Exception e)
                         {
-                            //						e.printStackTrace();
-                            //						throw new MetaMetadataException("Cannot find metadata class: " + metadataClassName);
+                            Debug.WriteLine("Exception: " + e.Message);
+                            Debug.WriteLine("Stacktrace:\n" + e.StackTrace);
                             Debug.WriteLine("Cannot find metadata class: " + metadataClassName);
                         }
                     }
@@ -376,23 +374,23 @@ namespace Ecologylab.Semantics.MetaMetadataNS
         protected void BindMetadataFieldDescriptors(SimplTypesScope metadataTScope,
                                                     MetadataClassDescriptor metadataClassDescriptorToBind)
         {
-            bool needCloneKinds = false;
+            bool needCloneKids = false;
 
             // check if the class's base class is genereic typed, and make sure itself is not generic.  
             MetadataClassDescriptor metadataCd = MetadataClassDescriptor;
-            MetaMetadata baseMmd = InheritedMmd;
+            MetaMetadata baseMmd = TypeMmd;
             while(baseMmd != null && metadataCd != null)
             {
                 if (metadataCd.GetGenericTypeVars().Count == 0 && baseMmd.GenericTypeVars != null)
                 {
-                    needCloneKinds = true;
+                    needCloneKids = true;
                     break;
                 }
                 metadataCd = baseMmd.MetadataClassDescriptor;
-                baseMmd = baseMmd.InheritedMmd;
+                baseMmd = baseMmd.TypeMmd;
             }
 
-            if (needCloneKinds)
+            if (needCloneKids)
             {
                 DictionaryList<string, MetaMetadataField> clonedKids = new DictionaryList<string, MetaMetadataField>();
                 foreach (KeyValuePair<string, MetaMetadataField> entry in Kids)
@@ -401,7 +399,8 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                     MetaMetadataField field = entry.Value;
                         
                     // look up to see if the field is declared in a generic typed class. If not, it does not need to clone it.
-                    if (field.DeclaringMmd.GenericTypeVars != null && field.DeclaringMmd.IsGenericMetadata)
+                    MetaMetadata declaringMmd = field.DeclaringMmd;
+                    if (declaringMmd != null && declaringMmd.GenericTypeVars != null && declaringMmd.IsGenericMetadata)
                     {
                         // clone the field
                         field = field.Clone();
@@ -440,27 +439,8 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                     nonDisplayedFieldNames.Add(thatChild.Shadows);
 
                 // recursively process sub-fields
-                if (thatChild is MetaMetadataScalarField)
-                {
-                    // no! we can't add regex filters to field descriptors, because field descriptors
-                    // are shared between fields and inherited fields.
-
-                    // process regex filter
-                    //MetaMetadataScalarField scalar = (MetaMetadataScalarField) thatChild;
-                    //if (scalar.Filter != null)
-                    //{
-                    //    MetadataFieldDescriptor fd = scalar.MetadataFieldDescriptor;
-                    //    if (fd != null)
-                    //    {
-                    //        fd.FilterRegex = scalar.Filter.RegexPattern;
-                    //        fd.FilterReplace = scalar.Filter.Replace;
-                    //    }
-
-                    //    else
-                    //        Debug.WriteLine("Encountered null fd for scalar: " + scalar);
-                    //}
-                }
-                else if (thatChild is MetaMetadataNestedField && thatChild.HasChildren())
+                Int32 fieldType = metadataFd.FdType;
+                if (fieldType == FieldTypes.CompositeElement || fieldType == FieldTypes.CollectionElement)
                 {
                     // bind class descriptor for nested sub-fields
                     MetaMetadataNestedField nested = (MetaMetadataNestedField) thatChild;
@@ -475,7 +455,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
                             ((MetaMetadataNestedField) thatChild).BindMetadataClassDescriptor(metadataTScope);
                         if (elementClassDescriptor != null)
                         {
-                            MetaMetadata mmdForThatChild = nested.InheritedMmd;
+                            MetaMetadata mmdForThatChild = nested.TypeMmd;
                             if (mmdForThatChild != null && mmdForThatChild.MetadataClassDescriptor == null)
                                 //							mmdForThatChild.setMetadataClassDescriptor(elementClassDescriptor);
                                 mmdForThatChild.BindMetadataClassDescriptor(metadataTScope);
@@ -504,14 +484,14 @@ namespace Ecologylab.Semantics.MetaMetadataNS
         {
             base.CustomizeFieldDescriptor(metadataTScope, fdProxy);
 
-            MetaMetadata thisMmd = InheritedMmd;
+            MetaMetadata thisMmd = TypeMmd;
             if (thisMmd == null)
                 return;
 
-            MetaMetadataNestedField inheritedField = (MetaMetadataNestedField) InheritedField;
+            MetaMetadataNestedField inheritedField = (MetaMetadataNestedField) SuperField;
             if (inheritedField != null)
             {
-                MetaMetadata superMmd = inheritedField.InheritedMmd;
+                MetaMetadata superMmd = inheritedField.TypeMmd;
                 if (thisMmd == superMmd || thisMmd.IsDerivedFrom(superMmd))
                 {
                     MetadataClassDescriptor elementMetadataCD = thisMmd.GetMetadataClassDescriptor(metadataTScope);
@@ -532,17 +512,17 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 
         protected virtual string GetMetadataClassName()
         {
-            return (inheritedMmd != null) ? InheritedMmd.GetMetadataClassName() : null;
+            return (typeMmd != null) ? TypeMmd.GetMetadataClassName() : null;
         }
 
         protected virtual string GetMetadataClassSimpleName()
         {
-            return (inheritedMmd != null) ? InheritedMmd.GetMetadataClassSimpleName() : null;
+            return (typeMmd != null) ? TypeMmd.GetMetadataClassSimpleName() : null;
         }
 
         public void ClearInheritFinishedOrInProgressFlag()
         {
-            inheritFinished = false;
+            inheritDone = false;
             _inheritInProcess = false;
         }
 

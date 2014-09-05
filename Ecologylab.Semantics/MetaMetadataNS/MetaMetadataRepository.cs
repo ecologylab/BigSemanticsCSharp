@@ -209,7 +209,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 			    if (mcd != null)
 				    RepositoryByClassName.Put(mcd.DescribedClass.Name, mmd);
 			
-			    foreach (MetaMetadata localMmd in mmd.MmdScope.Values)
+			    foreach (MetaMetadata localMmd in mmd.Scope.Values)
 			    {
 				    AddToRepositoryByClassName(localMmd);
 			    }
@@ -235,9 +235,10 @@ namespace Ecologylab.Semantics.MetaMetadataNS
         {
             if (!initializedTypes)
             {
-                initializedTypes = true;
                 MetadataScalarType.init();
+                MetaMetadataTranslationScope.Get();
                 MetadataBuiltinsTypesScope.Get();
+                initializedTypes = true;
             }
         }
 

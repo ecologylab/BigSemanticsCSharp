@@ -129,6 +129,7 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 	    {
 		    if (mmdName == null)
 			    return null;
+            Object resultObj = null;
 		    MetaMetadata result = null;
 		    MetaMetadataField field = mmStack.Peek();
 		    if (nameType != null && nameType.Length > 0)
@@ -138,7 +139,8 @@ namespace Ecologylab.Semantics.MetaMetadataNS
 		    if (field is MetaMetadataNestedField)
 		    {
 			    MetaMetadataNestedField nested = (MetaMetadataNestedField) field;
-			    nested.MmdScope.TryGetValue(mmdName, out result);
+			    nested.Scope.TryGetValue(mmdName, out resultObj);
+                result = (MetaMetadata) resultObj;
 			    if (result != null)
 				    if (nameType != null && nameType.Length > 0)
 					    nameType[0] = NameType.MMD;
