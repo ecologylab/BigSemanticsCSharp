@@ -15,6 +15,7 @@ using Simpl.Fundamental.Collections;
 using Simpl.Fundamental.Generic;
 using Simpl.Serialization;
 using Simpl.Serialization.Attributes;
+using Simpl.Serialization.Context;
 
 
 namespace Ecologylab.BigSemantics.MetaMetadataNS 
@@ -75,7 +76,6 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
 
         private bool    mmdScopeTraversed;
         
-        protected bool  inheritMetaMetadataFinished = false;
         private bool    _inheritInProcess;
 
         /*
@@ -89,6 +89,8 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
         protected Stack<MetaMetadataNestedField> _waitingToInheritFrom;
 
         protected Stack<InheritanceHandler> _waitingToInheritFromInheritanceHandler;
+
+        private String _cachedMetadataClassName;
 
         protected MetaMetadataNestedField()
         {
@@ -159,7 +161,12 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
                         if (c != '_')
                             sb.Append((i == 0 || pc == '.' || pc == '_') ? Char.ToUpper(c) : c);
                     }
+                    sb.Append("NS");
                     result = sb.ToString();
+                    if (result.Contains("Bigsemantics"))
+                    {
+                        result = result.Replace("Bigsemantics", "BigSemantics");
+                    }
                     //StringBuilderUtils.release(sb);
                     sb.Clear();
                 }
@@ -340,7 +347,7 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
                             }
                             else
                             {
-                                Debug.WriteLine("Cannot find metadata class: " + metadataClassName);
+                                Debug.WriteLine("Cannot find metadata class " + metadataClassName + " for " + this);
                             }
 
                         }
@@ -348,7 +355,7 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
                         {
                             Debug.WriteLine("Exception: " + e.Message);
                             Debug.WriteLine("Stacktrace:\n" + e.StackTrace);
-                            Debug.WriteLine("Cannot find metadata class: " + metadataClassName);
+                            Debug.WriteLine("Cannot find metadata class " + metadataClassName + " for " + this);
                         }
                     }
                 }
@@ -419,8 +426,7 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
             foreach (MetaMetadataField thatChild in fields)
             {
                 // look up by field name and bind
-                MetadataFieldDescriptor metadataFd = thatChild.BindMetadataFieldDescriptor(metadataTScope,
-                                                                                                        metadataClassDescriptorToBind);
+                MetadataFieldDescriptor metadataFd = thatChild.BindMetadataFieldDescriptor(metadataTScope, metadataClassDescriptorToBind);
                 if (metadataFd == null)
                 {
                     Debug.WriteLine("Cannot bind metadata field descriptor for " + thatChild);
@@ -512,12 +518,33 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
 
         protected virtual string GetMetadataClassName()
         {
-            return (typeMmd != null) ? TypeMmd.GetMetadataClassName() : null;
+            String result = _cachedMetadataClassName;
+            if (result == null)
+            {
+                result = (typeMmd != null) ? TypeMmd.GetMetadataClassName() : null;
+                if (result != null)
+                {
+                    if (result.Contains("Bigsemantics"))
+                    {
+                        result = result.Replace("Bigsemantics", "BigSemantics");
+                    }
+                    _cachedMetadataClassName = result;
+                } 
+            }
+            return result;
         }
 
         protected virtual string GetMetadataClassSimpleName()
         {
-            return (typeMmd != null) ? TypeMmd.GetMetadataClassSimpleName() : null;
+            if (TypeMmd != null)
+            {
+                return TypeMmd.GetMetadataClassSimpleName();
+            }
+            if (this.GetTypeName() != null)
+            {
+                return XmlTools.CamelCaseFromXMLElementName(this.GetTypeName(), true);
+            }
+            return null;
         }
 
         public void ClearInheritFinishedOrInProgressFlag()

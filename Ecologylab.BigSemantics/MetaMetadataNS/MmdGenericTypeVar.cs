@@ -6,6 +6,7 @@ using Ecologylab.BigSemantics.MetadataNS;
 using Simpl.Serialization.Attributes;
 using Simpl.Serialization;
 using System.Collections.ObjectModel;
+using Simpl.Serialization.Types.Element;
 
 namespace Ecologylab.BigSemantics.MetaMetadataNS 
 {
@@ -16,7 +17,7 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
     ///</summary> 
     [SimplTag("generic_type_var")]
     [SimplInherit]
-    public class MmdGenericTypeVar : ElementState
+    public class MmdGenericTypeVar : ElementState, IMappable<String>
     {
 
 	    /**
@@ -46,9 +47,8 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
 	     * a scope of nested generic type variables. e.g. A, B in &lt;M extends Media&lt;A, B&gt;&gt;.
 	     */
 	    [SimplMap("generic_type_var")]
-	    [SimplMapKeyField("name")]
 	    [SimplNoWrap]
-	    private MmdGenericTypeVarScope	nestedGenericTypeVars;
+	    private Dictionary<String, MmdGenericTypeVar>	nestedGenericTypeVars;
 
 	    public String Name
 	    {
@@ -68,7 +68,7 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
             set { arg = value; }
 	    }
 
-	    public MmdGenericTypeVarScope NestedGenericTypeVarScope
+	    public IDictionary<String, MmdGenericTypeVar> NestedGenericTypeVarScope
 	    {
             get { return nestedGenericTypeVars; }
 	    }
@@ -149,5 +149,9 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
 					    "wrong meta-metadata generic type var type! must either be an assignment or a bound.");
 	    }
 
+        public String Key()
+        {
+            return Name;
+        }
     }
 }

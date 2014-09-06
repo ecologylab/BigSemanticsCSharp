@@ -47,7 +47,7 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations
 
 		[SimplComposite]
 		[MmName("see_also")]
-		private Document seeAlso;
+		private RichDocument seeAlso;
 
 		/// <summary>
 		/// The search query
@@ -86,9 +86,9 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations
 		[MmName("main_audio")]
 		private List<Audio> mainAudio;
 
-		[SimplCollection("document")]
+		[SimplCollection("article_bodie")]
 		[MmName("article_bodies")]
-		private List<Document> articleBodies;
+		private List<Ecologylab.BigSemantics.MetadataNS.Scalar.MetadataString> articleBodies;
 
 		public RichDocumentDeclaration()
 		{ }
@@ -148,7 +148,7 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations
 			}
 		}
 
-		public Document SeeAlso
+		public RichDocument SeeAlso
 		{
 			get{return seeAlso;}
 			set
@@ -252,7 +252,7 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations
 			}
 		}
 
-		public List<Document> ArticleBodies
+		public List<Ecologylab.BigSemantics.MetadataNS.Scalar.MetadataString> ArticleBodies
 		{
 			get{return articleBodies;}
 			set

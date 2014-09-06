@@ -358,7 +358,7 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
         {
             buf.Append(this.GetType().ToString());
             buf.Append(".").Append(id == null ? NO_ID : id);
-            buf.Append(": [").Append(local.Count).Append("]");
+            buf.Append(": [").Append(Count).Append("]");
             buf.Append(local == null ? "{}" : local.ToString());
             if (ancestors != null && ancestors.Count > 0)
             {

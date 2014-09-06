@@ -208,8 +208,8 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
                 MetadataClassDescriptor mcd = mmd.MetadataClassDescriptor;
 			    if (mcd != null)
 				    RepositoryByClassName.Put(mcd.DescribedClass.Name, mmd);
-			
-			    foreach (MetaMetadata localMmd in mmd.Scope.Values)
+
+			    foreach (MetaMetadata localMmd in mmd.Scope.valuesOfType<MetaMetadata>())
 			    {
 				    AddToRepositoryByClassName(localMmd);
 			    }

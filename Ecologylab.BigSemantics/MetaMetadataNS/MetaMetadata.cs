@@ -302,7 +302,7 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
             {
                 // re-using existing type
                 // do not use this.type directly because we don't know if that is a definition or just re-using exsiting type
-                MetaMetadata inheritedMmd = TypeMmd;
+                MetaMetadata inheritedMmd = SuperMmd;
 //                if (inheritedMmd == null)
 //                    InheritMetaMetadata(null);//edit // currently, this should never happend because we call this method after inheritance process.
                 return inheritedMmd == null ? null : inheritedMmd.GetMetadataClassSimpleName();

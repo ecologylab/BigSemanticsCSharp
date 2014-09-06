@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 using Ecologylab.BigSemantics.MetadataNS;
 using Simpl.Fundamental.Generic;
 using Simpl.Serialization.Attributes;
@@ -180,6 +181,10 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
         [SimplComposite]
         [MmDontInherit]
         private MetaMetadata declaringMmd = null;
+
+        [SimplComposite]
+        [MmDontInherit]
+        private MetaMetadata inlineMmd = null;
 
         private MetadataFieldDescriptorProxy _fieldDescriptorProxy;
 	
@@ -486,6 +491,12 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
 	        set { declaringMmd = value; }
 	    }
 
+	    public MetaMetadata InlineMmd
+	    {
+	        get { return inlineMmd; }
+	        set { inlineMmd = value; }
+	    }
+
 	    public HashSet<string> NonDisplayedFieldNames
 	    {
 	        get { return nonDisplayedFieldNames; }
@@ -715,7 +726,7 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
             String result = _toString;
 		    if (result == null)
 		    {
-			    result = this.GetType().ToString() + ParentString() + "<" + this.Name + ">";
+			    result = this.GetType().Name + ParentString() + "<" + this.Name + ">";
 			    _toString = result;
 		    }
 		    return result;
@@ -723,16 +734,16 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
 
         public String ParentString()
 	    {
-		    String result = "";
+            StringBuilder result = new StringBuilder();
 	
 		    ElementState parent = this.Parent;
 		    while (parent is MetaMetadataField)
 		    {
 			    MetaMetadataField pf = (MetaMetadataField) parent;
-			    result = "<" + pf.Name + ">";
+                result.Insert(0, "<" + pf.Name + ">");
 			    parent = parent.Parent;
 		    }
-		    return result;
+		    return result.ToString();
 	    }
 
 	    /**
