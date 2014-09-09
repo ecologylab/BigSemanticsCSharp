@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Ecologylab.Semantics.MetaMetadataNS;
-using Ecologylab.Semantics.MetadataNS.Builtins.Declarations;
+using Ecologylab.BigSemantics.MetadataNS;
+using Ecologylab.BigSemantics.MetadataNS.Builtins;
+using Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations;
+using Ecologylab.BigSemantics.MetaMetadataNS;
 using Simpl.Fundamental.Net;
 using Simpl.Serialization.Attributes;
 
-namespace Ecologylab.Semantics.MetadataNS.Builtins
+namespace Ecologylab.BigSemantics.MetadataNS.Builtins
 {
     public class RichArtifact<M> : RichArtifactDeclaration<M>, IRichArtifact<M> where M : Metadata
     {
