@@ -31,6 +31,8 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins
     public interface IRichArtifact<out TM> where TM: Metadata
     {
         TM Media { get; }
+
+        List<CreativeAct> CreativeActs { get; } 
     }
 
     

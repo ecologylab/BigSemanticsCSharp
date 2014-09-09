@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using Ecologylab.BigSemantics.MetaMetadataNS;
 using Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations;
 using Ecologylab.BigSemantics.MetadataNS.Scalar;
+using Simpl.Serialization.Attributes;
 
 namespace Ecologylab.BigSemantics.MetadataNS.Builtins
 {
+    [SimplInherit]
     public class CreativeAct : CreativeActDeclaration
     {
         public enum CreativeAction
