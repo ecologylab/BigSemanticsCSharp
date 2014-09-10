@@ -71,6 +71,10 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations
 		private List<IClipping<Metadata>> clippings;
 
 		[SimplComposite]
+		[MmName("favicon")]
+		private Image favicon;
+
+		[SimplComposite]
 		[MmName("thumbnail")]
 		private Image thumbnail;
 
@@ -195,6 +199,19 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations
 				if (this.clippings != value)
 				{
 					this.clippings = value;
+					// TODO we need to implement our property change notification mechanism.
+				}
+			}
+		}
+
+		public Image Favicon
+		{
+			get{return favicon;}
+			set
+			{
+				if (this.favicon != value)
+				{
+					this.favicon = value;
 					// TODO we need to implement our property change notification mechanism.
 				}
 			}
