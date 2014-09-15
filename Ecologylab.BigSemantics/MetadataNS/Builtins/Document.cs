@@ -28,10 +28,6 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins
         [SimplScalar]
         private MetadataInteger generation;
 
-        [MmName("favicon")]
-        [SimplScalar]
-        private MetadataParsedURL favicon;
-
         private DownloadStatus downloadStatus = DownloadStatus.UNPROCESSED;
 
         private DocumentClosure documentClosure;
@@ -43,24 +39,12 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins
 
         public MetadataInteger Generation
         {
-            get{return generation;}
-            set 
-            { 
-                if (this.generation != value)   
-                this.generation = value;
-                 //this.RaisePropertyChanged(() => this.Generation); }
-            }
-        }
-
-        public MetadataParsedURL Favicon
-        {
-            get{return favicon;}
+            get { return generation; }
             set
             {
-                if (this.favicon != value)
-                {
-                    this.favicon = value; //this.RaisePropertyChanged(() => this.Favicon);
-                }
+                if (this.generation != value)
+                    this.generation = value;
+                //this.RaisePropertyChanged(() => this.Generation); }
             }
         }
 
