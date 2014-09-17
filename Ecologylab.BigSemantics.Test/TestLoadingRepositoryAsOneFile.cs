@@ -28,7 +28,7 @@ namespace Ecologylab.BigSemantics.Test
             FileInfo repoFile = new FileInfo(workingDirPath + "\\..\\..\\..\\..\\BigSemanticsWrapperRepository\\BigSemanticsWrappers\\PostInheritanceRepository\\post-inheritance-repository.xml");
             Assert.IsTrue(repoFile.Exists);
             MetaMetadataRepositoryInit repoInit =
-                new MetaMetadataRepositoryInit(RepositoryMetadataTranslationScope.Get(),
+                new MetaMetadataRepositoryInit(RepositoryMetadataTypesScope.Get(),
                                                repoFile.FullName,
                                                null);
             Task<MetaMetadataRepository> task = repoInit.LoadRepositoryFromCache(repoFile);
