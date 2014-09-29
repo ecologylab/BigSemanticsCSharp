@@ -253,7 +253,7 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins
             ParsedUri redirectedPURL = new ParsedUri(redirectedUri.AbsoluteUri);
             Debug.WriteLine("try redirecting: " + originalPURL + " > " + redirectedPURL);
 
-            Document redirectedDocument = semanticsSessionScope.GetOrConstructDocument(redirectedPURL);
+            /*Document redirectedDocument = semanticsSessionScope.GetOrConstructDocument(redirectedPURL);
             // note FIXME currently, GetOrConstructDocument does not return null!
             if (redirectedDocument != null)
             {
@@ -273,7 +273,7 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins
             else
             {
                 // TODO -- redirect to a new location.
-            }
+            }*/
 
             // TODO -- what if redirectedDocument is already in the queue or being downloaded?
 

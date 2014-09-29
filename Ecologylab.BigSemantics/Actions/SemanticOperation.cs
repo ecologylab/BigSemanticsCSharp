@@ -293,7 +293,7 @@ namespace Ecologylab.BigSemantics.Actions
                 if (outlinkPurlObject != null)
                 {
                     ParsedUri outlinkPurl = ((MetadataParsedURL)outlinkPurlObject).Value;
-                    result = sessionScope.GetOrConstructDocument(outlinkPurl);
+                    //result = sessionScope.GetOrConstructDocument(outlinkPurl);
                 }
             }
 
@@ -316,8 +316,8 @@ namespace Ecologylab.BigSemantics.Actions
                 MetadataString anchorText = (MetadataString)GetArgumentObject(SemanticOperationNamedArguments.AnchorText);
                 // create anchor text from Document title if there is none passed in directly, and we won't
                 // be setting metadata
-                if (anchorText == null)
-                    anchorText = result.Title;
+               // if (anchorText == null)
+                //    anchorText = result.Title;
 
                 // work to avoid honey pots!
                 MetadataString anchorContextString = (MetadataString)GetArgumentObject(SemanticOperationNamedArguments.AnchorContext);

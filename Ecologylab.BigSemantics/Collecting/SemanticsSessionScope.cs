@@ -42,14 +42,14 @@ namespace Ecologylab.BigSemantics.Collecting
 
         public DownloadMonitor DownloadMonitor { get; private set; }
 
-        public override Document GetOrConstructDocument(ParsedUri location)
+        public override async Task<Document> GetOrConstructDocument(ParsedUri location)
         {
-            Document doc = base.GetOrConstructDocument(location);
+            Document doc = await base.GetOrConstructDocument(location);
             doc.SemanticsSessionScope = this;
             return doc;
         }
 
-        public async new Task<Document> GetDocument(ParsedUri puri)
+        public override async Task<Document> GetDocument(ParsedUri puri)
         {
             if (puri == null)
             {
@@ -57,13 +57,21 @@ namespace Ecologylab.BigSemantics.Collecting
                 return null;
             }
 
-            var doc = base.GetDocument(puri);
+            var doc = await base.GetDocument(puri);
             if (doc == null)
             {
-                var response = await HttpClient.GetAsync(new Uri(MetadataServiceUri, "metadata.json?url=" + puri.AbsoluteUri));
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    doc = this.MetadataTranslationScope.Deserialize(await response.Content.ReadAsStreamAsync(), Format.Json) as Document;
+                    var response = await HttpClient.GetAsync(new Uri(MetadataServiceUri, "metadata.json?url=" + puri.AbsoluteUri));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        doc = this.MetadataTranslationScope.Deserialize(await response.Content.ReadAsStreamAsync(), Format.Json) as Document;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("failed to get document: {0}", e.Message);
+                    doc = null;
                 }
             }
 

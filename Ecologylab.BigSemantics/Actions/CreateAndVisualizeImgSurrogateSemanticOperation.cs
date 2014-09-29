@@ -79,8 +79,8 @@ namespace Ecologylab.BigSemantics.Actions
 			
 			    ParsedUri hrefPURL 		= (ParsedUri) GetArgumentObject(SemanticOperationNamedArguments.Href);
 			    Document outlink 			= (Document) GetArgumentObject(SemanticOperationNamedArguments.HrefMetadata);
-			    if (hrefPURL != null & outlink == null)
-				    outlink				= sessionScope.GetOrConstructDocument(hrefPURL);
+			    //if (hrefPURL != null & outlink == null)
+			//	    outlink				= sessionScope.GetOrConstructDocument(hrefPURL);
 			
 			    ImageClipping imageClipping	= image.ConstructClipping(source, outlink, caption, null);
                 source.AddClipping(imageClipping);

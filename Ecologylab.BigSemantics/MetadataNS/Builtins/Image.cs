@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Ecologylab.BigSemantics.Collecting;
 using Ecologylab.BigSemantics.MetaMetadataNS;
 using Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations;
+using Simpl.Fundamental.Net;
 using Simpl.Serialization.Attributes;
 using Ecologylab.BigSemantics.MetadataNS.Scalar;
 using Ecologylab.BigSemantics.MetadataNS;
@@ -37,6 +38,15 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins
         public override bool IsImage
         {
             get { return true; }
+        }
+
+        public ParsedUri ImageLocation
+        {
+            get
+            {
+                ParsedUri result = null;       // System.Windows.Media.ImageSource || Windows.UI.Xaml.Media.ImageSource
+                return new ParsedUri((this.LocalLocation != null) ? this.LocalLocation.Value.AbsoluteUri : this.Location.Value.AbsoluteUri);
+            }
         }
 	}
 }

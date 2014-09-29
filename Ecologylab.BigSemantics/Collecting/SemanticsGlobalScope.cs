@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Ecologylab.BigSemantics.MetadataNS.Builtins;
 using Ecologylab.BigSemantics.MetaMetadataNS;
 using Simpl.Fundamental.Net;
@@ -19,9 +20,9 @@ namespace Ecologylab.BigSemantics.Collecting
             get { return _globalDocumentCollection; }
         }
 
-        public virtual Document GetOrConstructDocument(ParsedUri location)
+        public virtual async Task<Document> GetOrConstructDocument(ParsedUri location)
         {
-            var doc = GetDocument(location);
+            var doc = await GetDocument(location);
    
             if(doc == null)
             {
@@ -33,7 +34,7 @@ namespace Ecologylab.BigSemantics.Collecting
             return doc;
         }
 
-        public Document GetDocument(ParsedUri location)
+        public virtual async Task<Document> GetDocument(ParsedUri location)
         {
             if (location == null)
                 return null;

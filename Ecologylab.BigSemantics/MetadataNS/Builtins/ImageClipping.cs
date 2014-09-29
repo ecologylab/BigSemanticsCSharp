@@ -17,7 +17,6 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins
 	[SimplInherit]
 	public class ImageClipping : ImageClippingDeclaration
 	{
-
 		public ImageClipping() { }
 
 		public ImageClipping(MetaMetadataCompositeField mmd) : base(mmd) { }
@@ -70,5 +69,7 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins
 
 	        return imageClipping;
 	    }
+
+
 	}
 }

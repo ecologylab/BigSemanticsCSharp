@@ -48,12 +48,6 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins
             }
         }
 
-        public MetadataString Title
-        {
-            get { return new MetadataString(Location.ToString()); }
-            set { }
-        }
-
         #region Runtime Properties
 
         public SemanticsSessionScope SemanticsSessionScope { get; set; }
