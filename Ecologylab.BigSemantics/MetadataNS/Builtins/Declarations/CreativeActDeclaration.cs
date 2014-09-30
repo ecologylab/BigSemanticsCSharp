@@ -28,8 +28,8 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations
 		private MetadataInteger action;
 
 		[SimplComposite]
-		[SimplWrap]
-		[SimplScope("repository_documents")]
+		//[SimplWrap]
+		//[SimplScope("repository_documents")]
 		[MmName("creator")]
 		private Document creator;
 
