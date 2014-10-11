@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations;
 using Ecologylab.BigSemantics.MetadataNS.Scalar;
 using Simpl.Fundamental.Net;
+using Ecologylab.BigSemantics.MetadataNS.Builtins.PersonNS.AuthorNS;
 
 namespace Ecologylab.BigSemantics.MetadataNS.Builtins
 {
     public class ImageSelfmade : ImageSelfmadeDeclaration
     {
 
-        public static ImageSelfmade ConstructRichArtifact(Image media, Document creator)
+        public static ImageSelfmade ConstructRichArtifact(Image media, IdeaMacheUser creator)
         {
             var imageSelfmade = new ImageSelfmade
             {

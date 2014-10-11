@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Ecologylab.Collections;
 using Ecologylab.BigSemantics.MetadataNS;
 using Ecologylab.BigSemantics.MetadataNS.Scalar;
+using Ecologylab.BigSemantics.MetadataNS.Builtins.PersonNS.AuthorNS;
 
 namespace Ecologylab.BigSemantics.MetadataNS.Builtins 
 {
@@ -48,7 +49,7 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins
             }
         }
 
-	    public static ImageClipping ConstructClipping(ParsedUri location, Document sourceDoc, Document creator)
+	    public static ImageClipping ConstructClipping(ParsedUri location, Document sourceDoc, IdeaMacheUser creator)
 	    {
             var imageClipping = new ImageClipping
             {
