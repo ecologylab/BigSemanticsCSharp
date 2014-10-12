@@ -44,8 +44,9 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins
         {
             get
             {
-                ParsedUri result = null;       // System.Windows.Media.ImageSource || Windows.UI.Xaml.Media.ImageSource
-                return new ParsedUri((this.LocalLocation != null) ? this.LocalLocation.Value.AbsoluteUri : this.Location.Value.AbsoluteUri);
+                //ParsedUri result = null;       // System.Windows.Media.ImageSource || Windows.UI.Xaml.Media.ImageSource
+                //return new ParsedUri((this.LocalLocation != null) ? this.LocalLocation.Value.AbsoluteUri : this.Location.Value.AbsoluteUri);
+                return this.Location.Value;
             }
         }
 	}
