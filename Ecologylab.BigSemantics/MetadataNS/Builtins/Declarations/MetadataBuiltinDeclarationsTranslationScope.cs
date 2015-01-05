@@ -49,6 +49,7 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations
 				typeof(ImageDeclaration),
 				typeof(ImageSelfmadeDeclaration),
 				typeof(MetadataDeclaration),
+				typeof(PersistenceMetaInfoDeclaration),
 				typeof(PersonDeclaration),
 				typeof(RatingDeclaration),
 				typeof(RichArtifactDeclaration<>),
