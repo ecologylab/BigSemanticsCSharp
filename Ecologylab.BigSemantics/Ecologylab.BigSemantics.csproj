@@ -97,6 +97,8 @@
     <Compile Include="MetadataNS\Builtins\Declarations\CreativeWorkNS\CurationDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\CurateLinkDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\GisLocationDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\PersistenceMetaInfo.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\PersistenceMetaInfoDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\PersonNS\AuthorNS\AuthorDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\PersonNS\AuthorNS\IdeaMacheUserDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\PersonNS\BirthDetailDeclaration.cs" />
