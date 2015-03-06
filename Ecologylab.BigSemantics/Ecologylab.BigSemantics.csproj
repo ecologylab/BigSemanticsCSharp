@@ -105,6 +105,8 @@
     <Compile Include="MetadataNS\Builtins\Declarations\PersonNS\PersonDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\SequencedClippableDocumentDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\VideoDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\PresentationFrame.cs" />
+    <Compile Include="MetadataNS\Builtins\FrameSelfmade.cs" />
     <Compile Include="MetadataNS\Builtins\GisLocation.cs" />
     <Compile Include="MetadataNS\Builtins\ImageSelfmade.cs" />
     <Compile Include="MetadataNS\Builtins\PersonNS\AuthorNS\Author.cs" />
