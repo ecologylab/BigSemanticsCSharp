@@ -78,6 +78,8 @@
     <Compile Include="Documentparsers\XPathParser.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MetadataNS\Builtins\AggregateMedia.cs" />
+    <Compile Include="MetadataNS\Builtins\AggregateSelfmade.cs" />
     <Compile Include="MetadataNS\Builtins\Annotate.cs" />
     <Compile Include="MetadataNS\Builtins\AssignPrimaryLink.cs" />
     <Compile Include="MetadataNS\Builtins\Audio.cs" />
@@ -88,6 +90,8 @@
     <Compile Include="MetadataNS\Builtins\CreativeWorkNS\CreativeWork.cs" />
     <Compile Include="MetadataNS\Builtins\CreativeWorkNS\Curation.cs" />
     <Compile Include="MetadataNS\Builtins\CurateLink.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\AggregateMediaDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\AggregateSelfmadeDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\AssignPrimaryLinkDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\AudioDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\CommentNS\CommentDeclaration.cs" />
@@ -96,6 +100,7 @@
     <Compile Include="MetadataNS\Builtins\Declarations\CreativeWorkNS\CreativeWorkDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\CreativeWorkNS\CurationDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\CurateLinkDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\FrameSelfmadeDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\GisLocationDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\PersistenceMetaInfo.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\PersistenceMetaInfoDeclaration.cs" />
@@ -103,6 +108,7 @@
     <Compile Include="MetadataNS\Builtins\Declarations\PersonNS\AuthorNS\IdeaMacheUserDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\PersonNS\BirthDetailDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\PersonNS\PersonDeclaration.cs" />
+    <Compile Include="MetadataNS\Builtins\Declarations\PresentationFrameDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\SequencedClippableDocumentDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\Declarations\VideoDeclaration.cs" />
     <Compile Include="MetadataNS\Builtins\PresentationFrame.cs" />

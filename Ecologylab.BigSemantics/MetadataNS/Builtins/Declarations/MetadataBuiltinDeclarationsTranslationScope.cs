@@ -26,6 +26,8 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations
 		public static SimplTypesScope Get()
 		{
 			return SimplTypesScope.Get("repository_builtin_declarations_scope",
+				typeof(AggregateMediaDeclaration),
+				typeof(AggregateSelfmadeDeclaration),
 				typeof(AnnotateDeclaration),
 				typeof(AssignPrimaryLinkDeclaration),
 				typeof(AudioDeclaration),
@@ -42,6 +44,7 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations
 				typeof(DebugMetadataDeclaration),
 				typeof(DocumentDeclaration),
 				typeof(DocumentMetadataWrapDeclaration),
+				typeof(FrameSelfmadeDeclaration),
 				typeof(GisLocationDeclaration),
 				typeof(HtmlTextDeclaration),
 				typeof(IdeaMacheUserDeclaration),
@@ -51,6 +54,7 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins.Declarations
 				typeof(MetadataDeclaration),
 				typeof(PersistenceMetaInfoDeclaration),
 				typeof(PersonDeclaration),
+				typeof(PresentationFrameDeclaration),
 				typeof(RatingDeclaration),
 				typeof(RichArtifactDeclaration<>),
 				typeof(RichDocumentDeclaration),

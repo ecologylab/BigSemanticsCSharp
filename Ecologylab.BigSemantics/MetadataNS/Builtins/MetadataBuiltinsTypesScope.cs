@@ -42,6 +42,8 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins
             typeof (TextSelfmade),
             typeof (FrameSelfmade),
             typeof (PresentationFrame),
+            typeof (AggregateMedia),
+            typeof (AggregateSelfmade)
         };
 
         static MetadataBuiltinsTypesScope()
