@@ -21,7 +21,8 @@ namespace Ecologylab.BigSemantics.MetadataNS.Builtins
             Note = 4,
             Sketch = 5,
             Upload = 6,
-            Edit = 7
+            Edit = 7,
+            Aggregate = 10,
         }
 
         public CreativeAct() { }
