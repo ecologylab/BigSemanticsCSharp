@@ -34,9 +34,7 @@ namespace Ecologylab.BigSemantics.MetadataNS.Scalar.Types
 			// Get type handles for Test<String> and its field.
 
             this.valueScalarType = TypeRegistry.ScalarTypes[valueClass];
-			//valueField = metadataScalarTypeClass.GetField(MetadataScalarBase<object>.VALUE_FIELD_NAME);
-		    valueField = SemanticsPlatformSpecifics.Get().GetFieldFromTypeWithName(metadataScalarTypeClass,
-		                                                                           MetadataScalarBase<object>.VALUE_FIELD_NAME);
+			valueField = metadataScalarTypeClass.GetRuntimeField(MetadataScalarBase<object>.VALUE_FIELD_NAME);
             if (ValueField == null)
 				Debug.WriteLine(metadataScalarTypeClass.Name + " does not have a valueField");
 		}
