@@ -58,7 +58,7 @@ namespace Ecologylab.BigSemantics.Collecting
             }
 
             var doc = await base.GetDocument(puri);
-            if (doc == null)
+            /*if (doc == null)
             {
                 try
                 {
@@ -73,7 +73,7 @@ namespace Ecologylab.BigSemantics.Collecting
                     Debug.WriteLine("failed to get document: {0}", e.Message);
                     doc = null;
                 }
-            }
+            }*/
 
             return doc;
         }
