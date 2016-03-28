@@ -198,12 +198,12 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
 
         public async Task<MetaMetadataRepository> LoadRepositoryFromServiceAsync(ParsedUri serviceUri, object cacheFile = null)
         {
-            _metaMetadataRepository     = await RequestMetaMetadataRepository(new ParsedUri(serviceUri, "mmdrepository.xml"));
+            _metaMetadataRepository     = new MetaMetadataRepository(); //await RequestMetaMetadataRepository(new ParsedUri(serviceUri, "mmdrepository.xml"));
 
-            if (cacheFile != null)
-                SimplTypesScope.Serialize(_metaMetadataRepository, cacheFile, Format.Xml);
+            //if (cacheFile != null)
+            //    SimplTypesScope.Serialize(_metaMetadataRepository, cacheFile, Format.Xml);
 
-            InitializeRepositoryAndPerformBinding();
+            //InitializeRepositoryAndPerformBinding();
 
             return _metaMetadataRepository;
         }
