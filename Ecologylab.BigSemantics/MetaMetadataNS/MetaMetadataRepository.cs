@@ -151,7 +151,11 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
             _clippableDocumentRepositoryByUrlStripped = new Dictionary<String, MetaMetadata>();
             _documentRepositoryByDomain = new Dictionary<String, MetaMetadata>();
             _documentRepositoryByUrlStripped = new Dictionary<String, MetaMetadata>();
+
             _repositoryByClassName = new Dictionary<String, MetaMetadata>();
+            _repositoryByName = new Dictionary<string, MetaMetadata>();
+            _repositoryBySuffix = new Dictionary<string, MetaMetadata>();
+            _repositoryByMime = new Dictionary<string, MetaMetadata>();
         }
 
         /// <summary>
@@ -175,7 +179,7 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
                 MetadataClassDescriptor mcd = mmd.BindMetadataClassDescriptor(metadataTScope);
                 if (mcd == null)
                 {
-                    Debug.WriteLine("Cannot bind metadata class descriptor for " + mmd);
+                    Debug.WriteLineIf(BigSemanticsSettings.DebugLevel > 5, "Cannot bind metadata class descriptor for " + mmd);
                     this.RepositoryByName.Remove(mmd.Name);
                 }
             }

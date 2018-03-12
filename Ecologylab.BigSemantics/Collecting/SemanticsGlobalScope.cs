@@ -24,7 +24,7 @@ namespace Ecologylab.BigSemantics.Collecting
         {
             var doc = await GetDocument(location);
    
-            if(doc == null)
+            if(doc == null && MetaMetadataRepository != null)
             {
                 doc = MetaMetadataRepository.ConstructDocument(location, false);
                 if (doc != null)

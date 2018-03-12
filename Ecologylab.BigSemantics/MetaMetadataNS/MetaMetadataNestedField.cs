@@ -347,7 +347,7 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
                             }
                             else
                             {
-                                Debug.WriteLine("Cannot find metadata class " + metadataClassName + " for " + this);
+                                Debug.WriteLineIf(BigSemanticsSettings.DebugLevel > 5, "Cannot find metadata class " + metadataClassName + " for " + this);
                             }
 
                         }
@@ -429,7 +429,7 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
                 MetadataFieldDescriptor metadataFd = thatChild.BindMetadataFieldDescriptor(metadataTScope, metadataClassDescriptorToBind);
                 if (metadataFd == null)
                 {
-                    Debug.WriteLine("Cannot bind metadata field descriptor for " + thatChild);
+                    Debug.WriteLineIf(BigSemanticsSettings.DebugLevel > 5, "Cannot bind metadata field descriptor for " + thatChild);
                     Kids.Remove(thatChild.Name);
                     continue;
                 }
@@ -453,7 +453,7 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
                     MetadataFieldDescriptor fd = nested.MetadataFieldDescriptor;
                     if (fd.IsPolymorphic)
                     {
-                        Debug.WriteLine("Polymorphic field: " + nested + ", not binding an element class descriptor.");
+                        Debug.WriteLineIf(BigSemanticsSettings.DebugLevel > 5, "Polymorphic field: " + nested + ", not binding an element class descriptor.");
                     }
                     else
                     {
@@ -468,7 +468,7 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
                         }
                         else
                         {
-                            Debug.WriteLine("Cannot determine elementClassDescriptor for " + thatChild);
+                            Debug.WriteLineIf(BigSemanticsSettings.DebugLevel > 5, "Cannot determine elementClassDescriptor for " + thatChild);
                             Kids.Remove(thatChild.Name);
                         }
                     }
@@ -505,7 +505,7 @@ namespace Ecologylab.BigSemantics.MetaMetadataNS
                         fdProxy.SetElementClassDescriptor(elementMetadataCD);
                     else
                     {
-                        Debug.WriteLine("can't bind FieldDescriptor because metadata class does not exist for: " + thisMmd.ToString());
+                        Debug.WriteLineIf(BigSemanticsSettings.DebugLevel > 5, "can't bind FieldDescriptor because metadata class does not exist for: " + thisMmd.ToString());
                     }
                 }
                 else

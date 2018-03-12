@@ -45,7 +45,8 @@ namespace Ecologylab.BigSemantics.Collecting
         public override async Task<Document> GetOrConstructDocument(ParsedUri location)
         {
             Document doc = await base.GetOrConstructDocument(location);
-            doc.SemanticsSessionScope = this;
+            if (doc != null)
+                doc.SemanticsSessionScope = this;
             return doc;
         }
 
